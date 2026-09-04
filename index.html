@@ -63,29 +63,29 @@
                 <button onclick="watchAd()" style="flex: 1; padding: 10px 2px; background: #2196F3; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 11px;">🎬 Ad (+500⚡)</button>
                 <button onclick="inviteFriend()" style="flex: 1; padding: 10px 2px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 11px;">👥 Invite (+1000⚡)</button>
             </div>
-            <button onclick="openMiniGame()" style="width: 100%; padding: 11px; background: linear-gradient(135deg, #f72585, #7209b7); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px;">🕹️ Daily Quest (Pass 50 Tunnels)</button>
+            <button onclick="openMiniGame()" style="width: 100%; padding: 11px; background: linear-gradient(135deg, #f72585, #7209b7); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px;">🕹️ Daily Quest (Escape Hands: 10)</button>
         </div>
 
     </div>
 
-    <!-- MINI-GAME MODAL (FLAPPY BIRD) -->
+    <!-- MINI-GAME MODAL (AVOID HANDS) -->
     <div id="miniGameModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 200; flex-direction: column; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box;">
         <div style="width: 100%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <div style="color: #ffd700; font-weight: bold; font-size: 15px;">Tunnel Quest: <span id="questTunnelCount">0</span>/50</div>
+            <div style="color: #ffd700; font-weight: bold; font-size: 15px;">Hands Avoided: <span id="questTunnelCount">0</span>/10</div>
             <button onclick="closeMiniGame()" style="background: #ff4757; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">✕ Exit</button>
         </div>
         
         <div style="position: relative; border: 3px solid #00f2fe; border-radius: 12px; overflow: hidden; background: #111;">
             <canvas id="birdCanvas" width="340" height="460" style="display: block; cursor: pointer;"></canvas>
             <div id="gameStartOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.7);">
-                <h3 style="color: #ffd700; margin: 0 0 10px 0;">🪙 Biz777 Coin Quest</h3>
-                <p style="color: #fff; font-size: 13px; text-align: center; padding: 0 20px; margin-bottom: 15px;">Tap screen to fly through 50 tunnels easily and win +500 Energy!</p>
+                <h3 style="color: #ffd700; margin: 0 0 10px 0;">✋ Grab & Escape Quest</h3>
+                <p style="color: #fff; font-size: 13px; text-align: center; padding: 0 20px; margin-bottom: 15px;">Avoid 10 grabbing hands to win +500 Energy!</p>
                 <button onclick="startBirdGame()" style="padding: 10px 25px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer;">Start Game</button>
             </div>
         </div>
 
         <div id="questRewardBox" style="display: none; margin-top: 12px; text-align: center;">
-            <p style="color: #00ff88; font-weight: bold; margin: 0 0 8px 0;">🎉 Quest Completed! 50 Tunnels Passed!</p>
+            <p style="color: #00ff88; font-weight: bold; margin: 0 0 8px 0;">🎉 Quest Completed! 10 Hands Avoided!</p>
             <button onclick="claimQuestReward()" style="padding: 10px 20px; background: #ffd700; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Claim +500 ⚡ Energy</button>
         </div>
     </div>
@@ -176,7 +176,7 @@
             }
 
             buildingIcon.style.transform = "scale(0.88)";
-            setTimeout(function() { buildingIcon.style.transform = "scale(1)"; }, 60);
+            setTimeout(function() { buildingIcon.style.transform = "scale(1);"; }, 60);
 
             updateGame();
         }, { passive: false });
@@ -233,7 +233,7 @@
 
         updateGame();
 
-        // --- FLAPPY BIRD MINI-GAME SCRIPT (EASIER & BIZ777 COIN) ---
+        // --- MINI-GAME SCRIPT (AVOID HANDS) ---
         var canvas = document.getElementById("birdCanvas");
         var ctx = canvas.getContext("2d");
         var birdGameRunning = false;
@@ -255,7 +255,6 @@
         }
 
         function resetBirdGame() {
-            // Easier gravity and lift for smoother gameplay
             bird = { x: 60, y: 220, radius: 18, gravity: 0.45, lift: -7.5, velocity: 0 };
             pipes = [];
         }
@@ -298,7 +297,6 @@
             ctx.save();
             ctx.translate(bird.x, bird.y);
             
-            // Outer golden coin circle
             ctx.beginPath();
             ctx.arc(0, 0, bird.radius, 0, Math.PI * 2);
             ctx.fillStyle = "#ffd700";
@@ -307,7 +305,6 @@
             ctx.strokeStyle = "#ffaa00";
             ctx.stroke();
 
-            // Inner text "biz777"
             ctx.fillStyle = "#000";
             ctx.font = "bold 9px sans-serif";
             ctx.textAlign = "center";
@@ -315,9 +312,9 @@
             ctx.fillText("biz777", 0, 0);
             ctx.restore();
 
-            // Pipes generation & rendering (Wider gap for easier passing)
+            // Hands generation & rendering
             if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 180) {
-                var gapSize = 150; // Increased gap size to make it much easier
+                var gapSize = 160;
                 var minHeight = 40;
                 var maxHeight = canvas.height - gapSize - 80;
                 var topH = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
@@ -325,40 +322,42 @@
             }
 
             for (var i = pipes.length - 1; i >= 0; i--) {
-                pipes[i].x -= 2; // Slower speed for easier control
+                pipes[i].x -= 2;
 
-                // Draw Top Pipe
-                ctx.fillStyle = "#00ff88";
-                ctx.fillRect(pipes[i].x, 0, 55, pipes[i].top);
-                // Draw Bottom Pipe
-                ctx.fillRect(pipes[i].x, pipes[i].bottom, 55, canvas.height - pipes[i].bottom);
+                // Draw Hands (Top hand pointing down, Bottom hand pointing up)
+                ctx.font = "45px sans-serif";
+                ctx.textAlign = "left";
+                ctx.textBaseline = "top";
+                
+                // Top hand trying to grab downwards
+                ctx.fillText("👇", pipes[i].x + 2, pipes[i].top - 45);
 
-                // Score check
+                // Bottom hand trying to grab upwards
+                ctx.fillText("👆", pipes[i].x + 2, pipes[i].bottom);
+
                 if (!pipes[i].passed && pipes[i].x + 55 < bird.x) {
                     pipes[i].passed = true;
                     tunnelScore++;
                     document.getElementById("questTunnelCount").innerText = tunnelScore;
 
-                    if (tunnelScore >= 50 && !questClaimed) {
+                    if (tunnelScore >= 10 && !questClaimed) {
                         birdGameRunning = false;
                         document.getElementById("questRewardBox").style.display = "block";
                     }
                 }
 
-                // Collision detection
-                if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 55) {
+                // Collision detection with hands area
+                if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 50) {
                     if (bird.y - bird.radius < pipes[i].top || bird.y + bird.radius > pipes[i].bottom) {
                         endBirdGame();
                     }
                 }
 
-                // Remove offscreen pipes
                 if (pipes[i].x < -60) {
                     pipes.splice(i, 1);
                 }
             }
 
-            // Floor & Roof collision
             if (bird.y + bird.radius >= canvas.height || bird.y - bird.radius <= 0) {
                 endBirdGame();
             }
@@ -371,8 +370,8 @@
         function endBirdGame() {
             birdGameRunning = false;
             document.getElementById("gameStartOverlay").style.display = "flex";
-            document.querySelector("#gameStartOverlay h3").innerText = "💥 Game Over!";
-            document.querySelector("#gameStartOverlay p").innerText = "Tunnels passed: " + tunnelScore + "/50. Try again!";
+            document.querySelector("#gameStartOverlay h3").innerText = "💥 Caught by Hands!";
+            document.querySelector("#gameStartOverlay p").innerText = "Hands avoided: " + tunnelScore + "/10. Try again!";
             document.querySelector("#gameStartOverlay button").innerText = "Try Again";
         }
 
