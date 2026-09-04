@@ -24,7 +24,6 @@
 </head>
 <body id="gameBody" style="margin: 0; padding: 0; background-color: #0b0c10; color: #ffffff; font-family: sans-serif; height: 100vh; overflow: hidden; user-select: none; -webkit-user-select: none;">
 
-    <!-- Background Decorative Money Symbols -->
     <div style="position: absolute; top: 3%; left: -15px; width: 110px; height: 110px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 26px; opacity: 0.25; transform: rotate(-25deg); z-index: 1; pointer-events: none;">💵</div>
     <div style="position: absolute; top: 7%; right: -25px; width: 130px; height: 130px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 30px; opacity: 0.2; transform: rotate(18deg); z-index: 1; pointer-events: none;">€</div>
     <div style="position: absolute; top: 32%; left: -40px; width: 125px; height: 125px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 28px; opacity: 0.2; transform: rotate(40deg); z-index: 1; pointer-events: none;">💰</div>
@@ -32,33 +31,27 @@
     <div style="position: absolute; bottom: 22%; left: -20px; width: 115px; height: 115px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 26px; opacity: 0.25; transform: rotate(15deg); z-index: 1; pointer-events: none;">¥</div>
     <div style="position: absolute; bottom: 18%; right: -15px; width: 120px; height: 120px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 28px; opacity: 0.25; transform: rotate(-12deg); z-index: 1; pointer-events: none;">💵</div>
 
-    <!-- MAIN GAME LAYOUT -->
     <div style="position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 20px 0; box-sizing: border-box;">
         
-        <!-- HEADER / SCORE -->
         <div style="text-align: center; width: 85%;">
             <div id="score" style="font-size: 48px; font-weight: 900; color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.6);">0</div>
             <div id="levelTitle" style="font-size: 18px; font-weight: bold; color: #00f2fe; margin-top: 5px;">1. Bronze Foundation 🏗️</div>
             
-            <!-- PROGRESS BAR -->
             <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2);">
                 <div id="progressFill" style="height: 100%; width: 0%; background: #00f2fe; transition: width 0.2s;"></div>
             </div>
         </div>
 
-        <!-- TAP AREA -->
         <div id="tapArea" style="position: relative; width: 210px; height: 210px; background: rgba(255, 255, 255, 0.04); border: 2px dashed #ffd700; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation;">
             <div id="buildingIcon" style="font-size: 105px; pointer-events: none; transition: transform 0.05s;">🏗️</div>
         </div>
 
-        <!-- FOOTER / ENERGY & BOOSTS -->
         <div style="width: 85%; text-align: center;">
             <div style="font-size: 15px; font-weight: bold; color: #ffb703; margin-bottom: 5px;">⚡ Energy: <span id="energyText">1000</span> / <span id="maxEnergyText">1000</span></div>
             <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 12px;">
                 <div id="energyFill" style="height: 100%; width: 100%; background: #ffb703;"></div>
             </div>
 
-            <!-- BUTTONS -->
             <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 8px;">
                 <button onclick="watchAd()" style="flex: 1; padding: 10px 2px; background: #2196F3; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 11px;">🎬 Ad (+500⚡)</button>
                 <button onclick="inviteFriend()" style="flex: 1; padding: 10px 2px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 11px;">👥 Invite (+1000⚡)</button>
@@ -68,7 +61,6 @@
 
     </div>
 
-    <!-- MINI-GAME MODAL -->
     <div id="miniGameModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 200; flex-direction: column; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box;">
         <div style="width: 100%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <div style="color: #ffd700; font-weight: bold; font-size: 15px;">Hands Passed: <span id="questTunnelCount">0</span>/10</div>
@@ -90,7 +82,6 @@
         </div>
     </div>
 
-    <!-- WIN MODAL -->
     <div id="winModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center;">
         <div style="background: #1a1d24; padding: 25px; border-radius: 20px; text-align: center; border: 2px solid #ffd700; width: 80%;">
             <h2 style="color: #ffd700; margin: 0 0 10px 0;">🎉 Congratulations!</h2>
@@ -112,6 +103,7 @@
         var currentTime = new Date().getTime();
         var twentyFourHours = 24 * 60 * 60 * 1000;
 
+        // 24 საათის გასვლის შემდეგ ივსება მხოლოდ ენერგია (ქულები არ იშლება!)
         if (currentTime - lastEnergyTime >= twentyFourHours) {
             energy = maxEnergy;
             localStorage.setItem("biz777_last_energy_time", currentTime);
@@ -140,4 +132,289 @@
 
         function saveGame() {
             localStorage.setItem("biz777_score", score);
-            localStorage.setItem("biz777_energy", energy
+            localStorage.setItem("biz777_energy", energy);
+        }
+
+        tapArea.addEventListener("touchstart", function(e) {
+            e.preventDefault();
+            var touches = e.changedTouches;
+
+            if (energy <= 0) {
+                alert("Out of energy!");
+                return;
+            }
+
+            var actualTaps = Math.min(touches.length, energy);
+            score += actualTaps;
+            energy -= actualTaps;
+            saveGame();
+
+            for (var i = 0; i < actualTaps; i++) {
+                var touch = touches[i];
+                var rect = tapArea.getBoundingClientRect();
+                var x = touch.clientX - rect.left;
+                var y = touch.clientY - rect.top;
+
+                var coin = document.createElement("div");
+                coin.className = "floating-coin";
+                coin.innerText = "+1";
+                coin.style.left = (x - 15) + "px";
+                coin.style.top = (y - 20) + "px";
+                tapArea.appendChild(coin);
+
+                setTimeout(function(c) {
+                    c.remove();
+                }, 700, coin);
+            }
+
+            buildingIcon.style.transform = "scale(0.88)";
+            setTimeout(function() { buildingIcon.style.transform = "scale(1)"; }, 60);
+
+            updateGame();
+        }, { passive: false });
+
+        function inviteFriend() {
+            var botUsername = "biz_777_bot";
+            var inviteLink = "https://t.me/" + botUsername + "?start=ref_" + (tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "user");
+            var shareText = "Join Biz777!";
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink("https://t.me/share/url?url=" + encodeURIComponent(inviteLink) + "&text=" + encodeURIComponent(shareText));
+            } else {
+                alert("Invite link generated!");
+            }
+        }
+
+        function watchAd() {
+            alert("Loading ad...");
+            setTimeout(function() {
+                energy = Math.min(energy + 500, maxEnergy);
+                saveGame();
+                updateGame();
+                alert("+500 ⚡ Energy added!");
+            }, 800);
+        }
+
+        function updateGame() {
+            scoreEl.innerText = score.toLocaleString();
+            energyTextEl.innerText = energy;
+            maxEnergyTextEl.innerText = maxEnergy;
+
+            var fillPercent = Math.min((energy / maxEnergy) * 100, 100);
+            energyFillEl.style.width = fillPercent + "%";
+
+            var currentStage = STAGES[0];
+            for (var i = 0; i < STAGES.length; i++) {
+                if (score >= STAGES[i].min) {
+                    currentStage = STAGES[i];
+                }
+            }
+
+            levelTitleEl.innerText = currentStage.name;
+            buildingIcon.innerText = currentStage.icon;
+
+            var range = currentStage.max - currentStage.min;
+            var progress = score - currentStage.min;
+            var percent = Math.min((progress / range) * 100, 100);
+            progressFillEl.style.width = percent + "%";
+
+            if (score >= 10000000) {
+                document.getElementById("winModal").style.display = "flex";
+            }
+        }
+
+        updateGame();
+
+        // --- MINI-GAME LOGIC (4 FINGERS, BIZ777 COIN & EASY DISTANCE) ---
+        var canvas = document.getElementById("birdCanvas");
+        var ctx = canvas.getContext("2d");
+        var birdGameRunning = false;
+        var bird, pipes, tunnelScore, animFrame = 0;
+        var questClaimed = localStorage.getItem("biz777_quest_claimed") === "true";
+
+        function openMiniGame() {
+            document.getElementById("miniGameModal").style.display = "flex";
+            document.getElementById("gameStartOverlay").style.display = "flex";
+            document.getElementById("questRewardBox").style.display = "none";
+            tunnelScore = 0;
+            document.getElementById("questTunnelCount").innerText = tunnelScore;
+            resetBirdGame();
+        }
+
+        function closeMiniGame() {
+            birdGameRunning = false;
+            document.getElementById("miniGameModal").style.display = "none";
+        }
+
+        function resetBirdGame() {
+            bird = { x: 60, y: 220, radius: 17, gravity: 0.38, lift: -6.8, velocity: 0 };
+            pipes = [];
+            animFrame = 0;
+        }
+
+        function startBirdGame() {
+            if (questClaimed) {
+                alert("Reward already claimed today!");
+            }
+            document.getElementById("gameStartOverlay").style.display = "none";
+            resetBirdGame();
+            tunnelScore = 0;
+            document.getElementById("questTunnelCount").innerText = tunnelScore;
+            birdGameRunning = true;
+            loopBirdGame();
+        }
+
+        canvas.addEventListener("click", function() {
+            if (birdGameRunning) {
+                bird.velocity = bird.lift;
+            }
+        });
+        canvas.addEventListener("touchstart", function(e) {
+            e.preventDefault();
+            if (birdGameRunning) {
+                bird.velocity = bird.lift;
+            }
+        }, { passive: false });
+
+        // Function to draw hand with 4 fingers and custom thumb
+        function drawRoundedHandColumn(x, boundaryHeight, width, isTop) {
+            ctx.fillStyle = "#ffdbac"; // Skin color
+            ctx.strokeStyle = "#d4a373";
+            ctx.lineWidth = 2;
+
+            if (isTop) {
+                ctx.fillRect(x, 0, width, boundaryHeight);
+                ctx.strokeRect(x, 0, width, boundaryHeight);
+
+                var fingerW = width / 4;
+                for (var f = 0; f < 4; f++) {
+                    var fx = x + f * fingerW;
+                    ctx.beginPath();
+                    ctx.roundRect(fx, boundaryHeight, fingerW, 40, [0, 0, 12, 12]);
+                    ctx.fill();
+                    ctx.stroke();
+                }
+                // Curved thumb on the side
+                ctx.beginPath();
+                ctx.roundRect(x - 12, boundaryHeight + 5, 12, 28, [8, 0, 0, 8]);
+                ctx.fill();
+                ctx.stroke();
+            } else {
+                var pipeY = boundaryHeight;
+                var pipeH = canvas.height - boundaryHeight;
+                ctx.fillRect(x, pipeY, width, pipeH);
+                ctx.strokeRect(x, pipeY, width, pipeH);
+
+                var fingerW = width / 4;
+                for (var f = 0; f < 4; f++) {
+                    var fx = x + f * fingerW;
+                    ctx.beginPath();
+                    ctx.roundRect(fx, pipeY - 40, fingerW, 40, [12, 12, 0, 0]);
+                    ctx.fill();
+                    ctx.stroke();
+                }
+                // Curved thumb on the side
+                ctx.beginPath();
+                ctx.roundRect(x - 12, pipeY - 33, 12, 28, [8, 0, 0, 8]);
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
+
+        function loopBirdGame() {
+            if (!birdGameRunning) return;
+
+            animFrame++;
+            ctx.fillStyle = "#111";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
+
+            // Player Coin with "Biz777" text inside
+            ctx.beginPath();
+            ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
+            ctx.fillStyle = "#ffd700";
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#fff";
+            ctx.stroke();
+
+            // Draw "Biz777" text inside coin clearly
+            ctx.fillStyle = "#000";
+            ctx.font = "bold 8px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("Biz777", bird.x, bird.y);
+
+            // Barriers Generation with much larger, easy gap and distance
+            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 205) {
+                var gapSize = 195; // Very comfortable & easy gap
+                var minHeight = 30;
+                var maxHeight = canvas.height - gapSize - 40;
+                var topH = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
+                pipes.push({ x: canvas.width, top: topH, bottom: topH + gapSize, passed: false });
+            }
+
+            for (var i = pipes.length - 1; i >= 0; i--) {
+                pipes[i].x -= 1.8; // Slower speed for easier gameplay
+
+                var handOffset = Math.sin(animFrame * 0.05) * 4;
+                var topBoundary = pipes[i].top + handOffset;
+                var bottomBoundary = pipes[i].bottom - handOffset;
+
+                drawRoundedHandColumn(pipes[i].x, topBoundary, 60, true);
+                drawRoundedHandColumn(pipes[i].x, bottomBoundary, 60, false);
+
+                if (!pipes[i].passed && pipes[i].x + 60 < bird.x) {
+                    pipes[i].passed = true;
+                    tunnelScore++;
+                    document.getElementById("questTunnelCount").innerText = tunnelScore;
+
+                    if (tunnelScore >= 10 && !questClaimed) {
+                        birdGameRunning = false;
+                        document.getElementById("questRewardBox").style.display = "block";
+                    }
+                }
+
+                var topHitbox = topBoundary + 35;
+                var bottomHitbox = bottomBoundary - 35;
+                if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 60) {
+                    if (bird.y - bird.radius < topHitbox || bird.y + bird.radius > bottomHitbox) {
+                        endBirdGame();
+                    }
+                }
+
+                if (pipes[i].x < -70) {
+                    pipes.splice(i, 1);
+                }
+            }
+
+            if (bird.y + bird.radius >= canvas.height || bird.y - bird.radius <= 0) {
+                endBirdGame();
+            }
+
+            if (birdGameRunning) {
+                requestAnimationFrame(loopBirdGame);
+            }
+        }
+
+        function endBirdGame() {
+            birdGameRunning = false;
+            document.getElementById("gameStartOverlay").style.display = "flex";
+            document.querySelector("#gameStartOverlay h3").innerText = "💥 Caught!";
+            document.querySelector("#gameStartOverlay p").innerText = "Passed: " + tunnelScore + "/10. Try again!";
+            document.querySelector("#gameStartOverlay button").innerText = "Try Again";
+        }
+
+        function claimQuestReward() {
+            questClaimed = true;
+            localStorage.setItem("biz777_quest_claimed", "true");
+            energy = Math.min(energy + 500, maxEnergy);
+            saveGame();
+            updateGame();
+            alert("+500 ⚡ Energy added!");
+            closeMiniGame();
+        }
+    </script>
+</body>
+</html>
