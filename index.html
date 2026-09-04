@@ -24,7 +24,6 @@
 </head>
 <body id="gameBody" style="margin: 0; padding: 0; background-color: #0b0c10; color: #ffffff; font-family: sans-serif; height: 100vh; overflow: hidden; user-select: none; -webkit-user-select: none;">
 
-    <!-- Background Decorative Money Symbols -->
     <div style="position: absolute; top: 3%; left: -15px; width: 110px; height: 110px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 26px; opacity: 0.25; transform: rotate(-25deg); z-index: 1; pointer-events: none;">💵</div>
     <div style="position: absolute; top: 7%; right: -25px; width: 130px; height: 130px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 30px; opacity: 0.2; transform: rotate(18deg); z-index: 1; pointer-events: none;">€</div>
     <div style="position: absolute; top: 32%; left: -40px; width: 125px; height: 125px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 28px; opacity: 0.2; transform: rotate(40deg); z-index: 1; pointer-events: none;">💰</div>
@@ -32,33 +31,27 @@
     <div style="position: absolute; bottom: 22%; left: -20px; width: 115px; height: 115px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 26px; opacity: 0.25; transform: rotate(15deg); z-index: 1; pointer-events: none;">¥</div>
     <div style="position: absolute; bottom: 18%; right: -15px; width: 120px; height: 120px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 28px; opacity: 0.25; transform: rotate(-12deg); z-index: 1; pointer-events: none;">💵</div>
 
-    <!-- MAIN GAME LAYOUT -->
     <div style="position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 20px 0; box-sizing: border-box;">
         
-        <!-- HEADER / SCORE -->
         <div style="text-align: center; width: 85%;">
             <div id="score" style="font-size: 48px; font-weight: 900; color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.6);">0</div>
             <div id="levelTitle" style="font-size: 18px; font-weight: bold; color: #00f2fe; margin-top: 5px;">1. Bronze Foundation 🏗️</div>
             
-            <!-- PROGRESS BAR -->
             <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2);">
                 <div id="progressFill" style="height: 100%; width: 0%; background: #00f2fe; transition: width 0.2s;"></div>
             </div>
         </div>
 
-        <!-- TAP AREA -->
         <div id="tapArea" style="position: relative; width: 210px; height: 210px; background: rgba(255, 255, 255, 0.04); border: 2px dashed #ffd700; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation;">
             <div id="buildingIcon" style="font-size: 105px; pointer-events: none; transition: transform 0.05s;">🏗️</div>
         </div>
 
-        <!-- FOOTER / ENERGY & BOOSTS -->
         <div style="width: 85%; text-align: center;">
             <div style="font-size: 15px; font-weight: bold; color: #ffb703; margin-bottom: 5px;">⚡ Energy: <span id="energyText">1000</span> / <span id="maxEnergyText">1000</span></div>
             <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 12px;">
                 <div id="energyFill" style="height: 100%; width: 100%; background: #ffb703;"></div>
             </div>
 
-            <!-- BUTTONS -->
             <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 8px;">
                 <button onclick="watchAd()" style="flex: 1; padding: 10px 2px; background: #2196F3; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 11px;">🎬 Ad (+500⚡)</button>
                 <button onclick="inviteFriend()" style="flex: 1; padding: 10px 2px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 11px;">👥 Invite (+1000⚡)</button>
@@ -68,7 +61,6 @@
 
     </div>
 
-    <!-- MINI-GAME MODAL -->
     <div id="miniGameModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 200; flex-direction: column; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box;">
         <div style="width: 100%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <div style="color: #ffd700; font-weight: bold; font-size: 15px;">Hands Passed: <span id="questTunnelCount">0</span>/10</div>
@@ -78,19 +70,18 @@
         <div style="position: relative; border: 3px solid #00f2fe; border-radius: 12px; overflow: hidden; background: #111;">
             <canvas id="birdCanvas" width="340" height="460" style="display: block; cursor: pointer;"></canvas>
             <div id="gameStartOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.7);">
-                <h3 style="color: #ffd700; margin: 0 0 10px 0;">✋ Coin & Hands Quest</h3>
-                <p style="color: #fff; font-size: 13px; text-align: center; padding: 0 20px; margin-bottom: 15px;">Pass 10 pairs of hands safely to win +500 Energy!</p>
+                <h3 style="color: #ffd700; margin: 0 0 10px 0;">✋ Animated Hands Quest</h3>
+                <p style="color: #fff; font-size: 13px; text-align: center; padding: 0 20px; margin-bottom: 15px;">Pass 10 animated hands to win +500 Energy!</p>
                 <button onclick="startBirdGame()" style="padding: 10px 25px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer;">Start Game</button>
             </div>
         </div>
 
         <div id="questRewardBox" style="display: none; margin-top: 12px; text-align: center;">
-            <p style="color: #00ff88; font-weight: bold; margin: 0 0 8px 0;">🎉 Quest Completed! Pass 10 Hands!</p>
+            <p style="color: #00ff88; font-weight: bold; margin: 0 0 8px 0;">🎉 Quest Completed! (10 Passed)</p>
             <button onclick="claimQuestReward()" style="padding: 10px 20px; background: #ffd700; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Claim +500 ⚡ Energy</button>
         </div>
     </div>
 
-    <!-- WIN MODAL -->
     <div id="winModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center;">
         <div style="background: #1a1d24; padding: 25px; border-radius: 20px; text-align: center; border: 2px solid #ffd700; width: 80%;">
             <h2 style="color: #ffd700; margin: 0 0 10px 0;">🎉 Congratulations!</h2>
@@ -148,7 +139,7 @@
             var touches = e.changedTouches;
 
             if (energy <= 0) {
-                alert("Out of energy! Daily energy refills every 24 hours, or use Invite / Ad / Daily Quest.");
+                alert("Out of energy!");
                 return;
             }
 
@@ -184,8 +175,7 @@
         function inviteFriend() {
             var botUsername = "biz_777_bot";
             var inviteLink = "https://t.me/" + botUsername + "?start=ref_" + (tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "user");
-            var shareText = "Join Biz777, build your empire and claim your Airdrop! 🚀";
-            
+            var shareText = "Join Biz777!";
             if (tg && tg.openTelegramLink) {
                 tg.openTelegramLink("https://t.me/share/url?url=" + encodeURIComponent(inviteLink) + "&text=" + encodeURIComponent(shareText));
             } else {
@@ -199,7 +189,7 @@
                 energy = Math.min(energy + 500, maxEnergy);
                 saveGame();
                 updateGame();
-                alert("Thank you! +500 ⚡ Energy added!");
+                alert("+500 ⚡ Energy added!");
             }, 800);
         }
 
@@ -233,11 +223,11 @@
 
         updateGame();
 
-        // --- MINI-GAME SCRIPT (HANDS OBSTACLE & GOAL: 10) ---
+        // --- ANIMATED HANDS MINI-GAME (GOAL: 10) ---
         var canvas = document.getElementById("birdCanvas");
         var ctx = canvas.getContext("2d");
         var birdGameRunning = false;
-        var bird, pipes, tunnelScore;
+        var bird, pipes, tunnelScore, animFrame = 0;
         var questClaimed = localStorage.getItem("biz777_quest_claimed") === "true";
 
         function openMiniGame() {
@@ -255,13 +245,14 @@
         }
 
         function resetBirdGame() {
-            bird = { x: 60, y: 220, radius: 18, gravity: 0.45, lift: -7.5, velocity: 0 };
+            bird = { x: 60, y: 220, radius: 16, gravity: 0.45, lift: -7.5, velocity: 0 };
             pipes = [];
+            animFrame = 0;
         }
 
         function startBirdGame() {
             if (questClaimed) {
-                alert("You have already claimed today's quest reward!");
+                alert("Reward already claimed today!");
             }
             document.getElementById("gameStartOverlay").style.display = "none";
             resetBirdGame();
@@ -286,33 +277,23 @@
         function loopBirdGame() {
             if (!birdGameRunning) return;
 
-            ctx.fillStyle = "#1e1e2f";
+            animFrame++;
+            ctx.fillStyle = "#111";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Bird physics
             bird.velocity += bird.gravity;
             bird.y += bird.velocity;
 
-            // Draw Biz777 Coin as Player
-            ctx.save();
-            ctx.translate(bird.x, bird.y);
-            
+            // Animated Coin Player
             ctx.beginPath();
-            ctx.arc(0, 0, bird.radius, 0, Math.PI * 2);
+            ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
             ctx.fillStyle = "#ffd700";
             ctx.fill();
             ctx.lineWidth = 2;
-            ctx.strokeStyle = "#ffaa00";
+            ctx.strokeStyle = "#fff";
             ctx.stroke();
 
-            ctx.fillStyle = "#000";
-            ctx.font = "bold 9px sans-serif";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText("biz777", 0, 0);
-            ctx.restore();
-
-            // Hands generation & rendering
+            // Barriers Generation
             if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 180) {
                 var gapSize = 150;
                 var minHeight = 40;
@@ -324,29 +305,38 @@
             for (var i = pipes.length - 1; i >= 0; i--) {
                 pipes[i].x -= 2;
 
-                // Draw Hands trying to grab the coin
-                ctx.font = "38px sans-serif";
-                ctx.textAlign = "center";
-                ctx.textBaseline = "bottom";
-                ctx.fillText("👇", pipes[i].x + 25, pipes[i].top);
+                // Animated hands reaching/moving slightly up and down
+                var handOffset = Math.sin(animFrame * 0.1) * 10;
 
-                ctx.textBaseline = "top";
-                ctx.fillText("👆", pipes[i].x + 25, pipes[i].bottom);
+                // Draw Top Hand (reaching down)
+                ctx.fillStyle = "#ffb703";
+                ctx.fillRect(pipes[i].x, 0, 50, pipes[i].top + handOffset);
+                ctx.fillStyle = "#fff";
+                ctx.font = "20px sans-serif";
+                ctx.fillText("✋", pipes[i].x + 12, pipes[i].top + handOffset - 10);
 
-                if (!pipes[i].passed && pipes[i].x + 55 < bird.x) {
+                // Draw Bottom Hand (reaching up)
+                ctx.fillStyle = "#ffb703";
+                ctx.fillRect(pipes[i].x, pipes[i].bottom - handOffset, 50, canvas.height - (pipes[i].bottom - handOffset));
+                ctx.fillStyle = "#fff";
+                ctx.fillText("✋", pipes[i].x + 12, pipes[i].bottom - handOffset + 25);
+
+                if (!pipes[i].passed && pipes[i].x + 50 < bird.x) {
                     pipes[i].passed = true;
                     tunnelScore++;
                     document.getElementById("questTunnelCount").innerText = tunnelScore;
 
-                    // Goal is 10 hands passed for 500 energy reward
                     if (tunnelScore >= 10 && !questClaimed) {
                         birdGameRunning = false;
                         document.getElementById("questRewardBox").style.display = "block";
                     }
                 }
 
+                // Collision Detection with animated hands
+                var topBoundary = pipes[i].top + handOffset;
+                var bottomBoundary = pipes[i].bottom - handOffset;
                 if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 50) {
-                    if (bird.y - bird.radius < pipes[i].top || bird.y + bird.radius > pipes[i].bottom) {
+                    if (bird.y - bird.radius < topBoundary || bird.y + bird.radius > bottomBoundary) {
                         endBirdGame();
                     }
                 }
@@ -369,7 +359,7 @@
             birdGameRunning = false;
             document.getElementById("gameStartOverlay").style.display = "flex";
             document.querySelector("#gameStartOverlay h3").innerText = "💥 Caught by Hands!";
-            document.querySelector("#gameStartOverlay p").innerText = "Hands passed: " + tunnelScore + "/10. Try again!";
+            document.querySelector("#gameStartOverlay p").innerText = "Passed: " + tunnelScore + "/10. Try again!";
             document.querySelector("#gameStartOverlay button").innerText = "Try Again";
         }
 
@@ -379,7 +369,7 @@
             energy = Math.min(energy + 500, maxEnergy);
             saveGame();
             updateGame();
-            alert("Success! +500 ⚡ Energy added to your balance!");
+            alert("+500 ⚡ Energy added!");
             closeMiniGame();
         }
     </script>
