@@ -223,7 +223,7 @@
 
         updateGame();
 
-        // --- MINI-GAME LOGIC (WIDE GAP & ROUNDED FINGERS) ---
+        // --- MINI-GAME LOGIC (EXTRA WIDE GAP & ROUNDED FINGERS) ---
         var canvas = document.getElementById("birdCanvas");
         var ctx = canvas.getContext("2d");
         var birdGameRunning = false;
@@ -245,7 +245,7 @@
         }
 
         function resetBirdGame() {
-            bird = { x: 60, y: 220, radius: 15, gravity: 0.42, lift: -7.2, velocity: 0 };
+            bird = { x: 60, y: 220, radius: 15, gravity: 0.4, lift: -7.0, velocity: 0 };
             pipes = [];
             animFrame = 0;
         }
@@ -328,11 +328,11 @@
             ctx.strokeStyle = "#fff";
             ctx.stroke();
 
-            // Barriers Generation with much wider gap for easy play
-            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 200) {
-                var gapSize = 190; // Widened gap significantly
-                var minHeight = 40;
-                var maxHeight = canvas.height - gapSize - 60;
+            // Barriers Generation with maximum wide gap for comfortable play
+            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 220) {
+                var gapSize = 220; // Massively increased gap distance
+                var minHeight = 30;
+                var maxHeight = canvas.height - gapSize - 50;
                 var topH = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
                 pipes.push({ x: canvas.width, top: topH, bottom: topH + gapSize, passed: false });
             }
@@ -340,14 +340,14 @@
             for (var i = pipes.length - 1; i >= 0; i--) {
                 pipes[i].x -= 2;
 
-                var handOffset = Math.sin(animFrame * 0.06) * 6;
+                var handOffset = Math.sin(animFrame * 0.05) * 5;
                 var topBoundary = pipes[i].top + handOffset;
                 var bottomBoundary = pipes[i].bottom - handOffset;
 
-                drawRoundedHandColumn(pipes[i].x, topBoundary, 58, true);
-                drawRoundedHandColumn(pipes[i].x, bottomBoundary, 58, false);
+                drawRoundedHandColumn(pipes[i].x, topBoundary, 54, true);
+                drawRoundedHandColumn(pipes[i].x, bottomBoundary, 54, false);
 
-                if (!pipes[i].passed && pipes[i].x + 58 < bird.x) {
+                if (!pipes[i].passed && pipes[i].x + 54 < bird.x) {
                     pipes[i].passed = true;
                     tunnelScore++;
                     document.getElementById("questTunnelCount").innerText = tunnelScore;
@@ -360,7 +360,7 @@
 
                 var topHitbox = topBoundary + 40;
                 var bottomHitbox = bottomBoundary - 40;
-                if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 58) {
+                if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 54) {
                     if (bird.y - bird.radius < topHitbox || bird.y + bird.radius > bottomHitbox) {
                         endBirdGame();
                     }
