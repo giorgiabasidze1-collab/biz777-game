@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Biz777 - Tap, Hand Game & Shop</title>
+    <title>Biz777</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @keyframes floatUp {
@@ -47,7 +47,7 @@
 
             <!-- BUTTONS ROW: SHOP & MINI-GAME -->
             <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                <button onclick="openShop()" style="flex: 1; padding: 12px; background: #00bcd4; color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px;">🛒 Shop</button>
+                <button onclick="openShop()" style="flex: 1; padding: 14px; background: #00bcd4; color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 15px;">🛒 Shop</button>
             </div>
 
             <button onclick="openMiniGame()" style="width: 100%; padding: 11px; background: linear-gradient(135deg, #f72585, #7209b7); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px;">🕹️ Hands Mini-Game</button>
@@ -56,7 +56,7 @@
     </div>
 
     <!-- SHOP MODAL -->
-    <div id="shopModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 150; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;">
+    <div id="shopModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;">
         <div style="width: 100%; max-width: 340px; background: #1a1d24; border: 2px solid #00bcd4; border-radius: 15px; padding: 20px; box-sizing: border-box;">
             <h2 style="color: #00bcd4; margin-top: 0; text-align: center;">🛒 Shop</h2>
             
@@ -101,7 +101,7 @@
     </div>
 
     <!-- MINI-GAME MODAL -->
-    <div id="miniGameModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 200; flex-direction: column; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box;">
+    <div id="miniGameModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 999; flex-direction: column; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box;">
         <div style="width: 100%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <div style="color: #ffd700; font-weight: bold; font-size: 15px;">Score: <span id="questTunnelCount">0</span></div>
             <button onclick="closeMiniGame()" style="background: #ff4757; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">✕ Exit</button>
