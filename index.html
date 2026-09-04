@@ -78,8 +78,8 @@
         <div style="position: relative; border: 3px solid #00f2fe; border-radius: 12px; overflow: hidden; background: #111;">
             <canvas id="birdCanvas" width="340" height="460" style="display: block; cursor: pointer;"></canvas>
             <div id="gameStartOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.7);">
-                <h3 style="color: #ffd700; margin: 0 0 10px 0;">✋ Solid Drawn Hands</h3>
-                <p style="color: #fff; font-size: 13px; text-align: center; padding: 0 20px; margin-bottom: 15px;">Pass 10 solid drawn hands to win +500 Energy!</p>
+                <h3 style="color: #ffd700; margin: 0 0 10px 0;">✋ Filled Hand & Pipe Quest</h3>
+                <p style="color: #fff; font-size: 13px; text-align: center; padding: 0 20px; margin-bottom: 15px;">Pass 10 obstacles to win +500 Energy!</p>
                 <button onclick="startBirdGame()" style="padding: 10px 25px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer;">Start Game</button>
             </div>
         </div>
@@ -232,7 +232,7 @@
 
         updateGame();
 
-        // --- FULLY FILLED HANDS MINI-GAME (GOAL: 10) ---
+        // --- FILLED PIPES AND HANDS MINI-GAME (GOAL: 10) ---
         var canvas = document.getElementById("birdCanvas");
         var ctx = canvas.getContext("2d");
         var birdGameRunning = false;
@@ -283,37 +283,37 @@
             }
         }, { passive: false });
 
-        // Function to draw completely filled and solid hand shape
-        function drawSolidHand(x, boundaryHeight, totalWidth, isTop) {
-            ctx.fillStyle = "#f5c6a5"; // Filled skin color (no empty spaces)
+        // Function to draw connected skin-colored pipe + hand structure
+        function drawPipeWithHand(x, height, width, isTop) {
+            ctx.fillStyle = "#f5c6a5"; // Filled skin color (no empty gaps)
             ctx.strokeStyle = "#d89e75";
             ctx.lineWidth = 2;
 
             if (isTop) {
-                // Top hand extending downwards
-                ctx.fillRect(x, 0, totalWidth, boundaryHeight);
-                ctx.strokeRect(x, 0, totalWidth, boundaryHeight);
+                // Top Pipe body
+                ctx.fillRect(x, 0, width, height);
+                ctx.strokeRect(x, 0, width, height);
 
-                // Fingers on bottom edge of the top hand
-                var fingerW = totalWidth / 5;
+                // Hand/Fingers attached at the bottom of the top pipe
+                var fingerW = width / 5;
                 for (var f = 0; f < 5; f++) {
                     var fx = x + f * fingerW;
-                    ctx.fillRect(fx + 2, boundaryHeight, fingerW - 4, 40);
-                    ctx.strokeRect(fx + 2, boundaryHeight, fingerW - 4, 40);
+                    ctx.fillRect(fx + 1, height, fingerW - 2, 35);
+                    ctx.strokeRect(fx + 1, height, fingerW - 2, 35);
                 }
             } else {
-                // Bottom hand extending upwards
-                var handY = boundaryHeight;
-                var handH = canvas.height - boundaryHeight;
-                ctx.fillRect(x, handY, totalWidth, handH);
-                ctx.strokeRect(x, handY, totalWidth, handH);
+                // Bottom Pipe body
+                var pipeY = height;
+                var pipeH = canvas.height - height;
+                ctx.fillRect(x, pipeY, width, pipeH);
+                ctx.strokeRect(x, pipeY, width, pipeH);
 
-                // Fingers on top edge of the bottom hand
-                var fingerW = totalWidth / 5;
+                // Hand/Fingers attached at the top of the bottom pipe
+                var fingerW = width / 5;
                 for (var f = 0; f < 5; f++) {
                     var fx = x + f * fingerW;
-                    ctx.fillRect(fx + 2, handY - 40, fingerW - 4, 40);
-                    ctx.strokeRect(fx + 2, handY - 40, fingerW - 4, 40);
+                    ctx.fillRect(fx + 1, pipeY - 35, fingerW - 2, 35);
+                    ctx.strokeRect(fx + 1, pipeY - 35, fingerW - 2, 35);
                 }
             }
         }
@@ -340,7 +340,7 @@
             // Barriers Generation
             if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 180) {
                 var gapSize = 150;
-                var minHeight = 50;
+                var minHeight = 40;
                 var maxHeight = canvas.height - gapSize - 80;
                 var topH = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
                 pipes.push({ x: canvas.width, top: topH, bottom: topH + gapSize, passed: false });
@@ -353,11 +353,11 @@
                 var topBoundary = pipes[i].top + handOffset;
                 var bottomBoundary = pipes[i].bottom - handOffset;
 
-                // Draw solid top & bottom hands with no gaps inside
-                drawSolidHand(pipes[i].x, topBoundary, 65, true);
-                drawSolidHand(pipes[i].x, bottomBoundary, 65, false);
+                // Draw filled pipes with attached hands
+                drawPipeWithHand(pipes[i].x, topBoundary, 60, true);
+                drawPipeWithHand(pipes[i].x, bottomBoundary, 60, false);
 
-                if (!pipes[i].passed && pipes[i].x + 65 < bird.x) {
+                if (!pipes[i].passed && pipes[i].x + 60 < bird.x) {
                     pipes[i].passed = true;
                     tunnelScore++;
                     document.getElementById("questTunnelCount").innerText = tunnelScore;
@@ -368,14 +368,16 @@
                     }
                 }
 
-                // Collision Detection
-                if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 65) {
-                    if (bird.y - bird.radius < topBoundary || bird.y + bird.radius > bottomBoundary) {
+                // Collision Detection (including the hand extensions)
+                var topHitbox = topBoundary + 35;
+                var bottomHitbox = bottomBoundary - 35;
+                if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 60) {
+                    if (bird.y - bird.radius < topHitbox || bird.y + bird.radius > bottomHitbox) {
                         endBirdGame();
                     }
                 }
 
-                if (pipes[i].x < -75) {
+                if (pipes[i].x < -70) {
                     pipes.splice(i, 1);
                 }
             }
@@ -392,7 +394,7 @@
         function endBirdGame() {
             birdGameRunning = false;
             document.getElementById("gameStartOverlay").style.display = "flex";
-            document.querySelector("#gameStartOverlay h3").innerText = "💥 Caught by Hand!";
+            document.querySelector("#gameStartOverlay h3").innerText = "💥 Caught!";
             document.querySelector("#gameStartOverlay p").innerText = "Passed: " + tunnelScore + "/10. Try again!";
             document.querySelector("#gameStartOverlay button").innerText = "Try Again";
         }
