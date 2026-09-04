@@ -30,7 +30,7 @@
         <!-- HEADER / SCORE -->
         <div style="text-align: center; width: 85%;">
             <div id="score" style="font-size: 45px; font-weight: 900; color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.6);">0</div>
-            <div style="font-size: 14px; font-weight: bold; color: #00f2fe; margin-top: 3px;">ძალა: +<span id="tapPowerDisplay">1</span> / ტაპი</div>
+            <div style="font-size: 14px; font-weight: bold; color: #00f2fe; margin-top: 3px;">Power: +<span id="tapPowerDisplay">1</span> / Tap</div>
         </div>
 
         <!-- TAP AREA -->
@@ -40,17 +40,17 @@
 
         <!-- FOOTER / ENERGY & BUTTONS -->
         <div style="width: 85%; text-align: center;">
-            <div style="font-size: 14px; font-weight: bold; color: #ffb703; margin-bottom: 4px;">⚡ ენერგია: <span id="energyText">1000</span> / <span id="maxEnergyText">1000</span></div>
+            <div style="font-size: 14px; font-weight: bold; color: #ffb703; margin-bottom: 4px;">⚡ Energy: <span id="energyText">1000</span> / <span id="maxEnergyText">1000</span></div>
             <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 10px;">
                 <div id="energyFill" style="height: 100%; width: 100%; background: #ffb703;"></div>
             </div>
 
-            <!-- BUTTONS ROW -->
+            <!-- BUTTONS ROW: SHOP & MINI-GAME -->
             <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                <button onclick="openShop()" style="flex: 1; padding: 11px; background: #00bcd4; color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px;">🛒 მაღაზია (Shop)</button>
+                <button onclick="openShop()" style="flex: 1; padding: 12px; background: #00bcd4; color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px;">🛒 Shop</button>
             </div>
 
-            <button onclick="openMiniGame()" style="width: 100%; padding: 11px; background: linear-gradient(135deg, #f72585, #7209b7); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px;">🕹️ ხელების მინი-თამაში</button>
+            <button onclick="openMiniGame()" style="width: 100%; padding: 11px; background: linear-gradient(135deg, #f72585, #7209b7); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px;">🕹️ Hands Mini-Game</button>
         </div>
 
     </div>
@@ -58,61 +58,61 @@
     <!-- SHOP MODAL -->
     <div id="shopModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 150; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;">
         <div style="width: 100%; max-width: 340px; background: #1a1d24; border: 2px solid #00bcd4; border-radius: 15px; padding: 20px; box-sizing: border-box;">
-            <h2 style="color: #00bcd4; margin-top: 0; text-align: center;">🛒 მაღაზია</h2>
+            <h2 style="color: #00bcd4; margin-top: 0; text-align: center;">🛒 Shop</h2>
             
             <!-- Item 1: +2 Tap -->
             <div style="margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <div style="font-weight: bold; font-size: 13px;">👆 ძალა (+2 ტაპზე)</div>
-                    <div style="font-size: 11px; color: #ffd700;">ფასი: 300 ქულა</div>
+                    <div style="font-weight: bold; font-size: 13px;">👆 Power (+2 Tap)</div>
+                    <div style="font-size: 11px; color: #ffd700;">Price: 300 Coins</div>
                 </div>
-                <button onclick="buyUpgrade(2, 300)" style="background: #00ff88; color: #000; border: none; padding: 7px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">ყიდვა</button>
+                <button onclick="buyUpgrade(2, 300)" style="background: #00ff88; color: #000; border: none; padding: 7px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Buy</button>
             </div>
 
             <!-- Item 2: +5 Tap -->
             <div style="margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <div style="font-weight: bold; font-size: 13px;">🔥 ძალა (+5 ტაპზე)</div>
-                    <div style="font-size: 11px; color: #ffd700;">ფასი: 1,000 ქულა</div>
+                    <div style="font-weight: bold; font-size: 13px;">🔥 Power (+5 Tap)</div>
+                    <div style="font-size: 11px; color: #ffd700;">Price: 1,200 Coins</div>
                 </div>
-                <button onclick="buyUpgrade(5, 1000)" style="background: #00ff88; color: #000; border: none; padding: 7px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">ყიდვა</button>
+                <button onclick="buyUpgrade(5, 1200)" style="background: #00ff88; color: #000; border: none; padding: 7px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Buy</button>
             </div>
 
             <!-- Item 3: +10 Tap -->
             <div style="margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <div style="font-weight: bold; font-size: 13px;">⚡ ძალა (+10 ტაპზე)</div>
-                    <div style="font-size: 11px; color: #ffd700;">ფასი: 3,500 ქულა</div>
+                    <div style="font-weight: bold; font-size: 13px;">⚡ Power (+10 Tap)</div>
+                    <div style="font-size: 11px; color: #ffd700;">Price: 4,000 Coins</div>
                 </div>
-                <button onclick="buyUpgrade(10, 3500)" style="background: #00ff88; color: #000; border: none; padding: 7px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">ყიდვა</button>
+                <button onclick="buyUpgrade(10, 4000)" style="background: #00ff88; color: #000; border: none; padding: 7px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Buy</button>
             </div>
 
             <!-- Item 4: Refill Energy -->
             <div style="margin-bottom: 15px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <div style="font-weight: bold; font-size: 13px;">🔋 ენერგიის შევსება</div>
-                    <div style="font-size: 11px; color: #ffd700;">ფასი: 200 ქულა</div>
+                    <div style="font-weight: bold; font-size: 13px;">🔋 Energy Refill</div>
+                    <div style="font-size: 11px; color: #ffd700;">Price: 200 Coins</div>
                 </div>
-                <button onclick="buyEnergyRefill()" style="background: #ffb703; color: #000; border: none; padding: 7px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">ყიდვა</button>
+                <button onclick="buyEnergyRefill()" style="background: #ffb703; color: #000; border: none; padding: 7px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Buy</button>
             </div>
 
-            <button onclick="closeShop()" style="width: 100%; padding: 10px; background: #ff4757; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">დახურვა</button>
+            <button onclick="closeShop()" style="width: 100%; padding: 10px; background: #ff4757; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Close</button>
         </div>
     </div>
 
     <!-- MINI-GAME MODAL -->
     <div id="miniGameModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 200; flex-direction: column; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box;">
         <div style="width: 100%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <div style="color: #ffd700; font-weight: bold; font-size: 15px;">ქულა: <span id="questTunnelCount">0</span></div>
-            <button onclick="closeMiniGame()" style="background: #ff4757; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">✕ გასვლა</button>
+            <div style="color: #ffd700; font-weight: bold; font-size: 15px;">Score: <span id="questTunnelCount">0</span></div>
+            <button onclick="closeMiniGame()" style="background: #ff4757; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">✕ Exit</button>
         </div>
         
         <div style="position: relative; border: 3px solid #00f2fe; border-radius: 12px; overflow: hidden; background: #111;">
             <canvas id="birdCanvas" width="340" height="460" style="display: block; cursor: pointer;"></canvas>
             <div id="gameStartOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.7);">
-                <h3 style="color: #ffd700; margin: 0 0 10px 0;">✋ ხელების დაბრკოლებები</h3>
-                <p style="color: #fff; font-size: 13px; text-align: center; padding: 0 20px; margin-bottom: 15px;">შეეხე ეკრანს, რომ აიფრინო და აიცილო ხელები!</p>
-                <button onclick="startBirdGame()" style="padding: 10px 25px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer;">დაწყება</button>
+                <h3 style="color: #ffd700; margin: 0 0 10px 0;">✋ Hands Obstacles</h3>
+                <p style="color: #fff; font-size: 13px; text-align: center; padding: 0 20px; margin-bottom: 15px;">Tap screen to fly and avoid hands!</p>
+                <button onclick="startBirdGame()" style="padding: 10px 25px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer;">Start</button>
             </div>
         </div>
     </div>
@@ -217,10 +217,10 @@
                 tapPower += powerAdd;
                 saveGame();
                 updateGame();
-                alert("წარმატებით იყიდე! ახლა თითო ტაპზე გემატება +" + tapPower);
+                alert("Successfully purchased! Current power: +" + tapPower);
                 closeShop();
             } else {
-                alert("არ გაქვს საკმარისი ქულა! გჭირდება " + cost.toLocaleString() + " ქულა.");
+                alert("Not enough coins! Required: " + cost.toLocaleString());
             }
         }
 
@@ -231,10 +231,10 @@
                 energy = maxEnergy;
                 saveGame();
                 updateGame();
-                alert("ენერგია წარმატებით შეივსო!");
+                alert("Energy successfully refilled!");
                 closeShop();
             } else {
-                alert("არ გაქვს საკმარისი ქულა! გჭირდება 200 ქულა.");
+                alert("Not enough coins! Required: 200");
             }
         }
 
@@ -395,9 +395,9 @@
         function endBirdGame() {
             birdGameRunning = false;
             document.getElementById("gameStartOverlay").style.display = "flex";
-            document.querySelector("#gameStartOverlay h3").innerText = "💥 წააგე!";
-            document.querySelector("#gameStartOverlay p").innerText = "შენი ქულა: " + tunnelScore + ". სცადე თავიდან!";
-            document.querySelector("#gameStartOverlay button").innerText = "თავიდან ცდა";
+            document.querySelector("#gameStartOverlay h3").innerText = "💥 Game Over!";
+            document.querySelector("#gameStartOverlay p").innerText = "Your score: " + tunnelScore + ". Try again!";
+            document.querySelector("#gameStartOverlay button").innerText = "Try Again";
         }
     </script>
 </body>
