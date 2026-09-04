@@ -82,9 +82,34 @@
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg) tg.expand();
 
-        var score = 0;
-        var energy = 1000;
+        // Load saved game data or set defaults
+        var score = parseInt(localStorage.getItem("biz777_score")) || 0;
+        var energy = parseInt(localStorage.getItem("biz777_energy"));
+        if (isNaN(energy)) energy = 1000;
         var maxEnergy = 1000;
+
+        // 24-hour daily energy refill check
+        var lastEnergyTime = parseInt(localStorage.getItem("biz777_last_energy_time")) || 0;
+        var currentTime = new Date().getTime();
+        var twentyFourHours = 24 * 60 * 60 * 1000;
+
+        if (currentTime - lastEnergyTime >= twentyFourHours) {
+            energy = maxEnergy;
+            localStorage.setItem("biz777_last_energy_time", currentTime);
+            saveGame();
+        }
+
+        // Referral check
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
+            var refClaimed = localStorage.getItem("biz777_ref_claimed");
+            if (!refClaimed) {
+                energy = Math.min(energy + 1000, maxEnergy);
+                localStorage.setItem("biz777_ref_claimed", "true");
+                setTimeout(function() {
+                    alert("Welcome via referral! +1000 ⚡ Energy added!");
+                }, 500);
+            }
+        }
 
         var STAGES = [
             { name: "1. Bronze Foundation", icon: "🏗️", min: 0, max: 1000 },
@@ -106,21 +131,26 @@
         var energyFillEl = document.getElementById("energyFill");
         var tapArea = document.getElementById("tapArea");
 
+        function saveGame() {
+            localStorage.setItem("biz777_score", score);
+            localStorage.setItem("biz777_energy", energy);
+        }
+
         // Multi-touch support with floating +1 coin animation per finger
         tapArea.addEventListener("touchstart", function(e) {
             e.preventDefault();
             var touches = e.changedTouches;
 
             if (energy <= 0) {
-                alert("Out of energy! Invite a friend or watch an ad to refill.");
+                alert("Out of energy! Daily energy refills every 24 hours, or use Invite / Ad.");
                 return;
             }
 
             var actualTaps = Math.min(touches.length, energy);
             score += actualTaps;
             energy -= actualTaps;
+            saveGame();
 
-            // Spawn floating +1 coin for each touch point
             for (var i = 0; i < actualTaps; i++) {
                 var touch = touches[i];
                 var rect = tapArea.getBoundingClientRect();
@@ -146,18 +176,14 @@
         }, { passive: false });
 
         function inviteFriend() {
+            var botUsername = "biz_777_bot";
+            var inviteLink = "https://t.me/" + botUsername + "?start=ref_" + (tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "user");
             var shareText = "Join Biz777, build your empire and claim your Airdrop! 🚀";
-            var botUrl = "https://t.me/biz_777_bot";
             
             if (tg && tg.openTelegramLink) {
-                tg.openTelegramLink("https://t.me/share/url?url=" + encodeURIComponent(botUrl) + "&text=" + encodeURIComponent(shareText));
-                energy = Math.min(energy + 1000, maxEnergy);
-                updateGame();
-                alert("Friend invited successfully! +1000 ⚡ Energy added!");
+                tg.openTelegramLink("https://t.me/share/url?url=" + encodeURIComponent(inviteLink) + "&text=" + encodeURIComponent(shareText));
             } else {
-                energy = Math.min(energy + 1000, maxEnergy);
-                updateGame();
-                alert("Invite link action simulated! +1000 ⚡ Energy added!");
+                alert("Invite link generated! Share it with friends.");
             }
         }
 
@@ -165,6 +191,7 @@
             alert("Loading ad...");
             setTimeout(function() {
                 energy = Math.min(energy + 500, maxEnergy);
+                saveGame();
                 updateGame();
                 alert("Thank you! +500 ⚡ Energy added!");
             }, 800);
