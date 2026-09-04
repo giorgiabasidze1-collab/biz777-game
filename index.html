@@ -8,14 +8,14 @@
 </head>
 <body id="gameBody" style="margin: 0; padding: 0; background-color: #0b0c10; color: #ffffff; font-family: sans-serif; height: 100vh; overflow: hidden; user-select: none; -webkit-user-select: none;">
 
-    <!-- Background Decorative Coins -->
-    <div style="position: absolute; top: 3%; left: -15px; width: 110px; height: 110px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; opacity: 0.3; transform: rotate(-25deg); z-index: 1; pointer-events: none;">BIZ777</div>
-    <div style="position: absolute; top: 7%; right: -25px; width: 130px; height: 130px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; opacity: 0.25; transform: rotate(18deg); z-index: 1; pointer-events: none;">BIZ777</div>
-    <div style="position: absolute; top: 32%; left: -40px; width: 125px; height: 125px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; opacity: 0.2; transform: rotate(40deg); z-index: 1; pointer-events: none;">BIZ777</div>
-    <div style="position: absolute; top: 36%; right: -35px; width: 140px; height: 140px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; opacity: 0.2; transform: rotate(-35deg); z-index: 1; pointer-events: none;">BIZ777</div>
-    <div style="position: absolute; bottom: 22%; left: -20px; width: 115px; height: 115px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; opacity: 0.25; transform: rotate(15deg); z-index: 1; pointer-events: none;">BIZ777</div>
-    <div style="position: absolute; bottom: 18%; right: -15px; width: 120px; height: 120px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; opacity: 0.3; transform: rotate(-12deg); z-index: 1; pointer-events: none;">BIZ777</div>
-    <div style="position: absolute; top: 20%; left: 38%; width: 95px; height: 95px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; opacity: 0.15; transform: rotate(50deg); z-index: 1; pointer-events: none;">BIZ777</div>
+    <!-- Background Decorative Money Symbols -->
+    <div style="position: absolute; top: 3%; left: -15px; width: 110px; height: 110px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 26px; opacity: 0.25; transform: rotate(-25deg); z-index: 1; pointer-events: none;">💵</div>
+    <div style="position: absolute; top: 7%; right: -25px; width: 130px; height: 130px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 30px; opacity: 0.2; transform: rotate(18deg); z-index: 1; pointer-events: none;">€</div>
+    <div style="position: absolute; top: 32%; left: -40px; width: 125px; height: 125px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 28px; opacity: 0.2; transform: rotate(40deg); z-index: 1; pointer-events: none;">💰</div>
+    <div style="position: absolute; top: 36%; right: -35px; width: 140px; height: 140px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 32px; opacity: 0.2; transform: rotate(-35deg); z-index: 1; pointer-events: none;">£</div>
+    <div style="position: absolute; bottom: 22%; left: -20px; width: 115px; height: 115px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 26px; opacity: 0.25; transform: rotate(15deg); z-index: 1; pointer-events: none;">¥</div>
+    <div style="position: absolute; bottom: 18%; right: -15px; width: 120px; height: 120px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 28px; opacity: 0.25; transform: rotate(-12deg); z-index: 1; pointer-events: none;">💵</div>
+    <div style="position: absolute; top: 20%; left: 38%; width: 95px; height: 95px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 22px; opacity: 0.15; transform: rotate(50deg); z-index: 1; pointer-events: none;">💶</div>
 
     <!-- MAIN GAME LAYOUT -->
     <div style="position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 20px 0; box-sizing: border-box;">
@@ -46,7 +46,7 @@
             <!-- BUTTONS -->
             <div style="display: flex; gap: 10px; justify-content: center;">
                 <button onclick="watchAd()" style="flex: 1; padding: 12px 5px; background: #2196F3; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 12px;">🎬 Ad (+500⚡)</button>
-                <button onclick="inviteFriend()" style="flex: 1; padding: 12px 5px; background: #4CAF50; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 12px;">👥 Invite (+1000 Pts)</button>
+                <button onclick="inviteFriend()" style="flex: 1; padding: 12px 5px; background: #4CAF50; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 12px;">👥 Invite (+1000⚡)</button>
             </div>
         </div>
 
@@ -68,7 +68,7 @@
 
         var score = 0;
         var energy = 1000;
-        var maxEnergy = 1000;
+        var maxEnergy = 1000; // Strict limit: 1000 max
 
         var STAGES = [
             { name: "1. Bronze Foundation", icon: "🏗️", min: 0, max: 1000 },
@@ -108,7 +108,7 @@
 
         function inviteFriend() {
             var shareText = "Join Biz777, build your empire and claim your Airdrop! 🚀";
-            var botUrl = "https://t.me/your_bot_username";
+            var botUrl = "https://t.me/biz_777_bot";
             
             if (tg && tg.openTelegramLink) {
                 tg.openTelegramLink("https://t.me/share/url?url=" + encodeURIComponent(botUrl) + "&text=" + encodeURIComponent(shareText));
@@ -116,18 +116,16 @@
                 alert("Invite link copied!");
             }
 
-            score += 1000;
-            maxEnergy += 1000;
-            energy += 1000;
+            // Only energy refilled/added up to max limit of 1000, score and building level unchanged
+            energy = Math.min(energy + 1000, maxEnergy);
             updateGame();
-            alert("Friend invited! +1000 Points and +1000 ⚡ Energy added!");
+            alert("Friend invited! Energy fully refilled (+1000 ⚡)!");
         }
 
         function watchAd() {
             alert("Loading ad...");
             setTimeout(function() {
-                maxEnergy += 500;
-                energy += 500;
+                energy = Math.min(energy + 500, maxEnergy);
                 updateGame();
                 alert("Thank you! +500 ⚡ Energy added!");
             }, 800);
