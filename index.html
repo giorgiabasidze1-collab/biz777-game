@@ -236,7 +236,7 @@
         function buyMaxEnergy() {
             var cost = 2500;
             if (score >= cost) {
-                score -= cost; // ⚡ ქულების დაკლება ყიდვისას
+                score -= cost;
                 maxEnergy += 500;
                 energy = maxEnergy;
                 saveGame();
@@ -251,7 +251,7 @@
         function buyTapPower() {
             var cost = 5000;
             if (score >= cost) {
-                score -= cost; // ⚡ ქულების დაკლება ყიდვისას
+                score -= cost;
                 tapPower += 1;
                 saveGame();
                 updateGame();
@@ -410,4 +410,142 @@
             if (birdGameRunning) { bird.velocity = bird.lift; }
         }, { passive: false });
 
-        function drawRoundedHandColumn(x, boundaryHeight, width, isTop)
+        function drawRoundedHandColumn(x, boundaryHeight, width, isTop) {
+            ctx.fillStyle = "#ffdbac";
+            ctx.strokeStyle = "#d4a373";
+            ctx.lineWidth = 2;
+
+            if (isTop) {
+                ctx.fillRect(x, 0, width, boundaryHeight);
+                ctx.strokeRect(x, 0, width, boundaryHeight);
+
+                var fingerW = width / 4;
+                for (var f = 0; f < 4; f++) {
+                    var fx = x + f * fingerW;
+                    ctx.beginPath();
+                    ctx.roundRect(fx, boundaryHeight, fingerW, 40, [0, 0, 12, 12]);
+                    ctx.fill();
+                    ctx.stroke();
+                }
+                // Curved thumb on the side
+                ctx.beginPath();
+                ctx.roundRect(x - 12, boundaryHeight + 5, 12, 28, [8, 0, 0, 8]);
+                ctx.fill();
+                ctx.stroke();
+            } else {
+                var pipeY = boundaryHeight;
+                var pipeH = canvas.height - boundaryHeight;
+                ctx.fillRect(x, pipeY, width, pipeH);
+                ctx.strokeRect(x, pipeY, width, pipeH);
+
+                var fingerW = width / 4;
+                for (var f = 0; f < 4; f++) {
+                    var fx = x + f * fingerW;
+                    ctx.beginPath();
+                    ctx.roundRect(fx, pipeY - 40, fingerW, 40, [12, 12, 0, 0]);
+                    ctx.fill();
+                    ctx.stroke();
+                }
+                // Curved thumb on the side
+                ctx.beginPath();
+                ctx.roundRect(x - 12, pipeY - 33, 12, 28, [8, 0, 0, 8]);
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
+
+        function loopBirdGame() {
+            if (!birdGameRunning) return;
+
+            animFrame++;
+            ctx.fillStyle = "#111";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
+
+            ctx.beginPath();
+            ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
+            ctx.fillStyle = "#ffd700";
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#fff";
+            ctx.stroke();
+
+            ctx.fillStyle = "#000";
+            ctx.font = "bold 8px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("Biz777", bird.x, bird.y);
+
+            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 205) {
+                var gapSize = 195;
+                var minHeight = 30;
+                var maxHeight = canvas.height - gapSize - 40;
+                var topH = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
+                pipes.push({ x: canvas.width, top: topH, bottom: topH + gapSize, passed: false });
+            }
+
+            for (var i = pipes.length - 1; i >= 0; i--) {
+                pipes[i].x -= 1.8;
+
+                var handOffset = Math.sin(animFrame * 0.05) * 4;
+                var topBoundary = pipes[i].top + handOffset;
+                var bottomBoundary = pipes[i].bottom - handOffset;
+
+                drawRoundedHandColumn(pipes[i].x, topBoundary, 60, true);
+                drawRoundedHandColumn(pipes[i].x, bottomBoundary, 60, false);
+
+                if (!pipes[i].passed && pipes[i].x + 60 < bird.x) {
+                    pipes[i].passed = true;
+                    tunnelScore++;
+                    document.getElementById("questTunnelCount").innerText = tunnelScore;
+
+                    if (tunnelScore >= 10 && !questClaimed) {
+                        birdGameRunning = false;
+                        document.getElementById("questRewardBox").style.display = "block";
+                    }
+                }
+
+                var topHitbox = topBoundary + 35;
+                var bottomHitbox = bottomBoundary - 35;
+                if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 60) {
+                    if (bird.y - bird.radius < topHitbox || bird.y + bird.radius > bottomHitbox) {
+                        endBirdGame();
+                    }
+                }
+
+                if (pipes[i].x < -70) {
+                    pipes.splice(i, 1);
+                }
+            }
+
+            if (bird.y + bird.radius >= canvas.height || bird.y - bird.radius <= 0) {
+                endBirdGame();
+            }
+
+            if (birdGameRunning) {
+                requestAnimationFrame(loopBirdGame);
+            }
+        }
+
+        function endBirdGame() {
+            birdGameRunning = false;
+            document.getElementById("gameStartOverlay").style.display = "flex";
+            document.querySelector("#gameStartOverlay h3").innerText = "💥 Caught!";
+            document.querySelector("#gameStartOverlay p").innerText = "Passed: " + tunnelScore + "/10. Try again!";
+            document.querySelector("#gameStartOverlay button").innerText = "Try Again";
+        }
+
+        function claimQuestReward() {
+            questClaimed = true;
+            localStorage.setItem("biz777_quest_claimed", "true");
+            energy = Math.min(energy + 500, maxEnergy);
+            saveGame();
+            updateGame();
+            alert("+500 ⚡ Energy added!");
+            closeMiniGame();
+        }
+    </script>
+</body>
+</html>
