@@ -229,3 +229,209 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biz777 Mini App</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 15px;
+            margin: 0;
+        }
+        .coin-display {
+            font-size: 40px;
+            font-weight: bold;
+            margin: 5px 0;
+            color: #ffcc00;
+        }
+        .level-text {
+            color: #00ffff;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .tap-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border: 3px dashed #ffcc00;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: #1a1a1a;
+            transition: transform 0.1s;
+        }
+        .tap-container:active {
+            transform: scale(0.95);
+        }
+        .tap-icon {
+            font-size: 70px;
+        }
+        
+        .energy-info {
+            font-size: 15px;
+            color: #ffaa00;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .energy-bar-container {
+            width: 85%;
+            max-width: 340px;
+            background: #333;
+            height: 14px;
+            border-radius: 10px;
+            margin: 0 auto 20px auto;
+            overflow: hidden;
+        }
+        .energy-bar {
+            height: 100%;
+            background: #ffaa00;
+            width: 100%;
+            transition: width 0.2s;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            width: 90%;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+        .action-btn {
+            background: #0099ff;
+            color: white;
+            border: none;
+            padding: 14px 10px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            flex: 1;
+            box-shadow: 0 4px 10px rgba(0, 153, 255, 0.3);
+        }
+        .invite-btn {
+            background: #28a745;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+        }
+        .action-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            opacity: 0.5;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="coin-display" id="coinCount">0</div>
+    <div class="level-text">1. Bronze Foundation</div>
+
+    <div class="tap-container" onclick="tapCoin()">
+        <div class="tap-icon">🏗️</div>
+    </div>
+
+    <div class="energy-info" id="energyText">⚡ Energy: 1000 / 1000</div>
+    <div class="energy-bar-container">
+        <div class="energy-bar" id="energyBar"></div>
+    </div>
+
+    <div class="btn-container">
+        <button id="adBtn" class="action-btn" onclick="claimAdEnergy()">🎬 Ad (+500⚡)</button>
+        <button class="action-btn invite-btn" onclick="inviteFriend()">👥 Invite (+1000⚡)</button>
+    </div>
+
+    <script>
+        let coins = parseInt(localStorage.getItem('biz_coins')) || 0;
+        let energy = parseInt(localStorage.getItem('biz_energy')) || 1000;
+        const maxEnergy = 1000;
+
+        function updateDisplay() {
+            document.getElementById('coinCount').textContent = coins;
+            document.getElementById('energyText').textContent = `⚡ Energy: ${energy} / ${maxEnergy}`;
+            let percentage = (energy / maxEnergy) * 100;
+            document.getElementById('energyBar').style.width = percentage + '%';
+            
+            localStorage.setItem('biz_coins', coins);
+            localStorage.setItem('biz_energy', energy);
+        }
+        updateDisplay();
+
+        function tapCoin() {
+            if (energy > 0) {
+                coins += 1;
+                energy -= 1;
+                updateDisplay();
+            } else {
+                alert("⚡ Out of energy!");
+            }
+        }
+
+        setInterval(() => {
+            if (energy < maxEnergy) {
+                energy = Math.min(energy + 5, maxEnergy);
+                updateDisplay();
+            }
+        }, 3000);
+
+        function claimAdEnergy() {
+            const lastClaimDate = localStorage.getItem('biz_last_ad');
+            const today = new Date().toDateString();
+
+            if (lastClaimDate === today) {
+                alert("⏳ Energy bonus already claimed today! Come back tomorrow.");
+                return;
+            }
+
+            energy = Math.min(energy + 500, maxEnergy);
+            localStorage.setItem('biz_last_ad', today);
+            
+            alert("🎉 Success! +500 Energy added.");
+            updateDisplay();
+            checkAdStatus();
+        }
+
+        function checkAdStatus() {
+            const lastClaimDate = localStorage.getItem('biz_last_ad');
+            const today = new Date().toDateString();
+            const btn = document.getElementById('adBtn');
+
+            if (lastClaimDate === today) {
+                btn.disabled = true;
+                btn.textContent = "✅ Claimed";
+            } else {
+                btn.disabled = false;
+                btn.textContent = "🎬 Ad (+500⚡)";
+            }
+        }
+        checkAdStatus();
+
+        function inviteFriend() {
+            const botUsername = "biz777_bot";
+            const refLink = `https://t.me/${botUsername}?start=ref_${Math.floor(Math.random() * 1000000)}`;
+
+            if (window.Telegram && window.Telegram.WebApp) {
+                const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent("Join Biz777 and let's earn together! 🪙")}`;
+                window.Telegram.WebApp.openTelegramLink(shareUrl);
+            } else {
+                navigator.clipboard.writeText(refLink);
+                alert("📋 Referral link copied to clipboard!");
+            }
+
+            energy = Math.min(energy + 1000, maxEnergy);
+            updateDisplay();
+            alert("⚡ +1000 Energy added for inviting a friend!");
+        }
+    </script>
+
+</body>
+</html>
