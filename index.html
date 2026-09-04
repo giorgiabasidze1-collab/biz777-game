@@ -24,6 +24,7 @@
 </head>
 <body id="gameBody" style="margin: 0; padding: 0; background-color: #0b0c10; color: #ffffff; font-family: sans-serif; height: 100vh; overflow: hidden; user-select: none; -webkit-user-select: none;">
 
+    <!-- Background Decorative Money Symbols -->
     <div style="position: absolute; top: 3%; left: -15px; width: 110px; height: 110px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 26px; opacity: 0.25; transform: rotate(-25deg); z-index: 1; pointer-events: none;">💵</div>
     <div style="position: absolute; top: 7%; right: -25px; width: 130px; height: 130px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 30px; opacity: 0.2; transform: rotate(18deg); z-index: 1; pointer-events: none;">€</div>
     <div style="position: absolute; top: 32%; left: -40px; width: 125px; height: 125px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 28px; opacity: 0.2; transform: rotate(40deg); z-index: 1; pointer-events: none;">💰</div>
@@ -31,33 +32,40 @@
     <div style="position: absolute; bottom: 22%; left: -20px; width: 115px; height: 115px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 26px; opacity: 0.25; transform: rotate(15deg); z-index: 1; pointer-events: none;">¥</div>
     <div style="position: absolute; bottom: 18%; right: -15px; width: 120px; height: 120px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 28px; opacity: 0.25; transform: rotate(-12deg); z-index: 1; pointer-events: none;">💵</div>
 
+    <!-- MAIN GAME LAYOUT -->
     <div style="position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 15px 0; box-sizing: border-box;">
         
+        <!-- HEADER / SCORE -->
         <div style="text-align: center; width: 85%;">
             <div id="score" style="font-size: 44px; font-weight: 900; color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.6);">0</div>
             <div id="levelTitle" style="font-size: 16px; font-weight: bold; color: #00f2fe; margin-top: 3px;">1. Bronze Foundation 🏗️</div>
             
+            <!-- PROGRESS BAR -->
             <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2);">
                 <div id="progressFill" style="height: 100%; width: 0%; background: #00f2fe; transition: width 0.2s;"></div>
             </div>
         </div>
 
+        <!-- TAP AREA -->
         <div id="tapArea" style="position: relative; width: 190px; height: 190px; background: rgba(255, 255, 255, 0.04); border: 2px dashed #ffd700; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation;">
             <div id="buildingIcon" style="font-size: 95px; pointer-events: none; transition: transform 0.05s;">🏗️</div>
         </div>
 
+        <!-- FOOTER / ENERGY & BOOSTS -->
         <div style="width: 85%; text-align: center;">
             <div style="font-size: 14px; font-weight: bold; color: #ffb703; margin-bottom: 4px;">⚡ Energy: <span id="energyText">1000</span> / <span id="maxEnergyText">1000</span></div>
             <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 10px;">
                 <div id="energyFill" style="height: 100%; width: 100%; background: #ffb703;"></div>
             </div>
 
+            <!-- BUTTONS ROW 1 -->
             <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 6px;">
                 <button onclick="watchAd()" style="flex: 1; padding: 9px 2px; background: #2196F3; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 11px;">🎬 Ad (+500⚡)</button>
                 <button onclick="inviteFriend()" style="flex: 1; padding: 9px 2px; background: #4CAF50; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 11px;">👥 Invite</button>
                 <button onclick="openDailyBonus()" style="flex: 1; padding: 9px 2px; background: #ff9800; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 11px;">🎁 Daily</button>
             </div>
 
+            <!-- BUTTONS ROW 2 -->
             <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 6px;">
                 <button onclick="openShop()" style="flex: 1; padding: 9px 2px; background: #00bcd4; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 11px;">🛒 Shop</button>
                 <button onclick="openLeaderboard()" style="flex: 1; padding: 9px 2px; background: #9c27b0; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 11px;">🏆 Top List</button>
@@ -68,39 +76,52 @@
 
     </div>
 
+    <!-- SHOP MODAL -->
     <div id="shopModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 150; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;">
-        <div style="width: 100%; max-width: 340px; background: #1a1d24; border: 2px solid #00bcd4; border-radius: 15px; padding: 20px; box-sizing: border-box;">
+        <div style="width: 100%; max-width: 340px; background: #1a1d24; border: 2px solid #00bcd4; border-radius: 15px; padding: 20px; box-sizing: border-box; max-height: 85vh; overflow-y: auto;">
             <h2 style="color: #00bcd4; margin-top: 0; text-align: center;">🛒 Upgrades Shop</h2>
             
-            <div style="margin-bottom: 15px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+            <!-- Upgrade Building / House -->
+            <div style="margin-bottom: 12px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <div style="font-weight: bold; font-size: 14px;">⚡ Max Energy (+500)</div>
-                    <div style="font-size: 12px; color: #ffd700;">Cost: 2,500 Coins</div>
+                    <div style="font-weight: bold; font-size: 13px;">🏗️ Upgrade Building Tier</div>
+                    <div id="nextBuildingCostText" style="font-size: 11px; color: #ffd700;">Cost: 1,000 Coins</div>
                 </div>
-                <button onclick="buyMaxEnergy()" style="background: #00bcd4; color: #000; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer;">Buy</button>
+                <button onclick="buyBuildingUpgrade()" style="background: #00ff88; color: #000; border: none; padding: 8px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Upgrade</button>
             </div>
 
-            <div style="margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+            <!-- Max Energy Upgrade -->
+            <div style="margin-bottom: 12px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <div style="font-weight: bold; font-size: 14px;">👆 Tap Power (+1 / tap)</div>
-                    <div style="font-size: 12px; color: #ffd700;">Cost: 5,000 Coins</div>
+                    <div style="font-weight: bold; font-size: 13px;">⚡ Max Energy (+500)</div>
+                    <div style="font-size: 11px; color: #ffd700;">Cost: 2,500 Coins</div>
                 </div>
-                <button onclick="buyTapPower()" style="background: #00bcd4; color: #000; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer;">Buy</button>
+                <button onclick="buyMaxEnergy()" style="background: #00bcd4; color: #000; border: none; padding: 8px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Buy</button>
+            </div>
+
+            <!-- Tap Power Upgrade -->
+            <div style="margin-bottom: 15px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: bold; font-size: 13px;">👆 Tap Power (+1 / tap)</div>
+                    <div style="font-size: 11px; color: #ffd700;">Cost: 5,000 Coins</div>
+                </div>
+                <button onclick="buyTapPower()" style="background: #00bcd4; color: #000; border: none; padding: 8px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Buy</button>
             </div>
 
             <button onclick="closeShop()" style="width: 100%; padding: 10px; background: #ff4757; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Close</button>
         </div>
     </div>
 
+    <!-- LEADERBOARD MODAL -->
     <div id="leaderboardModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 150; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;">
         <div style="width: 100%; max-width: 340px; background: #1a1d24; border: 2px solid #9c27b0; border-radius: 15px; padding: 20px; box-sizing: border-box; max-height: 80vh; display: flex; flex-direction: column;">
             <h2 style="color: #9c27b0; margin-top: 0; text-align: center;">🏆 Top Players</h2>
-            <div id="leaderboardList" style="overflow-y: auto; flex: 1; margin-bottom: 15px;">
-                </div>
+            <div id="leaderboardList" style="overflow-y: auto; flex: 1; margin-bottom: 15px;"></div>
             <button onclick="closeLeaderboard()" style="width: 100%; padding: 10px; background: #ff4757; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Close</button>
         </div>
     </div>
 
+    <!-- DAILY BONUS MODAL -->
     <div id="dailyModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 150; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;">
         <div style="width: 100%; max-width: 320px; background: #1a1d24; border: 2px solid #ff9800; border-radius: 15px; padding: 20px; text-align: center; box-sizing: border-box;">
             <h2 style="color: #ff9800; margin-top: 0;">🎁 Daily Reward</h2>
@@ -113,6 +134,7 @@
         </div>
     </div>
 
+    <!-- MINI-GAME MODAL -->
     <div id="miniGameModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 200; flex-direction: column; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box;">
         <div style="width: 100%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <div style="color: #ffd700; font-weight: bold; font-size: 15px;">Hands Passed: <span id="questTunnelCount">0</span>/10</div>
@@ -134,4 +156,448 @@
         </div>
     </div>
 
-    <div id="winModal" style="display: none; position: fixed; top: 0;
+    <!-- WIN MODAL -->
+    <div id="winModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center;">
+        <div style="background: #1a1d24; padding: 25px; border-radius: 20px; text-align: center; border: 2px solid #ffd700; width: 80%;">
+            <h2 style="color: #ffd700; margin: 0 0 10px 0;">🎉 Congratulations!</h2>
+            <p style="color: #fff; margin: 5px 0;">You built the <b>Biz777 Legend HQ! 👑</b></p>
+            <button onclick="document.getElementById('winModal').style.display='none'" style="padding: 10px 20px; background: #ffd700; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram ? window.Telegram.WebApp : null;
+        if (tg) tg.expand();
+
+        var score = parseInt(localStorage.getItem("biz777_score")) || 0;
+        var energy = parseInt(localStorage.getItem("biz777_energy"));
+        if (isNaN(energy)) energy = 1000;
+        
+        var maxEnergy = parseInt(localStorage.getItem("biz777_max_energy")) || 1000;
+        var tapPower = parseInt(localStorage.getItem("biz777_tap_power")) || 1;
+        var currentStageIndex = parseInt(localStorage.getItem("biz777_stage_index")) || 0;
+
+        var lastEnergyTime = parseInt(localStorage.getItem("biz777_last_energy_time")) || 0;
+        var currentTime = new Date().getTime();
+        var twentyFourHours = 24 * 60 * 60 * 1000;
+
+        if (currentTime - lastEnergyTime >= twentyFourHours) {
+            energy = maxEnergy;
+            localStorage.setItem("biz777_last_energy_time", currentTime);
+            saveGame();
+        }
+
+        var STAGES = [
+            { name: "1. Bronze Foundation", icon: "🏗️", cost: 0 },
+            { name: "2. Bronze Hut", icon: "🛖", cost: 1000 },
+            { name: "3. Silver House", icon: "🏡", cost: 5000 },
+            { name: "4. Silver Villa", icon: "🏠", cost: 20000 },
+            { name: "5. Gold Office", icon: "🏢", cost: 60000 },
+            { name: "6. Gold Skyscraper", icon: "🌆", cost: 150000 },
+            { name: "7. Diamond Tower", icon: "🏙️", cost: 400000 },
+            { name: "8. Biz777 Legend HQ", icon: "👑", cost: 1000000 }
+        ];
+
+        var scoreEl = document.getElementById("score");
+        var levelTitleEl = document.getElementById("levelTitle");
+        var progressFillEl = document.getElementById("progressFill");
+        var buildingIcon = document.getElementById("buildingIcon");
+        var energyTextEl = document.getElementById("energyText");
+        var maxEnergyTextEl = document.getElementById("maxEnergyText");
+        var energyFillEl = document.getElementById("energyFill");
+        var tapArea = document.getElementById("tapArea");
+        var nextBuildingCostText = document.getElementById("nextBuildingCostText");
+
+        function saveGame() {
+            localStorage.setItem("biz777_score", score);
+            localStorage.setItem("biz777_energy", energy);
+            localStorage.setItem("biz777_max_energy", maxEnergy);
+            localStorage.setItem("biz777_tap_power", tapPower);
+            localStorage.setItem("biz777_stage_index", currentStageIndex);
+        }
+
+        tapArea.addEventListener("touchstart", function(e) {
+            e.preventDefault();
+            var touches = e.changedTouches;
+
+            if (energy <= 0) {
+                alert("Out of energy!");
+                return;
+            }
+
+            var actualTaps = Math.min(touches.length, energy);
+            var earned = actualTaps * tapPower;
+            score += earned;
+            energy -= actualTaps;
+            saveGame();
+
+            for (var i = 0; i < actualTaps; i++) {
+                var touch = touches[i];
+                var rect = tapArea.getBoundingClientRect();
+                var x = touch.clientX - rect.left;
+                var y = touch.clientY - rect.top;
+
+                var coin = document.createElement("div");
+                coin.className = "floating-coin";
+                coin.innerText = "+" + tapPower;
+                coin.style.left = (x - 15) + "px";
+                coin.style.top = (y - 20) + "px";
+                tapArea.appendChild(coin);
+
+                setTimeout(function(c) {
+                    c.remove();
+                }, 700, coin);
+            }
+
+            buildingIcon.style.transform = "scale(0.88)";
+            setTimeout(function() { buildingIcon.style.transform = "scale(1)"; }, 60);
+
+            updateGame();
+        }, { passive: false });
+
+        // Shop Functions
+        function openShop() { 
+            updateShopUI();
+            document.getElementById("shopModal").style.display = "flex"; 
+        }
+        function closeShop() { document.getElementById("shopModal").style.display = "none"; }
+
+        function updateShopUI() {
+            if (currentStageIndex < STAGES.length - 1) {
+                var nextCost = STAGES[currentStageIndex + 1].cost;
+                nextBuildingCostText.innerText = "Cost: " + nextCost.toLocaleString() + " Coins";
+            } else {
+                nextBuildingCostText.innerText = "Max Level Reached!";
+            }
+        }
+
+        // Buy Building Upgrade
+        function buyBuildingUpgrade() {
+            if (currentStageIndex >= STAGES.length - 1) {
+                alert("You have already reached the maximum building level!");
+                return;
+            }
+            var nextCost = STAGES[currentStageIndex + 1].cost;
+            if (score >= nextCost) {
+                score -= nextCost;
+                currentStageIndex++;
+                saveGame();
+                updateGame();
+                updateShopUI();
+                alert("Successfully upgraded your building to " + STAGES[currentStageIndex].name + "!");
+            } else {
+                alert("Not enough coins! Need " + nextCost.toLocaleString() + ".");
+            }
+        }
+
+        function buyMaxEnergy() {
+            var cost = 2500;
+            if (score >= cost) {
+                score -= cost;
+                maxEnergy += 500;
+                energy = maxEnergy;
+                saveGame();
+                updateGame();
+                alert("Successfully upgraded Max Energy!");
+                closeShop();
+            } else {
+                alert("Not enough coins! Need 2,500.");
+            }
+        }
+
+        function buyTapPower() {
+            var cost = 5000;
+            if (score >= cost) {
+                score -= cost;
+                tapPower += 1;
+                saveGame();
+                updateGame();
+                alert("Successfully upgraded Tap Power to +" + tapPower + "!");
+                closeShop();
+            } else {
+                alert("Not enough coins! Need 5,000.");
+            }
+        }
+
+        // Daily Bonus Functions
+        function openDailyBonus() { document.getElementById("dailyModal").style.display = "flex"; }
+        function closeDailyBonus() { document.getElementById("dailyModal").style.display = "none"; }
+
+        function claimDailyBonus() {
+            var lastDaily = parseInt(localStorage.getItem("biz777_last_daily")) || 0;
+            var now = new Date().getTime();
+            if (now - lastDaily >= twentyFourHours) {
+                score += 300;
+                energy = Math.min(energy + 300, maxEnergy);
+                localStorage.setItem("biz777_last_daily", now);
+                saveGame();
+                updateGame();
+                alert("Daily Bonus Claimed (+300 Coins & Energy)!");
+                closeDailyBonus();
+            } else {
+                alert("Daily bonus already claimed today! Come back later.");
+            }
+        }
+
+        // Leaderboard Functions
+        function openLeaderboard() {
+            var modal = document.getElementById("leaderboardModal");
+            var listEl = document.getElementById("leaderboardList");
+            modal.style.display = "flex";
+
+            var userName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) ? tg.initDataUnsafe.user.first_name : "You (Player)";
+            
+            var players = [
+                { name: "Sandro_77", score: 125000 },
+                { name: "Nika_Dev", score: 85000 },
+                { name: "Mari_Gold", score: 42000 },
+                { name: userName, score: score },
+                { name: "Giorgi_Biz", score: 15000 }
+            ];
+
+            players.sort(function(a, b) { return b.score - a.score; });
+
+            var html = "";
+            for (var i = 0; i < players.length; i++) {
+                var bg = (players[i].name === userName) ? "rgba(156, 39, 176, 0.3)" : "rgba(255,255,255,0.05)";
+                html += '<div style="display: flex; justify-content: space-between; padding: 10px; margin-bottom: 6px; background: ' + bg + '; border-radius: 8px;">' +
+                        '<span><b>#' + (i+1) + '</b> ' + players[i].name + '</span>' +
+                        '<span style="color: #ffd700; font-weight: bold;">' + players[i].score.toLocaleString() + '</span>' +
+                        '</div>';
+            }
+            listEl.innerHTML = html;
+        }
+        function closeLeaderboard() { document.getElementById("leaderboardModal").style.display = "none"; }
+
+        function inviteFriend() {
+            var botUsername = "biz_777_bot";
+            var inviteLink = "https://t.me/" + botUsername + "?start=ref_" + (tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "user");
+            var shareText = "Join Biz777!";
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink("https://t.me/share/url?url=" + encodeURIComponent(inviteLink) + "&text=" + encodeURIComponent(shareText));
+            } else {
+                alert("Invite link generated!");
+            }
+        }
+
+        function watchAd() {
+            alert("Loading ad...");
+            setTimeout(function() {
+                energy = Math.min(energy + 500, maxEnergy);
+                saveGame();
+                updateGame();
+                alert("+500 ⚡ Energy added!");
+            }, 800);
+        }
+
+        function updateGame() {
+            scoreEl.innerText = score.toLocaleString();
+            energyTextEl.innerText = energy;
+            maxEnergyTextEl.innerText = maxEnergy;
+
+            var fillPercent = Math.min((energy / maxEnergy) * 100, 100);
+            energyFillEl.style.width = fillPercent + "%";
+
+            var currentStage = STAGES[currentStageIndex];
+            levelTitleEl.innerText = currentStage.name;
+            buildingIcon.innerText = currentStage.icon;
+
+            // Progress bar based on current stage cost vs next stage cost
+            var nextCost = (currentStageIndex < STAGES.length - 1) ? STAGES[currentStageIndex + 1].cost : STAGES[STAGES.length - 1].cost;
+            var prevCost = currentStage.cost;
+            var range = nextCost - prevCost;
+            var progress = score - prevCost;
+            var percent = range > 0 ? Math.min(Math.max((progress / range) * 100, 0), 100) : 100;
+            progressFillEl.style.width = percent + "%";
+
+            if (currentStageIndex >= STAGES.length - 1) {
+                document.getElementById("winModal").style.display = "flex";
+            }
+        }
+
+        updateGame();
+
+        // --- MINI-GAME LOGIC (4 Fingers, Curved Thumb & Biz777 Coin) ---
+        var canvas = document.getElementById("birdCanvas");
+        var ctx = canvas.getContext("2d");
+        var birdGameRunning = false;
+        var bird, pipes, tunnelScore, animFrame = 0;
+        var questClaimed = localStorage.getItem("biz777_quest_claimed") === "true";
+
+        function openMiniGame() {
+            document.getElementById("miniGameModal").style.display = "flex";
+            document.getElementById("gameStartOverlay").style.display = "flex";
+            document.getElementById("questRewardBox").style.display = "none";
+            tunnelScore = 0;
+            document.getElementById("questTunnelCount").innerText = tunnelScore;
+            resetBirdGame();
+        }
+
+        function closeMiniGame() {
+            birdGameRunning = false;
+            document.getElementById("miniGameModal").style.display = "none";
+        }
+
+        function resetBirdGame() {
+            bird = { x: 60, y: 220, radius: 17, gravity: 0.38, lift: -6.8, velocity: 0 };
+            pipes = [];
+            animFrame = 0;
+        }
+
+        function startBirdGame() {
+            if (questClaimed) {
+                alert("Reward already claimed today!");
+            }
+            document.getElementById("gameStartOverlay").style.display = "none";
+            resetBirdGame();
+            tunnelScore = 0;
+            document.getElementById("questTunnelCount").innerText = tunnelScore;
+            birdGameRunning = true;
+            loopBirdGame();
+        }
+
+        canvas.addEventListener("click", function() {
+            if (birdGameRunning) { bird.velocity = bird.lift; }
+        });
+        canvas.addEventListener("touchstart", function(e) {
+            e.preventDefault();
+            if (birdGameRunning) { bird.velocity = bird.lift; }
+        }, { passive: false });
+
+        function drawRoundedHandColumn(x, boundaryHeight, width, isTop) {
+            ctx.fillStyle = "#ffdbac";
+            ctx.strokeStyle = "#d4a373";
+            ctx.lineWidth = 2;
+
+            if (isTop) {
+                ctx.fillRect(x, 0, width, boundaryHeight);
+                ctx.strokeRect(x, 0, width, boundaryHeight);
+
+                var fingerW = width / 4;
+                for (var f = 0; f < 4; f++) {
+                    var fx = x + f * fingerW;
+                    ctx.beginPath();
+                    ctx.roundRect(fx, boundaryHeight, fingerW, 40, [0, 0, 12, 12]);
+                    ctx.fill();
+                    ctx.stroke();
+                }
+                ctx.beginPath();
+                ctx.roundRect(x - 12, boundaryHeight + 5, 12, 28, [8, 0, 0, 8]);
+                ctx.fill();
+                ctx.stroke();
+            } else {
+                var pipeY = boundaryHeight;
+                var pipeH = canvas.height - boundaryHeight;
+                ctx.fillRect(x, pipeY, width, pipeH);
+                ctx.strokeRect(x, pipeY, width, pipeH);
+
+                var fingerW = width / 4;
+                for (var f = 0; f < 4; f++) {
+                    var fx = x + f * fingerW;
+                    ctx.beginPath();
+                    ctx.roundRect(fx, pipeY - 40, fingerW, 40, [12, 12, 0, 0]);
+                    ctx.fill();
+                    ctx.stroke();
+                }
+                ctx.beginPath();
+                ctx.roundRect(x - 12, pipeY - 33, 12, 28, [8, 0, 0, 8]);
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
+
+        function loopBirdGame() {
+            if (!birdGameRunning) return;
+
+            animFrame++;
+            ctx.fillStyle = "#111";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
+
+            ctx.beginPath();
+            ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
+            ctx.fillStyle = "#ffd700";
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#fff";
+            ctx.stroke();
+
+            ctx.fillStyle = "#000";
+            ctx.font = "bold 8px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("Biz777", bird.x, bird.y);
+
+            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 205) {
+                var gapSize = 195;
+                var minHeight = 30;
+                var maxHeight = canvas.height - gapSize - 40;
+                var topH = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
+                pipes.push({ x: canvas.width, top: topH, bottom: topH + gapSize, passed: false });
+            }
+
+            for (var i = pipes.length - 1; i >= 0; i--) {
+                pipes[i].x -= 1.8;
+
+                var handOffset = Math.sin(animFrame * 0.05) * 4;
+                var topBoundary = pipes[i].top + handOffset;
+                var bottomBoundary = pipes[i].bottom - handOffset;
+
+                drawRoundedHandColumn(pipes[i].x, topBoundary, 60, true);
+                drawRoundedHandColumn(pipes[i].x, bottomBoundary, 60, false);
+
+                if (!pipes[i].passed && pipes[i].x + 60 < bird.x) {
+                    pipes[i].passed = true;
+                    tunnelScore++;
+                    document.getElementById("questTunnelCount").innerText = tunnelScore;
+
+                    if (tunnelScore >= 10 && !questClaimed) {
+                        birdGameRunning = false;
+                        document.getElementById("questRewardBox").style.display = "block";
+                    }
+                }
+
+                var topHitbox = topBoundary + 35;
+                var bottomHitbox = bottomBoundary - 35;
+                if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 60) {
+                    if (bird.y - bird.radius < topHitbox || bird.y + bird.radius > bottomHitbox) {
+                        endBirdGame();
+                    }
+                }
+
+                if (pipes[i].x < -70) {
+                    pipes.splice(i, 1);
+                }
+            }
+
+            if (bird.y + bird.radius >= canvas.height || bird.y - bird.radius <= 0) {
+                endBirdGame();
+            }
+
+            if (birdGameRunning) {
+                requestAnimationFrame(loopBirdGame);
+            }
+        }
+
+        function endBirdGame() {
+            birdGameRunning = false;
+            document.getElementById("gameStartOverlay").style.display = "flex";
+            document.querySelector("#gameStartOverlay h3").innerText = "💥 Caught!";
+            document.querySelector("#gameStartOverlay p").innerText = "Passed: " + tunnelScore + "/10. Try again!";
+            document.querySelector("#gameStartOverlay button").innerText = "Try Again";
+        }
+
+        function claimQuestReward() {
+            questClaimed = true;
+            localStorage.setItem("biz777_quest_claimed", "true");
+            energy = Math.min(energy + 500, maxEnergy);
+            saveGame();
+            updateGame();
+            alert("+500 ⚡ Energy added!");
+            closeMiniGame();
+        }
+    </script>
+</body>
+</html>
