@@ -24,7 +24,6 @@
 </head>
 <body id="gameBody" style="margin: 0; padding: 0; background-color: #0b0c10; color: #ffffff; font-family: sans-serif; height: 100vh; overflow: hidden; user-select: none; -webkit-user-select: none;">
 
-    <!-- Background Decorative Money Symbols -->
     <div style="position: absolute; top: 3%; left: -15px; width: 110px; height: 110px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 26px; opacity: 0.25; transform: rotate(-25deg); z-index: 1; pointer-events: none;">💵</div>
     <div style="position: absolute; top: 7%; right: -25px; width: 130px; height: 130px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 30px; opacity: 0.2; transform: rotate(18deg); z-index: 1; pointer-events: none;">€</div>
     <div style="position: absolute; top: 32%; left: -40px; width: 125px; height: 125px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 28px; opacity: 0.2; transform: rotate(40deg); z-index: 1; pointer-events: none;">💰</div>
@@ -32,33 +31,27 @@
     <div style="position: absolute; bottom: 22%; left: -20px; width: 115px; height: 115px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 26px; opacity: 0.25; transform: rotate(15deg); z-index: 1; pointer-events: none;">¥</div>
     <div style="position: absolute; bottom: 18%; right: -15px; width: 120px; height: 120px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 28px; opacity: 0.25; transform: rotate(-12deg); z-index: 1; pointer-events: none;">💵</div>
 
-    <!-- MAIN GAME LAYOUT -->
     <div style="position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 20px 0; box-sizing: border-box;">
         
-        <!-- HEADER / SCORE -->
         <div style="text-align: center; width: 85%;">
             <div id="score" style="font-size: 48px; font-weight: 900; color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.6);">0</div>
             <div id="levelTitle" style="font-size: 18px; font-weight: bold; color: #00f2fe; margin-top: 5px;">1. Bronze Foundation 🏗️</div>
             
-            <!-- PROGRESS BAR -->
             <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2);">
                 <div id="progressFill" style="height: 100%; width: 0%; background: #00f2fe; transition: width 0.2s;"></div>
             </div>
         </div>
 
-        <!-- TAP AREA -->
         <div id="tapArea" style="position: relative; width: 210px; height: 210px; background: rgba(255, 255, 255, 0.04); border: 2px dashed #ffd700; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation;">
             <div id="buildingIcon" style="font-size: 105px; pointer-events: none; transition: transform 0.05s;">🏗️</div>
         </div>
 
-        <!-- FOOTER / ENERGY & BOOSTS -->
         <div style="width: 85%; text-align: center;">
             <div style="font-size: 15px; font-weight: bold; color: #ffb703; margin-bottom: 5px;">⚡ Energy: <span id="energyText">1000</span> / <span id="maxEnergyText">1000</span></div>
             <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 12px;">
                 <div id="energyFill" style="height: 100%; width: 100%; background: #ffb703;"></div>
             </div>
 
-            <!-- BUTTONS -->
             <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 8px;">
                 <button onclick="watchAd()" style="flex: 1; padding: 10px 2px; background: #2196F3; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 11px;">🎬 Ad (+500⚡)</button>
                 <button onclick="inviteFriend()" style="flex: 1; padding: 10px 2px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 11px;">👥 Invite (+1000⚡)</button>
@@ -68,7 +61,6 @@
 
     </div>
 
-    <!-- MINI-GAME MODAL -->
     <div id="miniGameModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 200; flex-direction: column; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box;">
         <div style="width: 100%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
             <div style="color: #ffd700; font-weight: bold; font-size: 15px;">Hands Passed: <span id="questTunnelCount">0</span>/10</div>
@@ -78,8 +70,8 @@
         <div style="position: relative; border: 3px solid #00f2fe; border-radius: 12px; overflow: hidden; background: #111;">
             <canvas id="birdCanvas" width="340" height="460" style="display: block; cursor: pointer;"></canvas>
             <div id="gameStartOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.7);">
-                <h3 style="color: #ffd700; margin: 0 0 10px 0;">✋ Filled Hand & Pipe Quest</h3>
-                <p style="color: #fff; font-size: 13px; text-align: center; padding: 0 20px; margin-bottom: 15px;">Pass 10 obstacles to win +500 Energy!</p>
+                <h3 style="color: #ffd700; margin: 0 0 10px 0;">✋ Skin Hand Obstacle Quest</h3>
+                <p style="color: #fff; font-size: 13px; text-align: center; padding: 0 20px; margin-bottom: 15px;">Pass 10 skin-colored hand barriers to win +500 Energy!</p>
                 <button onclick="startBirdGame()" style="padding: 10px 25px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer;">Start Game</button>
             </div>
         </div>
@@ -90,7 +82,6 @@
         </div>
     </div>
 
-    <!-- WIN MODAL -->
     <div id="winModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center;">
         <div style="background: #1a1d24; padding: 25px; border-radius: 20px; text-align: center; border: 2px solid #ffd700; width: 80%;">
             <h2 style="color: #ffd700; margin: 0 0 10px 0;">🎉 Congratulations!</h2>
@@ -232,7 +223,7 @@
 
         updateGame();
 
-        // --- FILLED PIPES AND HANDS MINI-GAME (GOAL: 10) ---
+        // --- MINI-GAME LOGIC (SKIN-COLORED PIPES + HANDS) ---
         var canvas = document.getElementById("birdCanvas");
         var ctx = canvas.getContext("2d");
         var birdGameRunning = false;
@@ -283,32 +274,32 @@
             }
         }, { passive: false });
 
-        // Function to draw connected skin-colored pipe + hand structure
-        function drawPipeWithHand(x, height, width, isTop) {
-            ctx.fillStyle = "#f5c6a5"; // Filled skin color (no empty gaps)
-            ctx.strokeStyle = "#d89e75";
+        // Completely skin-colored pipe and attached hand structure (no empty spaces)
+        function drawSkinHandPipe(x, boundaryHeight, width, isTop) {
+            ctx.fillStyle = "#f5c6a5"; // Filled skin color
+            ctx.strokeStyle = "#d89e75"; // Border shade
             ctx.lineWidth = 2;
 
             if (isTop) {
-                // Top Pipe body
-                ctx.fillRect(x, 0, width, height);
-                ctx.strokeRect(x, 0, width, height);
+                // Top pipe body extending from top of the screen
+                ctx.fillRect(x, 0, width, boundaryHeight);
+                ctx.strokeRect(x, 0, width, boundaryHeight);
 
-                // Hand/Fingers attached at the bottom of the top pipe
+                // Fingers attached at the bottom of the top pipe
                 var fingerW = width / 5;
                 for (var f = 0; f < 5; f++) {
                     var fx = x + f * fingerW;
-                    ctx.fillRect(fx + 1, height, fingerW - 2, 35);
-                    ctx.strokeRect(fx + 1, height, fingerW - 2, 35);
+                    ctx.fillRect(fx + 1, boundaryHeight, fingerW - 2, 35);
+                    ctx.strokeRect(fx + 1, boundaryHeight, fingerW - 2, 35);
                 }
             } else {
-                // Bottom Pipe body
-                var pipeY = height;
-                var pipeH = canvas.height - height;
+                // Bottom pipe body extending down to the screen edge
+                var pipeY = boundaryHeight;
+                var pipeH = canvas.height - boundaryHeight;
                 ctx.fillRect(x, pipeY, width, pipeH);
                 ctx.strokeRect(x, pipeY, width, pipeH);
 
-                // Hand/Fingers attached at the top of the bottom pipe
+                // Fingers attached at the top of the bottom pipe
                 var fingerW = width / 5;
                 for (var f = 0; f < 5; f++) {
                     var fx = x + f * fingerW;
@@ -353,9 +344,9 @@
                 var topBoundary = pipes[i].top + handOffset;
                 var bottomBoundary = pipes[i].bottom - handOffset;
 
-                // Draw filled pipes with attached hands
-                drawPipeWithHand(pipes[i].x, topBoundary, 60, true);
-                drawPipeWithHand(pipes[i].x, bottomBoundary, 60, false);
+                // Draw skin-colored pipes & hands
+                drawSkinHandPipe(pipes[i].x, topBoundary, 60, true);
+                drawSkinHandPipe(pipes[i].x, bottomBoundary, 60, false);
 
                 if (!pipes[i].passed && pipes[i].x + 60 < bird.x) {
                     pipes[i].passed = true;
@@ -368,7 +359,7 @@
                     }
                 }
 
-                // Collision Detection (including the hand extensions)
+                // Collision Detection
                 var topHitbox = topBoundary + 35;
                 var bottomHitbox = bottomBoundary - 35;
                 if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 60) {
