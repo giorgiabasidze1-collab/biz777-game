@@ -148,7 +148,7 @@
             overflow: hidden;
         }
 
-        /* Tapping Section with Large Chaotic Background Icons */
+        /* Tapping Section with Rich Background Icons */
         .tap-section {
             display: flex;
             flex-direction: column;
@@ -175,16 +175,16 @@
 
         .bg-coin {
             position: absolute;
-            font-size: 32px;
-            opacity: 0.18;
+            font-size: 26px;
+            opacity: 0.24;
             font-weight: bold;
             color: #38bdf8;
-            animation: floatSlow 7s ease-in-out infinite alternate;
+            animation: floatSlow 6s ease-in-out infinite alternate;
         }
 
         @keyframes floatSlow {
             0% { transform: translateY(0px) rotate(0deg); }
-            100% { transform: translateY(-15px) rotate(20deg); }
+            100% { transform: translateY(-20px) rotate(30deg); }
         }
 
         /* Interactive Clicker Container */
@@ -268,6 +268,53 @@
         @keyframes floatUp {
             0% { opacity: 1; transform: translateY(0) scale(1); }
             100% { opacity: 0; transform: translateY(-80px) scale(1.2); }
+        }
+
+        /* Fake Video Ad Modal Overlay */
+        #adModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        .ad-video-box {
+            width: 100%;
+            max-width: 340px;
+            background: #1e293b;
+            border: 2px solid var(--accent);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 25px var(--accent-glow);
+            animation: fadeInAd 0.3s ease;
+        }
+
+        @keyframes fadeInAd {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .ad-screen {
+            width: 100%;
+            height: 180px;
+            background: #090d16;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         /* Navigation Bar */
@@ -416,15 +463,19 @@
             <!-- Tab 1: Tap / Clicker -->
             <div class="tab-pane active" id="tab-clicker">
                 <div class="coin-background-pattern">
-                    <span class="bg-coin" style="top: 5%; left: 10%;">🪙 Biz777</span>
-                    <span class="bg-coin" style="top: 18%; right: 12%; animation-delay: 1s;">💵 $</span>
-                    <span class="bg-coin" style="top: 40%; left: 5%; animation-delay: 2s;">💴 ¥</span>
-                    <span class="bg-coin" style="bottom: 20%; right: 8%; animation-delay: 1.5s;">💶 €</span>
-                    <span class="bg-coin" style="bottom: 8%; left: 15%; animation-delay: 2.5s;">🪙 Biz</span>
-                    <span class="bg-coin" style="top: 55%; right: 25%; animation-delay: 0.5s;">💰 777</span>
-                    <span class="bg-coin" style="top: 25%; left: 30%; animation-delay: 1.8s;">💷 £</span>
-                    <span class="bg-coin" style="top: 10%; left: 60%; animation-delay: 0.8s;">🪙 $</span>
-                    <span class="bg-coin" style="bottom: 35%; left: 65%; animation-delay: 2.2s;">💵 Biz777</span>
+                    <span class="bg-coin" style="top: 2%; left: 5%;">🪙 Biz777</span>
+                    <span class="bg-coin" style="top: 10%; right: 8%;">💵 $</span>
+                    <span class="bg-coin" style="top: 25%; left: 2%;">💴 ¥</span>
+                    <span class="bg-coin" style="top: 42%; right: 4%;">💶 €</span>
+                    <span class="bg-coin" style="bottom: 22%; left: 8%;">🪙 Biz</span>
+                    <span class="bg-coin" style="bottom: 10%; right: 12%;">💰 777</span>
+                    <span class="bg-coin" style="top: 32%; left: 32%;">💷 £</span>
+                    <span class="bg-coin" style="top: 6%; left: 52%;">🪙 $</span>
+                    <span class="bg-coin" style="bottom: 28%; left: 58%;">💵 Coins</span>
+                    <span class="bg-coin" style="top: 60%; left: 12%;">💎 777</span>
+                    <span class="bg-coin" style="top: 72%; right: 20%;">🚀 Biz</span>
+                    <span class="bg-coin" style="top: 85%; left: 40%;">⭐ 777</span>
+                    <span class="bg-coin" style="top: 48%; left: 75%;">🪙 Gold</span>
                 </div>
 
                 <div class="tap-section"></div>
@@ -492,10 +543,10 @@
                 <div class="ads-list">
                     <div class="ad-card" style="flex-direction: row;">
                         <div class="ad-info">
-                            <h4>Adsgram Reward</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Watch official Adsgram ad to get +1,000 coins</p>
+                            <h4>Video Ad Reward</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Watch quick simulated ad to get +1,000 coins</p>
                         </div>
-                        <button class="btn" onclick="watchAdsgramAd()">Watch 📺</button>
+                        <button class="btn" onclick="watchSimulatedAd()">Watch 📺</button>
                     </div>
                 </div>
             </div>
@@ -519,6 +570,19 @@
                 <span>📺</span> Earn
             </button>
         </nav>
+    </div>
+
+    <!-- Custom Fake Video Ad Popup Modal -->
+    <div id="adModal">
+        <div class="ad-video-box">
+            <h3 style="margin-bottom: 10px; font-size: 15px; color: var(--accent);">📺 Playing Sponsored Ad...</h3>
+            <div class="ad-screen">
+                <div style="font-size: 36px; margin-bottom: 5px;">🎬</div>
+                <div style="font-size: 13px; color: var(--text-secondary);">Simulated Video Ad</div>
+                <div id="adTimer" style="font-size: 18px; font-weight: bold; color: var(--warning); margin-top: 8px;">3s</div>
+            </div>
+            <p style="font-size: 11px; color: var(--text-secondary);">Reward will be credited automatically!</p>
+        </div>
     </div>
 
     <script>
@@ -597,7 +661,7 @@
 
         setInterval(() => {
             if (energy < maxEnergy) {
-                energy = Math.min(maxEnergy, energy + 2);
+                energy = Math.min(maxEnergy, energy + 3);
                 updateUI();
                 saveState();
             }
@@ -663,7 +727,7 @@
             energyContainer.innerHTML = "";
 
             const tapPrices = {
-                2: 200, 3: 600, 4: 1500, 5: 3500, 6: 7500, 7: 15000, 8: 30000, 9: 60000, 10: 120000
+                2: 50, 3: 120, 4: 250, 5: 500, 6: 900, 7: 1500, 8: 2500, 9: 4000, 10: 6000
             };
 
             if (tapPower < 10) {
@@ -695,14 +759,14 @@
             }
 
             const energyTiers = [
-                { target: 1500, price: 500 },
-                { target: 2000, price: 1500 },
-                { target: 2500, price: 4000 },
-                { target: 3000, price: 8000 },
-                { target: 3500, price: 15000 },
-                { target: 4000, price: 30000 },
-                { target: 4500, price: 60000 },
-                { target: 5000, price: 120000 }
+                { target: 1500, price: 100 },
+                { target: 2000, price: 300 },
+                { target: 2500, price: 700 },
+                { target: 3000, price: 1300 },
+                { target: 3500, price: 2200 },
+                { target: 4000, price: 3500 },
+                { target: 4500, price: 5000 },
+                { target: 5000, price: 7500 }
             ];
 
             let nextTier = energyTiers.find(t => t.target > maxEnergy);
@@ -767,6 +831,37 @@
             } else {
                 prompt("Copy your referral link:", refLink);
             }
+        }
+
+        // --- SIMULATED VIDEO AD REWARD SYSTEM ---
+        function watchSimulatedAd() {
+            const modal = document.getElementById('adModal');
+            const timerEl = document.getElementById('adTimer');
+            modal.style.display = 'flex';
+            
+            let timeLeft = 3;
+            timerEl.innerText = `${timeLeft}s`;
+
+            let countdown = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                    timerEl.innerText = `${timeLeft}s`;
+                } else {
+                    clearInterval(countdown);
+                    modal.style.display = 'none';
+
+                    // ჯილდოს დამატება ყურების გარეშე (ავტომატურად)
+                    score += 1000;
+                    updateUI();
+                    saveState();
+
+                    if (tg && tg.showAlert) {
+                        tg.showAlert("Reward claimed: +1,000 Coins added!");
+                    } else {
+                        alert("Reward claimed: +1,000 Coins added!");
+                    }
+                }
+            }, 1000);
         }
 
         // --- MINI-GAME LOGIC ---
@@ -977,7 +1072,7 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = '#ef4444';
                 ctx.font = 'bold 18px sans-serif';
-                ctx.textAlign = 'center';
+                ctx.textAlign.center = 'center';
                 ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 15);
                 ctx.fillStyle = '#f8fafc';
                 ctx.font = '13px sans-serif';
@@ -991,61 +1086,6 @@
             requestAnimationFrame(gameLoop);
         }
         requestAnimationFrame(gameLoop);
-
-        // --- SAFE ADSGRAM INTEGRATION WITH FALLBACK ---
-        let adsgramController = null;
-
-        function initAdsgram() {
-            if (!adsgramController && window.Adsgram) {
-                try {
-                    adsgramController = window.Adsgram.init({ blockId: "46267" });
-                } catch (e) {
-                    console.error("Adsgram init error:", e);
-                }
-            }
-        }
-
-        window.addEventListener('load', () => {
-            setTimeout(initAdsgram, 1000);
-        });
-
-        function watchAdsgramAd() {
-            initAdsgram();
-
-            if (adsgramController) {
-                adsgramController.show().then(() => {
-                    score += 1000;
-                    if (tg && tg.showAlert) {
-                        tg.showAlert("Reward claimed: +1,000 Coins for watching the ad!");
-                    } else {
-                        alert("Reward claimed: +1,000 Coins for watching the ad!");
-                    }
-                    updateUI();
-                    saveState();
-                }).catch((err) => {
-                    console.error("Ad error or skipped, falling back to test mode:", err);
-                    // Fallback: თუ რეკლამამ შეცდომა დააბრუნა, მაინც ვუწერთ ჯილდოს
-                    score += 1000;
-                    if (tg && tg.showAlert) {
-                        tg.showAlert("Test Mode: +1,000 Coins added!");
-                    } else {
-                        alert("Test Mode: +1,000 Coins added!");
-                    }
-                    updateUI();
-                    saveState();
-                });
-            } else {
-                // Fallback: თუ SDK საერთოდ არ ჩაიტვირთა, მაინც ატანს მონეტებს
-                score += 1000;
-                if (tg && tg.showAlert) {
-                    tg.showAlert("Test Mode: +1,000 Coins added (SDK not loaded)!");
-                } else {
-                    alert("Test Mode: +1,000 Coins added (SDK not loaded)!");
-                }
-                updateUI();
-                saveState();
-            }
-        }
 
         function switchTab(tabId, btnElement) {
             document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
