@@ -97,31 +97,31 @@
         <div class="modal-content" style="border-color: #00bcd4;">
             <h2 style="color: #00bcd4; margin-top: 0; text-align: center; font-size: 18px;">🛒 Biz777 Shop</h2>
             
-            <!-- Tap 2 (ერთჯერადი) -->
-            <div id="itemTap2" style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <!-- Tap 2 -->
+            <div style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 12px;">👆 Power (2 Tap)</div>
                     <div style="font-size: 10px; color: #ffd700;">Price: 300 Coins</div>
                 </div>
-                <button onclick="buyUpgrade(2, 300)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
+                <button id="btnTap2" onclick="buyUpgrade(2, 300)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
             </div>
 
-            <!-- Tap 5 (ერთჯერადი) -->
-            <div id="itemTap5" style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <!-- Tap 5 -->
+            <div style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 12px;">🔥 Power (5 Tap)</div>
                     <div style="font-size: 10px; color: #ffd700;">Price: 1,200 Coins</div>
                 </div>
-                <button onclick="buyUpgrade(5, 1200)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
+                <button id="btnTap5" onclick="buyUpgrade(5, 1200)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
             </div>
 
-            <!-- Tap 10 (ერთჯერადი) -->
-            <div id="itemTap10" style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <!-- Tap 10 -->
+            <div style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 12px;">⚡ Power (10 Tap)</div>
                     <div style="font-size: 10px; color: #ffd700;">Price: 4,000 Coins</div>
                 </div>
-                <button onclick="buyUpgrade(10, 4000)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
+                <button id="btnTap10" onclick="buyUpgrade(10, 4000)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
             </div>
 
             <button onclick="closeModal('shopModal')" style="width: 100%; margin-top: 10px; padding: 8px; background: #ff4757; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Close</button>
@@ -313,11 +313,11 @@
         }
 
         function buyUpgrade(targetPower, cost) {
+            if (tapPower >= targetPower) {
+                alert("Already purchased!");
+                return;
+            }
             if (score >= cost) {
-                if (tapPower >= targetPower) {
-                    alert("Already purchased!");
-                    return;
-                }
                 score -= cost;
                 tapPower = targetPower;
                 saveGame();
@@ -330,21 +330,44 @@
         }
 
         function updateShopUI() {
-            var itemTap2 = document.getElementById("itemTap2");
-            var itemTap5 = document.getElementById("itemTap5");
-            var itemTap10 = document.getElementById("itemTap10");
+            var btnTap2 = document.getElementById("btnTap2");
+            var btnTap5 = document.getElementById("btnTap5");
+            var btnTap10 = document.getElementById("btnTap10");
 
-            if (itemTap2) {
-                if (tapPower >= 2) itemTap2.style.display = "none";
-                else itemTap2.style.display = "flex";
+            if (tapPower >= 2) {
+                btnTap2.innerText = "Purchased";
+                btnTap2.style.background = "#555";
+                btnTap2.style.color = "#aaa";
+                btnTap2.style.cursor = "not-allowed";
+            } else {
+                btnTap2.innerText = "Buy";
+                btnTap2.style.background = "#00ff88";
+                btnTap2.style.color = "#000";
+                btnTap2.style.cursor = "pointer";
             }
-            if (itemTap5) {
-                if (tapPower >= 5) itemTap5.style.display = "none";
-                else itemTap5.style.display = "flex";
+
+            if (tapPower >= 5) {
+                btnTap5.innerText = "Purchased";
+                btnTap5.style.background = "#555";
+                btnTap5.style.color = "#aaa";
+                btnTap5.style.cursor = "not-allowed";
+            } else {
+                btnTap5.innerText = "Buy";
+                btnTap5.style.background = "#00ff88";
+                btnTap5.style.color = "#000";
+                btnTap5.style.cursor = "pointer";
             }
-            if (itemTap10) {
-                if (tapPower >= 10) itemTap10.style.display = "none";
-                else itemTap10.style.display = "flex";
+
+            if (tapPower >= 10) {
+                btnTap10.innerText = "Purchased";
+                btnTap10.style.background = "#555";
+                btnTap10.style.color = "#aaa";
+                btnTap10.style.cursor = "not-allowed";
+            } else {
+                btnTap10.innerText = "Buy";
+                btnTap10.style.background = "#00ff88";
+                btnTap10.style.color = "#000";
+                btnTap10.style.cursor = "pointer";
             }
         }
 
@@ -378,7 +401,7 @@
         }
 
         updateGame();
-        updateShopUI(); // ტვირთვიდანვე ამოწმებს და მალავს ნაყიდ ნივთებს
+        updateShopUI();
 
         // --- MINI-GAME LOGIC ---
         var canvas = document.getElementById("birdCanvas");
