@@ -25,6 +25,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -389,7 +390,7 @@
             align-items: center;
             width: 100%;
             padding: 5px;
-            gap: 12px;
+            gap: 10px;
         }
 
         .levels-container {
@@ -408,6 +409,7 @@
             font-size: 11px;
             font-weight: bold;
             cursor: pointer;
+            position: relative;
         }
 
         .level-btn.active-level {
@@ -416,11 +418,17 @@
             border-color: var(--accent);
         }
 
+        .level-btn.completed-level {
+            background: #22c55e;
+            color: #000;
+            border-color: #22c55e;
+        }
+
         .cups-board {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin: 20px 0;
+            margin: 15px 0;
             position: relative;
             height: 130px;
             align-items: flex-end;
@@ -442,8 +450,8 @@
             background: #eab308;
             color: #000;
             font-weight: bold;
-            font-size: 12px;
-            padding: 5px 8px;
+            font-size: 11px;
+            padding: 5px 6px;
             border-radius: 14px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             border: 2px solid #fef08a;
@@ -466,7 +474,7 @@
             position: absolute;
             bottom: 0;
             z-index: 3;
-            transition: transform 0.3s ease, background 0.3s ease;
+            transition: transform 0.3s ease, background 0.3s ease, left 0.2s ease;
         }
 
         .cup::before {
@@ -606,15 +614,15 @@
                     <div class="game-card-option" onclick="openSubGame('flappy')">
                         <div class="game-card-info">
                             <h4 style="color: var(--accent); font-size: 15px;">🪙 Flappy Biz777 (Hard Mode)</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Avoid custom rounded moving hands with fingers! Score 10 for +500 Energy!</p>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Avoid custom rounded moving hands (5 fingers)! Score 10 for +500 Energy!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('cups')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Biz777 Cup & Ball</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Watch Biz777 coin, follow cups shuffle & guess winning cup!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Biz777 Cup & Ball (Daily)</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">5 Levels of Classic Cup Shuffling. Once per 24 hours!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
@@ -643,33 +651,34 @@
 
                     <div class="cup-game-wrapper">
                         <div class="levels-container">
-                            <button class="level-btn active-level" onclick="setCupLevel(1)">Lvl 1</button>
-                            <button class="level-btn" onclick="setCupLevel(2)">Lvl 2</button>
-                            <button class="level-btn" onclick="setCupLevel(3)">Lvl 3</button>
-                            <button class="level-btn" onclick="setCupLevel(4)">Lvl 4</button>
-                            <button class="level-btn" onclick="setCupLevel(5)">Lvl 5</button>
+                            <button class="level-btn active-level" id="lvlBtn1" onclick="setCupLevel(1)">Lvl 1</button>
+                            <button class="level-btn" id="lvlBtn2" onclick="setCupLevel(2)">Lvl 2</button>
+                            <button class="level-btn" id="lvlBtn3" onclick="setCupLevel(3)">Lvl 3</button>
+                            <button class="level-btn" id="lvlBtn4" onclick="setCupLevel(4)">Lvl 4 (Hard)</button>
+                            <button class="level-btn" id="lvlBtn5" onclick="setCupLevel(5)">Lvl 5 (Extreme)</button>
                         </div>
 
                         <div id="cupGameInfo" style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; text-align: center; width: 100%;">
-                            Cost: 100 Biz777 | Win: 200 Biz777
+                            Cost: 500 Biz777 | Win: 1,000 Biz777
                         </div>
 
                         <div class="cups-board" id="cupsBoard">
-                            <div class="cup-slot">
+                            <div class="cup-slot" id="slot0">
                                 <div class="coin-item" id="coin0">biz777</div>
                                 <div class="cup" id="cup0" onclick="chooseCup(0)"></div>
                             </div>
-                            <div class="cup-slot">
+                            <div class="cup-slot" id="slot1">
                                 <div class="coin-item" id="coin1">biz777</div>
                                 <div class="cup" id="cup1" onclick="chooseCup(1)"></div>
                             </div>
-                            <div class="cup-slot">
+                            <div class="cup-slot" id="slot2">
                                 <div class="coin-item" id="coin2">biz777</div>
                                 <div class="cup" id="cup2" onclick="chooseCup(2)"></div>
                             </div>
                         </div>
 
                         <button class="btn" id="startCupGameBtn" onclick="startCupRound()" style="width: 100%;">Start Round 🎮</button>
+                        <div id="cupCooldownText" style="font-size: 11px; color: var(--text-secondary); text-align: center;"></div>
                     </div>
                 </div>
             </div>
@@ -732,6 +741,15 @@
         let invitedFriendsCount = parseInt(localStorage.getItem('biz_invitedFriends')) || 0;
         let freeTap20Claimed = localStorage.getItem('biz_freeTap20Claimed') === "true";
         let lastFlappyRewardDate = localStorage.getItem('biz_lastFlappyReward') || "";
+
+        // Cup game saved data
+        let cupLevelDataState = JSON.parse(localStorage.getItem('biz_cup_states')) || {
+            1: { completed: false, lastPlayed: "" },
+            2: { completed: false, lastPlayed: "" },
+            3: { completed: false, lastPlayed: "" },
+            4: { completed: false, lastPlayed: "" },
+            5: { completed: false, lastPlayed: "" }
+        };
 
         let userId = "user";
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -937,7 +955,7 @@
             document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
             document.getElementById(`subgame-${gameName}`).classList.add('active-subgame');
             if (gameName === 'flappy' && !flappyRunning) { startFlappyGame(); }
-            if (gameName === 'cups') { resetCupStageDisplay(); }
+            if (gameName === 'cups') { initCupStageUI(); }
         }
 
         function backToGamesMenu() {
@@ -998,10 +1016,10 @@
             ctx.textBaseline = 'middle';
             ctx.fillText('🪙', bird.x, bird.y);
 
-            if (frameCount % 85 === 0) {
-                let pipeWidth = 56;
-                let gapHeight = 110;
-                let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 90)) + 40;
+            if (frameCount % 95 === 0) {
+                let pipeWidth = 62;
+                let gapHeight = 145;
+                let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 80)) + 35;
                 pipes.push({ 
                     x: canvas.width, 
                     top: topHeight, 
@@ -1009,15 +1027,14 @@
                     width: pipeWidth, 
                     passed: false,
                     vOffset: 0,
-                    vSpeed: (Math.random() > 0.5 ? 1 : -1) * 1.2
+                    vSpeed: (Math.random() > 0.5 ? 1 : -1) * 1.0
                 });
             }
 
             for (let i = pipes.length - 1; i >= 0; i--) {
-                pipes[i].x -= 2.8;
-
+                pipes[i].x -= 2.6;
                 pipes[i].vOffset += pipes[i].vSpeed;
-                if (pipes[i].vOffset > 22 || pipes[i].vOffset < -22) {
+                if (pipes[i].vOffset > 18 || pipes[i].vOffset < -18) {
                     pipes[i].vSpeed *= -1;
                 }
 
@@ -1036,17 +1053,11 @@
                 ctx.fill();
                 ctx.stroke();
 
-                ctx.beginPath();
-                ctx.roundRect(pipes[i].x - 10, currentTop - 35, 10, 22, [6, 0, 0, 6]);
-                ctx.roundRect(pipes[i].x + pipes[i].width, currentTop - 35, 10, 22, [0, 6, 6, 0]);
-                ctx.fill();
-                ctx.stroke();
-
-                let fingerWidth = pipes[i].width / 4;
-                for (let f = 0; f < 4; f++) {
+                let fingerWidth = pipes[i].width / 5;
+                for (let f = 0; f < 5; f++) {
                     let fx = pipes[i].x + (f * fingerWidth);
-                    ctx.fillRect(fx, currentTop, fingerWidth - 2, 15);
-                    ctx.strokeRect(fx, currentTop, fingerWidth - 2, 15);
+                    ctx.fillRect(fx, currentTop, fingerWidth - 1, 15);
+                    ctx.strokeRect(fx, currentTop, fingerWidth - 1, 15);
                 }
 
                 let bottomY = canvas.height - currentBottom;
@@ -1055,21 +1066,15 @@
                 ctx.fill();
                 ctx.stroke();
 
-                ctx.beginPath();
-                ctx.roundRect(pipes[i].x - 10, bottomY + 15, 10, 22, [6, 0, 0, 6]);
-                ctx.roundRect(pipes[i].x + pipes[i].width, bottomY + 15, 10, 22, [0, 6, 6, 0]);
-                ctx.fill();
-                ctx.stroke();
-
-                for (let f = 0; f < 4; f++) {
+                for (let f = 0; f < 5; f++) {
                     let fx = pipes[i].x + (f * fingerWidth);
-                    ctx.fillRect(fx, bottomY - 15, fingerWidth - 2, 15);
-                    ctx.strokeRect(fx, bottomY - 15, fingerWidth - 2, 15);
+                    ctx.fillRect(fx, bottomY - 15, fingerWidth - 1, 15);
+                    ctx.strokeRect(fx, bottomY - 15, fingerWidth - 1, 15);
                 }
 
                 if (
-                    bird.x + bird.radius > pipes[i].x - 8 &&
-                    bird.x - bird.radius < pipes[i].x + pipes[i].width + 8 &&
+                    bird.x + bird.radius > pipes[i].x - 6 &&
+                    bird.x - bird.radius < pipes[i].x + pipes[i].width + 6 &&
                     (bird.y - bird.radius < currentTop || bird.y + bird.radius > bottomY)
                 ) {
                     endFlappyGame();
@@ -1128,49 +1133,81 @@
             };
         }
 
-        // --- CUP GAME LOGIC (BIZ777 COIN SHOWN FIRST, THEN COVERED & SHUFFLED) ---
+        // --- CUP & BALL GAME LOGIC (24H COOLDOWN & 5 LEVELS) ---
         let currentCupLevel = 1;
         let winningCupIndex = -1;
         let gameActive = false;
         let isShuffling = false;
 
         const cupLevelsData = {
-            1: { cost: 100, win: 200, shuffles: 3, speed: 380 },
-            2: { cost: 500, win: 1000, shuffles: 5, speed: 280 },
-            3: { cost: 1500, win: 3200, shuffles: 7, speed: 200 },
-            4: { cost: 4000, win: 9000, shuffles: 10, speed: 140 },
-            5: { cost: 10000, win: 23000, shuffles: 15, speed: 85 }
+            1: { cost: 500, win: 1000, shuffles: 3, speed: 380 },
+            2: { cost: 2500, win: 5000, shuffles: 6, speed: 280 },
+            3: { cost: 10000, win: 25000, shuffles: 10, speed: 200 },
+            4: { cost: 50000, win: 150000, shuffles: 15, speed: 120 },
+            5: { cost: 200000, win: 800000, shuffles: 22, speed: 75 }
         };
 
         function setCupLevel(lvl) {
             if (gameActive || isShuffling) return;
             currentCupLevel = lvl;
-            document.querySelectorAll('.level-btn').forEach((btn, index) => {
-                if (index + 1 === lvl) btn.classList.add('active-level');
-                else btn.classList.remove('active-level');
-            });
+            
+            for(let i=1; i<=5; i++) {
+                let btn = document.getElementById(`lvlBtn${i}`);
+                btn.classList.remove('active-level');
+                if(cupLevelDataState[i].completed) {
+                    btn.classList.add('completed-level');
+                }
+            }
+            document.getElementById(`lvlBtn${lvl}`).classList.add('active-level');
+
             let data = cupLevelsData[lvl];
             document.getElementById('cupGameInfo').innerText = `Cost: ${data.cost.toLocaleString()} Biz777 | Win: ${data.win.toLocaleString()} Biz777`;
-            resetCupStageDisplay();
+            
+            checkCupCooldown();
+            initCupStageUI();
         }
 
-        function resetCupStageDisplay() {
+        function checkCupCooldown() {
+            let state = cupLevelDataState[currentCupLevel];
+            let now = new Date().getTime();
+            let btn = document.getElementById('startCupGameBtn');
+            let cooldownText = document.getElementById('cupCooldownText');
+
+            if (state.lastPlayed) {
+                let diff = now - parseInt(state.lastPlayed);
+                let dayMs = 24 * 60 * 60 * 1000;
+                if (diff < dayMs) {
+                    let timeLeft = dayMs - diff;
+                    let hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    let mins = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    btn.disabled = true;
+                    btn.style.opacity = "0.5";
+                    cooldownText.innerText = `⏳ Level available in ${hours}h ${mins}m (Once per 24h)`;
+                    return true;
+                }
+            }
+            btn.disabled = false;
+            btn.style.opacity = "1";
+            cooldownText.innerText = "";
+            return false;
+        }
+
+        function initCupStageUI() {
             winningCupIndex = Math.floor(Math.random() * 3);
             for (let i = 0; i < 3; i++) {
                 document.getElementById(`cup${i}`).classList.remove('lifted');
-                document.getElementById(`coin0`).style.opacity = "0";
-                document.getElementById(`coin1`).style.opacity = "0";
-                document.getElementById(`coin2`).style.opacity = "0";
+                document.getElementById(`coin${i}`).style.opacity = (i === winningCupIndex) ? "1" : "0";
             }
-            // Show winning coin with Biz777 text initially
-            document.getElementById(`coin${winningCupIndex}`).style.opacity = "1";
             document.getElementById(`startCupGameBtn`).innerText = "Start Round 🎮";
             gameActive = false;
             isShuffling = false;
+            checkCupCooldown();
         }
 
         function startCupRound() {
             if (isShuffling || gameActive) return;
+            if (checkCupCooldown()) return;
+
             let data = cupLevelsData[currentCupLevel];
             if (score < data.cost) { alert("Not enough Biz777 coins!"); return; }
 
@@ -1180,38 +1217,46 @@
 
             isShuffling = true;
             document.getElementById('startCupGameBtn').innerText = "Covering & Shuffling... 🌪️";
+            document.getElementById('startCupGameBtn').disabled = true;
 
-            // Step 1: Temporarily lift cups to show preview, then cover
+            // 1. First show winning coin clearly, then lift cups up to cover
             for (let i = 0; i < 3; i++) {
-                document.getElementById(`coin${i}`).style.opacity = "0";
-                document.getElementById(`cup${i}`).classList.add('lifted');
+                document.getElementById(`coin${i}`).style.opacity = (i === winningCupIndex) ? "1" : "0";
+                document.getElementById(`cup${i}`).classList.remove('lifted');
             }
 
+            // After 1 second, lift cups to hide coin and start shuffle animation
             setTimeout(() => {
-                // Drop cups down to cover
                 for (let i = 0; i < 3; i++) {
-                    document.getElementById(`cup${i}`).classList.remove('lifted');
+                    document.getElementById(`cup${i}`).classList.add('lifted');
+                    document.getElementById(`coin${i}`).style.opacity = "0";
                 }
 
-                // Step 2: Shuffle animation sequence after covering
                 setTimeout(() => {
-                    let shuffleCount = 0;
-                    let shuffleInterval = setInterval(() => {
-                        let c1 = Math.floor(Math.random() * 3);
-                        let c2 = (c1 + 1 + Math.floor(Math.random() * 2)) % 3;
-                        if (winningCupIndex === c1) winningCupIndex = c2;
-                        else if (winningCupIndex === c2) winningCupIndex = c1;
+                    // Close cups back down for shuffling
+                    for (let i = 0; i < 3; i++) {
+                        document.getElementById(`cup${i}`).classList.remove('lifted');
+                    }
 
-                        shuffleCount++;
-                        if (shuffleCount >= data.shuffles) {
-                            clearInterval(shuffleInterval);
-                            isShuffling = false;
-                            gameActive = true;
-                            document.getElementById('startCupGameBtn').innerText = "Guess the Cup! 🤔";
-                        }
-                    }, data.speed);
-                }, 400);
-            }, 900);
+                    setTimeout(() => {
+                        let shuffleCount = 0;
+                        let shuffleInterval = setInterval(() => {
+                            let c1 = Math.floor(Math.random() * 3);
+                            let c2 = (c1 + 1 + Math.floor(Math.random() * 2)) % 3;
+                            if (winningCupIndex === c1) winningCupIndex = c2;
+                            else if (winningCupIndex === c2) winningCupIndex = c1;
+
+                            shuffleCount++;
+                            if (shuffleCount >= data.shuffles) {
+                                clearInterval(shuffleInterval);
+                                isShuffling = false;
+                                gameActive = true;
+                                document.getElementById('startCupGameBtn').innerText = "Guess the Cup! 🤔";
+                            }
+                        }, data.speed);
+                    }, 400);
+                }, 700);
+            }, 1000);
         }
 
         function chooseCup(index) {
@@ -1226,16 +1271,19 @@
                 }
             }
 
+            cupLevelDataState[currentCupLevel].lastPlayed = new Date().getTime().toString();
             if (index === winningCupIndex) {
                 score += data.win;
+                cupLevelDataState[currentCupLevel].completed = true;
                 setTimeout(() => alert(`🎉 You won ${data.win.toLocaleString()} Biz777 coins!`), 200);
             } else {
-                setTimeout(() => alert(`😢 Wrong cup!`), 200);
+                setTimeout(() => alert(`😢 Wrong cup! Try again tomorrow.`), 200);
             }
 
+            localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
             updateUI();
             saveState();
-            document.getElementById('startCupGameBtn').innerText = "Play Again 🎮";
+            setCupLevel(currentCupLevel);
         }
 
         function switchTab(tabId, btnElement) {
@@ -1245,7 +1293,7 @@
             document.getElementById(`tab-${tabId}`).classList.add('active');
             btnElement.classList.add('active');
             if(tabId === 'minigame') {
-                resetCupStageDisplay();
+                setCupLevel(currentCupLevel);
             }
         }
 
@@ -1259,7 +1307,7 @@
         }
 
         updateUI();
-        resetCupStageDisplay();
+        setCupLevel(1);
     </script>
 </body>
 </html>
