@@ -41,7 +41,7 @@
             background: #1a1d24;
             border: 2px solid #00bcd4;
             border-radius: 15px;
-            padding: 20px;
+            padding: 15px;
             box-sizing: border-box;
             max-height: 85vh;
             overflow-y: auto;
@@ -95,36 +95,76 @@
     <!-- Shop Modal -->
     <div id="shopModal" class="modal-overlay">
         <div class="modal-content" style="border-color: #00bcd4;">
-            <h2 style="color: #00bcd4; margin-top: 0; text-align: center; font-size: 18px;">🛒 Biz777 Shop</h2>
+            <h2 style="color: #00bcd4; margin-top: 0; text-align: center; font-size: 17px;">🛒 Biz777 Shop</h2>
+            
+            <div style="font-size: 11px; color: #00f2fe; font-weight: bold; margin-bottom: 5px;">⚡ Tap Power Upgrades</div>
             
             <!-- Tap 2 -->
-            <div style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <div style="font-weight: bold; font-size: 12px;">👆 Power (2 Tap)</div>
-                    <div style="font-size: 10px; color: #ffd700;">Price: 300 Coins</div>
+                    <div style="font-weight: bold; font-size: 11px;">👆 Power (2 Tap)</div>
+                    <div style="font-size: 9px; color: #ffd700;">Price: 300 Coins</div>
                 </div>
-                <button id="btnTap2" onclick="buyUpgrade(2, 300)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
+                <button id="btnTap2" onclick="buyTapUpgrade(2, 300)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
             </div>
 
             <!-- Tap 5 -->
-            <div style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <div style="font-weight: bold; font-size: 12px;">🔥 Power (5 Tap)</div>
-                    <div style="font-size: 10px; color: #ffd700;">Price: 1,200 Coins</div>
+                    <div style="font-weight: bold; font-size: 11px;">🔥 Power (5 Tap)</div>
+                    <div style="font-size: 9px; color: #ffd700;">Price: 1,200 Coins</div>
                 </div>
-                <button id="btnTap5" onclick="buyUpgrade(5, 1200)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
+                <button id="btnTap5" onclick="buyTapUpgrade(5, 1200)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
             </div>
 
             <!-- Tap 10 -->
-            <div style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <div style="font-weight: bold; font-size: 12px;">⚡ Power (10 Tap)</div>
-                    <div style="font-size: 10px; color: #ffd700;">Price: 4,000 Coins</div>
+                    <div style="font-weight: bold; font-size: 11px;">⚡ Power (10 Tap)</div>
+                    <div style="font-size: 9px; color: #ffd700;">Price: 4,000 Coins</div>
                 </div>
-                <button id="btnTap10" onclick="buyUpgrade(10, 4000)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
+                <button id="btnTap10" onclick="buyTapUpgrade(10, 4000)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
             </div>
 
-            <button onclick="closeModal('shopModal')" style="width: 100%; margin-top: 10px; padding: 8px; background: #ff4757; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Close</button>
+            <div style="font-size: 11px; color: #ffb703; font-weight: bold; margin-bottom: 5px;">🔋 Max Energy (Stock) Upgrades</div>
+
+            <!-- Energy 1500 -->
+            <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: bold; font-size: 11px;">🔋 Stock 1,500 ⚡</div>
+                    <div style="font-size: 9px; color: #ffd700;">Price: 500 Coins</div>
+                </div>
+                <button id="btnEnergy1500" onclick="buyEnergyUpgrade(1500, 500)" style="background: #ffd700; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+            </div>
+
+            <!-- Energy 2000 -->
+            <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: bold; font-size: 11px;">🔋 Stock 2,000 ⚡</div>
+                    <div style="font-size: 9px; color: #ffd700;">Price: 1,500 Coins</div>
+                </div>
+                <button id="btnEnergy2000" onclick="buyEnergyUpgrade(2000, 1500)" style="background: #ffd700; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+            </div>
+
+            <!-- Energy 3000 -->
+            <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: bold; font-size: 11px;">🔋 Stock 3,000 ⚡</div>
+                    <div style="font-size: 9px; color: #ffd700;">Price: 4,000 Coins</div>
+                </div>
+                <button id="btnEnergy3000" onclick="buyEnergyUpgrade(3000, 4000)" style="background: #ffd700; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+            </div>
+
+            <!-- Energy 5000 -->
+            <div style="margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: bold; font-size: 11px;">🔋 Stock 5,000 ⚡</div>
+                    <div style="font-size: 9px; color: #ffd700;">Price: 8,000 Coins</div>
+                </div>
+                <button id="btnEnergy5000" onclick="buyEnergyUpgrade(5000, 8000)" style="background: #ffd700; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+            </div>
+
+            <button onclick="closeModal('shopModal')" style="width: 100%; padding: 8px; background: #ff4757; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px;">Close</button>
         </div>
     </div>
 
@@ -312,7 +352,7 @@
             document.getElementById(modalId).style.display = "none";
         }
 
-        function buyUpgrade(targetPower, cost) {
+        function buyTapUpgrade(targetPower, cost) {
             if (tapPower >= targetPower) {
                 alert("Already purchased!");
                 return;
@@ -329,11 +369,34 @@
             }
         }
 
+        function buyEnergyUpgrade(targetMaxEnergy, cost) {
+            if (maxEnergy >= targetMaxEnergy) {
+                alert("Already purchased!");
+                return;
+            }
+            if (score >= cost) {
+                score -= cost;
+                maxEnergy = targetMaxEnergy;
+                energy = maxEnergy; // ავსებს სრულად ახალ ლიმიტამდე
+                saveGame();
+                updateGame();
+                updateShopUI();
+                alert("Successfully upgraded max energy to " + maxEnergy + " ⚡!");
+            } else {
+                alert("Not enough coins! Required: " + cost.toLocaleString());
+            }
+        }
+
         function updateShopUI() {
             var btnTap2 = document.getElementById("btnTap2");
             var btnTap5 = document.getElementById("btnTap5");
             var btnTap10 = document.getElementById("btnTap10");
+            var btnEnergy1500 = document.getElementById("btnEnergy1500");
+            var btnEnergy2000 = document.getElementById("btnEnergy2000");
+            var btnEnergy3000 = document.getElementById("btnEnergy3000");
+            var btnEnergy5000 = document.getElementById("btnEnergy5000");
 
+            // Tap Upgrades UI state
             if (tapPower >= 2) {
                 btnTap2.innerText = "Purchased";
                 btnTap2.style.background = "#555";
@@ -368,6 +431,55 @@
                 btnTap10.style.background = "#00ff88";
                 btnTap10.style.color = "#000";
                 btnTap10.style.cursor = "pointer";
+            }
+
+            // Energy Upgrades UI state
+            if (maxEnergy >= 1500) {
+                btnEnergy1500.innerText = "Purchased";
+                btnEnergy1500.style.background = "#555";
+                btnEnergy1500.style.color = "#aaa";
+                btnEnergy1500.style.cursor = "not-allowed";
+            } else {
+                btnEnergy1500.innerText = "Buy";
+                btnEnergy1500.style.background = "#ffd700";
+                btnEnergy1500.style.color = "#000";
+                btnEnergy1500.style.cursor = "pointer";
+            }
+
+            if (maxEnergy >= 2000) {
+                btnEnergy2000.innerText = "Purchased";
+                btnEnergy2000.style.background = "#555";
+                btnEnergy2000.style.color = "#aaa";
+                btnEnergy2000.style.cursor = "not-allowed";
+            } else {
+                btnEnergy2000.innerText = "Buy";
+                btnEnergy2000.style.background = "#ffd700";
+                btnEnergy2000.style.color = "#000";
+                btnEnergy2000.style.cursor = "pointer";
+            }
+
+            if (maxEnergy >= 3000) {
+                btnEnergy3000.innerText = "Purchased";
+                btnEnergy3000.style.background = "#555";
+                btnEnergy3000.style.color = "#aaa";
+                btnEnergy3000.style.cursor = "not-allowed";
+            } else {
+                btnEnergy3000.innerText = "Buy";
+                btnEnergy3000.style.background = "#ffd700";
+                btnEnergy3000.style.color = "#000";
+                btnEnergy3000.style.cursor = "pointer";
+            }
+
+            if (maxEnergy >= 5000) {
+                btnEnergy5000.innerText = "Purchased";
+                btnEnergy5000.style.background = "#555";
+                btnEnergy5000.style.color = "#aaa";
+                btnEnergy5000.style.cursor = "not-allowed";
+            } else {
+                btnEnergy5000.innerText = "Buy";
+                btnEnergy5000.style.background = "#ffd700";
+                btnEnergy5000.style.color = "#000";
+                btnEnergy5000.style.cursor = "pointer";
             }
         }
 
