@@ -622,7 +622,7 @@
             }
         }
 
-        // --- MINI-GAME LOGIC (Biz777 Coin & 5-Fingered Hands Moving) ---
+        // --- MINI-GAME LOGIC ---
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -679,13 +679,19 @@
                 spawnObstacle();
             }
 
+            // მთლიანი ხელების მოძრაობა ზემოთ-ქვემოთ
+            let handMoveOffset = Math.sin(frameCount * 0.08) * 35;
+
             for (let i = obstacles.length - 1; i >= 0; i--) {
                 obstacles[i].x -= 2.2;
 
+                let currentTopH = obstacles[i].top + handMoveOffset;
+                let currentBottomH = obstacles[i].bottom - handMoveOffset;
+
                 if (
                     coinToken.x + coinToken.radius > obstacles[i].x &&
-                    coinToken.x - coinToken.radius < obstacles[i].x + 45 &&
-                    (coinToken.y - coinToken.radius < obstacles[i].top || coinToken.y + coinToken.radius > canvas.height - obstacles[i].bottom)
+                    coinToken.x - coinToken.radius < obstacles[i].x + 48 &&
+                    (coinToken.y - coinToken.radius < currentTopH || coinToken.y + coinToken.radius > canvas.height - currentBottomH)
                 ) {
                     isGameOver = true;
                 }
@@ -725,69 +731,84 @@
             ctx.lineWidth = 2.5;
             ctx.stroke();
 
-            // Text on Coin (Biz777)
             ctx.fillStyle = '#0f172a';
             ctx.font = 'bold 8px sans-serif';
             ctx.textAlign = 'center';
             ctx.fillText('Biz777', coinToken.x, coinToken.y + 3);
             ctx.textAlign = 'left';
 
-            // Simple Up & Down Moving Offset for Hand Fingers
-            let fingerMove = Math.sin(frameCount * 0.1) * 3;
+            let handMoveOffset = Math.sin(frameCount * 0.08) * 35;
 
-            // Draw Hands with 5 Rounded Fingers
+            // Draw Hands (ზუსტად ფოტოს მსგავსი ფერი, 4 თითი სწორად, ცერი გვერდზე მიხატული)
             for (let obs of obstacles) {
-                let skinColor = '#eac086';
-                let skinShadow = '#cca065';
-                let nailColor = '#fff5e6';
+                let skinColor = '#ffdfbe';  // ფოტოს მსგავსი ღია კრემისფერი
+                let skinShadow = '#e0b896';
+                let nailColor = '#ffffff';
 
-                // Top Hand Body
-                let topH = obs.top;
+                let currentTopH = obs.top + handMoveOffset;
+                let currentBottomH = obs.bottom - handMoveOffset;
+
+                // --- TOP HAND ---
                 ctx.fillStyle = skinColor;
-                ctx.fillRect(obs.x, 0, 48, topH - 22);
+                ctx.fillRect(obs.x, 0, 44, currentTopH - 18);
                 ctx.strokeStyle = skinShadow;
                 ctx.lineWidth = 2;
-                ctx.strokeRect(obs.x, 0, 48, topH - 22);
+                ctx.strokeRect(obs.x, 0, 44, currentTopH - 18);
 
-                // 5 Rounded Fingers (Top) + Moving Offset
-                for (let f = 0; f < 5; f++) {
-                    let fx = obs.x + 2 + (f * 9);
-                    let fYOffset = (f === 0 || f === 4) ? fingerMove : -fingerMove; // Side thumb/finger moves slightly
-                    let currentFingerY = topH - 22 + fYOffset;
-
+                // 4 Fingers (Top)
+                for (let f = 0; f < 4; f++) {
+                    let fx = obs.x + 3 + (f * 10);
+                    let fy = currentTopH - 18;
                     ctx.beginPath();
-                    ctx.roundRect(fx, currentFingerY, 8, 22, [0, 0, 5, 5]);
+                    ctx.roundRect(fx, fy, 8, 18, [0, 0, 4, 4]);
                     ctx.fillStyle = skinColor;
                     ctx.fill();
                     ctx.stroke();
                     // Nail
                     ctx.fillStyle = nailColor;
-                    ctx.fillRect(fx + 1, currentFingerY + 2, 6, 3);
+                    ctx.fillRect(fx + 1, fy + 2, 6, 3);
                 }
-
-                // Bottom Hand Body
-                let bottomY = canvas.height - obs.bottom;
-                let bottomH = obs.bottom;
-
-                // 5 Rounded Fingers (Bottom) + Moving Offset
-                for (let f = 0; f < 5; f++) {
-                    let fx = obs.x + 2 + (f * 9);
-                    let fYOffset = (f === 0 || f === 4) ? -fingerMove : fingerMove;
-                    let currentFingerY = bottomY + fYOffset;
-
-                    ctx.beginPath();
-                    ctx.roundRect(fx, currentFingerY, 8, 22, [5, 5, 0, 0]);
-                    ctx.fillStyle = skinColor;
-                    ctx.fill();
-                    ctx.stroke();
-                    // Nail
-                    ctx.fillStyle = nailColor;
-                    ctx.fillRect(fx + 1, currentFingerY + 16, 6, 3);
-                }
-
+                // Side Thumb (ცერი მარცხენა მხარეს გვერდზე)
+                ctx.beginPath();
+                ctx.roundRect(obs.x - 8, currentTopH - 32, 10, 16, [4, 0, 0, 4]);
                 ctx.fillStyle = skinColor;
-                ctx.fillRect(obs.x, bottomY + 22, 48, bottomH - 22);
-                ctx.strokeRect(obs.x, bottomY + 22, 48, bottomH - 22);
+                ctx.fill();
+                ctx.stroke();
+                // Thumb Nail
+                ctx.fillStyle = nailColor;
+                ctx.fillRect(obs.x - 6, currentTopH - 30, 3, 5);
+
+
+                // --- BOTTOM HAND ---
+                let bottomY = canvas.height - currentBottomH;
+
+                // 4 Fingers (Bottom)
+                for (let f = 0; f < 4; f++) {
+                    let fx = obs.x + 3 + (f * 10);
+                    let fy = bottomY;
+                    ctx.beginPath();
+                    ctx.roundRect(fx, fy, 8, 18, [4, 4, 0, 0]);
+                    ctx.fillStyle = skinColor;
+                    ctx.fill();
+                    ctx.stroke();
+                    // Nail
+                    ctx.fillStyle = nailColor;
+                    ctx.fillRect(fx + 1, fy + 13, 6, 3);
+                }
+                // Side Thumb (ქვედა ხელის ცერი მარცხენა მხარეს გვერდზე)
+                ctx.beginPath();
+                ctx.roundRect(obs.x - 8, bottomY + 14, 10, 16, [0, 4, 4, 0]);
+                ctx.fillStyle = skinColor;
+                ctx.fill();
+                ctx.stroke();
+                // Thumb Nail
+                ctx.fillStyle = nailColor;
+                ctx.fillRect(obs.x - 6, bottomY + 23, 3, 5);
+
+                // Bottom Arm Body
+                ctx.fillStyle = skinColor;
+                ctx.fillRect(obs.x, bottomY + 18, 44, currentBottomH - 18);
+                ctx.strokeRect(obs.x, bottomY + 18, 44, currentBottomH - 18);
             }
 
             // Draw Score
