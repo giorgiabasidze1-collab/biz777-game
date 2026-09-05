@@ -346,7 +346,7 @@
                 <div class="avatar" id="userAvatar">B</div>
                 <div>
                     <div class="username" id="userName">Biz777 User</div>
-                    <div class="level-badge" id="levelName">Bronze Foundation</div>
+                    <div class="level-badge" id="levelName">1. Bronze Foundation</div>
                 </div>
             </div>
             <div class="score-board">
@@ -400,9 +400,9 @@
             <!-- Tab 3: Mini-Game (Hand & Finger Obstacles) -->
             <div class="tab-pane" id="tab-minigame">
                 <div class="minigame-wrapper">
-                    <h3 style="margin-bottom: 10px; font-size: 16px;">Hand & Finger Challenge</h3>
-                    <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">Tap to fly through hands & win +500 ⚡!</p>
-                    <canvas id="gameCanvas" width="300" height="400"></canvas>
+                    <h3 style="margin-bottom: 6px; font-size: 15px;">Hand & Finger Challenge</h3>
+                    <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Pass 10 obstacles to win +500 ⚡ Energy!</p>
+                    <canvas id="gameCanvas" width="300" height="360"></canvas>
                 </div>
             </div>
 
@@ -481,7 +481,7 @@
             document.getElementById('userAvatar').innerText = (user.first_name || "B")[0].toUpperCase();
         }
 
-        // Levels Config
+        // Levels Config (Sequential Progression)
         const levels = [
             { name: "1. Bronze Foundation", min: 0, icon: "🏢" },
             { name: "2. Silver Startup", min: 5000, icon: "🏬" },
@@ -506,9 +506,8 @@
         const buyTapBtn = document.getElementById('buyTapBtn');
         const buyEnergyBtn = document.getElementById('buyEnergyBtn');
 
-        // Main Tap Event Handler (with Multi-touch support)
+        // Main Tap Event Handler (Multi-touch support)
         clickerBtn.addEventListener('pointerdown', (e) => {
-            const tapsCount = (e.isPrimary === false) ? 1 : 1; // Simplifed handling or standard click
             if (energy >= tapPower) {
                 energy -= tapPower;
                 score += tapPower;
@@ -539,7 +538,7 @@
             }
         }, 1000);
 
-        // UI Update Function
+        // UI Update Function & Sequential Building Levels Checker
         function updateUI() {
             scoreDisplay.innerText = score.toLocaleString();
             energyText.innerText = `${energy} / ${maxEnergy}`;
@@ -550,6 +549,7 @@
             buyTapBtn.innerText = `${tapCost} 🪙`;
             buyEnergyBtn.innerText = `${energyCost} 🪙`;
 
+            // Check current sequential level based on score
             let currentLevelObj = levels[0];
             for (let i = levels.length - 1; i >= 0; i--) {
                 if (score >= levels[i].min) {
@@ -579,11 +579,11 @@
             saveState();
         }
 
-        // --- MINI-GAME LOGIC (Hand & Finger Obstacles) ---
+        // --- MINI-GAME LOGIC (Coin Token & Hand/Finger Obstacles) ---
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        let bird = { x: 50, y: 150, radius: 14, gravity: 0.5, lift: -7, velocity: 0 };
+        let coinToken = { x: 50, y: 140, radius: 14, gravity: 0.45, lift: -6.5, velocity: 0 };
         let obstacles = [];
         let frameCount = 0;
         let gameScore = 0;
@@ -591,8 +591,8 @@
         let gameStarted = false;
 
         function resetMiniGame() {
-            bird.y = 150;
-            bird.velocity = 0;
+            coinToken.y = 140;
+            coinToken.velocity = 0;
             obstacles = [];
             frameCount = 0;
             gameScore = 0;
@@ -608,12 +608,12 @@
                 resetMiniGame();
                 gameStarted = true;
             }
-            bird.velocity = bird.lift;
+            coinToken.velocity = coinToken.lift;
         });
 
         function spawnObstacle() {
-            let gap = 120;
-            let topHeight = Math.floor(Math.random() * (canvas.height - gap - 100)) + 50;
+            let gap = 125;
+            let topHeight = Math.floor(Math.random() * (canvas.height - gap - 80)) + 40;
             obstacles.push({
                 x: canvas.width,
                 top: topHeight,
@@ -625,34 +625,33 @@
         function updateMiniGame() {
             if (!gameStarted) return;
 
-            bird.velocity += bird.gravity;
-            bird.y += bird.velocity;
+            coinToken.velocity += coinToken.gravity;
+            coinToken.y += coinToken.velocity;
 
-            if (bird.y + bird.radius > canvas.height || bird.y - bird.radius < 0) {
+            if (coinToken.y + coinToken.radius > canvas.height || coinToken.y - coinToken.radius < 0) {
                 isGameOver = true;
             }
 
-            if (frameCount % 100 === 0) {
+            if (frameCount % 110 === 0) {
                 spawnObstacle();
             }
 
             for (let i = obstacles.length - 1; i >= 0; i--) {
-                obstacles[i].x -= 2.5;
+                obstacles[i].x -= 2.2;
 
                 // Collision detection
                 if (
-                    bird.x + bird.radius > obstacles[i].x &&
-                    bird.x - bird.radius < obstacles[i].x + 40 &&
-                    (bird.y - bird.radius < obstacles[i].top || bird.y + bird.radius > canvas.height - obstacles[i].bottom)
+                    coinToken.x + coinToken.radius > obstacles[i].x &&
+                    coinToken.x - coinToken.radius < obstacles[i].x + 45 &&
+                    (coinToken.y - coinToken.radius < obstacles[i].top || coinToken.y + coinToken.radius > canvas.height - obstacles[i].bottom)
                 ) {
                     isGameOver = true;
                 }
 
-                if (!obstacles[i].passed && obstacles[i].x < bird.x) {
+                if (!obstacles[i].passed && obstacles[i].x < coinToken.x) {
                     obstacles[i].passed = true;
                     gameScore++;
                     if (gameScore >= 10) {
-                        // Reward energy on 10 obstacles passed
                         energy = Math.min(maxEnergy, energy + 500);
                         if (tg && tg.showAlert) {
                             tg.showAlert("Quest Complete! +500 ⚡ Energy awarded!");
@@ -675,51 +674,57 @@
         function drawMiniGame() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw Bird / Token
-            ctx.fillStyle = '#38bdf8';
-            ctx.beginPath();
-            ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = '#000';
-            ctx.font = '12px sans-serif';
-            ctx.fillText('🪙', bird.x - 7, bird.y + 4);
-
-            // Draw Obstacles (Hands/Fingers styling)
+            // Draw Coin Token
             ctx.fillStyle = '#eab308';
-            for (let obs of obstacles) {
-                // Top Hand/Finger
-                ctx.fillRect(obs.x, 0, 40, obs.top);
-                ctx.fillText('✋', obs.x + 8, obs.top - 10);
+            ctx.beginPath();
+            ctx.arc(coinToken.x, coinToken.y, coinToken.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#fef08a';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.fillStyle = '#1e293b';
+            ctx.font = 'bold 12px sans-serif';
+            ctx.fillText('🪙', coinToken.x - 7, coinToken.y + 4);
 
-                // Bottom Hand/Finger
-                ctx.fillRect(obs.x, canvas.height - obs.bottom, 40, obs.bottom);
-                ctx.fillText('✊', obs.x + 8, canvas.height - obs.bottom + 25);
+            // Draw Hand & Finger Obstacles
+            for (let obs of obstacles) {
+                // Top Hand/Finger Obstacle
+                ctx.fillStyle = '#38bdf8';
+                ctx.fillRect(obs.x, 0, 42, obs.top);
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = '20px sans-serif';
+                ctx.fillText('✋', obs.x + 8, obs.top - 8);
+
+                // Bottom Hand/Finger Obstacle
+                ctx.fillStyle = '#38bdf8';
+                ctx.fillRect(obs.x, canvas.height - obs.bottom, 42, obs.bottom);
+                ctx.fillText('✊', obs.x + 8, canvas.height - obs.bottom + 26);
             }
 
             // Draw Score
             ctx.fillStyle = '#f8fafc';
-            ctx.font = 'bold 18px sans-serif';
-            ctx.fillText(`Score: ${gameScore} / 10`, 15, 30);
+            ctx.font = 'bold 16px sans-serif';
+            ctx.fillText(`Score: ${gameScore} / 10`, 15, 25);
 
             if (!gameStarted) {
-                ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = '#38bdf8';
-                ctx.font = 'bold 16px sans-serif';
+                ctx.font = 'bold 15px sans-serif';
                 ctx.textAlign = 'center';
                 ctx.fillText('Tap to Start Game!', canvas.width / 2, canvas.height / 2);
                 ctx.textAlign = 'left';
             }
 
             if (isGameOver) {
-                ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = '#ef4444';
-                ctx.font = 'bold 20px sans-serif';
+                ctx.font = 'bold 18px sans-serif';
                 ctx.textAlign = 'center';
                 ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 15);
                 ctx.fillStyle = '#f8fafc';
-                ctx.font = '14px sans-serif';
+                ctx.font = '13px sans-serif';
                 ctx.fillText('Tap anywhere to Restart', canvas.width / 2, canvas.height / 2 + 15);
                 ctx.textAlign = 'left';
             }
