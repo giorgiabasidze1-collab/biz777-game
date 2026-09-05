@@ -319,8 +319,8 @@
             display: flex;
         }
 
-        /* Shop & Ads Design */
-        .shop-list, .ads-list {
+        /* Shop, Ads & Referral Design */
+        .shop-list, .ads-list, .friends-list {
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -328,7 +328,7 @@
             margin-top: 10px;
         }
 
-        .shop-card, .ad-card {
+        .shop-card, .ad-card, .friend-card {
             background: var(--card-bg);
             padding: 15px;
             border-radius: 14px;
@@ -340,7 +340,7 @@
             align-items: stretch;
         }
 
-        .shop-info h4, .ad-info h4 {
+        .shop-info h4, .ad-info h4, .friend-info h4 {
             font-size: 15px;
             margin-bottom: 4px;
         }
@@ -381,7 +381,6 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
         <header>
             <div class="header-top">
                 <div class="user-info">
@@ -397,7 +396,6 @@
                 </div>
             </div>
 
-            <!-- Header Level Progress Bar -->
             <div class="level-progress-container">
                 <div class="level-progress-info">
                     <span id="nextLevelText">Next Level: 1,000</span>
@@ -409,11 +407,8 @@
             </div>
         </header>
 
-        <!-- Content Panels -->
         <div class="content">
-            <!-- Tab 1: Tap / Clicker -->
             <div class="tab-pane active" id="tab-clicker">
-                <!-- Large Chaotic Background Pattern with Currency Emojis -->
                 <div class="coin-background-pattern">
                     <span class="bg-coin" style="top: 5%; left: 10%;">🪙 Biz777</span>
                     <span class="bg-coin" style="top: 18%; right: 12%; animation-delay: 1s;">💵 $</span>
@@ -428,7 +423,6 @@
 
                 <div class="tap-section"></div>
 
-                <!-- Interactive Clicker Area -->
                 <div class="interactive-clicker-area" id="clickerBtn">
                     <div class="clicker-circle">
                         <div class="clicker-icon" id="buildingIcon">🏗️</div>
@@ -446,26 +440,24 @@
                 </div>
             </div>
 
-            <!-- Tab 2: Shop / Upgrades -->
             <div class="tab-pane" id="tab-shop">
                 <h3 style="margin-bottom: 15px; align-self: flex-start;">Upgrades</h3>
                 <div class="shop-list">
                     <div class="shop-card">
                         <div class="shop-info">
-                            <h4>Tap Power Upgrades (1 to 10)</h4>
+                            <h4>Tap Power Upgrades</h4>
                         </div>
                         <div id="tapShopContainer" style="margin-top: 8px; width: 100%;"></div>
                     </div>
                     <div class="shop-card">
                         <div class="shop-info">
-                            <h4>Energy Upgrades (1000 to 5000)</h4>
+                            <h4>Energy Upgrades</h4>
                         </div>
                         <div id="energyShopContainer" style="margin-top: 8px; width: 100%;"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab 3: Mini-Game -->
             <div class="tab-pane" id="tab-minigame">
                 <div class="minigame-wrapper">
                     <h3 style="margin-bottom: 4px; font-size: 14px;">📅 Daily Quest</h3>
@@ -474,7 +466,17 @@
                 </div>
             </div>
 
-            <!-- Tab 4: Ads & Rewards Section -->
+            <div class="tab-pane" id="tab-friends">
+                <h3 style="margin-bottom: 10px; align-self: flex-start;">👥 Invite Friends</h3>
+                <div class="friends-list">
+                    <div class="friend-card" style="align-items: stretch; gap: 8px;">
+                        <h4 style="font-size: 14px;">Invite 3 Friends to get Free Tap Power 20!</h4>
+                        <p style="font-size: 11px; color: var(--text-secondary);">Share your referral link. Invited friends: <span id="friendCountDisplay" style="color: var(--accent); font-weight: bold;">0</span> / 3</p>
+                        <button class="btn" onclick="inviteFriendLink()">Share Referral Link 🔗</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="tab-pane" id="tab-ads">
                 <h3 style="margin-bottom: 15px; align-self: flex-start;">Earn & Ads</h3>
                 <div class="ads-list">
@@ -489,7 +491,6 @@
             </div>
         </div>
 
-        <!-- Navigation Bar -->
         <nav>
             <button class="nav-item active" onclick="switchTab('clicker', this)">
                 <span>⚡</span> Tap
@@ -500,8 +501,11 @@
             <button class="nav-item" onclick="switchTab('minigame', this)">
                 <span>🎮</span> Game
             </button>
+            <button class="nav-item" onclick="switchTab('friends', this)">
+                <span>👥</span> Friends
+            </button>
             <button class="nav-item" onclick="switchTab('ads', this)">
-                <span>📺</span> Earn Ads
+                <span>📺</span> Earn
             </button>
         </nav>
     </div>
@@ -515,11 +519,24 @@
         let maxEnergy = parseInt(localStorage.getItem('biz_maxEnergy')) || 1000;
         let tapPower = parseInt(localStorage.getItem('biz_tapPower')) || 1;
         let lastQuestTime = parseInt(localStorage.getItem('biz_lastQuestTime')) || 0;
+        let invitedFriendsCount = parseInt(localStorage.getItem('biz_invitedFriends')) || 0;
+        let freeTap20Claimed = localStorage.getItem('biz_freeTap20Claimed') === "true";
 
+        let userId = "user";
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const user = tg.initDataUnsafe.user;
+            userId = user.id;
             document.getElementById('userName').innerText = user.first_name || "Biz777 User";
             document.getElementById('userAvatar').innerText = (user.first_name || "B")[0].toUpperCase();
+
+            if (tg.initDataUnsafe.start_param) {
+                let refKey = `biz_ref_claimed_${user.id}`;
+                if (!localStorage.getItem(refKey)) {
+                    invitedFriendsCount += 1;
+                    localStorage.setItem('biz_invitedFriends', invitedFriendsCount);
+                    localStorage.setItem(refKey, "true");
+                }
+            }
         }
 
         const levels = [
@@ -540,6 +557,7 @@
         const levelName = document.getElementById('levelName');
         const buildingIcon = document.getElementById('buildingIcon');
         const questStatusText = document.getElementById('questStatusText');
+        const friendCountDisplay = document.getElementById('friendCountDisplay');
         
         const levelBarFill = document.getElementById('levelBarFill');
         const nextLevelText = document.getElementById('nextLevelText');
@@ -591,6 +609,7 @@
             scoreDisplay.innerText = score.toLocaleString();
             energyText.innerText = `${energy} / ${maxEnergy}`;
             energyFill.style.width = `${(energy / maxEnergy) * 100}%`;
+            friendCountDisplay.innerText = invitedFriendsCount;
 
             let currentLevelIndex = 0;
             for (let i = levels.length - 1; i >= 0; i--) {
@@ -632,17 +651,9 @@
             tapContainer.innerHTML = "";
             energyContainer.innerHTML = "";
 
-            // --- TAP POWER UPGRADES (Levels 1 to 10 step by step) ---
+            // --- TAP POWER UPGRADES (1 to 10 bought with coins, 10 to 20 free via 3 friends) ---
             const tapPrices = {
-                2: 200,
-                3: 600,
-                4: 1500,
-                5: 3500,
-                6: 7500,
-                7: 15000,
-                8: 30000,
-                9: 60000,
-                10: 120000
+                2: 200, 3: 600, 4: 1500, 5: 3500, 6: 7500, 7: 15000, 8: 30000, 9: 60000, 10: 120000
             };
 
             if (tapPower < 10) {
@@ -656,20 +667,33 @@
                         </div>
                         <button onclick="buyTapUpgrade(${nextPower}, ${price})" style="background: #00ff88; color: #000; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
                     </div>`;
+            } else if (tapPower === 10 && !freeTap20Claimed) {
+                if (invitedFriendsCount < 3) {
+                    tapContainer.innerHTML = `<div style="font-size: 11px; color: var(--warning); text-align: center; padding: 6px; font-weight: bold;">🔒 Invite ${3 - invitedFriendsCount} more friends in 'Friends' tab to get FREE Tap Power 20!</div>`;
+                } else {
+                    tapContainer.innerHTML = `
+                        <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: bold; font-size: 12px;">🎁 Get FREE Tap Power 20!</div>
+                                <div style="font-size: 10px; color: #22c55e;">3/3 Friends Invited (Cost: FREE)</div>
+                            </div>
+                            <button onclick="claimFreeTap20()" style="background: #22c55e; color: #000; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px;">Claim 🚀</button>
+                        </div>`;
+                }
             } else {
-                tapContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Tap Power (10) Purchased!</div>`;
+                tapContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Tap Power (20) Unlocked Free!</div>`;
             }
 
-            // --- ENERGY UPGRADES (1000-1500-2000-2500-3000-3500-4000-4500-5000) ---
+            // --- ENERGY UPGRADES ---
             const energyTiers = [
-                { target: 1500, price: 250 },
-                { target: 2000, price: 700 },
-                { target: 2500, price: 1600 },
-                { target: 3000, price: 3200 },
-                { target: 3500, price: 6500 },
-                { target: 4000, price: 13000 },
-                { target: 4500, price: 26000 },
-                { target: 5000, price: 50000 }
+                { target: 1500, price: 500 },
+                { target: 2000, price: 1500 },
+                { target: 2500, price: 4000 },
+                { target: 3000, price: 8000 },
+                { target: 3500, price: 15000 },
+                { target: 4000, price: 30000 },
+                { target: 4500, price: 60000 },
+                { target: 5000, price: 120000 }
             ];
 
             let nextTier = energyTiers.find(t => t.target > maxEnergy);
@@ -698,6 +722,20 @@
             }
         }
 
+        function claimFreeTap20() {
+            if (invitedFriendsCount >= 3 && !freeTap20Claimed) {
+                tapPower = 20;
+                freeTap20Claimed = true;
+                updateUI();
+                saveState();
+                if (tg && tg.showAlert) {
+                    tg.showAlert("Congratulations! Tap Power 20 unlocked for free!");
+                } else {
+                    alert("Congratulations! Tap Power 20 unlocked for free!");
+                }
+            }
+        }
+
         function buyEnergyUpgrade(newMaxEnergy, price) {
             if (score >= price) {
                 score -= price;
@@ -710,11 +748,23 @@
             }
         }
 
-        // --- MINI-GAME LOGIC ---
+        function inviteFriendLink() {
+            let botUsername = "Biz777Bot";
+            let refLink = `https://t.me/${botUsername}?start=ref_${userId}`;
+            let shareText = `Join Biz777 Mini App and let's earn coins together! 🚀`;
+            
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent(shareText)}`);
+            } else {
+                prompt("Copy your referral link:", refLink);
+            }
+        }
+
+        // --- MINI-GAME LOGIC (Soft Jumps) ---
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        let coinToken = { x: 50, y: 170, radius: 16, gravity: 0.3, lift: -6.8, velocity: 0 };
+        let coinToken = { x: 50, y: 170, radius: 16, gravity: 0.22, lift: -5.0, velocity: 0 };
         let obstacles = [];
         let frameCount = 0;
         let gameScore = 0;
@@ -743,7 +793,7 @@
         });
 
         function spawnObstacle() {
-            let gap = 140; 
+            let gap = 150; 
             let topHeight = Math.floor(Math.random() * (canvas.height - gap - 70)) + 30;
             obstacles.push({
                 x: canvas.width,
@@ -978,6 +1028,8 @@
             localStorage.setItem('biz_maxEnergy', maxEnergy);
             localStorage.setItem('biz_tapPower', tapPower);
             localStorage.setItem('biz_lastQuestTime', lastQuestTime);
+            localStorage.setItem('biz_invitedFriends', invitedFriendsCount);
+            localStorage.setItem('biz_freeTap20Claimed', freeTap20Claimed);
         }
 
         updateUI();
