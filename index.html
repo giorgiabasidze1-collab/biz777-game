@@ -982,7 +982,6 @@
                 ctx.fillStyle = '#f8fafc';
                 ctx.font = '13px sans-serif';
                 ctx.fillText('Tap screen to restart', canvas.width / 2, canvas.height / 2 + 15);
-                ctx.textAlign, 'left';
             }
         }
 
@@ -993,21 +992,28 @@
         }
         requestAnimationFrame(gameLoop);
 
-        // --- REAL ADSGRAM SDK INTEGRATION ---
+        // --- SAFE ADSGRAM SDK INTEGRATION ---
         let adsgramController = null;
-        try {
-            if (window.Adsgram) {
-                // შენი რეალური UnitID (46267) ჩასმულია აქ:
-                adsgramController = window.Adsgram.init({ blockId: "46267" });
+
+        function initAdsgram() {
+            if (!adsgramController && window.Adsgram) {
+                try {
+                    adsgramController = window.Adsgram.init({ blockId: "46267" });
+                } catch (e) {
+                    console.error("Adsgram init error:", e);
+                }
             }
-        } catch (e) {
-            console.error("Adsgram init error:", e);
         }
 
+        window.addEventListener('load', () => {
+            setTimeout(initAdsgram, 1000);
+        });
+
         function watchAdsgramAd() {
+            initAdsgram();
+
             if (adsgramController) {
                 adsgramController.show().then(() => {
-                    // ეს ბლოკი შესრულდება მხოლოდ მაშინ, როცა ვიდეო ბოლომდე იქნება ნაყურები წარმატებით
                     score += 1000;
                     if (tg && tg.showAlert) {
                         tg.showAlert("Reward claimed: +1,000 Coins for watching the ad!");
@@ -1017,16 +1023,19 @@
                     updateUI();
                     saveState();
                 }).catch((err) => {
-                    // მომხმარებელმა გამოტოვა ან რეკლამა ვერ ჩაიტვირთა
                     console.error("Ad error or skipped:", err);
                     if (tg && tg.showAlert) {
-                        tg.showAlert("Ad was skipped or failed to load. No reward given.");
+                        tg.showAlert("Ad was skipped or failed to load.");
                     } else {
-                        alert("Ad was skipped or failed to load. No reward given.");
+                        alert("Ad was skipped or failed to load.");
                     }
                 });
             } else {
-                alert("Adsgram SDK is not initialized. Please check your internet connection.");
+                if (tg && tg.showAlert) {
+                    tg.showAlert("Adsgram SDK is still loading or blocked. Check your connection!");
+                } else {
+                    alert("Adsgram SDK is still loading or blocked. Check your connection!");
+                }
             }
         }
 
