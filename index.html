@@ -539,12 +539,12 @@
 
             <!-- Tab 5: Ads & Rewards Section -->
             <div class="tab-pane" id="tab-ads">
-                <h3 style="margin-bottom: 15px; align-self: flex-start;">Earn & Ads</h3>
+                <h3 style="margin-bottom: 15px; align-self: flex-start;">Boost Energy</h3>
                 <div class="ads-list">
                     <div class="ad-card" style="flex-direction: row;">
                         <div class="ad-info">
-                            <h4>Video Ad Reward</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Watch quick simulated ad to get +1,000 coins</p>
+                            <h4>Refill Energy Ad</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Watch quick simulated ad to instantly refill energy to max</p>
                         </div>
                         <button class="btn" onclick="watchSimulatedAd()">Watch 📺</button>
                     </div>
@@ -567,7 +567,7 @@
                 <span>👥</span> Friends
             </button>
             <button class="nav-item" onclick="switchTab('ads', this)">
-                <span>📺</span> Earn
+                <span>📺</span> Boost
             </button>
         </nav>
     </div>
@@ -575,13 +575,13 @@
     <!-- Custom Fake Video Ad Popup Modal -->
     <div id="adModal">
         <div class="ad-video-box">
-            <h3 style="margin-bottom: 10px; font-size: 15px; color: var(--accent);">📺 Playing Sponsored Ad...</h3>
+            <h3 style="margin-bottom: 10px; font-size: 15px; color: var(--accent);">📺 Refilling Energy...</h3>
             <div class="ad-screen">
-                <div style="font-size: 36px; margin-bottom: 5px;">🎬</div>
-                <div style="font-size: 13px; color: var(--text-secondary);">Simulated Video Ad</div>
+                <div style="font-size: 36px; margin-bottom: 5px;">⚡</div>
+                <div style="font-size: 13px; color: var(--text-secondary);">Simulated Energy Boost</div>
                 <div id="adTimer" style="font-size: 18px; font-weight: bold; color: var(--warning); margin-top: 8px;">3s</div>
             </div>
-            <p style="font-size: 11px; color: var(--text-secondary);">Reward will be credited automatically!</p>
+            <p style="font-size: 11px; color: var(--text-secondary);">Energy will be fully restored automatically!</p>
         </div>
     </div>
 
@@ -833,7 +833,7 @@
             }
         }
 
-        // --- SIMULATED VIDEO AD REWARD SYSTEM ---
+        // --- SIMULATED VIDEO AD ENERGY REFILL SYSTEM ---
         function watchSimulatedAd() {
             const modal = document.getElementById('adModal');
             const timerEl = document.getElementById('adTimer');
@@ -850,15 +850,15 @@
                     clearInterval(countdown);
                     modal.style.display = 'none';
 
-                    // ჯილდოს დამატება ყურების გარეშე (ავტომატურად)
-                    score += 1000;
+                    // ენერგია ივსება მაქსიმუმამდე, ფული არ ემატება
+                    energy = maxEnergy;
                     updateUI();
                     saveState();
 
                     if (tg && tg.showAlert) {
-                        tg.showAlert("Reward claimed: +1,000 Coins added!");
+                        tg.showAlert("Energy fully refilled!");
                     } else {
-                        alert("Reward claimed: +1,000 Coins added!");
+                        alert("Energy fully refilled!");
                     }
                 }
             }, 1000);
