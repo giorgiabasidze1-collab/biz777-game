@@ -77,10 +77,9 @@
 
             <!-- BUTTONS ROW: SHOP & MINI-GAME -->
             <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                <button onclick="openShop()" style="flex: 1; padding: 14px; background: #00bcd4; color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 15px;">🛒 Shop</button>
+                <button onclick="openShop()" style="flex: 1; padding: 12px; background: #00bcd4; color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px;">🛒 Shop</button>
+                <button onclick="openMiniGame()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #f72585, #7209b7); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px;">🕹️ Mini-Game</button>
             </div>
-
-            <button onclick="openMiniGame()" style="width: 100%; padding: 11px; background: linear-gradient(135deg, #f72585, #7209b7); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px;">🕹️ Hands Mini-Game</button>
         </div>
 
     </div>
@@ -375,7 +374,6 @@
             ctx.textBaseline = "middle";
             ctx.fillText("Biz777", bird.x, bird.y);
 
-            // მუშტებს შორის დისტანცია და გასასვლელი გაფართოებულია
             if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 245) {
                 var gapSize = 220;
                 var minHeight = 30;
