@@ -148,7 +148,6 @@
         if (isNaN(energy)) energy = maxEnergy;
         var tapPower = parseInt(localStorage.getItem("biz777_tap_power")) || 1;
 
-        // Fix values greater than 10 for tap power
         if (tapPower > 10) tapPower = 10;
 
         var lastEnergyTime = parseInt(localStorage.getItem("biz777_last_energy_time")) || 0;
@@ -327,7 +326,6 @@
             tapContainer.innerHTML = "";
             energyContainer.innerHTML = "";
 
-            // Tap Upgrades Sequential Logic
             if (tapPower === 1) {
                 tapContainer.innerHTML = `
                     <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
@@ -359,7 +357,6 @@
                 tapContainer.innerHTML = `<div style="font-size: 10px; color: #888; text-align: center; padding: 4px;">All tap upgrades purchased!</div>`;
             }
 
-            // Energy Upgrades Sequential Logic
             if (maxEnergy < 1500) {
                 energyContainer.innerHTML = `
                     <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
@@ -462,6 +459,7 @@
         function startBirdGame() {
             if (questClaimed) {
                 alert("Reward already claimed today!");
+                return;
             }
             document.getElementById("gameStartOverlay").style.display = "none";
             resetBirdGame();
@@ -604,7 +602,7 @@
             birdGameRunning = false;
             document.getElementById("gameStartOverlay").style.display = "flex";
             document.querySelector("#gameStartOverlay h3").innerText = "💥 Caught!";
-            document.querySelector("#gameStartOverlay p").innerText = "Passed: " + tunnelScore + "/10. Try again!";
+            document.querySelector("#gameStartOverlay p").innerText = "You scored " + tunnelScore + "/10. Try again!";
             document.querySelector("#gameStartOverlay button").innerText = "Try Again";
         }
 
@@ -614,7 +612,7 @@
             energy = Math.min(energy + 500, maxEnergy);
             saveGame();
             updateGame();
-            alert("+500 ⚡ Energy added!");
+            alert("Successfully claimed +500 ⚡ Energy!");
             closeMiniGame();
         }
     </script>
