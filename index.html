@@ -50,13 +50,19 @@
         header {
             padding: 15px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
             background: var(--card-bg);
             border-bottom-left-radius: 20px;
             border-bottom-right-radius: 20px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             z-index: 10;
+            gap: 10px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .user-info {
@@ -95,6 +101,37 @@
             font-size: 20px;
             font-weight: bold;
             color: var(--accent);
+        }
+
+        /* Level Progress Bar in Header */
+        .level-progress-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .level-progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .level-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: #0f172a;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .level-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #38bdf8);
+            width: 0%;
+            transition: width 0.3s ease;
         }
 
         /* Main Content Area */
@@ -295,7 +332,6 @@
             touch-action: none;
         }
 
-        /* Ad Modal / Overlay */
         #adModal {
             position: fixed;
             top: 0;
@@ -332,24 +368,33 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
         <header>
-            <div class="user-info">
-                <div class="avatar" id="userAvatar">B</div>
-                <div>
-                    <div class="username" id="userName">Biz777 User</div>
-                    <div class="level-badge" id="levelName">1. Bronze Foundation</div>
+            <div class="header-top">
+                <div class="user-info">
+                    <div class="avatar" id="userAvatar">B</div>
+                    <div>
+                        <div class="username" id="userName">Biz777 User</div>
+                        <div class="level-badge" id="levelName">1. Bronze Foundation</div>
+                    </div>
+                </div>
+                <div class="score-board">
+                    <div class="score-value" id="scoreDisplay">0</div>
+                    <div class="level-badge">Biz777 Coins</div>
                 </div>
             </div>
-            <div class="score-board">
-                <div class="score-value" id="scoreDisplay">0</div>
-                <div class="level-badge">Biz777 Coins</div>
+
+            <div class="level-progress-container">
+                <div class="level-progress-info">
+                    <span id="nextLevelText">შემდეგ სახლამდე: 5,000</span>
+                    <span id="levelPercentage">0%</span>
+                </div>
+                <div class="level-bar-bg">
+                    <div class="level-bar-fill" id="levelBarFill"></div>
+                </div>
             </div>
         </header>
 
-        <!-- Content Panels -->
         <div class="content">
-            <!-- Tab 1: Tap / Clicker -->
             <div class="tab-pane active" id="tab-clicker">
                 <div class="tap-section">
                     <div class="clicker-circle" id="clickerBtn">
@@ -368,13 +413,12 @@
                 </div>
             </div>
 
-            <!-- Tab 2: Shop / Upgrades -->
             <div class="tab-pane" id="tab-shop">
                 <h3 style="margin-bottom: 15px; align-self: flex-start;">Upgrades</h3>
                 <div class="shop-list">
                     <div class="shop-card">
                         <div class="shop-info">
-                            <h4>Tap Power Upgrades</h4>
+                            <h4>Tap Power Upgrades (Max: 10)</h4>
                         </div>
                         <div id="tapShopContainer" style="margin-top: 8px;"></div>
                     </div>
@@ -387,16 +431,14 @@
                 </div>
             </div>
 
-            <!-- Tab 3: Mini-Game -->
             <div class="tab-pane" id="tab-minigame">
                 <div class="minigame-wrapper">
-                    <h3 style="margin-bottom: 6px; font-size: 15px;">Catch Biz777 Coin!</h3>
-                    <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Pass 10 obstacles for +500 ⚡ Energy!</p>
-                    <canvas id="gameCanvas" width="300" height="360"></canvas>
+                    <h3 style="margin-bottom: 4px; font-size: 14px;">📅 დღიური ქვესტი (Daily Quest)</h3>
+                    <p id="questStatusText" style="font-size: 11px; color: var(--warning); margin-bottom: 6px; text-align: center;">აიღე 10 ქულა თამაშში (+500 ⚡ Energy დღეში ერთხელ)</p>
+                    <canvas id="gameCanvas" width="300" height="340"></canvas>
                 </div>
             </div>
 
-            <!-- Tab 4: Ads & Rewards Section -->
             <div class="tab-pane" id="tab-ads">
                 <h3 style="margin-bottom: 15px; align-self: flex-start;">Earn & Ads</h3>
                 <div class="ads-list">
@@ -418,7 +460,6 @@
             </div>
         </div>
 
-        <!-- Navigation Bar -->
         <nav>
             <button class="nav-item active" onclick="switchTab('clicker', this)">
                 <span>⚡</span> Tap
@@ -435,7 +476,6 @@
         </nav>
     </div>
 
-    <!-- Simulated Ad Player Modal -->
     <div id="adModal">
         <div class="ad-box">
             <h3>Sponsored Ad</h3>
@@ -446,27 +486,24 @@
     </div>
 
     <script>
-        // Telegram WebApp Integration
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Game State Variables
         let score = parseInt(localStorage.getItem('biz_score')) || 0;
         let energy = parseInt(localStorage.getItem('biz_energy')) || 1000;
         let maxEnergy = parseInt(localStorage.getItem('biz_maxEnergy')) || 1000;
         let tapPower = parseInt(localStorage.getItem('biz_tapPower')) || 1;
+        let lastQuestTime = parseInt(localStorage.getItem('biz_lastQuestTime')) || 0;
 
         let currentAdType = null;
         let adCountdownInterval = null;
 
-        // User Data Setup from Telegram
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const user = tg.initDataUnsafe.user;
             document.getElementById('userName').innerText = user.first_name || "Biz777 User";
             document.getElementById('userAvatar').innerText = (user.first_name || "B")[0].toUpperCase();
         }
 
-        // Levels Config (Sequential Progression)
         const levels = [
             { name: "1. Bronze Foundation", min: 0, icon: "🏢" },
             { name: "2. Silver Startup", min: 5000, icon: "🏬" },
@@ -478,15 +515,19 @@
             { name: "8. Biz777 Legend HQ", min: 10000000, icon: "🏛️" }
         ];
 
-        // DOM Elements
         const scoreDisplay = document.getElementById('scoreDisplay');
         const energyText = document.getElementById('energyText');
         const energyFill = document.getElementById('energyFill');
         const clickerBtn = document.getElementById('clickerBtn');
         const levelName = document.getElementById('levelName');
         const buildingIcon = document.getElementById('buildingIcon');
+        const questStatusText = document.getElementById('questStatusText');
+        
+        // Level Progress Elements
+        const levelBarFill = document.getElementById('levelBarFill');
+        const nextLevelText = document.getElementById('nextLevelText');
+        const levelPercentage = document.getElementById('levelPercentage');
 
-        // Main Tap Event Handler
         clickerBtn.addEventListener('pointerdown', (e) => {
             if (energy >= tapPower) {
                 energy -= tapPower;
@@ -498,7 +539,6 @@
             }
         });
 
-        // Floating Number Animation
         function showFloatingText(x, y, text) {
             const el = document.createElement('div');
             el.className = 'floating-number';
@@ -509,7 +549,6 @@
             setTimeout(() => el.remove(), 800);
         }
 
-        // Energy Regeneration Loop
         setInterval(() => {
             if (energy < maxEnergy) {
                 energy = Math.min(maxEnergy, energy + 2);
@@ -518,26 +557,58 @@
             }
         }, 1000);
 
-        // UI Update Function & Sequential Building Levels Checker
+        function checkDailyQuestStatus() {
+            const now = Date.now();
+            const twentyFourHours = 24 * 60 * 60 * 1000;
+            if (now - lastQuestTime < twentyFourHours) {
+                let timeLeft = Math.ceil((twentyFourHours - (now - lastQuestTime)) / (1000 * 60 * 60));
+                questStatusText.innerText = `დღიური ქვესტი შესრულებულია! შემდეგი ~${timeLeft} საათში`;
+                questStatusText.style.color = '#94a3b8';
+            } else {
+                questStatusText.innerText = `აიღე 10 ქულა თამაშში (+500 ⚡ Energy - დღიური ქვესტი)`;
+                questStatusText.style.color = '#eab308';
+            }
+        }
+
         function updateUI() {
             scoreDisplay.innerText = score.toLocaleString();
-            energyText.innerText = `${energy} / ${maxEnergy}`;
+            energyText.innerText = `${energy} /${maxEnergy}`;
             energyFill.style.width = `${(energy / maxEnergy) * 100}%`;
 
-            let currentLevelObj = levels[0];
+            let currentLevelIndex = 0;
             for (let i = levels.length - 1; i >= 0; i--) {
                 if (score >= levels[i].min) {
-                    currentLevelObj = levels[i];
+                    currentLevelIndex = i;
                     break;
                 }
             }
+
+            let currentLevelObj = levels[currentLevelIndex];
             levelName.innerText = currentLevelObj.name;
             buildingIcon.innerText = currentLevelObj.icon;
 
+            // Level Progress Calculation
+            let currentMin = currentLevelObj.min;
+            let nextMin = (currentLevelIndex < levels.length - 1) ? levels[currentLevelIndex + 1].min : currentMin;
+
+            if (currentLevelIndex === levels.length - 1) {
+                levelBarFill.style.width = "100%";
+                nextLevelText.innerText = "მაქსიმალური დონე მიღწეულია!";
+                levelPercentage.innerText = "100%";
+            } else {
+                let progressRange = nextMin - currentMin;
+                let currentProgress = score - currentMin;
+                let percentage = Math.min(100, Math.max(0, (currentProgress / progressRange) * 100));
+
+                levelBarFill.style.width = `${percentage}%`;
+                nextLevelText.innerText = `შემდეგ სახლამდე: ${(nextMin - score).toLocaleString()} ქულა`;
+                levelPercentage.innerText = `${Math.floor(percentage)}%`;
+            }
+
             updateShopUI();
+            checkDailyQuestStatus();
         }
 
-        // Sequential Shop UI Upgrades Logic
         function updateShopUI() {
             var tapContainer = document.getElementById("tapShopContainer");
             var energyContainer = document.getElementById("energyShopContainer");
@@ -549,373 +620,25 @@
                 tapContainer.innerHTML = `
                     <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <div style="font-weight: bold; font-size: 11px;">👆 Power (2 Tap)</div>
+                            <div style="font-weight: bold; font-size: 11px;">👆 Power (3 Tap)</div>
                             <div style="font-size: 9px; color: #ffd700;">Price: 300 Coins</div>
                         </div>
-                        <button onclick="buyTapUpgrade(2, 300)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+                        <button onclick="buyTapUpgrade(3, 300)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
                     </div>`;
-            } else if (tapPower === 2) {
+            } else if (tapPower === 3) {
                 tapContainer.innerHTML = `
                     <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <div style="font-weight: bold; font-size: 11px;">🔥 Power (5 Tap)</div>
+                            <div style="font-weight: bold; font-size: 11px;">🔥 Power (6 Tap)</div>
                             <div style="font-size: 9px; color: #ffd700;">Price: 1,200 Coins</div>
                         </div>
-                        <button onclick="buyTapUpgrade(5, 1200)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+                        <button onclick="buyTapUpgrade(6, 1200)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
                     </div>`;
-            } else if (tapPower === 5) {
+            } else if (tapPower === 6) {
                 tapContainer.innerHTML = `
                     <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <div style="font-weight: bold; font-size: 11px;">⚡ Power (10 Tap)</div>
+                            <div style="font-weight: bold; font-size: 11px;">⚡ Max Power (10 Tap)</div>
                             <div style="font-size: 9px; color: #ffd700;">Price: 4,000 Coins</div>
                         </div>
-                        <button onclick="buyTapUpgrade(10, 4000)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
-                    </div>`;
-            } else {
-                tapContainer.innerHTML = `<div style="font-size: 10px; color: #888; text-align: center; padding: 4px;">All tap upgrades purchased!</div>`;
-            }
-
-            if (maxEnergy === 1000) {
-                energyContainer.innerHTML = `
-                    <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <div style="font-weight: bold; font-size: 11px;">⚡ Max Energy (1,500)</div>
-                            <div style="font-size: 9px; color: #ffd700;">Price: 500 Coins</div>
-                        </div>
-                        <button onclick="buyEnergyUpgrade(1500, 500)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
-                    </div>`;
-            } else if (maxEnergy === 1500) {
-                energyContainer.innerHTML = `
-                    <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <div style="font-weight: bold; font-size: 11px;">⚡ Max Energy (2,500)</div>
-                            <div style="font-size: 9px; color: #ffd700;">Price: 2,000 Coins</div>
-                        </div>
-                        <button onclick="buyEnergyUpgrade(2500, 2000)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
-                    </div>`;
-            } else {
-                energyContainer.innerHTML = `<div style="font-size: 10px; color: #888; text-align: center; padding: 4px;">All energy upgrades purchased!</div>`;
-            }
-        }
-
-        function buyTapUpgrade(newPower, price) {
-            if (score >= price) {
-                score -= price;
-                tapPower = newPower;
-                updateUI();
-                saveState();
-            } else {
-                alert("Not enough coins!");
-            }
-        }
-
-        function buyEnergyUpgrade(newMaxEnergy, price) {
-            if (score >= price) {
-                score -= price;
-                maxEnergy = newMaxEnergy;
-                energy = maxEnergy;
-                updateUI();
-                saveState();
-            } else {
-                alert("Not enough coins!");
-            }
-        }
-
-        // --- MINI-GAME LOGIC ---
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-
-        let coinToken = { x: 50, y: 140, radius: 16, gravity: 0.38, lift: -5.8, velocity: 0 }; // რბილი და უფრო ნელა მფრინავი ქოქნი
-        let obstacles = [];
-        let frameCount = 0;
-        let gameScore = 0;
-        let isGameOver = false;
-        let gameStarted = false;
-
-        function resetMiniGame() {
-            coinToken.y = 140;
-            coinToken.velocity = 0;
-            obstacles = [];
-            frameCount = 0;
-            gameScore = 0;
-            isGameOver = false;
-            gameStarted = false;
-        }
-
-        canvas.addEventListener('pointerdown', () => {
-            if (!gameStarted) {
-                gameStarted = true;
-            }
-            if (isGameOver) {
-                resetMiniGame();
-                gameStarted = true;
-            }
-            coinToken.velocity = coinToken.lift;
-        });
-
-        function spawnObstacle() {
-            let gap = 135; // უფრო ფართო გასასვლელი (უფრო მარტივი)
-            let topHeight = Math.floor(Math.random() * (canvas.height - gap - 70)) + 35;
-            obstacles.push({
-                x: canvas.width,
-                top: topHeight,
-                bottom: canvas.height - topHeight - gap,
-                passed: false
-            });
-        }
-
-        function updateMiniGame() {
-            if (!gameStarted) return;
-
-            coinToken.velocity += coinToken.gravity;
-            coinToken.y += coinToken.velocity;
-
-            if (coinToken.y + coinToken.radius > canvas.height || coinToken.y - coinToken.radius < 0) {
-                isGameOver = true;
-            }
-
-            if (frameCount % 130 === 0) { // უფრო ნელა მოდიან დაბრკოლებები
-                spawnObstacle();
-            }
-
-            // უფრო ნელი და რბილი მოძრაობა ზემოთ-ქვემოთ
-            let handMoveOffset = Math.sin(frameCount * 0.04) * 25;
-
-            for (let i = obstacles.length - 1; i >= 0; i--) {
-                obstacles[i].x -= 1.8; // სიჩქარე შემცირებულია (უფრო მარტივი თამაში)
-
-                let currentTopH = obstacles[i].top + handMoveOffset;
-                let currentBottomH = obstacles[i].bottom - handMoveOffset;
-
-                if (
-                    coinToken.x + coinToken.radius > obstacles[i].x &&
-                    coinToken.x - coinToken.radius < obstacles[i].x + 44 &&
-                    (coinToken.y - coinToken.radius < currentTopH || coinToken.y + coinToken.radius > canvas.height - currentBottomH)
-                ) {
-                    isGameOver = true;
-                }
-
-                if (!obstacles[i].passed && obstacles[i].x < coinToken.x) {
-                    obstacles[i].passed = true;
-                    gameScore++;
-                    if (gameScore >= 10) {
-                        energy = Math.min(maxEnergy, energy + 500);
-                        if (tg && tg.showAlert) {
-                            tg.showAlert("Quest Complete! +500 ⚡ Energy awarded!");
-                        } else {
-                            alert("Quest Complete! +500 ⚡ Energy awarded!");
-                        }
-                        updateUI();
-                        saveState();
-                        resetMiniGame();
-                    }
-                }
-
-                if (obstacles[i].x < -50) {
-                    obstacles.splice(i, 1);
-                }
-            }
-            frameCount++;
-        }
-
-        function drawMiniGame() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Draw Biz777 Coin Token
-            ctx.fillStyle = '#eab308';
-            ctx.beginPath();
-            ctx.arc(coinToken.x, coinToken.y, coinToken.radius, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.strokeStyle = '#fef08a';
-            ctx.lineWidth = 2.5;
-            ctx.stroke();
-
-            ctx.fillStyle = '#0f172a';
-            ctx.font = 'bold 8px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('Biz777', coinToken.x, coinToken.y + 3);
-            ctx.textAlign = 'left';
-
-            let handMoveOffset = Math.sin(frameCount * 0.04) * 25;
-
-            // Draw Hands (ღია კრემისფერი, ცერი გვერდზე და თეთრი ფრჩხილები ზემოდან)
-            for (let obs of obstacles) {
-                let skinColor = '#ffdfbe';  
-                let skinShadow = '#e0b896';
-                let nailColor = '#ffffff'; // თეთრი ფრჩხილები
-
-                let currentTopH = obs.top + handMoveOffset;
-                let currentBottomH = obs.bottom - handMoveOffset;
-
-                // --- TOP HAND ---
-                ctx.fillStyle = skinColor;
-                ctx.fillRect(obs.x, 0, 44, currentTopH - 18);
-                ctx.strokeStyle = skinShadow;
-                ctx.lineWidth = 2;
-                ctx.strokeRect(obs.x, 0, 44, currentTopH - 18);
-
-                // 4 Fingers (Top) + თეთრი ფრჩხილები
-                for (let f = 0; f < 4; f++) {
-                    let fx = obs.x + 3 + (f * 10);
-                    let fy = currentTopH - 18;
-                    ctx.beginPath();
-                    ctx.roundRect(fx, fy, 8, 18, [0, 0, 4, 4]);
-                    ctx.fillStyle = skinColor;
-                    ctx.fill();
-                    ctx.stroke();
-                    // თეთრი ფრჩხილი თითის წვერზე
-                    ctx.fillStyle = nailColor;
-                    ctx.fillRect(fx + 1, fy + 1, 6, 4);
-                }
-                // Side Thumb (ცერი გვერდზე) + თეთრი ფრჩხილი ცერზე
-                ctx.beginPath();
-                ctx.roundRect(obs.x - 8, currentTopH - 32, 10, 16, [4, 0, 0, 4]);
-                ctx.fillStyle = skinColor;
-                ctx.fill();
-                ctx.stroke();
-                ctx.fillStyle = nailColor;
-                ctx.fillRect(obs.x - 7, currentTopH - 31, 3, 4);
-
-
-                // --- BOTTOM HAND ---
-                let bottomY = canvas.height - currentBottomH;
-
-                // 4 Fingers (Bottom) + თეთრი ფრჩხილები
-                for (let f = 0; f < 4; f++) {
-                    let fx = obs.x + 3 + (f * 10);
-                    let fy = bottomY;
-                    ctx.beginPath();
-                    ctx.roundRect(fx, fy, 8, 18, [4, 4, 0, 0]);
-                    ctx.fillStyle = skinColor;
-                    ctx.fill();
-                    ctx.stroke();
-                    // თეთრი ფრჩხილი თითის წვერზე (ქვედა ხელისთვის შიგნით მიმართული)
-                    ctx.fillStyle = nailColor;
-                    ctx.fillRect(fx + 1, fy + 13, 6, 4);
-                }
-                // Side Thumb (ქვედა ხელის ცერი გვერდზე) + თეთრი ფრჩხილი
-                ctx.beginPath();
-                ctx.roundRect(obs.x - 8, bottomY + 14, 10, 16, [0, 4, 4, 0]);
-                ctx.fillStyle = skinColor;
-                ctx.fill();
-                ctx.stroke();
-                ctx.fillStyle = nailColor;
-                ctx.fillRect(obs.x - 7, bottomY + 25, 3, 4);
-
-                // Bottom Arm Body
-                ctx.fillStyle = skinColor;
-                ctx.fillRect(obs.x, bottomY + 18, 44, currentBottomH - 18);
-                ctx.strokeRect(obs.x, bottomY + 18, 44, currentBottomH - 18);
-            }
-
-            // Draw Score
-            ctx.fillStyle = '#f8fafc';
-            ctx.font = 'bold 16px sans-serif';
-            ctx.fillText(`Score: ${gameScore} / 10`, 15, 25);
-
-            if (!gameStarted) {
-                ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#38bdf8';
-                ctx.font = 'bold 15px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText('Tap to Start Game!', canvas.width / 2, canvas.height / 2);
-                ctx.textAlign = 'left';
-            }
-
-            if (isGameOver) {
-                ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#ef4444';
-                ctx.font = 'bold 18px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 15);
-                ctx.fillStyle = '#f8fafc';
-                ctx.font = '13px sans-serif';
-                ctx.fillText('Tap anywhere to Restart', canvas.width / 2, canvas.height / 2 + 15);
-                ctx.textAlign = 'left';
-            }
-        }
-
-        function gameLoop() {
-            updateMiniGame();
-            drawMiniGame();
-            requestAnimationFrame(gameLoop);
-        }
-        requestAnimationFrame(gameLoop);
-
-        // --- AD SYSTEM LOGIC ---
-        function watchAd(type) {
-            currentAdType = type;
-            const modal = document.getElementById('adModal');
-            const desc = document.getElementById('adDescription');
-            const timerEl = document.getElementById('adTimer');
-            
-            if (type === 'energy') {
-                desc.innerText = "Watch this sponsor message to fully refill your energy!";
-            } else {
-                desc.innerText = "Watch this sponsor message to claim +1,000 bonus coins!";
-            }
-
-            modal.style.display = 'flex';
-            let timeLeft = 5;
-            timerEl.innerText = timeLeft;
-
-            if (adCountdownInterval) clearInterval(adCountdownInterval);
-
-            adCountdownInterval = setInterval(() => {
-                timeLeft--;
-                timerEl.innerText = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(adCountdownInterval);
-                    closeAdAndReward();
-                }
-            }, 1000);
-        }
-
-        function closeAdAndReward() {
-            const modal = document.getElementById('adModal');
-            modal.style.display = 'none';
-
-            if (currentAdType === 'energy') {
-                energy = maxEnergy;
-                if (tg && tg.showAlert) {
-                    tg.showAlert("Energy fully restored via Ad!");
-                } else {
-                    alert("Energy fully restored via Ad!");
-                }
-            } else if (currentAdType === 'coins') {
-                score += 1000;
-                if (tg && tg.showAlert) {
-                    tg.showAlert("Reward claimed: +1,000 Coins!");
-                } else {
-                    alert("Reward claimed: +1,000 Coins!");
-                }
-            }
-            updateUI();
-            saveState();
-        }
-
-        // Tab Switcher
-        function switchTab(tabId, btnElement) {
-            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            btnElement.classList.add('active');
-        }
-
-        // LocalStorage Save State
-        function saveState() {
-            localStorage.setItem('biz_score', score);
-            localStorage.setItem('biz_energy', energy);
-            localStorage.setItem('biz_maxEnergy', maxEnergy);
-            localStorage.setItem('biz_tapPower', tapPower);
-        }
-
-        // Initial UI Render
-        updateUI();
-    </script>
-</body>
-</html>
+                        <button onclick="buyTap
