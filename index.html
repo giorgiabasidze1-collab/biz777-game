@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Biz777 Mini App - Full 3D & Spin</title>
+    <title>Biz777 Mini App - Full 3D</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -50,6 +50,7 @@
             transform-style: preserve-3d;
         }
 
+        /* 3D Header */
         header {
             padding: 15px;
             display: flex;
@@ -142,6 +143,7 @@
             transition: width 0.3s ease;
         }
 
+        /* 3D Content Area */
         .content {
             flex: 1;
             display: flex;
@@ -179,6 +181,7 @@
             100% { transform: translateY(-30px) rotate(45deg) translateZ(50px); }
         }
 
+        /* 3D Clicker Coin/Building Button */
         .interactive-clicker-area {
             position: relative;
             z-index: 5;
@@ -266,6 +269,7 @@
             100% { opacity: 0; transform: translateY(-90px) scale(1.3) translateZ(120px); }
         }
 
+        /* 3D Navigation Bar */
         nav {
             display: flex;
             background: linear-gradient(145deg, #1e293b, #0f172a);
@@ -321,6 +325,7 @@
             display: flex;
         }
 
+        /* 3D Cards inside Tabs (Shop, Friends, Ads, Games) */
         .shop-list, .ads-list, .friends-list, .games-menu {
             width: 100%;
             display: flex;
@@ -405,53 +410,39 @@
             transform: translateZ(20px);
         }
 
-        /* --- 3D SPIN WHEEL STYLING --- */
+        /* --- SPIN WHEEL STYLES --- */
         .spin-wheel-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
-            gap: 15px;
+            padding: 5px;
+            gap: 12px;
             transform-style: preserve-3d;
-            padding-bottom: 15px;
         }
 
-        .wheel-container-3d {
+        .wheel-container {
             position: relative;
-            width: 240px;
-            height: 240px;
+            width: 260px;
+            height: 260px;
             margin: 10px auto;
             transform-style: preserve-3d;
-            transform: translateZ(30px);
+            transform: translateZ(25px);
         }
 
-        .wheel-pin {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 12px solid transparent;
-            border-right: 12px solid transparent;
-            border-top: 24px solid var(--warning);
-            z-index: 50;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
-        }
-
-        .spin-wheel {
+        .wheel {
             width: 100%;
             height: 100%;
             border-radius: 50%;
+            border: 6px solid var(--accent);
             position: relative;
             overflow: hidden;
-            border: 6px solid var(--accent);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 30px var(--accent-glow);
             transition: transform 4s cubic-bezier(0.15, 0.9, 0.2, 1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 30px var(--accent-glow);
             background: #0f172a;
         }
 
-        .wheel-slice {
+        .wheel-sector {
             position: absolute;
             width: 50%;
             height: 50%;
@@ -461,31 +452,113 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 13px;
             font-weight: bold;
             color: #fff;
-            border: 1px solid rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* 6 Slices Sizing and Colors */
-        .wheel-slice:nth-child(1) { transform: rotate(0deg) skewY(-30deg); background: #ef4444; }
-        .wheel-slice:nth-child(2) { transform: rotate(60deg) skewY(-30deg); background: #eab308; color: #000; }
-        .wheel-slice:nth-child(3) { transform: rotate(120deg) skewY(-30deg); background: #22c55e; }
-        .wheel-slice:nth-child(4) { transform: rotate(180deg) skewY(-30deg); background: #38bdf8; color: #000; }
-        .wheel-slice:nth-child(5) { transform: rotate(240deg) skewY(-30deg); background: #a855f7; }
-        .wheel-slice:nth-child(6) { transform: rotate(300deg) skewY(-30deg); background: #ec4899; }
+        /* 6 sectors coloring & rotation */
+        .wheel-sector:nth-child(1) { transform: rotate(0deg) skewY(-30deg); background: rgba(56, 189, 248, 0.8); }
+        .wheel-sector:nth-child(2) { transform: rotate(60deg) skewY(-30deg); background: rgba(34, 197, 94, 0.8); }
+        .wheel-sector:nth-child(3) { transform: rotate(120deg) skewY(-30deg); background: rgba(234, 179, 8, 0.8); }
+        .wheel-sector:nth-child(4) { transform: rotate(180deg) skewY(-30deg); background: rgba(239, 68, 68, 0.8); }
+        .wheel-sector:nth-child(5) { transform: rotate(240deg) skewY(-30deg); background: rgba(168, 85, 247, 0.8); }
+        .wheel-sector:nth-child(6) { transform: rotate(300deg) skewY(-30deg); background: rgba(236, 72, 153, 0.8); }
 
-        .wheel-slice span {
+        .sector-text {
             position: absolute;
+            width: 100px;
+            height: 100px;
+            text-align: center;
             transform: skewY(30deg) rotate(30deg);
             font-size: 11px;
+            font-weight: bold;
             text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-            width: 60px;
-            text-align: center;
-            left: 10px;
+            left: -15px;
             top: 25px;
         }
 
+        .wheel-pointer {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%) translateZ(40px);
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 24px solid var(--warning);
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8));
+            z-index: 20;
+        }
+
+        .wheel-center-hub {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateZ(35px);
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, #f8fafc, #64748b);
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .cup-game-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 5px;
+            gap: 12px;
+            transform-style: preserve-3d;
+        }
+
+        .levels-container {
+            display: flex;
+            gap: 6px;
+            width: 100%;
+            justify-content: center;
+            transform: translateZ(10px);
+        }
+
+        .level-btn {
+            background: #1e293b;
+            border: 1px solid rgba(255,255,255,0.15);
+            color: var(--text-secondary);
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            transition: all 0.2s;
+        }
+
+        .level-btn.active-level {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+            transform: translateZ(10px) scale(1.08);
+        }
+
+        .level-btn.completed-level {
+            background: #22c55e;
+            color: #000;
+            border-color: #22c55e;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+        }
+
+        /* --- FULL 3D CUP & TABLE ARENA --- */
         .cups-board-3d {
             perspective: 1000px;
             width: 100%;
@@ -551,6 +624,7 @@
             transition: opacity 0.3s ease;
         }
 
+        /* 3D Realistic Red Cup Styling */
         .cup-3d {
             position: absolute;
             width: 80px;
@@ -717,10 +791,10 @@
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
-                    <div class="game-card-option" onclick="openSubGame('spinwheel')">
+                    <div class="game-card-option" onclick="openSubGame('spin')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🎡 Biz777 Lucky Spin Wheel</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Spin the 3D Wheel to win massive coin rewards and Energy boosts!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🎡 Lucky Spin Wheel</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Spin the wheel daily for free random coin bonuses!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
@@ -781,32 +855,29 @@
                     </div>
                 </div>
 
-                <div class="sub-game-container" id="subgame-spinwheel">
+                <div class="sub-game-container" id="subgame-spin">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
                         <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🎡 3D Spin Wheel</h3>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Lucky Spin Wheel</h3>
                         <div style="width: 50px;"></div>
                     </div>
 
                     <div class="spin-wheel-wrapper">
-                        <div id="spinInfoBox" style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
-                            Cost: 300 Biz777 per Spin!
-                        </div>
-
-                        <div class="wheel-container-3d">
-                            <div class="wheel-pin"></div>
-                            <div class="spin-wheel" id="spinWheelElement">
-                                <div class="wheel-slice"><span>+2,000 Coins</span></div>
-                                <div class="wheel-slice"><span>+500 Energy</span></div>
-                                <div class="wheel-slice"><span>+5,000 Jackpot</span></div>
-                                <div class="wheel-slice"><span>Try Again</span></div>
-                                <div class="wheel-slice"><span>+1,000 Coins</span></div>
-                                <div class="wheel-slice"><span>+200 Energy</span></div>
+                        <div class="wheel-container">
+                            <div class="wheel-pointer"></div>
+                            <div class="wheel" id="luckyWheel">
+                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">100 Coins</div></div>
+                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">500 Coins</div></div>
+                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">50 Coins</div></div>
+                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">1,000 Coins</div></div>
+                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">200 Coins</div></div>
+                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">5,000 Coins</div></div>
                             </div>
+                            <div class="wheel-center-hub">🎯</div>
                         </div>
 
                         <button class="btn" id="spinWheelBtn" onclick="spinTheWheel()" style="width: 100%;">Spin Wheel 🎡</button>
-                        <div id="spinResultText" style="font-size: 12px; font-weight: bold; color: var(--success); text-align: center; min-height: 15px;"></div>
+                        <div id="spinCooldownText" style="font-size: 11px; color: var(--text-secondary); text-align: center;"></div>
                     </div>
                 </div>
             </div>
@@ -876,6 +947,7 @@
             5: { unlocked: false, completed: false }
         };
         let globalCupCooldownTimestamp = localStorage.getItem('biz_cup_global_cooldown') || "";
+        let lastSpinTimestamp = localStorage.getItem('biz_last_spin_time') || "";
 
         let userId = "user";
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -1082,6 +1154,7 @@
             document.getElementById(`subgame-${gameName}`).classList.add('active-subgame');
             if (gameName === 'flappy' && !flappyRunning) { startFlappyGame(); }
             if (gameName === 'cups') { initCupStageUI(); }
+            if (gameName === 'spin') { checkSpinCooldown(); }
         }
 
         function backToGamesMenu() {
@@ -1257,6 +1330,63 @@
                 canvas.onclick = null;
                 startFlappyGame();
             };
+        }
+
+        // --- LUCKY SPIN WHEEL LOGIC ---
+        const spinRewards = [100, 500, 50, 1000, 200, 5000];
+
+        function checkSpinCooldown() {
+            let now = new Date().getTime();
+            let btn = document.getElementById('spinWheelBtn');
+            let cooldownText = document.getElementById('spinCooldownText');
+
+            if (lastSpinTimestamp) {
+                let diff = now - parseInt(lastSpinTimestamp);
+                let dayMs = 24 * 60 * 60 * 1000;
+                if (diff < dayMs) {
+                    let timeLeft = dayMs - diff;
+                    let hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    let mins = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    btn.disabled = true;
+                    btn.style.opacity = "0.5";
+                    cooldownText.innerText = `⏳ Next free spin in ${hours}h ${mins}m`;
+                    return true;
+                }
+            }
+            btn.disabled = false;
+            btn.style.opacity = "1";
+            cooldownText.innerText = "";
+            return false;
+        }
+
+        function spinTheWheel() {
+            if (checkSpinCooldown()) return;
+
+            let btn = document.getElementById('spinWheelBtn');
+            btn.disabled = true;
+            btn.style.opacity = "0.5";
+
+            let winningIndex = Math.floor(Math.random() * spinRewards.length);
+            let degreesPerSector = 360 / spinRewards.length;
+            let extraSpins = 5; 
+            let targetDegree = (extraSpins * 360) + (winningIndex * degreesPerSector) + (degreesPerSector / 2);
+            
+            let wheel = document.getElementById('luckyWheel');
+            wheel.style.transition = 'transform 4s cubic-bezier(0.15, 0.9, 0.2, 1)';
+            wheel.style.transform = `rotate(-${targetDegree}deg)`;
+
+            setTimeout(() => {
+                let reward = spinRewards[winningIndex];
+                score += reward;
+                updateUI();
+                saveState();
+
+                lastSpinTimestamp = new Date().getTime().toString();
+                localStorage.setItem('biz_last_spin_time', lastSpinTimestamp);
+
+                alert(`🎉 Congratulations! You won ${reward.toLocaleString()} Biz777 coins!`);
+                checkSpinCooldown();
+            }, 4100);
         }
 
         // --- 3D CUP & BALL GAME LOGIC ---
@@ -1466,67 +1596,6 @@
             localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
             updateUI();
             saveState();
-        }
-
-        // --- 3D SPIN WHEEL GAME LOGIC ---
-        let currentWheelRotation = 0;
-        let isSpinningWheel = false;
-
-        const wheelPrizes = [
-            { id: 0, label: "+2,000 Coins", type: "coins", val: 2000 },
-            { id: 1, label: "+500 Energy", type: "energy", val: 500 },
-            { id: 2, label: "+5,000 Jackpot", type: "coins", val: 5000 },
-            { id: 3, label: "Try Again", type: "none", val: 0 },
-            { id: 4, label: "+1,000 Coins", type: "coins", val: 1000 },
-            { id: 5, label: "+200 Energy", type: "energy", val: 200 }
-        ];
-
-        function spinTheWheel() {
-            if (isSpinningWheel) return;
-            let cost = 300;
-            if (score < cost) {
-                alert("Not enough Biz777 coins to spin! (Cost: 300 coins)");
-                return;
-            }
-
-            score -= cost;
-            updateUI();
-            saveState();
-
-            isSpinningWheel = true;
-            document.getElementById('spinWheelBtn').disabled = true;
-            document.getElementById('spinResultText').innerText = "Spinning... 🎡";
-
-            // Random prize index selection
-            let randomIndex = Math.floor(Math.random() * wheelPrizes.length);
-            let sliceDegree = 360 / wheelPrizes.length;
-            
-            // Calculate exact target rotation to land the arrow on the chosen slice center
-            let extraSpins = 5 * 360; // 5 full rotations
-            let targetDegree = currentWheelRotation + extraSpins + (360 - (randomIndex * sliceDegree + sliceDegree / 2)) - (currentWheelRotation % 360);
-            
-            currentWheelRotation = targetDegree;
-            const wheelEl = document.getElementById('spinWheelElement');
-            wheelEl.style.transform = `rotate(${currentWheelRotation}deg)`;
-
-            setTimeout(() => {
-                isSpinningWheel = false;
-                document.getElementById('spinWheelBtn').disabled = false;
-                
-                let prize = wheelPrizes[randomIndex];
-                if (prize.type === "coins") {
-                    score += prize.val;
-                    document.getElementById('spinResultText').innerText = `🎉 You won ${prize.label}!`;
-                } else if (prize.type === "energy") {
-                    energy = Math.min(maxEnergy, energy + prize.val);
-                    document.getElementById('spinResultText').innerText = `⚡ You won ${prize.label}!`;
-                } else {
-                    document.getElementById('spinResultText').innerText = `😢 Better luck next time!`;
-                }
-
-                updateUI();
-                saveState();
-            }, 4000);
         }
 
         function switchTab(tabId, btnElement) {
