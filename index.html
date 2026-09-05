@@ -428,9 +428,9 @@
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin: 15px 0;
+            margin: 25px 0;
             position: relative;
-            height: 130px;
+            height: 120px;
             align-items: flex-end;
             width: 100%;
         }
@@ -451,12 +451,13 @@
             color: #000;
             font-weight: bold;
             font-size: 11px;
-            padding: 5px 6px;
+            padding: 5px 8px;
             border-radius: 14px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             border: 2px solid #fef08a;
             white-space: nowrap;
             z-index: 1;
+            opacity: 0;
             transition: opacity 0.3s ease;
         }
 
@@ -474,7 +475,7 @@
             position: absolute;
             bottom: 0;
             z-index: 3;
-            transition: transform 0.3s ease, background 0.3s ease, left 0.2s ease;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), left 0.3s ease;
         }
 
         .cup::before {
@@ -621,8 +622,8 @@
 
                     <div class="game-card-option" onclick="openSubGame('cups')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Biz777 Cup & Ball (Daily)</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">5 Levels of Classic Cup Shuffling. Once per 24 hours!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Biz777 Cup & Ball (Levels)</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Play through 5 progressive levels! Complete all 5 to reset daily.</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
@@ -665,15 +666,15 @@
                         <div class="cups-board" id="cupsBoard">
                             <div class="cup-slot" id="slot0">
                                 <div class="coin-item" id="coin0">biz777</div>
-                                <div class="cup" id="cup0" onclick="chooseCup(0)"></div>
+                                <div class="cup" id="cup0" onclick="chooseCup(0)" style="left: 0px;"></div>
                             </div>
                             <div class="cup-slot" id="slot1">
                                 <div class="coin-item" id="coin1">biz777</div>
-                                <div class="cup" id="cup1" onclick="chooseCup(1)"></div>
+                                <div class="cup" id="cup1" onclick="chooseCup(1)" style="left: 0px;"></div>
                             </div>
                             <div class="cup-slot" id="slot2">
                                 <div class="coin-item" id="coin2">biz777</div>
-                                <div class="cup" id="cup2" onclick="chooseCup(2)"></div>
+                                <div class="cup" id="cup2" onclick="chooseCup(2)" style="left: 0px;"></div>
                             </div>
                         </div>
 
@@ -742,14 +743,14 @@
         let freeTap20Claimed = localStorage.getItem('biz_freeTap20Claimed') === "true";
         let lastFlappyRewardDate = localStorage.getItem('biz_lastFlappyReward') || "";
 
-        // Cup game saved data
         let cupLevelDataState = JSON.parse(localStorage.getItem('biz_cup_states')) || {
-            1: { completed: false, lastPlayed: "" },
-            2: { completed: false, lastPlayed: "" },
-            3: { completed: false, lastPlayed: "" },
-            4: { completed: false, lastPlayed: "" },
-            5: { completed: false, lastPlayed: "" }
+            1: { unlocked: true, completed: false },
+            2: { unlocked: false, completed: false },
+            3: { unlocked: false, completed: false },
+            4: { unlocked: false, completed: false },
+            5: { unlocked: false, completed: false }
         };
+        let globalCupCooldownTimestamp = localStorage.getItem('biz_cup_global_cooldown') || "";
 
         let userId = "user";
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -1133,48 +1134,30 @@
             };
         }
 
-        // --- CUP & BALL GAME LOGIC (24H COOLDOWN & 5 LEVELS) ---
+        // --- UPDATED CUP & BALL GAME LOGIC (LEVELS + 24H RESTART) ---
         let currentCupLevel = 1;
-        let winningCupIndex = -1;
+        let winningIndex = 1;
+        let cupPositions = [0, 1, 2];
         let gameActive = false;
         let isShuffling = false;
 
         const cupLevelsData = {
-            1: { cost: 500, win: 1000, shuffles: 3, speed: 380 },
-            2: { cost: 2500, win: 5000, shuffles: 6, speed: 280 },
-            3: { cost: 10000, win: 25000, shuffles: 10, speed: 200 },
-            4: { cost: 50000, win: 150000, shuffles: 15, speed: 120 },
-            5: { cost: 200000, win: 800000, shuffles: 22, speed: 75 }
+            1: { cost: 500, win: 1000, shuffles: 4, speed: 400 },
+            2: { cost: 2500, win: 5000, shuffles: 7, speed: 280 },
+            3: { cost: 10000, win: 25000, shuffles: 11, speed: 200 },
+            4: { cost: 50000, win: 150000, shuffles: 16, speed: 130 },
+            5: { cost: 200000, win: 800000, shuffles: 24, speed: 80 }
         };
 
-        function setCupLevel(lvl) {
-            if (gameActive || isShuffling) return;
-            currentCupLevel = lvl;
-            
-            for(let i=1; i<=5; i++) {
-                let btn = document.getElementById(`lvlBtn${i}`);
-                btn.classList.remove('active-level');
-                if(cupLevelDataState[i].completed) {
-                    btn.classList.add('completed-level');
-                }
-            }
-            document.getElementById(`lvlBtn${lvl}`).classList.add('active-level');
+        const SLOT_WIDTH = 100;
 
-            let data = cupLevelsData[lvl];
-            document.getElementById('cupGameInfo').innerText = `Cost: ${data.cost.toLocaleString()} Biz777 | Win: ${data.win.toLocaleString()} Biz777`;
-            
-            checkCupCooldown();
-            initCupStageUI();
-        }
-
-        function checkCupCooldown() {
-            let state = cupLevelDataState[currentCupLevel];
+        function checkGlobalCooldown() {
             let now = new Date().getTime();
             let btn = document.getElementById('startCupGameBtn');
             let cooldownText = document.getElementById('cupCooldownText');
 
-            if (state.lastPlayed) {
-                let diff = now - parseInt(state.lastPlayed);
+            if (globalCupCooldownTimestamp) {
+                let diff = now - parseInt(globalCupCooldownTimestamp);
                 let dayMs = 24 * 60 * 60 * 1000;
                 if (diff < dayMs) {
                     let timeLeft = dayMs - diff;
@@ -1182,8 +1165,20 @@
                     let mins = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                     btn.disabled = true;
                     btn.style.opacity = "0.5";
-                    cooldownText.innerText = `⏳ Level available in ${hours}h ${mins}m (Once per 24h)`;
+                    cooldownText.innerText = `⏳ All 5 levels completed! Next restart in ${hours}h ${mins}m`;
                     return true;
+                } else {
+                    // 24 hours passed, reset everything back to level 1 and unlock
+                    globalCupCooldownTimestamp = "";
+                    localStorage.removeItem('biz_cup_global_cooldown');
+                    cupLevelDataState = {
+                        1: { unlocked: true, completed: false },
+                        2: { unlocked: false, completed: false },
+                        3: { unlocked: false, completed: false },
+                        4: { unlocked: false, completed: false },
+                        5: { unlocked: false, completed: false }
+                    };
+                    localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
                 }
             }
             btn.disabled = false;
@@ -1192,21 +1187,68 @@
             return false;
         }
 
+        function setCupLevel(lvl) {
+            if (gameActive || isShuffling) return;
+            
+            // Check if user is trying to click a locked level
+            if (!cupLevelDataState[lvl].unlocked) {
+                alert("Complete the previous level first!");
+                return;
+            }
+
+            currentCupLevel = lvl;
+            
+            for(let i=1; i<=5; i++) {
+                let btn = document.getElementById(`lvlBtn${i}`);
+                btn.classList.remove('active-level', 'completed-level');
+                
+                if(cupLevelDataState[i].completed) {
+                    btn.classList.add('completed-level');
+                } else if(!cupLevelDataState[i].unlocked) {
+                    btn.style.opacity = "0.4";
+                } else {
+                    btn.style.opacity = "1";
+                }
+            }
+            document.getElementById(`lvlBtn${lvl}`).classList.add('active-level');
+
+            let data = cupLevelsData[lvl];
+            document.getElementById('cupGameInfo').innerText = `Cost: ${data.cost.toLocaleString()} Biz777 | Win: ${data.win.toLocaleString()} Biz777`;
+            
+            checkGlobalCooldown();
+            initCupStageUI();
+        }
+
+        function renderCupPositions(animate = false) {
+            for (let cupId = 0; cupId < 3; cupId++) {
+                let slotIndex = cupPositions.indexOf(cupId);
+                let cupEl = document.getElementById(`cup${cupId}`);
+                cupEl.style.transitionDuration = animate ? `${cupLevelsData[currentCupLevel].speed}ms` : '0.3s';
+                cupEl.style.left = `${(slotIndex - 1) * SLOT_WIDTH}px`;
+            }
+        }
+
         function initCupStageUI() {
-            winningCupIndex = Math.floor(Math.random() * 3);
+            winningIndex = Math.floor(Math.random() * 3);
+            cupPositions = [0, 1, 2];
+            
+            renderCupPositions(false);
+
             for (let i = 0; i < 3; i++) {
                 document.getElementById(`cup${i}`).classList.remove('lifted');
-                document.getElementById(`coin${i}`).style.opacity = (i === winningCupIndex) ? "1" : "0";
+                document.getElementById(`coin${i}`).style.opacity = "0";
             }
-            document.getElementById(`startCupGameBtn`).innerText = "Start Round 🎮";
+
+            if (!checkGlobalCooldown()) {
+                document.getElementById(`startCupGameBtn`).innerText = "Start Round 🎮";
+            }
             gameActive = false;
             isShuffling = false;
-            checkCupCooldown();
         }
 
         function startCupRound() {
             if (isShuffling || gameActive) return;
-            if (checkCupCooldown()) return;
+            if (checkGlobalCooldown()) return;
 
             let data = cupLevelsData[currentCupLevel];
             if (score < data.cost) { alert("Not enough Biz777 coins!"); return; }
@@ -1216,74 +1258,92 @@
             saveState();
 
             isShuffling = true;
-            document.getElementById('startCupGameBtn').innerText = "Covering & Shuffling... 🌪️";
+            document.getElementById('startCupGameBtn').innerText = "Shuffling... 🌪️";
             document.getElementById('startCupGameBtn').disabled = true;
 
-            // 1. First show winning coin clearly, then lift cups up to cover
             for (let i = 0; i < 3; i++) {
-                document.getElementById(`coin${i}`).style.opacity = (i === winningCupIndex) ? "1" : "0";
-                document.getElementById(`cup${i}`).classList.remove('lifted');
+                document.getElementById(`cup${i}`).classList.add('lifted');
             }
+            let winningCupId = winningIndex;
+            document.getElementById(`coin${winningCupId}`).style.opacity = "1";
 
-            // After 1 second, lift cups to hide coin and start shuffle animation
             setTimeout(() => {
                 for (let i = 0; i < 3; i++) {
-                    document.getElementById(`cup${i}`).classList.add('lifted');
+                    document.getElementById(`cup${i}`).classList.remove('lifted');
                     document.getElementById(`coin${i}`).style.opacity = "0";
                 }
 
                 setTimeout(() => {
-                    // Close cups back down for shuffling
-                    for (let i = 0; i < 3; i++) {
-                        document.getElementById(`cup${i}`).classList.remove('lifted');
-                    }
+                    let shuffleCount = 0;
+                    let shuffleInterval = setInterval(() => {
+                        let slotA = Math.floor(Math.random() * 3);
+                        let slotB;
+                        do {
+                            slotB = Math.floor(Math.random() * 3);
+                        } while (slotB === slotA);
 
-                    setTimeout(() => {
-                        let shuffleCount = 0;
-                        let shuffleInterval = setInterval(() => {
-                            let c1 = Math.floor(Math.random() * 3);
-                            let c2 = (c1 + 1 + Math.floor(Math.random() * 2)) % 3;
-                            if (winningCupIndex === c1) winningCupIndex = c2;
-                            else if (winningCupIndex === c2) winningCupIndex = c1;
+                        let temp = cupPositions[slotA];
+                        cupPositions[slotA] = cupPositions[slotB];
+                        cupPositions[slotB] = temp;
 
-                            shuffleCount++;
-                            if (shuffleCount >= data.shuffles) {
-                                clearInterval(shuffleInterval);
-                                isShuffling = false;
-                                gameActive = true;
-                                document.getElementById('startCupGameBtn').innerText = "Guess the Cup! 🤔";
-                            }
-                        }, data.speed);
-                    }, 400);
-                }, 700);
-            }, 1000);
+                        renderCupPositions(true);
+
+                        shuffleCount++;
+                        if (shuffleCount >= data.shuffles) {
+                            clearInterval(shuffleInterval);
+                            isShuffling = false;
+                            gameActive = true;
+                            document.getElementById('startCupGameBtn').innerText = "Guess the Cup! 🤔";
+                        }
+                    }, data.speed + 50);
+                }, 400);
+            }, 1200);
         }
 
-        function chooseCup(index) {
+        function chooseCup(slotIdx) {
             if (isShuffling || !gameActive) return;
             gameActive = false;
             let data = cupLevelsData[currentCupLevel];
 
             for (let i = 0; i < 3; i++) {
                 document.getElementById(`cup${i}`).classList.add('lifted');
-                if (i === winningCupIndex) {
-                    document.getElementById(`coin${i}`).style.opacity = "1";
-                }
             }
 
-            cupLevelDataState[currentCupLevel].lastPlayed = new Date().getTime().toString();
-            if (index === winningCupIndex) {
+            let chosenCupId = cupPositions[slotIdx];
+            let winningCupId = winningIndex;
+
+            document.getElementById(`coin${winningCupId}`).style.opacity = "1";
+
+            if (chosenCupId === winningCupId) {
                 score += data.win;
                 cupLevelDataState[currentCupLevel].completed = true;
-                setTimeout(() => alert(`🎉 You won ${data.win.toLocaleString()} Biz777 coins!`), 200);
+                
+                // Unlock next level if available
+                let nextLvl = currentCupLevel + 1;
+                if (nextLvl <= 5) {
+                    cupLevelDataState[nextLvl].unlocked = true;
+                } else {
+                    // Completed all 5 levels! Trigger 24-hour global cooldown restart
+                    globalCupCooldownTimestamp = new Date().getTime().toString();
+                    localStorage.setItem('biz_cup_global_cooldown', globalCupCooldownTimestamp);
+                    alert(`🏆 Incredible! You completed all 5 levels! All levels reset and will restart in 24 hours.`);
+                }
+
+                setTimeout(() => {
+                    if (nextLvl <= 5) {
+                        alert(`🎉 You won ${data.win.toLocaleString()} Biz777 coins! Level ${nextLvl} unlocked!`);
+                        setCupLevel(nextLvl);
+                    }
+                }, 200);
             } else {
-                setTimeout(() => alert(`😢 Wrong cup! Try again tomorrow.`), 200);
+                setTimeout(() => alert(`😢 Wrong cup! Try this level again.`), 200);
+                document.getElementById('startCupGameBtn').innerText = "Start Round 🎮";
+                document.getElementById('startCupGameBtn').disabled = false;
             }
 
             localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
             updateUI();
             saveState();
-            setCupLevel(currentCupLevel);
         }
 
         function switchTab(tabId, btnElement) {
