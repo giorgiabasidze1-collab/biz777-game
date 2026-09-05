@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Biz777 Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://sad.adsgram.ai/js/adsgram.js"></script>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -145,19 +144,6 @@
             position: relative;
             padding: 20px;
             overflow: hidden;
-        }
-
-        .tap-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            pointer-events: none;
         }
 
         .coin-background-pattern {
@@ -335,11 +321,6 @@
             align-items: stretch;
         }
 
-        .shop-info h4, .ad-info h4, .friend-info h4 {
-            font-size: 15px;
-            margin-bottom: 4px;
-        }
-
         .btn {
             background: var(--accent);
             color: #000;
@@ -351,11 +332,6 @@
             transition: opacity 0.2s;
         }
 
-        .btn:active {
-            opacity: 0.8;
-        }
-
-        /* Improved Games Selection Menu Style */
         .games-menu {
             display: flex;
             flex-direction: column;
@@ -385,26 +361,6 @@
             transition: all 0.2s ease;
         }
 
-        .game-card-option:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
-            background: rgba(30, 41, 59, 0.9);
-        }
-
-        .game-card-info h4 {
-            font-size: 15px;
-            color: var(--accent);
-            margin-bottom: 3px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .game-card-info p {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
         .sub-game-container {
             display: none;
             width: 100%;
@@ -417,7 +373,6 @@
             display: flex;
         }
 
-        /* Flappy Coin Game Styles */
         #flappyCanvas {
             background: linear-gradient(to bottom, #1e293b, #0f172a);
             border-radius: 14px;
@@ -425,9 +380,9 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             cursor: pointer;
             margin: 10px 0;
+            touch-action: none;
         }
 
-        /* Cup Game Tab Design */
         .cup-game-wrapper {
             display: flex;
             flex-direction: column;
@@ -481,12 +436,7 @@
             cursor: pointer;
             font-size: 32px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-            transition: transform 0.3s ease, background 0.3s ease;
             position: relative;
-        }
-
-        .cup:hover {
-            transform: translateY(-5px);
         }
 
         .cup.lifted {
@@ -538,7 +488,6 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
         <header>
             <div class="header-top">
                 <div class="user-info">
@@ -565,27 +514,15 @@
             </div>
         </header>
 
-        <!-- Content Panels -->
         <div class="content">
-            <!-- Tab 1: Tap / Clicker -->
+            <!-- Tab 1: Clicker -->
             <div class="tab-pane active" id="tab-clicker">
                 <div class="coin-background-pattern">
                     <span class="bg-coin" style="top: 2%; left: 5%;">🪙 Biz777</span>
-                    <span class="bg-coin" style="top: 10%; right: 8%;">💵 $</span>
-                    <span class="bg-coin" style="top: 25%; left: 2%;">💴 ¥</span>
-                    <span class="bg-coin" style="top: 42%; right: 4%;">💶 €</span>
-                    <span class="bg-coin" style="bottom: 22%; left: 8%;">🪙 Biz</span>
-                    <span class="bg-coin" style="bottom: 10%; right: 12%;">💰 777</span>
-                    <span class="bg-coin" style="top: 32%; left: 32%;">💷 £</span>
-                    <span class="bg-coin" style="top: 6%; left: 52%;">🪙 $</span>
-                    <span class="bg-coin" style="bottom: 28%; left: 58%;">💵 Coins</span>
-                    <span class="bg-coin" style="top: 60%; left: 12%;">💎 777</span>
-                    <span class="bg-coin" style="top: 72%; right: 20%;">🚀 Biz</span>
-                    <span class="bg-coin" style="top: 85%; left: 40%;">⭐ 777</span>
-                    <span class="bg-coin" style="top: 48%; left: 75%;">🪙 Gold</span>
+                    <span class="bg-coin" style="top: 10%; right: 8%;">💵 Biz777</span>
+                    <span class="bg-coin" style="bottom: 22%; left: 8%;">🪙 Biz777</span>
+                    <span class="bg-coin" style="bottom: 10%; right: 12%;">💰 Biz777</span>
                 </div>
-
-                <div class="tap-section"></div>
 
                 <div class="interactive-clicker-area" id="clickerBtn">
                     <div class="clicker-circle">
@@ -604,74 +541,68 @@
                 </div>
             </div>
 
-            <!-- Tab 2: Shop / Upgrades -->
+            <!-- Tab 2: Shop -->
             <div class="tab-pane" id="tab-shop">
                 <h3 style="margin-bottom: 15px; align-self: flex-start;">Upgrades</h3>
                 <div class="shop-list">
                     <div class="shop-card">
-                        <div class="shop-info">
-                            <h4>Tap Power Upgrades</h4>
-                        </div>
+                        <div class="shop-info"><h4>Tap Power Upgrades</h4></div>
                         <div id="tapShopContainer" style="margin-top: 8px; width: 100%;"></div>
                     </div>
                     <div class="shop-card">
-                        <div class="shop-info">
-                            <h4>Energy Upgrades</h4>
-                        </div>
+                        <div class="shop-info"><h4>Energy Upgrades</h4></div>
                         <div id="energyShopContainer" style="margin-top: 8px; width: 100%;"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab 3: Games Hub (Contains both Flappy Coin & Cup Game) -->
+            <!-- Tab 3: Games Hub -->
             <div class="tab-pane" id="tab-minigame">
-                <!-- Improved Game Selection Menu -->
                 <div class="games-menu" id="gamesMenu">
                     <div class="game-header-banner">
                         <h3 style="font-size: 15px; color: var(--accent); margin-bottom: 3px;">🎮 Arcade Games Hub</h3>
-                        <p style="font-size: 11px; color: var(--text-secondary);">Select a game below to play and boost your earnings!</p>
+                        <p style="font-size: 11px; color: var(--text-secondary);">Select a game below to play and boost your Biz777 earnings!</p>
                     </div>
                     
                     <div class="game-card-option" onclick="openSubGame('flappy')">
                         <div class="game-card-info">
-                            <h4>🪙 Flappy Coin (Moving Hands)</h4>
-                            <p>Avoid moving hands with fingers, score 10 for +500 Energy!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🪙 Flappy Biz777 (Hard Mode)</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Avoid custom rounded moving hands with fingers! Score 10 for +500 Energy!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('cups')">
                         <div class="game-card-info">
-                            <h4>🏆 Cup & Ball Game</h4>
-                            <p>Pick level, watch shuffle animation & guess the winning Biz777 cup!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Biz777 Cup & Ball</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Pick level, watch shuffle animation & guess the winning cup!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
                 </div>
 
-                <!-- Sub-Game 1: Flappy Coin with Moving Hand Obstacles -->
+                <!-- Sub-Game 1: Flappy Coin -->
                 <div class="sub-game-container" id="subgame-flappy">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Back to Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Playing: Flappy Coin</h3>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Flappy Biz777 (Hard)</h3>
                         <div style="width: 50px;"></div>
                     </div>
                     <canvas id="flappyCanvas" width="300" height="340"></canvas>
                     <div style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 3px;">
-                        Tap canvas to jump. Avoid moving hand obstacles!
+                        Tap canvas to jump smoothly. Avoid moving hands!
                     </div>
                 </div>
 
-                <!-- Sub-Game 2: Cups & Ball -->
+                <!-- Sub-Game 2: Cups -->
                 <div class="sub-game-container" id="subgame-cups">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Back to Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Playing: Cup Game</h3>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Biz777 Cup Game</h3>
                         <div style="width: 50px;"></div>
                     </div>
 
                     <div class="cup-game-wrapper">
-                        <!-- Levels Selection -->
                         <div class="levels-container">
                             <button class="level-btn active-level" onclick="setCupLevel(1)">Lvl 1</button>
                             <button class="level-btn" onclick="setCupLevel(2)">Lvl 2</button>
@@ -681,20 +612,13 @@
                         </div>
 
                         <div id="cupGameInfo" style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; text-align: center; width: 100%;">
-                            Cost: 100 Coins | Win: 200 Coins
+                            Cost: 100 Biz777 | Win: 200 Biz777
                         </div>
 
-                        <!-- Cups Board -->
                         <div class="cups-board">
-                            <div class="cup" id="cup0" onclick="chooseCup(0)">
-                                <span id="cupIcon0">🥛</span>
-                            </div>
-                            <div class="cup" id="cup1" onclick="chooseCup(1)">
-                                <span id="cupIcon1">🥛</span>
-                            </div>
-                            <div class="cup" id="cup2" onclick="chooseCup(2)">
-                                <span id="cupIcon2">🥛</span>
-                            </div>
+                            <div class="cup" id="cup0" onclick="chooseCup(0)"><span id="cupIcon0">🥛</span></div>
+                            <div class="cup" id="cup1" onclick="chooseCup(1)"><span id="cupIcon1">🥛</span></div>
+                            <div class="cup" id="cup2" onclick="chooseCup(2)"><span id="cupIcon2">🥛</span></div>
                         </div>
 
                         <button class="btn" id="startCupGameBtn" onclick="startCupRound()" style="width: 100%;">Shuffle & Play 🎮</button>
@@ -702,26 +626,26 @@
                 </div>
             </div>
 
-            <!-- Tab 4: Friends / Referral Section -->
+            <!-- Tab 4: Friends -->
             <div class="tab-pane" id="tab-friends">
                 <h3 style="margin-bottom: 10px; align-self: flex-start;">👥 Invite Friends</h3>
                 <div class="friends-list">
                     <div class="friend-card" style="align-items: stretch; gap: 8px;">
                         <h4 style="font-size: 14px;">Invite 3 Friends to get Free Tap Power 20!</h4>
-                        <p style="font-size: 11px; color: var(--text-secondary);">Share your referral link. Invited friends: <span id="friendCountDisplay" style="color: var(--accent); font-weight: bold;">0</span> / 3</p>
+                        <p style="font-size: 11px; color: var(--text-secondary);">Invited friends: <span id="friendCountDisplay" style="color: var(--accent); font-weight: bold;">0</span> / 3</p>
                         <button class="btn" onclick="inviteFriendLink()">Share Referral Link 🔗</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab 5: Ads & Rewards Section -->
+            <!-- Tab 5: Ads -->
             <div class="tab-pane" id="tab-ads">
                 <h3 style="margin-bottom: 15px; align-self: flex-start;">Boost Energy</h3>
                 <div class="ads-list">
                     <div class="ad-card" style="flex-direction: row;">
                         <div class="ad-info">
                             <h4>Refill Energy Ad</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Watch quick simulated ad to instantly refill energy to max</p>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Watch simulated ad to instantly refill energy to max</p>
                         </div>
                         <button class="btn" onclick="watchSimulatedAd()">Watch 📺</button>
                     </div>
@@ -729,36 +653,23 @@
             </div>
         </div>
 
-        <!-- Navigation Bar -->
         <nav>
-            <button class="nav-item active" onclick="switchTab('clicker', this)">
-                <span>⚡</span> Tap
-            </button>
-            <button class="nav-item" onclick="switchTab('shop', this)">
-                <span>🛒</span> Shop
-            </button>
-            <button class="nav-item" onclick="switchTab('minigame', this)">
-                <span>🎮</span> Game
-            </button>
-            <button class="nav-item" onclick="switchTab('friends', this)">
-                <span>👥</span> Friends
-            </button>
-            <button class="nav-item" onclick="switchTab('ads', this)">
-                <span>📺</span> Boost
-            </button>
+            <button class="nav-item active" onclick="switchTab('clicker', this)"><span>⚡</span> Tap</button>
+            <button class="nav-item" onclick="switchTab('shop', this)"><span>🛒</span> Shop</button>
+            <button class="nav-item" onclick="switchTab('minigame', this)"><span>🎮</span> Game</button>
+            <button class="nav-item" onclick="switchTab('friends', this)"><span>👥</span> Friends</button>
+            <button class="nav-item" onclick="switchTab('ads', this)"><span>📺</span> Boost</button>
         </nav>
     </div>
 
-    <!-- Custom Fake Video Ad Popup Modal -->
     <div id="adModal">
         <div class="ad-video-box">
             <h3 style="margin-bottom: 10px; font-size: 15px; color: var(--accent);">📺 Refilling Energy...</h3>
             <div class="ad-screen">
                 <div style="font-size: 36px; margin-bottom: 5px;">⚡</div>
-                <div style="font-size: 13px; color: var(--text-secondary);">Simulated Energy Boost</div>
+                <div style="font-size: 13px; color: var(--text-secondary);">Biz777 Energy Boost</div>
                 <div id="adTimer" style="font-size: 18px; font-weight: bold; color: var(--warning); margin-top: 8px;">3s</div>
             </div>
-            <p style="font-size: 11px; color: var(--text-secondary);">Energy will be fully restored automatically!</p>
         </div>
     </div>
 
@@ -886,13 +797,13 @@
                     <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <div style="font-weight: bold; font-size: 12px;">👆 Upgrade Tap Power (${tapPower} ➔ ${nextPower})</div>
-                            <div style="font-size: 10px; color: #ffd700;">Price: ${price.toLocaleString()} Coins</div>
+                            <div style="font-size: 10px; color: #ffd700;">Price: ${price.toLocaleString()} Biz777</div>
                         </div>
-                        <button onclick="buyTapUpgrade(${nextPower}, ${price})" style="background: #00ff88; color: #000; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
+                        <button onclick="buyTapUpgrade(${nextPower}, ${price})" class="btn" style="padding: 6px 12px; font-size: 11px;">Buy</button>
                     </div>`;
             } else if (tapPower === 10 && !freeTap20Claimed) {
                 if (invitedFriendsCount < 3) {
-                    tapContainer.innerHTML = `<div style="font-size: 11px; color: var(--warning); text-align: center; padding: 6px; font-weight: bold;">🔒 Invite ${3 - invitedFriendsCount} more friends in 'Friends' tab to get FREE Tap Power 20!</div>`;
+                    tapContainer.innerHTML = `<div style="font-size: 11px; color: var(--warning); text-align: center; padding: 6px; font-weight: bold;">🔒 Invite ${3 - invitedFriendsCount} more friends for FREE Tap Power 20!</div>`;
                 } else {
                     tapContainer.innerHTML = `
                         <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
@@ -900,7 +811,7 @@
                                 <div style="font-weight: bold; font-size: 12px;">🎁 Get FREE Tap Power 20!</div>
                                 <div style="font-size: 10px; color: #22c55e;">3/3 Friends Invited</div>
                             </div>
-                            <button onclick="claimFreeTap20()" style="background: #22c55e; color: #000; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px;">Claim 🚀</button>
+                            <button onclick="claimFreeTap20()" class="btn" style="padding: 6px 12px; font-size: 11px; background: #22c55e;">Claim 🚀</button>
                         </div>`;
                 }
             } else {
@@ -920,9 +831,9 @@
                     <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <div style="font-weight: bold; font-size: 12px;">⚡ Max Energy (${maxEnergy} ➔ ${nextTier.target})</div>
-                            <div style="font-size: 10px; color: #ffd700;">Price: ${nextTier.price.toLocaleString()} Coins</div>
+                            <div style="font-size: 10px; color: #ffd700;">Price: ${nextTier.price.toLocaleString()} Biz777</div>
                         </div>
-                        <button onclick="buyEnergyUpgrade(${nextTier.target}, ${nextTier.price})" style="background: #00ff88; color: #000; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
+                        <button onclick="buyEnergyUpgrade(${nextTier.target}, ${nextTier.price})" class="btn" style="padding: 6px 12px; font-size: 11px;">Buy</button>
                     </div>`;
             } else {
                 energyContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Energy (5,000) Purchased!</div>`;
@@ -930,38 +841,25 @@
         }
 
         function buyTapUpgrade(newPower, price) {
-            if (score >= price) {
-                score -= price;
-                tapPower = newPower;
-                updateUI();
-                saveState();
-            } else { alert("Not enough coins!"); }
+            if (score >= price) { score -= price; tapPower = newPower; updateUI(); saveState(); }
+            else { alert("Not enough Biz777 coins!"); }
         }
 
         function claimFreeTap20() {
             if (invitedFriendsCount >= 3 && !freeTap20Claimed) {
-                tapPower = 20;
-                freeTap20Claimed = true;
-                updateUI();
-                saveState();
-                tg.showAlert ? tg.showAlert("Congratulations! Tap Power 20 unlocked!") : alert("Congratulations!");
+                tapPower = 20; freeTap20Claimed = true; updateUI(); saveState();
+                alert("Tap Power 20 unlocked!");
             }
         }
 
         function buyEnergyUpgrade(newMaxEnergy, price) {
-            if (score >= price) {
-                score -= price;
-                maxEnergy = newMaxEnergy;
-                energy = maxEnergy;
-                updateUI();
-                saveState();
-            } else { alert("Not enough coins!"); }
+            if (score >= price) { score -= price; maxEnergy = newMaxEnergy; energy = maxEnergy; updateUI(); saveState(); }
+            else { alert("Not enough Biz777 coins!"); }
         }
 
         function inviteFriendLink() {
-            let botUsername = "Biz777Bot";
-            let refLink = `https://t.me/${botUsername}?start=ref_${userId}`;
-            let shareText = `Join Biz777 Mini App and let's earn coins together! 🚀`;
+            let refLink = `https://t.me/Biz777Bot?start=ref_${userId}`;
+            let shareText = `Join Biz777 Mini App and earn coins! 🚀`;
             tg.openTelegramLink ? tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent(shareText)}`) : prompt("Copy link:", refLink);
         }
 
@@ -974,27 +872,23 @@
 
             let countdown = setInterval(() => {
                 timeLeft--;
-                if (timeLeft > 0) {
-                    timerEl.innerText = `${timeLeft}s`;
-                } else {
+                if (timeLeft > 0) { timerEl.innerText = `${timeLeft}s`; }
+                else {
                     clearInterval(countdown);
                     modal.style.display = 'none';
                     energy = maxEnergy;
                     updateUI();
                     saveState();
-                    tg.showAlert ? tg.showAlert("Energy fully refilled!") : alert("Energy fully refilled!");
+                    alert("Energy fully refilled!");
                 }
             }, 1000);
         }
 
-        // --- MINI GAMES NAVIGATION ---
         function openSubGame(gameName) {
             document.getElementById('gamesMenu').style.display = 'none';
             document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
             document.getElementById(`subgame-${gameName}`).classList.add('active-subgame');
-            if (gameName === 'flappy' && !flappyRunning) {
-                startFlappyGame();
-            }
+            if (gameName === 'flappy' && !flappyRunning) { startFlappyGame(); }
         }
 
         function backToGamesMenu() {
@@ -1003,18 +897,19 @@
             document.getElementById('gamesMenu').style.display = 'flex';
         }
 
-        // --- FLAPPY COIN GAME LOGIC (WITH DETAILED FINGER HANDS & MOVEMENT) ---
+        // --- FLAPPY BIZ777 GAME (LAG-FREE & ROUNDED HANDS WITH SIDE FINGERS) ---
         const canvas = document.getElementById('flappyCanvas');
         const ctx = canvas.getContext('2d');
         let flappyRunning = false;
-        let bird = { x: 50, y: 150, radius: 14, gravity: 0.5, lift: -7, velocity: 0 };
+        let bird = { x: 50, y: 150, radius: 14, gravity: 0.45, lift: -6.5, velocity: 0 };
         let pipes = [];
         let frameCount = 0;
         let flappyScore = 0;
 
-        canvas.addEventListener('click', () => {
+        canvas.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
             if (flappyRunning) {
-                bird.velocity = bird.lift;
+                bird.velocity = bird.lift; // Classic jump
             }
         });
 
@@ -1025,7 +920,7 @@
             flappyScore = 0;
             frameCount = 0;
             flappyRunning = true;
-            loopFlappy();
+            requestAnimationFrame(loopFlappy);
         }
 
         function loopFlappy() {
@@ -1056,12 +951,11 @@
             ctx.textBaseline = 'middle';
             ctx.fillText('🪙', bird.x, bird.y);
 
-            // Hands generation & movement (Obstacles)
-            if (frameCount % 90 === 0) {
+            // Hard mode obstacle generation
+            if (frameCount % 85 === 0) {
                 let pipeWidth = 56;
-                let gapHeight = 115;
-                let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 80)) + 40;
-                // Added vertical movement offset speed (verticalSpeed) for lively moving hands
+                let gapHeight = 110; // Harder gap
+                let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 90)) + 40;
                 pipes.push({ 
                     x: canvas.width, 
                     top: topHeight, 
@@ -1069,65 +963,80 @@
                     width: pipeWidth, 
                     passed: false,
                     vOffset: 0,
-                    vSpeed: (Math.random() > 0.5 ? 1 : -1) * 0.8
+                    vSpeed: (Math.random() > 0.5 ? 1 : -1) * 1.2
                 });
             }
 
             for (let i = pipes.length - 1; i >= 0; i--) {
-                pipes[i].x -= 2.5;
+                pipes[i].x -= 2.8;
 
-                // Animate vertical movement of hands
                 pipes[i].vOffset += pipes[i].vSpeed;
-                if (pipes[i].vOffset > 25 || pipes[i].vOffset < -25) {
+                if (pipes[i].vOffset > 22 || pipes[i].vOffset < -22) {
                     pipes[i].vSpeed *= -1;
                 }
 
                 let currentTop = pipes[i].top + pipes[i].vOffset;
                 let currentBottom = pipes[i].bottom - pipes[i].vOffset;
 
-                let handColor = '#ffdbac'; // Skin tone matching the image style
+                let handColor = '#ffdbac';
                 let outlineColor = '#e0ac69';
 
-                // --- DRAW TOP HAND (Pointing down) ---
+                // --- DRAW TOP HAND (Rounded + Side Fingers like your drawing) ---
                 ctx.fillStyle = handColor;
                 ctx.strokeStyle = outlineColor;
                 ctx.lineWidth = 2;
-                ctx.fillRect(pipes[i].x, 0, pipes[i].width, currentTop);
-                ctx.strokeRect(pipes[i].x, 0, pipes[i].width, currentTop);
 
-                // Draw fingers at the bottom of the top hand
+                // Rounded main body rect
+                ctx.beginPath();
+                ctx.roundRect(pipes[i].x, 0, pipes[i].width, currentTop, [0, 0, 12, 12]);
+                ctx.fill();
+                ctx.stroke();
+
+                // Side fingers (thumbs/fingers on sides as you drew in red)
+                ctx.beginPath();
+                ctx.roundRect(pipes[i].x - 10, currentTop - 35, 10, 22, [6, 0, 0, 6]); // Left side finger
+                ctx.roundRect(pipes[i].x + pipes[i].width, currentTop - 35, 10, 22, [0, 6, 6, 0]); // Right side finger
+                ctx.fill();
+                ctx.stroke();
+
+                // Bottom straight fingers
                 let fingerWidth = pipes[i].width / 4;
                 for (let f = 0; f < 4; f++) {
                     let fx = pipes[i].x + (f * fingerWidth);
-                    ctx.fillRect(fx, currentTop, fingerWidth - 2, 16);
-                    ctx.strokeRect(fx, currentTop, fingerWidth - 2, 16);
+                    ctx.fillRect(fx, currentTop, fingerWidth - 2, 15);
+                    ctx.strokeRect(fx, currentTop, fingerWidth - 2, 15);
                 }
 
-                // --- DRAW BOTTOM HAND (Pointing up) ---
+                // --- DRAW BOTTOM HAND ---
                 let bottomY = canvas.height - currentBottom;
-                ctx.fillStyle = handColor;
-                ctx.strokeStyle = outlineColor;
-                ctx.fillRect(pipes[i].x, bottomY, pipes[i].width, currentBottom);
-                ctx.strokeRect(pipes[i].x, bottomY, pipes[i].width, currentBottom);
+                ctx.beginPath();
+                ctx.roundRect(pipes[i].x, bottomY, pipes[i].width, currentBottom, [12, 12, 0, 0]);
+                ctx.fill();
+                ctx.stroke();
 
-                // Draw fingers at the top of the bottom hand
+                // Side fingers for bottom hand
+                ctx.beginPath();
+                ctx.roundRect(pipes[i].x - 10, bottomY + 15, 10, 22, [6, 0, 0, 6]);
+                ctx.roundRect(pipes[i].x + pipes[i].width, bottomY + 15, 10, 22, [0, 6, 6, 0]);
+                ctx.fill();
+                ctx.stroke();
+
                 for (let f = 0; f < 4; f++) {
                     let fx = pipes[i].x + (f * fingerWidth);
-                    ctx.fillRect(fx, bottomY - 16, fingerWidth - 2, 16);
-                    ctx.strokeRect(fx, bottomY - 16, fingerWidth - 2, 16);
+                    ctx.fillRect(fx, bottomY - 15, fingerWidth - 2, 15);
+                    ctx.strokeRect(fx, bottomY - 15, fingerWidth - 2, 15);
                 }
 
-                // Collision detection with moving hands
+                // Collision detection
                 if (
-                    bird.x + bird.radius > pipes[i].x &&
-                    bird.x - bird.radius < pipes[i].x + pipes[i].width &&
+                    bird.x + bird.radius > pipes[i].x - 8 &&
+                    bird.x - bird.radius < pipes[i].x + pipes[i].width + 8 &&
                     (bird.y - bird.radius < currentTop || bird.y + bird.radius > bottomY)
                 ) {
                     endFlappyGame();
                     return;
                 }
 
-                // Score increment
                 if (!pipes[i].passed && pipes[i].x + pipes[i].width < bird.x) {
                     pipes[i].passed = true;
                     flappyScore++;
@@ -1141,7 +1050,6 @@
                 }
             }
 
-            // Render score
             ctx.fillStyle = '#fff';
             ctx.font = 'bold 16px sans-serif';
             ctx.textAlign = 'left';
@@ -1159,15 +1067,15 @@
                 energy = Math.min(maxEnergy, energy + 500);
                 updateUI();
                 saveState();
-                tg.showAlert ? tg.showAlert("🎉 Amazing! You passed 10 score and got +500 Energy!") : alert("🎉 +500 Energy Reward!");
+                alert("🎉 Amazing! +500 Energy Reward!");
             }
         }
 
         function endFlappyGame() {
             flappyRunning = false;
-            ctx.fillStyle = 'rgba(0,0,0,0.7)';
+            ctx.fillStyle = 'rgba(0,0,0,0.75)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#ff4444';
+            ctx.fillStyle = '#ef4444';
             ctx.font = 'bold 20px sans-serif';
             ctx.textAlign = 'center';
             ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 15);
@@ -1181,40 +1089,35 @@
             };
         }
 
-        // --- CUP GAME LOGIC (5 Levels with shuffle animation) ---
+        // --- CUP GAME LOGIC ---
         let currentCupLevel = 1;
         let winningCupIndex = -1;
         let gameActive = false;
         let isShuffling = false;
 
         const cupLevelsData = {
-            1: { cost: 100, win: 200, shuffles: 2, speed: 400 },
-            2: { cost: 500, win: 1000, shuffles: 4, speed: 300 },
-            3: { cost: 1500, win: 3200, shuffles: 6, speed: 220 },
-            4: { cost: 4000, win: 9000, shuffles: 9, speed: 150 },
-            5: { cost: 10000, win: 23000, shuffles: 14, speed: 90 }
+            1: { cost: 100, win: 200, shuffles: 3, speed: 380 },
+            2: { cost: 500, win: 1000, shuffles: 5, speed: 280 },
+            3: { cost: 1500, win: 3200, shuffles: 7, speed: 200 },
+            4: { cost: 4000, win: 9000, shuffles: 10, speed: 140 },
+            5: { cost: 10000, win: 23000, shuffles: 15, speed: 85 }
         };
 
         function setCupLevel(lvl) {
             if (gameActive || isShuffling) return;
             currentCupLevel = lvl;
-            
             document.querySelectorAll('.level-btn').forEach((btn, index) => {
                 if (index + 1 === lvl) btn.classList.add('active-level');
                 else btn.classList.remove('active-level');
             });
-
             let data = cupLevelsData[lvl];
-            document.getElementById('cupGameInfo').innerText = `Cost: ${data.cost.toLocaleString()} Coins | Win: ${data.win.toLocaleString()} Coins`;
+            document.getElementById('cupGameInfo').innerText = `Cost: ${data.cost.toLocaleString()} Biz777 | Win: ${data.win.toLocaleString()} Biz777`;
         }
 
         function startCupRound() {
             if (isShuffling || gameActive) return;
             let data = cupLevelsData[currentCupLevel];
-            if (score < data.cost) {
-                alert("Not enough coins to play this level!");
-                return;
-            }
+            if (score < data.cost) { alert("Not enough Biz777 coins!"); return; }
 
             score -= data.cost;
             updateUI();
@@ -1222,80 +1125,50 @@
 
             isShuffling = true;
             winningCupIndex = Math.floor(Math.random() * 3);
-
             document.getElementById('startCupGameBtn').innerText = "Shuffling... 🌪️";
-            document.getElementById('startCupGameBtn').style.opacity = "0.5";
 
             for (let i = 0; i < 3; i++) {
-                let cupEl = document.getElementById(`cup${i}`);
-                cupEl.classList.remove('lifted');
+                document.getElementById(`cup${i}`).classList.remove('lifted');
                 document.getElementById(`cupIcon${i}`).innerText = "🥛";
             }
 
             let shuffleCount = 0;
-            let maxShuffles = data.shuffles;
-
             let shuffleInterval = setInterval(() => {
                 let c1 = Math.floor(Math.random() * 3);
                 let c2 = (c1 + 1 + Math.floor(Math.random() * 2)) % 3;
-
                 if (winningCupIndex === c1) winningCupIndex = c2;
                 else if (winningCupIndex === c2) winningCupIndex = c1;
 
-                let el1 = document.getElementById(`cup${c1}`);
-                let el2 = document.getElementById(`cup${c2}`);
-                el1.style.transform = "translateY(-15px)";
-                el2.style.transform = "translateY(15px)";
-                setTimeout(() => {
-                    el1.style.transform = "translateY(0)";
-                    el2.style.transform = "translateY(0)";
-                }, data.speed / 2);
-
                 shuffleCount++;
-                if (shuffleCount >= maxShuffles) {
+                if (shuffleCount >= data.shuffles) {
                     clearInterval(shuffleInterval);
                     isShuffling = false;
                     gameActive = true;
                     document.getElementById('startCupGameBtn').innerText = "Guess the Cup! 🤔";
-                    document.getElementById('startCupGameBtn').style.opacity = "1";
                 }
             }, data.speed);
         }
 
         function chooseCup(index) {
-            if (isShuffling || !gameActive) {
-                return;
-            }
-
+            if (isShuffling || !gameActive) return;
             gameActive = false;
             let data = cupLevelsData[currentCupLevel];
 
             for (let i = 0; i < 3; i++) {
-                let cupEl = document.getElementById(`cup${i}`);
-                cupEl.classList.add('lifted');
-                if (i === winningCupIndex) {
-                    document.getElementById(`cupIcon${i}`).innerText = "⚽";
-                } else {
-                    document.getElementById(`cupIcon${i}`).innerText = "❌";
-                }
+                document.getElementById(`cup${i}`).classList.add('lifted');
+                document.getElementById(`cupIcon${i}`).innerText = (i === winningCupIndex) ? "🪙" : "❌";
             }
 
             if (index === winningCupIndex) {
                 score += data.win;
-                setTimeout(() => {
-                    tg.showAlert ? tg.showAlert(`🎉 You won ${data.win.toLocaleString()} Coins!`) : alert(`🎉 You won ${data.win.toLocaleString()} Coins!`);
-                }, 200);
+                setTimeout(() => alert(`🎉 You won ${data.win.toLocaleString()} Biz777 coins!`), 200);
             } else {
-                setTimeout(() => {
-                    tg.showAlert ? tg.showAlert(`😢 Wrong cup! You lost ${data.cost.toLocaleString()} coins.`) : alert(`😢 Wrong cup!`);
-                }, 200);
+                setTimeout(() => alert(`😢 Wrong cup!`), 200);
             }
 
             updateUI();
             saveState();
-
             document.getElementById('startCupGameBtn').innerText = "Play Again 🎮";
-            document.getElementById('startCupGameBtn').style.opacity = "1";
         }
 
         function switchTab(tabId, btnElement) {
