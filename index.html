@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Biz777 Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Adsgram Official Script -->
+    <script src="https://sad.adsgram.ai/js/adsgram.js"></script>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -381,6 +383,7 @@
 </head>
 <body>
     <div class="app-container">
+        <!-- Header -->
         <header>
             <div class="header-top">
                 <div class="user-info">
@@ -396,6 +399,7 @@
                 </div>
             </div>
 
+            <!-- Header Level Progress Bar -->
             <div class="level-progress-container">
                 <div class="level-progress-info">
                     <span id="nextLevelText">Next Level: 1,000</span>
@@ -407,7 +411,9 @@
             </div>
         </header>
 
+        <!-- Content Panels -->
         <div class="content">
+            <!-- Tab 1: Tap / Clicker -->
             <div class="tab-pane active" id="tab-clicker">
                 <div class="coin-background-pattern">
                     <span class="bg-coin" style="top: 5%; left: 10%;">🪙 Biz777</span>
@@ -440,6 +446,7 @@
                 </div>
             </div>
 
+            <!-- Tab 2: Shop / Upgrades -->
             <div class="tab-pane" id="tab-shop">
                 <h3 style="margin-bottom: 15px; align-self: flex-start;">Upgrades</h3>
                 <div class="shop-list">
@@ -458,6 +465,7 @@
                 </div>
             </div>
 
+            <!-- Tab 3: Mini-Game -->
             <div class="tab-pane" id="tab-minigame">
                 <div class="minigame-wrapper">
                     <h3 style="margin-bottom: 4px; font-size: 14px;">📅 Daily Quest</h3>
@@ -466,6 +474,7 @@
                 </div>
             </div>
 
+            <!-- Tab 4: Friends / Referral Section -->
             <div class="tab-pane" id="tab-friends">
                 <h3 style="margin-bottom: 10px; align-self: flex-start;">👥 Invite Friends</h3>
                 <div class="friends-list">
@@ -477,6 +486,7 @@
                 </div>
             </div>
 
+            <!-- Tab 5: Ads & Rewards Section -->
             <div class="tab-pane" id="tab-ads">
                 <h3 style="margin-bottom: 15px; align-self: flex-start;">Earn & Ads</h3>
                 <div class="ads-list">
@@ -491,6 +501,7 @@
             </div>
         </div>
 
+        <!-- Navigation Bar -->
         <nav>
             <button class="nav-item active" onclick="switchTab('clicker', this)">
                 <span>⚡</span> Tap
@@ -651,7 +662,6 @@
             tapContainer.innerHTML = "";
             energyContainer.innerHTML = "";
 
-            // --- TAP POWER UPGRADES (1 to 10 bought with coins, 10 to 20 free via 3 friends) ---
             const tapPrices = {
                 2: 200, 3: 600, 4: 1500, 5: 3500, 6: 7500, 7: 15000, 8: 30000, 9: 60000, 10: 120000
             };
@@ -684,7 +694,6 @@
                 tapContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Tap Power (20) Unlocked Free!</div>`;
             }
 
-            // --- ENERGY UPGRADES ---
             const energyTiers = [
                 { target: 1500, price: 500 },
                 { target: 2000, price: 1500 },
@@ -760,7 +769,7 @@
             }
         }
 
-        // --- MINI-GAME LOGIC (Soft Jumps) ---
+        // --- MINI-GAME LOGIC ---
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -973,7 +982,7 @@
                 ctx.fillStyle = '#f8fafc';
                 ctx.font = '13px sans-serif';
                 ctx.fillText('Tap screen to restart', canvas.width / 2, canvas.height / 2 + 15);
-                ctx.textAlign = 'left';
+                ctx.textAlign, 'left';
             }
         }
 
@@ -984,33 +993,40 @@
         }
         requestAnimationFrame(gameLoop);
 
-        // --- ADSGRAM INTEGRATION ---
-        function watchAdsgramAd() {
+        // --- REAL ADSGRAM SDK INTEGRATION ---
+        let adsgramController = null;
+        try {
             if (window.Adsgram) {
-                window.Adsgram.init({ blockId: "YOUR_ADSGRAM_BLOCK_ID" }).show().then((result) => {
+                // შეცვალე შენი რეალური blockId-ით Adsgram კაბინეტიდან
+                adsgramController = window.Adsgram.init({ blockId: "YOUR_ADSGRAM_BLOCK_ID" });
+            }
+        } catch (e) {
+            console.error("Adsgram init error:", e);
+        }
+
+        function watchAdsgramAd() {
+            if (adsgramController) {
+                adsgramController.show().then(() => {
+                    // ეს ბლოკი შესრულდება მხოლოდ მაშინ, როცა ვიდეო ბოლომდე იქნება ნაყურები წარმატებით
                     score += 1000;
                     if (tg && tg.showAlert) {
-                        tg.showAlert("Reward claimed: +1,000 Coins via Adsgram!");
+                        tg.showAlert("Reward claimed: +1,000 Coins for watching the ad!");
                     } else {
-                        alert("Reward claimed: +1,000 Coins via Adsgram!");
+                        alert("Reward claimed: +1,000 Coins for watching the ad!");
                     }
                     updateUI();
                     saveState();
                 }).catch((err) => {
-                    console.error(err);
-                    alert("Ad was skipped or failed to load.");
+                    // მომხმარებელმა გამოტოვა ან რეკლამა ვერ ჩაიტვირთა
+                    console.error("Ad error or skipped:", err);
+                    if (tg && tg.showAlert) {
+                        tg.showAlert("Ad was skipped or failed to load. No reward given.");
+                    } else {
+                        alert("Ad was skipped or failed to load. No reward given.");
+                    }
                 });
             } else {
-                setTimeout(() => {
-                    score += 1000;
-                    if (tg && tg.showAlert) {
-                        tg.showAlert("Reward claimed: +1,000 Coins (Simulated Adsgram)!");
-                    } else {
-                        alert("Reward claimed: +1,000 Coins (Simulated Adsgram)!");
-                    }
-                    updateUI();
-                    saveState();
-                }, 1000);
+                alert("Adsgram SDK is not initialized. Please configure your Block ID.");
             }
         }
 
