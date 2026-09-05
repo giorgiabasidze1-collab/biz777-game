@@ -997,8 +997,8 @@
         let adsgramController = null;
         try {
             if (window.Adsgram) {
-                // შეცვალე შენი რეალური blockId-ით Adsgram კაბინეტიდან
-                adsgramController = window.Adsgram.init({ blockId: "YOUR_ADSGRAM_BLOCK_ID" });
+                // შენი რეალური UnitID (46267) ჩასმულია აქ:
+                adsgramController = window.Adsgram.init({ blockId: "46267" });
             }
         } catch (e) {
             console.error("Adsgram init error:", e);
@@ -1026,7 +1026,7 @@
                     }
                 });
             } else {
-                alert("Adsgram SDK is not initialized. Please configure your Block ID.");
+                alert("Adsgram SDK is not initialized. Please check your internet connection.");
             }
         }
 
