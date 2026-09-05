@@ -157,7 +157,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            pointer-events: none; /* უზრუნველყოფს, რომ ფონმა ხელი არ შეუშალოს კლიკებს */
+            pointer-events: none;
         }
 
         .coin-background-pattern {
@@ -173,7 +173,7 @@
 
         .bg-coin {
             position: absolute;
-            font-size: 32px; /* გადიდებული ზომა */
+            font-size: 32px;
             opacity: 0.18;
             font-weight: bold;
             color: #38bdf8;
@@ -185,7 +185,7 @@
             100% { transform: translateY(-15px) rotate(20deg); }
         }
 
-        /* Interactive Clicker Container (უნდა იყოს ზონა მაღალი z-index-ით, რომ უპრობლემოდ დაეჭიროს) */
+        /* Interactive Clicker Container */
         .interactive-clicker-area {
             position: relative;
             z-index: 5;
@@ -193,7 +193,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            pointer-events: auto; /* კლიკები მუშაობს აქტიურად */
+            pointer-events: auto;
         }
 
         .clicker-circle {
@@ -398,7 +398,7 @@
 
             <div class="level-progress-container">
                 <div class="level-progress-info">
-                    <span id="nextLevelText">Next Level: 5,000</span>
+                    <span id="nextLevelText">Next Level: 1,000</span>
                     <span id="levelPercentage">0%</span>
                 </div>
                 <div class="level-bar-bg">
@@ -425,7 +425,7 @@
 
                 <div class="interactive-clicker-area" id="clickerBtn">
                     <div class="clicker-circle">
-                        <div class="clicker-icon" id="buildingIcon">🏢</div>
+                        <div class="clicker-icon" id="buildingIcon">🏗️</div>
                     </div>
 
                     <div class="energy-container">
@@ -513,14 +513,14 @@
         }
 
         const levels = [
-            { name: "1. Bronze Foundation", min: 0, icon: "🏢" },
-            { name: "2. Silver Startup", min: 5000, icon: "🏬" },
-            { name: "3. Golden Enterprise", min: 25000, icon: "🏦" },
-            { name: "4. Platinum Corporation", min: 100000, icon: "🌆" },
-            { name: "5. Diamond Syndicate", min: 500000, icon: "💎" },
-            { name: "6. Master Holding", min: 2000000, icon: "🚀" },
-            { name: "7. Elite Empire", min: 5000000, icon: "👑" },
-            { name: "8. Biz777 Legend HQ", min: 10000000, icon: "🏛️" }
+            { name: "1. Bronze Foundation", icon: "🏗️", min: 0, max: 1000 },
+            { name: "2. Bronze Hut", icon: "🛖", min: 1000, max: 5000 },
+            { name: "3. Silver House", icon: "🏡", min: 5000, max: 25000 },
+            { name: "4. Silver Villa", icon: "🏠", min: 25000, max: 100000 },
+            { name: "5. Gold Office", icon: "🏢", min: 100000, max: 500000 },
+            { name: "6. Gold Skyscraper", icon: "🌆", min: 500000, max: 2000000 },
+            { name: "7. Diamond Tower", icon: "🏙️", min: 2000000, max: 5000000 },
+            { name: "8. Biz777 Legend HQ", icon: "👑", min: 5000000, max: Infinity }
         ];
 
         const scoreDisplay = document.getElementById('scoreDisplay');
@@ -579,7 +579,7 @@
 
         function updateUI() {
             scoreDisplay.innerText = score.toLocaleString();
-            energyText.innerText = `${energy} /${maxEnergy}`;
+            energyText.innerText = `${energy} / ${maxEnergy}`;
             energyFill.style.width = `${(energy / maxEnergy) * 100}%`;
 
             let currentLevelIndex = 0;
@@ -595,7 +595,7 @@
             buildingIcon.innerText = currentLevelObj.icon;
 
             let currentMin = currentLevelObj.min;
-            let nextMin = (currentLevelIndex < levels.length - 1) ? levels[currentLevelIndex + 1].min : currentMin;
+            let nextMin = currentLevelObj.max;
 
             if (currentLevelIndex === levels.length - 1) {
                 levelBarFill.style.width = "100%";
@@ -650,4 +650,326 @@
                         <button onclick="buyTapUpgrade(10, 4000)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
                     </div>`;
             } else {
-                tapContainer.innerHTML = `<div style="font-size: 10px; color: #888; text-align: center; padding
+                tapContainer.innerHTML = `<div style="font-size: 10px; color: #888; text-align: center; padding: 4px;">Max Tap Power (10) reached!</div>`;
+            }
+
+            if (maxEnergy === 1000) {
+                energyContainer.innerHTML = `
+                    <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 11px;">⚡ Max Energy (1,500)</div>
+                            <div style="font-size: 9px; color: #ffd700;">Price: 500 Coins</div>
+                        </div>
+                        <button onclick="buyEnergyUpgrade(1500, 500)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+                    </div>`;
+            } else if (maxEnergy === 1500) {
+                energyContainer.innerHTML = `
+                    <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 11px;">⚡ Max Energy (2,500)</div>
+                            <div style="font-size: 9px; color: #ffd700;">Price: 2,000 Coins</div>
+                        </div>
+                        <button onclick="buyEnergyUpgrade(2500, 2000)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+                    </div>`;
+            } else {
+                energyContainer.innerHTML = `<div style="font-size: 10px; color: #888; text-align: center; padding: 4px;">All energy upgrades purchased!</div>`;
+            }
+        }
+
+        function buyTapUpgrade(newPower, price) {
+            if (score >= price) {
+                score -= price;
+                tapPower = newPower;
+                updateUI();
+                saveState();
+            } else {
+                alert("Not enough coins!");
+            }
+        }
+
+        function buyEnergyUpgrade(newMaxEnergy, price) {
+            if (score >= price) {
+                score -= price;
+                maxEnergy = newMaxEnergy;
+                energy = maxEnergy;
+                updateUI();
+                saveState();
+            } else {
+                alert("Not enough coins!");
+            }
+        }
+
+        // --- MINI-GAME LOGIC ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let coinToken = { x: 50, y: 140, radius: 16, gravity: 0.35, lift: -10, velocity: 0 };
+        let obstacles = [];
+        let frameCount = 0;
+        let gameScore = 0;
+        let isGameOver = false;
+        let gameStarted = false;
+
+        function resetMiniGame() {
+            coinToken.y = 140;
+            coinToken.velocity = 0;
+            obstacles = [];
+            frameCount = 0;
+            gameScore = 0;
+            isGameOver = false;
+            gameStarted = false;
+        }
+
+        canvas.addEventListener('pointerdown', () => {
+            if (!gameStarted) {
+                gameStarted = true;
+            }
+            if (isGameOver) {
+                resetMiniGame();
+                gameStarted = true;
+            }
+            coinToken.velocity = coinToken.lift;
+        });
+
+        function spawnObstacle() {
+            let gap = 140; 
+            let topHeight = Math.floor(Math.random() * (canvas.height - gap - 70)) + 30;
+            obstacles.push({
+                x: canvas.width,
+                top: topHeight,
+                bottom: canvas.height - topHeight - gap,
+                passed: false
+            });
+        }
+
+        function updateMiniGame() {
+            if (!gameStarted) return;
+
+            coinToken.velocity += coinToken.gravity;
+            coinToken.y += coinToken.velocity;
+
+            if (coinToken.y + coinToken.radius > canvas.height || coinToken.y - coinToken.radius < 0) {
+                isGameOver = true;
+            }
+
+            if (frameCount % 140 === 0) {
+                spawnObstacle();
+            }
+
+            let handMoveOffset = Math.sin(frameCount * 0.03) * 20;
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                obstacles[i].x -= 1.6;
+
+                let currentTopH = obstacles[i].top + handMoveOffset;
+                let currentBottomH = obstacles[i].bottom - handMoveOffset;
+
+                if (
+                    coinToken.x + coinToken.radius > obstacles[i].x &&
+                    coinToken.x - coinToken.radius < obstacles[i].x + 44 &&
+                    (coinToken.y - coinToken.radius < currentTopH || coinToken.y + coinToken.radius > canvas.height - currentBottomH)
+                ) {
+                    isGameOver = true;
+                }
+
+                if (!obstacles[i].passed && obstacles[i].x < coinToken.x) {
+                    obstacles[i].passed = true;
+                    gameScore++;
+                    
+                    if (gameScore >= 10) {
+                        const now = Date.now();
+                        const twentyFourHours = 24 * 60 * 60 * 1000;
+
+                        if (now - lastQuestTime >= twentyFourHours) {
+                            lastQuestTime = now;
+                            energy = Math.min(maxEnergy, energy + 500);
+                            if (tg && tg.showAlert) {
+                                tg.showAlert("Congrats! Daily quest completed: +500 ⚡ Energy received!");
+                            } else {
+                                alert("Congrats! Daily quest completed: +500 ⚡ Energy received!");
+                            }
+                        } else {
+                            if (tg && tg.showAlert) {
+                                tg.showAlert("10 points reached! (Daily quest already completed today)");
+                            } else {
+                                alert("10 points reached! (Daily quest already completed today)");
+                            }
+                        }
+                        updateUI();
+                        saveState();
+                        resetMiniGame();
+                    }
+                }
+
+                if (obstacles[i].x < -50) {
+                    obstacles.splice(i, 1);
+                }
+            }
+            frameCount++;
+        }
+
+        function drawMiniGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#eab308';
+            ctx.beginPath();
+            ctx.arc(coinToken.x, coinToken.y, coinToken.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#fef08a';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 8px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Biz777', coinToken.x, coinToken.y + 3);
+            ctx.textAlign = 'left';
+
+            let handMoveOffset = Math.sin(frameCount * 0.03) * 20;
+
+            for (let obs of obstacles) {
+                let skinColor = '#ffdfbe';  
+                let skinShadow = '#e0b896';
+                let nailColor = '#ffffff';
+
+                let currentTopH = obs.top + handMoveOffset;
+                let currentBottomH = obs.bottom - handMoveOffset;
+
+                // --- TOP HAND ---
+                ctx.fillStyle = skinColor;
+                ctx.fillRect(obs.x, 0, 44, currentTopH - 18);
+                ctx.strokeStyle = skinShadow;
+                ctx.lineWidth = 2;
+                ctx.strokeRect(obs.x, 0, 44, currentTopH - 18);
+
+                for (let f = 0; f < 4; f++) {
+                    let fx = obs.x + 3 + (f * 10);
+                    let fy = currentTopH - 18;
+                    ctx.beginPath();
+                    ctx.roundRect(fx, fy, 8, 18, [0, 0, 4, 4]);
+                    ctx.fillStyle = skinColor;
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.fillStyle = nailColor;
+                    ctx.fillRect(fx + 1, fy + 1, 6, 4);
+                }
+                ctx.beginPath();
+                ctx.roundRect(obs.x - 8, currentTopH - 32, 10, 16, [4, 0, 0, 4]);
+                ctx.fillStyle = skinColor;
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = nailColor;
+                ctx.fillRect(obs.x - 7, currentTopH - 31, 3, 4);
+
+                // --- BOTTOM HAND ---
+                let bottomY = canvas.height - currentBottomH;
+
+                for (let f = 0; f < 4; f++) {
+                    let fx = obs.x + 3 + (f * 10);
+                    let fy = bottomY;
+                    ctx.beginPath();
+                    ctx.roundRect(fx, fy, 8, 18, [4, 4, 0, 0]);
+                    ctx.fillStyle = skinColor;
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.fillStyle = nailColor;
+                    ctx.fillRect(fx + 1, fy + 13, 6, 4);
+                }
+                ctx.beginPath();
+                ctx.roundRect(obs.x - 8, bottomY + 14, 10, 16, [0, 4, 4, 0]);
+                ctx.fillStyle = skinColor;
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = nailColor;
+                ctx.fillRect(obs.x - 7, bottomY + 25, 3, 4);
+
+                ctx.fillStyle = skinColor;
+                ctx.fillRect(obs.x, bottomY + 18, 44, currentBottomH - 18);
+                ctx.strokeRect(obs.x, bottomY + 18, 44, currentBottomH - 18);
+            }
+
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = 'bold 16px sans-serif';
+            ctx.fillText(`Score: ${gameScore} / 10`, 15, 25);
+
+            if (!gameStarted) {
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#38bdf8';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Tap screen to start!', canvas.width / 2, canvas.height / 2);
+                ctx.textAlign = 'left';
+            }
+
+            if (isGameOver) {
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#ef4444';
+                ctx.font = 'bold 18px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 15);
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = '13px sans-serif';
+                ctx.fillText('Tap screen to restart', canvas.width / 2, canvas.height / 2 + 15);
+                ctx.textAlign = 'left';
+            }
+        }
+
+        function gameLoop() {
+            updateMiniGame();
+            drawMiniGame();
+            requestAnimationFrame(gameLoop);
+        }
+        requestAnimationFrame(gameLoop);
+
+        // --- ADSGRAM INTEGRATION ---
+        function watchAdsgramAd() {
+            if (window.Adsgram) {
+                window.Adsgram.init({ blockId: "YOUR_ADSGRAM_BLOCK_ID" }).show().then((result) => {
+                    score += 1000;
+                    if (tg && tg.showAlert) {
+                        tg.showAlert("Reward claimed: +1,000 Coins via Adsgram!");
+                    } else {
+                        alert("Reward claimed: +1,000 Coins via Adsgram!");
+                    }
+                    updateUI();
+                    saveState();
+                }).catch((err) => {
+                    console.error(err);
+                    alert("Ad was skipped or failed to load.");
+                });
+            } else {
+                setTimeout(() => {
+                    score += 1000;
+                    if (tg && tg.showAlert) {
+                        tg.showAlert("Reward claimed: +1,000 Coins (Simulated Adsgram)!");
+                    } else {
+                        alert("Reward claimed: +1,000 Coins (Simulated Adsgram)!");
+                    }
+                    updateUI();
+                    saveState();
+                }, 1000);
+            }
+        }
+
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        function saveState() {
+            localStorage.setItem('biz_score', score);
+            localStorage.setItem('biz_energy', energy);
+            localStorage.setItem('biz_maxEnergy', maxEnergy);
+            localStorage.setItem('biz_tapPower', tapPower);
+            localStorage.setItem('biz_lastQuestTime', lastQuestTime);
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
