@@ -96,39 +96,34 @@
         <div class="modal-content" style="border-color: #00bcd4;">
             <h2 style="color: #00bcd4; margin-top: 0; text-align: center; font-size: 18px;">🛒 Biz777 Shop</h2>
             
-            <div style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <!-- Tap 2 -->
+            <div id="itemTap2" style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <div style="font-weight: bold; font-size: 12px;">👆 Power (+2 Tap)</div>
+                    <div style="font-weight: bold; font-size: 12px;">👆 Power (2 Tap)</div>
                     <div style="font-size: 10px; color: #ffd700;">Price: 300 Coins</div>
                 </div>
                 <button onclick="buyUpgrade(2, 300)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
             </div>
 
-            <div style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <!-- Tap 5 -->
+            <div id="itemTap5" style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <div style="font-weight: bold; font-size: 12px;">🔥 Power (+5 Tap)</div>
+                    <div style="font-weight: bold; font-size: 12px;">🔥 Power (5 Tap)</div>
                     <div style="font-size: 10px; color: #ffd700;">Price: 1,200 Coins</div>
                 </div>
                 <button onclick="buyUpgrade(5, 1200)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
             </div>
 
-            <div style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <!-- Tap 10 -->
+            <div id="itemTap10" style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <div style="font-weight: bold; font-size: 12px;">⚡ Power (+10 Tap)</div>
+                    <div style="font-weight: bold; font-size: 12px;">⚡ Power (10 Tap)</div>
                     <div style="font-size: 10px; color: #ffd700;">Price: 4,000 Coins</div>
                 </div>
                 <button onclick="buyUpgrade(10, 4000)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
             </div>
 
-            <div style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <div style="font-weight: bold; font-size: 12px;">🔋 Energy Refill</div>
-                    <div style="font-size: 10px; color: #ffd700;">Price: 200 Coins</div>
-                </div>
-                <button onclick="buyEnergyRefill()" style="background: #ffb703; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
-            </div>
-
-            <!-- პროგრესული ენერგიის სეიფი (Up to 5000 max) -->
+            <!-- Energy Vault -->
             <div style="margin-bottom: 12px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div id="vaultTitle" style="font-weight: bold; font-size: 12px;">🏦 Energy Vault (2,000 ⚡)</div>
@@ -323,34 +318,24 @@
             document.getElementById(modalId).style.display = "none";
         }
 
-        function buyUpgrade(powerAdd, cost) {
+        function buyUpgrade(targetPower, cost) {
             if (score >= cost) {
+                if (tapPower >= targetPower) {
+                    alert("Already purchased!");
+                    return;
+                }
                 score -= cost;
-                tapPower += powerAdd;
+                tapPower = targetPower; // ზუსტად ადგენს ძალას (2, 5 ან 10)
                 saveGame();
                 updateGame();
-                alert("Successfully purchased! Current power: +" + tapPower);
+                updateShopUI();
+                alert("Successfully purchased! Power is now: " + tapPower);
                 closeModal('shopModal');
             } else {
                 alert("Not enough coins! Required: " + cost.toLocaleString());
             }
         }
 
-        function buyEnergyRefill() {
-            var cost = 200;
-            if (score >= cost) {
-                score -= cost;
-                energy = maxEnergy;
-                saveGame();
-                updateGame();
-                alert("Energy successfully refilled!");
-                closeModal('shopModal');
-            } else {
-                alert("Not enough coins! Required: 200");
-            }
-        }
-
-        // პროგრესული სეიფის / საცავის ყიდვის სისტემა (1000 ➡️ 2000 ➡️ 3500 ➡️ 5000)
         function buyEnergyVault() {
             var cost = 0;
             var targetEnergy = 0;
@@ -372,7 +357,7 @@
             if (score >= cost) {
                 score -= cost;
                 maxEnergy = targetEnergy;
-                energy = maxEnergy; // ყიდვისას ავტომატურად ივსება ახალი ენერგია
+                energy = maxEnergy; 
                 saveGame();
                 updateGame();
                 updateShopUI();
@@ -384,6 +369,23 @@
         }
 
         function updateShopUI() {
+            var itemTap2 = document.getElementById("itemTap2");
+            var itemTap5 = document.getElementById("itemTap5");
+            var itemTap10 = document.getElementById("itemTap10");
+
+            if (itemTap2) {
+                if (tapPower >= 2) itemTap2.style.display = "none";
+                else itemTap2.style.display = "flex";
+            }
+            if (itemTap5) {
+                if (tapPower >= 5) itemTap5.style.display = "none";
+                else itemTap5.style.display = "flex";
+            }
+            if (itemTap10) {
+                if (tapPower >= 10) itemTap10.style.display = "none";
+                else itemTap10.style.display = "flex";
+            }
+
             var vaultTitle = document.getElementById("vaultTitle");
             var vaultPrice = document.getElementById("vaultPrice");
             var vaultBtn = document.getElementById("vaultBtn");
@@ -619,7 +621,7 @@
             document.querySelector("#gameStartOverlay button").innerText = "Try Again";
         }
 
-        function questRewardClaim() {
+        function claimQuestReward() {
             questClaimed = true;
             localStorage.setItem("biz777_quest_claimed", "true");
             energy = Math.min(energy + 500, maxEnergy);
