@@ -253,16 +253,13 @@
             align-items: center;
             justify-content: space-between;
             border: 1px solid rgba(255,255,255,0.05);
+            flex-direction: column;
+            align-items: stretch;
         }
 
         .shop-info h4, .ad-info h4 {
             font-size: 15px;
             margin-bottom: 4px;
-        }
-
-        .shop-info p, .ad-info p {
-            font-size: 12px;
-            color: var(--text-secondary);
         }
 
         .btn {
@@ -278,11 +275,6 @@
 
         .btn:active {
             opacity: 0.8;
-        }
-
-        .btn:disabled {
-            background: var(--text-secondary);
-            cursor: not-allowed;
         }
 
         /* Mini-Game Tab Styling */
@@ -382,17 +374,15 @@
                 <div class="shop-list">
                     <div class="shop-card">
                         <div class="shop-info">
-                            <h4>Tap Power</h4>
-                            <p>+1 coin per tap (Lvl <span id="tapLevel">1</span>)</p>
+                            <h4>Tap Power Upgrades</h4>
                         </div>
-                        <button class="btn" id="buyTapBtn" onclick="buyUpgrade('tap')">100 🪙</button>
+                        <div id="tapShopContainer" style="margin-top: 8px;"></div>
                     </div>
                     <div class="shop-card">
                         <div class="shop-info">
-                            <h4>Max Energy</h4>
-                            <p>+500 max energy (Lvl <span id="energyLevel">1</span>)</p>
+                            <h4>Energy Upgrades</h4>
                         </div>
-                        <button class="btn" id="buyEnergyBtn" onclick="buyUpgrade('energy')">150 🪙</button>
+                        <div id="energyShopContainer" style="margin-top: 8px;"></div>
                     </div>
                 </div>
             </div>
@@ -400,8 +390,8 @@
             <!-- Tab 3: Mini-Game -->
             <div class="tab-pane" id="tab-minigame">
                 <div class="minigame-wrapper">
-                    <h3 style="margin-bottom: 6px; font-size: 15px;">Hand & Finger Challenge</h3>
-                    <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Pass 10 obstacles to win +500 ⚡ Energy!</p>
+                    <h3 style="margin-bottom: 6px; font-size: 15px;">Catch Biz777 Coin!</h3>
+                    <p style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Pass 10 obstacles for +500 ⚡ Energy!</p>
                     <canvas id="gameCanvas" width="300" height="360"></canvas>
                 </div>
             </div>
@@ -410,17 +400,17 @@
             <div class="tab-pane" id="tab-ads">
                 <h3 style="margin-bottom: 15px; align-self: flex-start;">Earn & Ads</h3>
                 <div class="ads-list">
-                    <div class="ad-card">
+                    <div class="ad-card" style="flex-direction: row;">
                         <div class="ad-info">
                             <h4>Watch Ad & Refill Energy</h4>
-                            <p>Instantly restore full energy stock</p>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Instantly restore full energy stock</p>
                         </div>
                         <button class="btn" onclick="watchAd('energy')">Watch 📺</button>
                     </div>
-                    <div class="ad-card">
+                    <div class="ad-card" style="flex-direction: row;">
                         <div class="ad-info">
                             <h4>Bonus Reward Ad</h4>
-                            <p>Watch an ad to get +1,000 coins</p>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Watch an ad to get +1,000 coins</p>
                         </div>
                         <button class="btn" onclick="watchAd('coins')">Claim 🪙</button>
                     </div>
@@ -465,11 +455,6 @@
         let energy = parseInt(localStorage.getItem('biz_energy')) || 1000;
         let maxEnergy = parseInt(localStorage.getItem('biz_maxEnergy')) || 1000;
         let tapPower = parseInt(localStorage.getItem('biz_tapPower')) || 1;
-        
-        let tapLevel = parseInt(localStorage.getItem('biz_tapLevel')) || 1;
-        let energyLevel = parseInt(localStorage.getItem('biz_energyLevel')) || 1;
-        let tapCost = parseInt(localStorage.getItem('biz_tapCost')) || 100;
-        let energyCost = parseInt(localStorage.getItem('biz_energyCost')) || 150;
 
         let currentAdType = null;
         let adCountdownInterval = null;
@@ -500,11 +485,6 @@
         const clickerBtn = document.getElementById('clickerBtn');
         const levelName = document.getElementById('levelName');
         const buildingIcon = document.getElementById('buildingIcon');
-        
-        const tapLevelSpan = document.getElementById('tapLevel');
-        const energyLevelSpan = document.getElementById('energyLevel');
-        const buyTapBtn = document.getElementById('buyTapBtn');
-        const buyEnergyBtn = document.getElementById('buyEnergyBtn');
 
         // Main Tap Event Handler
         clickerBtn.addEventListener('pointerdown', (e) => {
@@ -544,12 +524,6 @@
             energyText.innerText = `${energy} / ${maxEnergy}`;
             energyFill.style.width = `${(energy / maxEnergy) * 100}%`;
 
-            tapLevelSpan.innerText = tapLevel;
-            energyLevelSpan.innerText = energyLevel;
-            buyTapBtn.innerText = `${tapCost} 🪙`;
-            buyEnergyBtn.innerText = `${energyCost} 🪙`;
-
-            // Check current sequential level based on score
             let currentLevelObj = levels[0];
             for (let i = levels.length - 1; i >= 0; i--) {
                 if (score >= levels[i].min) {
@@ -559,31 +533,100 @@
             }
             levelName.innerText = currentLevelObj.name;
             buildingIcon.innerText = currentLevelObj.icon;
+
+            updateShopUI();
         }
 
-        // Upgrades Logic
-        function buyUpgrade(type) {
-            if (type === 'tap' && score >= tapCost) {
-                score -= tapCost;
-                tapPower += 1;
-                tapLevel += 1;
-                tapCost = Math.floor(tapCost * 1.6);
-            } else if (type === 'energy' && score >= energyCost) {
-                score -= energyCost;
-                maxEnergy += 500;
-                energy = maxEnergy;
-                energyLevel += 1;
-                energyCost = Math.floor(energyCost * 1.6);
+        // Sequential Shop UI Upgrades Logic
+        function updateShopUI() {
+            var tapContainer = document.getElementById("tapShopContainer");
+            var energyContainer = document.getElementById("energyShopContainer");
+            
+            tapContainer.innerHTML = "";
+            energyContainer.innerHTML = "";
+
+            if (tapPower === 1) {
+                tapContainer.innerHTML = `
+                    <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 11px;">👆 Power (2 Tap)</div>
+                            <div style="font-size: 9px; color: #ffd700;">Price: 300 Coins</div>
+                        </div>
+                        <button onclick="buyTapUpgrade(2, 300)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+                    </div>`;
+            } else if (tapPower === 2) {
+                tapContainer.innerHTML = `
+                    <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 11px;">🔥 Power (5 Tap)</div>
+                            <div style="font-size: 9px; color: #ffd700;">Price: 1,200 Coins</div>
+                        </div>
+                        <button onclick="buyTapUpgrade(5, 1200)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+                    </div>`;
+            } else if (tapPower === 5) {
+                tapContainer.innerHTML = `
+                    <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 11px;">⚡ Power (10 Tap)</div>
+                            <div style="font-size: 9px; color: #ffd700;">Price: 4,000 Coins</div>
+                        </div>
+                        <button onclick="buyTapUpgrade(10, 4000)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+                    </div>`;
+            } else {
+                tapContainer.innerHTML = `<div style="font-size: 10px; color: #888; text-align: center; padding: 4px;">All tap upgrades purchased!</div>`;
             }
-            updateUI();
-            saveState();
+
+            if (maxEnergy === 1000) {
+                energyContainer.innerHTML = `
+                    <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 11px;">⚡ Max Energy (1,500)</div>
+                            <div style="font-size: 9px; color: #ffd700;">Price: 500 Coins</div>
+                        </div>
+                        <button onclick="buyEnergyUpgrade(1500, 500)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+                    </div>`;
+            } else if (maxEnergy === 1500) {
+                energyContainer.innerHTML = `
+                    <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 11px;">⚡ Max Energy (2,500)</div>
+                            <div style="font-size: 9px; color: #ffd700;">Price: 2,000 Coins</div>
+                        </div>
+                        <button onclick="buyEnergyUpgrade(2500, 2000)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+                    </div>`;
+            } else {
+                energyContainer.innerHTML = `<div style="font-size: 10px; color: #888; text-align: center; padding: 4px;">All energy upgrades purchased!</div>`;
+            }
         }
 
-        // --- MINI-GAME LOGIC (Original Skin-Toned Hands & Coin Token) ---
+        function buyTapUpgrade(newPower, price) {
+            if (score >= price) {
+                score -= price;
+                tapPower = newPower;
+                updateUI();
+                saveState();
+            } else {
+                alert("Not enough coins!");
+            }
+        }
+
+        function buyEnergyUpgrade(newMaxEnergy, price) {
+            if (score >= price) {
+                score -= price;
+                maxEnergy = newMaxEnergy;
+                energy = maxEnergy;
+                updateUI();
+                saveState();
+            } else {
+                alert("Not enough coins!");
+            }
+        }
+
+        // --- MINI-GAME LOGIC (Biz777 Coin & Round-Fingered Hands) ---
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        let coinToken = { x: 50, y: 140, radius: 14, gravity: 0.45, lift: -6.5, velocity: 0 };
+        let coinToken = { x: 50, y: 140, radius: 16, gravity: 0.45, lift: -6.5, velocity: 0 };
         let obstacles = [];
         let frameCount = 0;
         let gameScore = 0;
@@ -639,7 +682,6 @@
             for (let i = obstacles.length - 1; i >= 0; i--) {
                 obstacles[i].x -= 2.2;
 
-                // Collision detection
                 if (
                     coinToken.x + coinToken.radius > obstacles[i].x &&
                     coinToken.x - coinToken.radius < obstacles[i].x + 45 &&
@@ -674,25 +716,29 @@
         function drawMiniGame() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw Coin Token
+            // Draw Biz777 Coin Token
             ctx.fillStyle = '#eab308';
             ctx.beginPath();
             ctx.arc(coinToken.x, coinToken.y, coinToken.radius, 0, Math.PI * 2);
             ctx.fill();
             ctx.strokeStyle = '#fef08a';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 2.5;
             ctx.stroke();
-            ctx.fillStyle = '#1e293b';
-            ctx.font = 'bold 12px sans-serif';
-            ctx.fillText('🪙', coinToken.x - 7, coinToken.y + 4);
 
-            // Draw Original Skin-Toned Hands & Fingers
+            // Text on Coin (Biz777)
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 8px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Biz777', coinToken.x, coinToken.y + 3);
+            ctx.textAlign = 'left';
+
+            // Draw Hands with Rounded Fingers
             for (let obs of obstacles) {
                 let skinColor = '#eac086';
                 let skinShadow = '#cca065';
                 let nailColor = '#fff5e6';
 
-                // Top Hand (Pointing Down)
+                // Top Hand Body
                 let topH = obs.top;
                 ctx.fillStyle = skinColor;
                 ctx.fillRect(obs.x, 0, 45, topH - 22);
@@ -700,31 +746,36 @@
                 ctx.lineWidth = 2;
                 ctx.strokeRect(obs.x, 0, 45, topH - 22);
 
-                // Fingers (Top)
+                // Rounded Fingers (Top)
                 for (let f = 0; f < 3; f++) {
                     let fx = obs.x + 4 + (f * 13);
+                    ctx.beginPath();
+                    ctx.roundRect(fx, topH - 22, 10, 22, [0, 0, 6, 6]);
                     ctx.fillStyle = skinColor;
-                    ctx.fillRect(fx, topH - 22, 10, 22);
-                    ctx.strokeRect(fx, topH - 22, 10, 22);
+                    ctx.fill();
+                    ctx.stroke();
+                    // Nail
                     ctx.fillStyle = nailColor;
                     ctx.fillRect(fx + 2, topH - 5, 6, 3);
                 }
 
-                // Bottom Hand (Pointing Up)
+                // Bottom Hand Body
                 let bottomY = canvas.height - obs.bottom;
                 let bottomH = obs.bottom;
 
-                // Fingers (Bottom)
+                // Rounded Fingers (Bottom)
                 for (let f = 0; f < 3; f++) {
                     let fx = obs.x + 4 + (f * 13);
+                    ctx.beginPath();
+                    ctx.roundRect(fx, bottomY, 10, 22, [6, 6, 0, 0]);
                     ctx.fillStyle = skinColor;
-                    ctx.fillRect(fx, bottomY, 10, 22);
-                    ctx.strokeRect(fx, bottomY, 10, 22);
+                    ctx.fill();
+                    ctx.stroke();
+                    // Nail
                     ctx.fillStyle = nailColor;
                     ctx.fillRect(fx + 2, bottomY + 2, 6, 3);
                 }
 
-                // Palm (Bottom)
                 ctx.fillStyle = skinColor;
                 ctx.fillRect(obs.x, bottomY + 22, 45, bottomH - 22);
                 ctx.strokeRect(obs.x, bottomY + 22, 45, bottomH - 22);
@@ -833,10 +884,6 @@
             localStorage.setItem('biz_energy', energy);
             localStorage.setItem('biz_maxEnergy', maxEnergy);
             localStorage.setItem('biz_tapPower', tapPower);
-            localStorage.setItem('biz_tapLevel', tapLevel);
-            localStorage.setItem('biz_energyLevel', energyLevel);
-            localStorage.setItem('biz_tapCost', tapCost);
-            localStorage.setItem('biz_energyCost', energyCost);
         }
 
         // Initial UI Render
