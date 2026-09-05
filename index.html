@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Biz777 Mini App - Games with Wheel Spin</title>
+    <title>Biz777 Mini App - Full 3D & Spin</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -50,7 +50,6 @@
             transform-style: preserve-3d;
         }
 
-        /* Header */
         header {
             padding: 15px;
             display: flex;
@@ -93,6 +92,7 @@
         .username {
             font-size: 16px;
             font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .level-badge {
@@ -131,6 +131,7 @@
             background: #090d16;
             border-radius: 4px;
             overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
             border: 1px solid rgba(255,255,255,0.05);
         }
 
@@ -141,7 +142,6 @@
             transition: width 0.3s ease;
         }
 
-        /* Content */
         .content {
             flex: 1;
             display: flex;
@@ -175,8 +175,8 @@
         }
 
         @keyframes floatSlow {
-            0% { transform: translateY(0px) rotate(0deg); }
-            100% { transform: translateY(-30px) rotate(45deg); }
+            0% { transform: translateY(0px) rotate(0deg) translateZ(-50px); }
+            100% { transform: translateY(-30px) rotate(45deg) translateZ(50px); }
         }
 
         .interactive-clicker-area {
@@ -186,6 +186,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            pointer-events: auto;
+            transform-style: preserve-3d;
         }
 
         .clicker-circle {
@@ -194,20 +196,24 @@
             border-radius: 50%;
             background: radial-gradient(circle, #22304c 0%, #0f172a 100%);
             border: 6px solid var(--accent);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 35px var(--accent-glow);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 35px var(--accent-glow), inset 0 10px 20px rgba(255,255,255,0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.1s;
+            position: relative;
+            transform: translateZ(40px) rotateX(10deg);
+            transition: transform 0.1s cubic-bezier(0.3, 1.5, 0.5, 1);
         }
 
         .clicker-circle:active {
-            transform: scale(0.93);
+            transform: translateZ(10px) rotateX(0deg) scale(0.93);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.9), 0 0 15px var(--accent-glow);
         }
 
         .clicker-icon {
             font-size: 75px;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
         }
 
         .energy-container {
@@ -215,6 +221,8 @@
             margin-top: 30px;
             position: relative;
             z-index: 5;
+            pointer-events: auto;
+            transform: translateZ(20px);
         }
 
         .energy-info {
@@ -231,6 +239,7 @@
             background: #090d16;
             border-radius: 6px;
             overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
             border: 1px solid rgba(255,255,255,0.05);
         }
 
@@ -248,15 +257,15 @@
             color: var(--warning);
             pointer-events: none;
             z-index: 100;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
             animation: floatUp 0.8s cubic-bezier(0.2, 1.5, 0.4, 1) forwards;
         }
 
         @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-90px) scale(1.3); }
+            0% { opacity: 1; transform: translateY(0) scale(1) translateZ(80px); }
+            100% { opacity: 0; transform: translateY(-90px) scale(1.3) translateZ(120px); }
         }
 
-        /* Navigation */
         nav {
             display: flex;
             background: linear-gradient(145deg, #1e293b, #0f172a);
@@ -264,8 +273,9 @@
             justify-content: space-around;
             border-top-left-radius: 24px;
             border-top-right-radius: 24px;
-            box-shadow: 0 -15px 35px rgba(0,0,0,0.6);
+            box-shadow: 0 -15px 35px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.1);
             z-index: 10;
+            transform: translateZ(20px);
             border-top: 2px solid var(--accent);
         }
 
@@ -279,10 +289,13 @@
             align-items: center;
             gap: 4px;
             cursor: pointer;
+            transition: all 0.2s;
+            transform: translateZ(10px);
         }
 
         .nav-item.active {
             color: var(--accent);
+            transform: translateZ(25px) scale(1.1);
             text-shadow: 0 0 10px var(--accent-glow);
         }
 
@@ -301,18 +314,20 @@
             padding-bottom: 20px;
             z-index: 5;
             position: relative;
+            transform-style: preserve-3d;
         }
 
         .tab-pane.active {
             display: flex;
         }
 
-        .shop-list, .friends-list, .ads-list, .games-menu {
+        .shop-list, .ads-list, .friends-list, .games-menu {
             width: 100%;
             display: flex;
             flex-direction: column;
             gap: 14px;
             margin-top: 10px;
+            transform-style: preserve-3d;
         }
 
         .shop-card, .ad-card, .friend-card, .game-card-option, .game-header-banner {
@@ -323,9 +338,17 @@
             align-items: center;
             justify-content: space-between;
             border: 2px solid rgba(56, 189, 248, 0.15);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 1px 3px rgba(255,255,255,0.1);
             flex-direction: column;
             align-items: stretch;
+            transform: translateZ(15px);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .shop-card:hover, .ad-card:hover, .friend-card:hover, .game-card-option:hover {
+            transform: translateZ(25px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.7), 0 0 15px rgba(56, 189, 248, 0.2);
+            border-color: var(--accent);
         }
 
         .btn {
@@ -336,7 +359,14 @@
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 6px 15px rgba(56, 189, 248, 0.4);
+            box-shadow: 0 6px 15px rgba(56, 189, 248, 0.4), inset 0 2px 4px rgba(255,255,255,0.4);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            transform: translateZ(5px);
+        }
+
+        .btn:active {
+            transform: translateZ(0px) scale(0.96);
+            box-shadow: 0 2px 5px rgba(56, 189, 248, 0.4);
         }
 
         .game-header-banner {
@@ -357,6 +387,7 @@
             flex-direction: column;
             align-items: center;
             height: 100%;
+            transform-style: preserve-3d;
         }
 
         .sub-game-container.active-subgame {
@@ -367,44 +398,188 @@
             background: linear-gradient(to bottom, #1e293b, #0f172a);
             border-radius: 16px;
             border: 3px solid var(--accent);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 20px var(--accent-glow);
             cursor: pointer;
             margin: 10px 0;
             touch-action: none;
+            transform: translateZ(20px);
         }
 
-        /* --- SPIN WHEEL MINI-GAME STYLES --- */
-        .wheel-container {
+        /* --- 3D SPIN WHEEL STYLING --- */
+        .spin-wheel-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 15px;
+            transform-style: preserve-3d;
+            padding-bottom: 15px;
+        }
+
+        .wheel-container-3d {
             position: relative;
             width: 240px;
             height: 240px;
-            margin: 15px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin: 10px auto;
+            transform-style: preserve-3d;
+            transform: translateZ(30px);
         }
 
-        #spinWheelCanvas {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 4px solid var(--accent);
-            box-shadow: 0 0 25px var(--accent-glow);
-            transition: transform 3.5s cubic-bezier(0.15, 0.85, 0.15, 1);
-        }
-
-        .wheel-pointer {
+        .wheel-pin {
             position: absolute;
             top: -12px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 20px solid var(--warning);
-            z-index: 20;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 24px solid var(--warning);
+            z-index: 50;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+        }
+
+        .spin-wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            border: 6px solid var(--accent);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 30px var(--accent-glow);
+            transition: transform 4s cubic-bezier(0.15, 0.9, 0.2, 1);
+            background: #0f172a;
+        }
+
+        .wheel-slice {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            left: 0;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: #fff;
+            border: 1px solid rgba(0,0,0,0.2);
+        }
+
+        /* 6 Slices Sizing and Colors */
+        .wheel-slice:nth-child(1) { transform: rotate(0deg) skewY(-30deg); background: #ef4444; }
+        .wheel-slice:nth-child(2) { transform: rotate(60deg) skewY(-30deg); background: #eab308; color: #000; }
+        .wheel-slice:nth-child(3) { transform: rotate(120deg) skewY(-30deg); background: #22c55e; }
+        .wheel-slice:nth-child(4) { transform: rotate(180deg) skewY(-30deg); background: #38bdf8; color: #000; }
+        .wheel-slice:nth-child(5) { transform: rotate(240deg) skewY(-30deg); background: #a855f7; }
+        .wheel-slice:nth-child(6) { transform: rotate(300deg) skewY(-30deg); background: #ec4899; }
+
+        .wheel-slice span {
+            position: absolute;
+            transform: skewY(30deg) rotate(30deg);
+            font-size: 11px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            width: 60px;
+            text-align: center;
+            left: 10px;
+            top: 25px;
+        }
+
+        .cups-board-3d {
+            perspective: 1000px;
+            width: 100%;
+            height: 200px;
+            background: radial-gradient(circle, #273548 0%, #0a0f1d 85%);
+            border-radius: 20px;
+            border: 3px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 10px 0;
+            overflow: hidden;
+            box-shadow: inset 0 15px 30px rgba(0,0,0,0.8), 0 15px 30px rgba(0,0,0,0.6);
+            transform: translateZ(25px);
+        }
+
+        .table-surface {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.5) 100%);
+            transform: rotateX(30deg);
+            transform-origin: bottom center;
+            pointer-events: none;
+        }
+
+        .cups-scene {
+            position: relative;
+            width: 320px;
+            height: 130px;
+            transform-style: preserve-3d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cup-slot-3d {
+            position: absolute;
+            width: 80px;
+            height: 110px;
+            transform-style: preserve-3d;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .coin-item-3d {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%) translateZ(-15px);
+            background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
+            color: #000;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.8);
+            border: 2px solid #fef08a;
+            white-space: nowrap;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .cup-3d {
+            position: absolute;
+            width: 80px;
+            height: 105px;
+            background: linear-gradient(135deg, #f87171 0%, #dc2626 50%, #991b1b 100%);
+            border-radius: 8px 8px 24px 24px;
+            border-bottom: 6px solid #fef2f2;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.8), inset 0 8px 15px rgba(255,255,255,0.35);
+            transform-style: preserve-3d;
+            transform-origin: bottom center;
+            transition: transform 0.4s cubic-bezier(0.3, 1.6, 0.5, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cup-3d::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .cup-3d.lifted {
+            transform: translateY(-60px) rotateX(-20deg) translateZ(30px) scale(1.08);
+            background: linear-gradient(135deg, #fca5a5 0%, #ef4444 50%, #b91c1c 100%);
+            box-shadow: 0 30px 45px rgba(0,0,0,0.9), 0 0 25px rgba(239, 68, 68, 0.5);
         }
 
         #adModal {
@@ -431,7 +606,8 @@
             border-radius: 20px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 30px var(--accent-glow);
+            transform: translateZ(40px);
         }
 
         .ad-screen {
@@ -443,8 +619,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            position: relative;
             margin-bottom: 15px;
             border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.8);
         }
     </style>
 </head>
@@ -477,7 +655,6 @@
         </header>
 
         <div class="content">
-            <!-- Tab 1: Clicker -->
             <div class="tab-pane active" id="tab-clicker">
                 <div class="coin-background-pattern">
                     <span class="bg-coin" style="top: 2%; left: 5%;">🪙 Biz777</span>
@@ -503,101 +680,155 @@
                 </div>
             </div>
 
-            <!-- Tab 2: Shop -->
             <div class="tab-pane" id="tab-shop">
-                <h3 style="margin-bottom: 12px; align-self: flex-start;">🛒 Upgrades Shop</h3>
+                <h3 style="margin-bottom: 12px; align-self: flex-start; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">🛒 3D Upgrades Shop</h3>
                 <div class="shop-list">
                     <div class="shop-card">
-                        <h4>Tap Power Upgrades</h4>
+                        <div class="shop-info"><h4>Tap Power Upgrades</h4></div>
                         <div id="tapShopContainer" style="margin-top: 8px; width: 100%;"></div>
                     </div>
                     <div class="shop-card">
-                        <h4>Energy Upgrades</h4>
+                        <div class="shop-info"><h4>Energy Upgrades</h4></div>
                         <div id="energyShopContainer" style="margin-top: 8px; width: 100%;"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab 3: Games Hub -->
             <div class="tab-pane" id="tab-minigame">
                 <div class="games-menu" id="gamesMenu">
                     <div class="game-header-banner">
-                        <h3 style="font-size: 15px; color: var(--accent); margin-bottom: 3px;">🎮 Mini Games Hub</h3>
-                        <p style="font-size: 11px; color: var(--text-secondary);">Choose a mini-game and win extra rewards!</p>
+                        <h3 style="font-size: 15px; color: var(--accent); margin-bottom: 3px;">🎮 3D Arcade Games Hub</h3>
+                        <p style="font-size: 11px; color: var(--text-secondary);">Select a game below to play and boost your Biz777 earnings!</p>
                     </div>
                     
-                    <!-- NEW SPIN MINI GAME CARD -->
-                    <div class="game-card-option" onclick="openSubGame('spin')">
-                        <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🎯 Lucky Wheel Spin (3-დან 3!)</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Spin the wheel! Land on 3 to win a massive jackpot!</p>
-                        </div>
-                        <span style="font-size: 22px; color: var(--accent);">👉</span>
-                    </div>
-
                     <div class="game-card-option" onclick="openSubGame('flappy')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🪙 Flappy Biz777</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Avoid obstacles! Score 10 for +500 Energy!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🪙 Flappy Biz777 (Hard Mode)</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Avoid custom rounded moving hands (5 fingers)! Score 10 for +500 Energy!</p>
+                        </div>
+                        <span style="font-size: 22px; color: var(--accent);">👉</span>
+                    </div>
+
+                    <div class="game-card-option" onclick="openSubGame('cups')">
+                        <div class="game-card-info">
+                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Biz777 Cup & Ball (3D Levels)</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Play through 5 progressive 3D levels! Complete all 5 to reset daily.</p>
+                        </div>
+                        <span style="font-size: 22px; color: var(--accent);">👉</span>
+                    </div>
+
+                    <div class="game-card-option" onclick="openSubGame('spinwheel')">
+                        <div class="game-card-info">
+                            <h4 style="color: var(--accent); font-size: 15px;">🎡 Biz777 Lucky Spin Wheel</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Spin the 3D Wheel to win massive coin rewards and Energy boosts!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
                 </div>
 
-                <!-- Sub-Game: Lucky Wheel Spin -->
-                <div class="sub-game-container" id="subgame-spin">
-                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🎯 Lucky Wheel Spin</h3>
-                        <div style="width: 50px;"></div>
-                    </div>
-
-                    <div style="display: flex; flex-direction: column; align-items: center; width: 100%; gap: 10px;">
-                        <div style="font-size: 11px; color: var(--warning); background: rgba(255,255,255,0.05); padding: 6px 10px; border-radius: 8px; text-align: center; width: 100%;">
-                            Spin Cost: 300 Coins | Land on **3** to win +3,000!
-                        </div>
-
-                        <!-- Wheel Graphic Component -->
-                        <div class="wheel-container">
-                            <div class="wheel-pointer"></div>
-                            <canvas id="spinWheelCanvas" width="300" height="300"></canvas>
-                        </div>
-
-                        <button class="btn" id="startWheelSpinBtn" onclick="executeWheelSpin()" style="width: 100%;">Spin Wheel 🎯 (-300)</button>
-                    </div>
-                </div>
-
-                <!-- Sub-Game: Flappy Coin -->
                 <div class="sub-game-container" id="subgame-flappy">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
                         <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Flappy Biz777</h3>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Flappy Biz777 (3D)</h3>
                         <div style="width: 50px;"></div>
                     </div>
                     <canvas id="flappyCanvas" width="300" height="340"></canvas>
+                    <div style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 3px;">
+                        Tap canvas to jump smoothly. Avoid moving hands!
+                    </div>
+                </div>
+
+                <div class="sub-game-container" id="subgame-cups">
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Biz777 3D Cup Game</h3>
+                        <div style="width: 50px;"></div>
+                    </div>
+
+                    <div class="cup-game-wrapper">
+                        <div class="levels-container">
+                            <button class="level-btn active-level" id="lvlBtn1" onclick="setCupLevel(1)">Lvl 1</button>
+                            <button class="level-btn" id="lvlBtn2" onclick="setCupLevel(2)">Lvl 2</button>
+                            <button class="level-btn" id="lvlBtn3" onclick="setCupLevel(3)">Lvl 3</button>
+                            <button class="level-btn" id="lvlBtn4" onclick="setCupLevel(4)">Lvl 4 (Hard)</button>
+                            <button class="level-btn" id="lvlBtn5" onclick="setCupLevel(5)">Lvl 5 (Extreme)</button>
+                        </div>
+
+                        <div id="cupGameInfo" style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
+                            Cost: 500 Biz777 | Win: 1,000 Biz777
+                        </div>
+
+                        <div class="cups-board-3d">
+                            <div class="table-surface"></div>
+                            <div class="cups-scene">
+                                <div class="cup-slot-3d" id="slot0" onclick="chooseCup(0)" style="transform: translateX(-105px);">
+                                    <div class="coin-item-3d" id="coin0">biz777</div>
+                                    <div class="cup-3d" id="cup0"></div>
+                                </div>
+                                <div class="cup-slot-3d" id="slot1" onclick="chooseCup(1)" style="transform: translateX(0px);">
+                                    <div class="coin-item-3d" id="coin1">biz777</div>
+                                    <div class="cup-3d" id="cup1"></div>
+                                </div>
+                                <div class="cup-slot-3d" id="slot2" onclick="chooseCup(2)" style="transform: translateX(105px);">
+                                    <div class="coin-item-3d" id="coin2">biz777</div>
+                                    <div class="cup-3d" id="cup2"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn" id="startCupGameBtn" onclick="startCupRound()" style="width: 100%;">Start Round 🎮</button>
+                        <div id="cupCooldownText" style="font-size: 11px; color: var(--text-secondary); text-align: center;"></div>
+                    </div>
+                </div>
+
+                <div class="sub-game-container" id="subgame-spinwheel">
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <h3 style="font-size: 13px; color: var(--accent);">🎡 3D Spin Wheel</h3>
+                        <div style="width: 50px;"></div>
+                    </div>
+
+                    <div class="spin-wheel-wrapper">
+                        <div id="spinInfoBox" style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
+                            Cost: 300 Biz777 per Spin!
+                        </div>
+
+                        <div class="wheel-container-3d">
+                            <div class="wheel-pin"></div>
+                            <div class="spin-wheel" id="spinWheelElement">
+                                <div class="wheel-slice"><span>+2,000 Coins</span></div>
+                                <div class="wheel-slice"><span>+500 Energy</span></div>
+                                <div class="wheel-slice"><span>+5,000 Jackpot</span></div>
+                                <div class="wheel-slice"><span>Try Again</span></div>
+                                <div class="wheel-slice"><span>+1,000 Coins</span></div>
+                                <div class="wheel-slice"><span>+200 Energy</span></div>
+                            </div>
+                        </div>
+
+                        <button class="btn" id="spinWheelBtn" onclick="spinTheWheel()" style="width: 100%;">Spin Wheel 🎡</button>
+                        <div id="spinResultText" style="font-size: 12px; font-weight: bold; color: var(--success); text-align: center; min-height: 15px;"></div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Tab 4: Friends -->
             <div class="tab-pane" id="tab-friends">
-                <h3 style="margin-bottom: 12px; align-self: flex-start;">👥 Invite Friends</h3>
+                <h3 style="margin-bottom: 12px; align-self: flex-start; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">👥 Invite Friends</h3>
                 <div class="friends-list">
                     <div class="friend-card" style="align-items: stretch; gap: 8px;">
-                        <h4 style="font-size: 14px;">Invite 3 Friends for Free Tap Power 20!</h4>
+                        <h4 style="font-size: 14px;">Invite 3 Friends to get Free Tap Power 20!</h4>
                         <p style="font-size: 11px; color: var(--text-secondary);">Invited friends: <span id="friendCountDisplay" style="color: var(--accent); font-weight: bold;">0</span> / 3</p>
                         <button class="btn" onclick="inviteFriendLink()">Share Referral Link 🔗</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab 5: Ads -->
             <div class="tab-pane" id="tab-ads">
-                <h3 style="margin-bottom: 12px; align-self: flex-start;">⚡ Boost Energy</h3>
+                <h3 style="margin-bottom: 12px; align-self: flex-start; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">⚡ Boost Energy</h3>
                 <div class="ads-list">
                     <div class="ad-card" style="flex-direction: row;">
                         <div class="ad-info">
                             <h4>Refill Energy Ad</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Watch ad to instantly refill energy</p>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Watch simulated ad to instantly refill energy to max</p>
                         </div>
                         <button class="btn" onclick="watchSimulatedAd()">Watch 📺</button>
                     </div>
@@ -619,7 +850,7 @@
             <h3 style="margin-bottom: 10px; font-size: 15px; color: var(--accent);">📺 Refilling Energy...</h3>
             <div class="ad-screen">
                 <div style="font-size: 36px; margin-bottom: 5px;">⚡</div>
-                <div style="font-size: 13px; color: var(--text-secondary);">Energy Boost Active</div>
+                <div style="font-size: 13px; color: var(--text-secondary);">Biz777 Energy Boost</div>
                 <div id="adTimer" style="font-size: 18px; font-weight: bold; color: var(--warning); margin-top: 8px;">3s</div>
             </div>
         </div>
@@ -636,6 +867,15 @@
         let invitedFriendsCount = parseInt(localStorage.getItem('biz_invitedFriends')) || 0;
         let freeTap20Claimed = localStorage.getItem('biz_freeTap20Claimed') === "true";
         let lastFlappyRewardDate = localStorage.getItem('biz_lastFlappyReward') || "";
+
+        let cupLevelDataState = JSON.parse(localStorage.getItem('biz_cup_states')) || {
+            1: { unlocked: true, completed: false },
+            2: { unlocked: false, completed: false },
+            3: { unlocked: false, completed: false },
+            4: { unlocked: false, completed: false },
+            5: { unlocked: false, completed: false }
+        };
+        let globalCupCooldownTimestamp = localStorage.getItem('biz_cup_global_cooldown') || "";
 
         let userId = "user";
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -749,7 +989,7 @@
                     <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <div style="font-weight: bold; font-size: 12px;">👆 Upgrade Tap Power (${tapPower} ➔ ${nextPower})</div>
-                            <div style="font-size: 10px; color: #ffd700;">Price: ${price.toLocaleString()} Coins</div>
+                            <div style="font-size: 10px; color: #ffd700;">Price: ${price.toLocaleString()} Biz777</div>
                         </div>
                         <button onclick="buyTapUpgrade(${nextPower}, ${price})" class="btn" style="padding: 6px 12px; font-size: 11px;">Buy</button>
                     </div>`;
@@ -783,7 +1023,7 @@
                     <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <div style="font-weight: bold; font-size: 12px;">⚡ Max Energy (${maxEnergy} ➔ ${nextTier.target})</div>
-                            <div style="font-size: 10px; color: #ffd700;">Price: ${nextTier.price.toLocaleString()} Coins</div>
+                            <div style="font-size: 10px; color: #ffd700;">Price: ${nextTier.price.toLocaleString()} Biz777</div>
                         </div>
                         <button onclick="buyEnergyUpgrade(${nextTier.target}, ${nextTier.price})" class="btn" style="padding: 6px 12px; font-size: 11px;">Buy</button>
                     </div>`;
@@ -794,7 +1034,7 @@
 
         function buyTapUpgrade(newPower, price) {
             if (score >= price) { score -= price; tapPower = newPower; updateUI(); saveState(); }
-            else { alert("Not enough coins!"); }
+            else { alert("Not enough Biz777 coins!"); }
         }
 
         function claimFreeTap20() {
@@ -806,7 +1046,7 @@
 
         function buyEnergyUpgrade(newMaxEnergy, price) {
             if (score >= price) { score -= price; maxEnergy = newMaxEnergy; energy = maxEnergy; updateUI(); saveState(); }
-            else { alert("Not enough coins!"); }
+            else { alert("Not enough Biz777 coins!"); }
         }
 
         function inviteFriendLink() {
@@ -840,108 +1080,14 @@
             document.getElementById('gamesMenu').style.display = 'none';
             document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
             document.getElementById(`subgame-${gameName}`).classList.add('active-subgame');
-            
-            if (gameName === 'spin') {
-                drawWheel();
-            } else if (gameName === 'flappy' && !flappyRunning) {
-                startFlappyGame();
-            }
+            if (gameName === 'flappy' && !flappyRunning) { startFlappyGame(); }
+            if (gameName === 'cups') { initCupStageUI(); }
         }
 
         function backToGamesMenu() {
             flappyRunning = false;
             document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
             document.getElementById('gamesMenu').style.display = 'flex';
-        }
-
-        // --- LUCKY WHEEL CANVAS & SPIN LOGIC ---
-        const wheelCanvas = document.getElementById('spinWheelCanvas');
-        const wheelCtx = wheelCanvas.getContext('2d');
-        const wheelSectors = ["50", "100", "3", "200", "500", "3", "1000", "0"];
-        const sectorColors = ["#1e293b", "#0284c7", "#eab308", "#1e293b", "#22c55e", "#eab308", "#38bdf8", "#ef4444"];
-        let currentWheelAngle = 0;
-        let isWheelSpinning = false;
-
-        function drawWheel() {
-            const numSectors = wheelSectors.length;
-            const arcSize = (2 * Math.PI) / numSectors;
-            wheelCtx.clearRect(0, 0, wheelCanvas.width, wheelCanvas.height);
-
-            let radius = wheelCanvas.width / 2;
-            wheelCtx.save();
-            wheelCtx.translate(radius, radius);
-            wheelCtx.rotate(currentWheelAngle);
-
-            for (let i = 0; i < numSectors; i++) {
-                const angle = i * arcSize;
-                wheelCtx.beginPath();
-                wheelCtx.fillStyle = sectorColors[i];
-                wheelCtx.moveTo(0, 0);
-                wheelCtx.arc(0, 0, radius, angle, angle + arcSize);
-                wheelCtx.lineTo(0, 0);
-                wheelCtx.fill();
-                wheelCtx.stroke();
-
-                // Draw text labels
-                wheelCtx.save();
-                wheelCtx.rotate(angle + arcSize / 2);
-                wheelCtx.textAlign = "right";
-                wheelCtx.fillStyle = "#fff";
-                wheelCtx.font = "bold 14px sans-serif";
-                wheelCtx.fillText(wheelSectors[i] === "3" ? "🎯 3" : wheelSectors[i], radius - 20, 6);
-                wheelCtx.restore();
-            }
-            wheelCtx.restore();
-        }
-
-        function executeWheelSpin() {
-            if (isWheelSpinning) return;
-            let spinCost = 300;
-            if (score < spinCost) {
-                alert("Not enough coins for a spin! (Cost: 300)");
-                return;
-            }
-
-            score -= spinCost;
-            updateUI();
-            saveState();
-
-            isWheelSpinning = true;
-            let btn = document.getElementById('startWheelSpinBtn');
-            btn.disabled = true;
-
-            // Random extra spins + random sector offset
-            let randomRotations = Math.floor(Math.random() * 5) + 5; // 5 to 9 full spins
-            let winningIndex = Math.floor(Math.random() * wheelSectors.length);
-            
-            // მომხმარებლის მოთხოვნა: შანსი რომ ამოვიდეს "3"
-            if (Math.random() < 0.25) {
-                winningIndex = wheelSectors.indexOf("3"); // ძებნა სადაც სექტორი 3-ია
-            }
-
-            const arcSize = 360 / wheelSectors.length;
-            let targetAngleDegree = (randomRotations * 360) + (360 - (winningIndex * arcSize)) - (arcSize / 2);
-            
-            currentWheelAngle += targetAngleDegree * (Math.PI / 180);
-            wheelCanvas.style.transform = `rotate(${currentWheelAngle}rad)`;
-
-            setTimeout(() => {
-                isWheelSpinning = false;
-                btn.disabled = false;
-
-                let prizeValue = wheelSectors[winningIndex];
-                if (prizeValue === "3") {
-                    let jackpotReward = 3000;
-                    score += jackpotReward;
-                    alert(`🎉 JACKPOT! ბორბალზე დაჯდა სექტორი **3**! მოიგე +${jackpotReward.toLocaleString()} მონეტა!`);
-                } else {
-                    let prizeNum = parseInt(prizeValue);
-                    score += prizeNum;
-                    alert(`🎯 მოიგე: +${prizeNum} მონეტა!`);
-                }
-                updateUI();
-                saveState();
-            }, 3500);
         }
 
         // --- FLAPPY BIZ777 GAME ---
@@ -955,7 +1101,9 @@
 
         canvas.addEventListener('pointerdown', (e) => {
             e.preventDefault();
-            if (flappyRunning) { bird.velocity = bird.lift; }
+            if (flappyRunning) {
+                bird.velocity = bird.lift;
+            }
         });
 
         function startFlappyGame() {
@@ -970,6 +1118,7 @@
 
         function loopFlappy() {
             if (!flappyRunning) return;
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             bird.velocity += bird.gravity;
@@ -997,21 +1146,45 @@
                 let pipeWidth = 62;
                 let gapHeight = 145;
                 let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 80)) + 35;
-                pipes.push({ x: canvas.width, top: topHeight, bottom: canvas.height - topHeight - gapHeight, width: pipeWidth, passed: false });
+                pipes.push({ 
+                    x: canvas.width, 
+                    top: topHeight, 
+                    bottom: canvas.height - topHeight - gapHeight, 
+                    width: pipeWidth, 
+                    passed: false,
+                    vOffset: 0,
+                    vSpeed: (Math.random() > 0.5 ? 1 : -1) * 1.0
+                });
             }
 
             for (let i = pipes.length - 1; i >= 0; i--) {
                 pipes[i].x -= 2.6;
-                let currentTop = pipes[i].top;
-                let currentBottom = pipes[i].bottom;
+                pipes[i].vOffset += pipes[i].vSpeed;
+                if (pipes[i].vOffset > 18 || pipes[i].vOffset < -18) {
+                    pipes[i].vSpeed *= -1;
+                }
 
-                ctx.fillStyle = '#ffdbac';
-                ctx.strokeStyle = '#e0ac69';
+                let currentTop = pipes[i].top + pipes[i].vOffset;
+                let currentBottom = pipes[i].bottom - pipes[i].vOffset;
+
+                let handColor = '#ffdbac';
+                let outlineColor = '#e0ac69';
+
+                ctx.fillStyle = handColor;
+                ctx.strokeStyle = outlineColor;
                 ctx.lineWidth = 2;
+
                 ctx.beginPath();
                 ctx.roundRect(pipes[i].x, 0, pipes[i].width, currentTop, [0, 0, 12, 12]);
                 ctx.fill();
                 ctx.stroke();
+
+                let fingerWidth = pipes[i].width / 5;
+                for (let f = 0; f < 5; f++) {
+                    let fx = pipes[i].x + (f * fingerWidth);
+                    ctx.fillRect(fx, currentTop, fingerWidth - 1, 15);
+                    ctx.strokeRect(fx, currentTop, fingerWidth - 1, 15);
+                }
 
                 let bottomY = canvas.height - currentBottom;
                 ctx.beginPath();
@@ -1019,7 +1192,17 @@
                 ctx.fill();
                 ctx.stroke();
 
-                if (bird.x + bird.radius > pipes[i].x - 6 && bird.x - bird.radius < pipes[i].x + pipes[i].width + 6 && (bird.y - bird.radius < currentTop || bird.y + bird.radius > bottomY)) {
+                for (let f = 0; f < 5; f++) {
+                    let fx = pipes[i].x + (f * fingerWidth);
+                    ctx.fillRect(fx, bottomY - 15, fingerWidth - 1, 15);
+                    ctx.strokeRect(fx, bottomY - 15, fingerWidth - 1, 15);
+                }
+
+                if (
+                    bird.x + bird.radius > pipes[i].x - 6 &&
+                    bird.x - bird.radius < pipes[i].x + pipes[i].width + 6 &&
+                    (bird.y - bird.radius < currentTop || bird.y + bird.radius > bottomY)
+                ) {
                     endFlappyGame();
                     return;
                 }
@@ -1028,19 +1211,13 @@
                     pipes[i].passed = true;
                     flappyScore++;
                     if (flappyScore === 10) {
-                        let today = new Date().toDateString();
-                        if (lastFlappyRewardDate !== today) {
-                            lastFlappyRewardDate = today;
-                            localStorage.setItem('biz_lastFlappyReward', today);
-                            energy = Math.min(maxEnergy, energy + 500);
-                            updateUI();
-                            saveState();
-                            alert("🎉 Amazing! +500 Energy Reward!");
-                        }
+                        checkFlappyReward();
                     }
                 }
 
-                if (pipes[i].x + pipes[i].width < 0) { pipes.splice(i, 1); }
+                if (pipes[i].x + pipes[i].width < 0) {
+                    pipes.splice(i, 1);
+                }
             }
 
             ctx.fillStyle = '#fff';
@@ -1050,6 +1227,18 @@
 
             frameCount++;
             requestAnimationFrame(loopFlappy);
+        }
+
+        function checkFlappyReward() {
+            let today = new Date().toDateString();
+            if (lastFlappyRewardDate !== today) {
+                lastFlappyRewardDate = today;
+                localStorage.setItem('biz_lastFlappyReward', today);
+                energy = Math.min(maxEnergy, energy + 500);
+                updateUI();
+                saveState();
+                alert("🎉 Amazing! +500 Energy Reward!");
+            }
         }
 
         function endFlappyGame() {
@@ -1063,7 +1252,281 @@
             ctx.fillStyle = '#fff';
             ctx.font = '13px sans-serif';
             ctx.fillText('Tap to Try Again', canvas.width / 2, canvas.height / 2 + 15);
-            canvas.onclick = () => { canvas.onclick = null; startFlappyGame(); };
+            
+            canvas.onclick = () => {
+                canvas.onclick = null;
+                startFlappyGame();
+            };
+        }
+
+        // --- 3D CUP & BALL GAME LOGIC ---
+        let currentCupLevel = 1;
+        let winningIndex = 1;
+        let cupPositions = [0, 1, 2];
+        let gameActive = false;
+        let isShuffling = false;
+
+        const cupLevelsData = {
+            1: { cost: 500, win: 1000, shuffles: 4, speed: 350 },
+            2: { cost: 2500, win: 5000, shuffles: 7, speed: 250 },
+            3: { cost: 10000, win: 25000, shuffles: 11, speed: 180 },
+            4: { cost: 50000, win: 150000, shuffles: 16, speed: 120 },
+            5: { cost: 200000, win: 800000, shuffles: 24, speed: 80 }
+        };
+
+        const SLOT_DISTANCE = 105;
+
+        function checkGlobalCooldown() {
+            let now = new Date().getTime();
+            let btn = document.getElementById('startCupGameBtn');
+            let cooldownText = document.getElementById('cupCooldownText');
+
+            if (globalCupCooldownTimestamp) {
+                let diff = now - parseInt(globalCupCooldownTimestamp);
+                let dayMs = 24 * 60 * 60 * 1000;
+                if (diff < dayMs) {
+                    let timeLeft = dayMs - diff;
+                    let hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    let mins = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    btn.disabled = true;
+                    btn.style.opacity = "0.5";
+                    cooldownText.innerText = `⏳ All 5 3D levels completed! Next restart in ${hours}h ${mins}m`;
+                    return true;
+                } else {
+                    globalCupCooldownTimestamp = "";
+                    localStorage.removeItem('biz_cup_global_cooldown');
+                    cupLevelDataState = {
+                        1: { unlocked: true, completed: false },
+                        2: { unlocked: false, completed: false },
+                        3: { unlocked: false, completed: false },
+                        4: { unlocked: false, completed: false },
+                        5: { unlocked: false, completed: false }
+                    };
+                    localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
+                }
+            }
+            btn.disabled = false;
+            btn.style.opacity = "1";
+            cooldownText.innerText = "";
+            return false;
+        }
+
+        function setCupLevel(lvl) {
+            if (gameActive || isShuffling) return;
+            
+            if (!cupLevelDataState[lvl].unlocked) {
+                alert("Complete the previous level first!");
+                return;
+            }
+
+            currentCupLevel = lvl;
+            
+            for(let i=1; i<=5; i++) {
+                let btn = document.getElementById(`lvlBtn${i}`);
+                btn.classList.remove('active-level', 'completed-level');
+                
+                if(cupLevelDataState[i].completed) {
+                    btn.classList.add('completed-level');
+                } else if(!cupLevelDataState[i].unlocked) {
+                    btn.style.opacity = "0.4";
+                } else {
+                    btn.style.opacity = "1";
+                }
+            }
+            document.getElementById(`lvlBtn${lvl}`).classList.add('active-level');
+
+            let data = cupLevelsData[lvl];
+            document.getElementById('cupGameInfo').innerText = `Cost: ${data.cost.toLocaleString()} Biz777 | Win: ${data.win.toLocaleString()} Biz777`;
+            
+            checkGlobalCooldown();
+            initCupStageUI();
+        }
+
+        function renderCupPositions(animate = false) {
+            for (let cupId = 0; cupId < 3; cupId++) {
+                let slotIndex = cupPositions.indexOf(cupId);
+                let slotEl = document.getElementById(`slot${cupId}`);
+                slotEl.style.transitionDuration = animate ? `${cupLevelsData[currentCupLevel].speed}ms` : '0.3s';
+                let xOffset = (slotIndex - 1) * SLOT_DISTANCE;
+                slotEl.style.transform = `translateX(${xOffset}px)`;
+            }
+        }
+
+        function initCupStageUI() {
+            winningIndex = Math.floor(Math.random() * 3);
+            cupPositions = [0, 1, 2];
+            
+            renderCupPositions(false);
+
+            for (let i = 0; i < 3; i++) {
+                document.getElementById(`cup${i}`).classList.remove('lifted');
+                document.getElementById(`coin${i}`).style.opacity = "0";
+            }
+
+            if (!checkGlobalCooldown()) {
+                document.getElementById(`startCupGameBtn`).innerText = "Start Round 🎮";
+            }
+            gameActive = false;
+            isShuffling = false;
+        }
+
+        function startCupRound() {
+            if (isShuffling || gameActive) return;
+            if (checkGlobalCooldown()) return;
+
+            let data = cupLevelsData[currentCupLevel];
+            if (score < data.cost) { alert("Not enough Biz777 coins!"); return; }
+
+            score -= data.cost;
+            updateUI();
+            saveState();
+
+            isShuffling = true;
+            document.getElementById('startCupGameBtn').innerText = "3D Shuffling... 🌪️";
+            document.getElementById('startCupGameBtn').disabled = true;
+
+            for (let i = 0; i < 3; i++) {
+                document.getElementById(`cup${i}`).classList.add('lifted');
+            }
+            let winningCupId = winningIndex;
+            document.getElementById(`coin${winningCupId}`).style.opacity = "1";
+
+            setTimeout(() => {
+                for (let i = 0; i < 3; i++) {
+                    document.getElementById(`cup${i}`).classList.remove('lifted');
+                    document.getElementById(`coin${i}`).style.opacity = "0";
+                }
+
+                setTimeout(() => {
+                    let shuffleCount = 0;
+                    let shuffleInterval = setInterval(() => {
+                        let slotA = Math.floor(Math.random() * 3);
+                        let slotB;
+                        do {
+                            slotB = Math.floor(Math.random() * 3);
+                        } while (slotB === slotA);
+
+                        let temp = cupPositions[slotA];
+                        cupPositions[slotA] = cupPositions[slotB];
+                        cupPositions[slotB] = temp;
+
+                        renderCupPositions(true);
+
+                        shuffleCount++;
+                        if (shuffleCount >= data.shuffles) {
+                            clearInterval(shuffleInterval);
+                            isShuffling = false;
+                            gameActive = true;
+                            document.getElementById('startCupGameBtn').innerText = "Choose 3D Cup! 🤔";
+                        }
+                    }, data.speed + 40);
+                }, 400);
+            }, 1200);
+        }
+
+        function chooseCup(slotIdx) {
+            if (isShuffling || !gameActive) return;
+            gameActive = false;
+            let data = cupLevelsData[currentCupLevel];
+
+            for (let i = 0; i < 3; i++) {
+                document.getElementById(`cup${i}`).classList.add('lifted');
+            }
+
+            let chosenCupId = cupPositions[slotIdx];
+            let winningCupId = winningIndex;
+
+            document.getElementById(`coin${winningCupId}`).style.opacity = "1";
+
+            if (chosenCupId === winningCupId) {
+                score += data.win;
+                cupLevelDataState[currentCupLevel].completed = true;
+                
+                let nextLvl = currentCupLevel + 1;
+                if (nextLvl <= 5) {
+                    cupLevelDataState[nextLvl].unlocked = true;
+                } else {
+                    globalCupCooldownTimestamp = new Date().getTime().toString();
+                    localStorage.setItem('biz_cup_global_cooldown', globalCupCooldownTimestamp);
+                    alert(`🏆 Incredible! You completed all 5 3D levels! All levels reset and will restart in 24 hours.`);
+                }
+
+                setTimeout(() => {
+                    if (nextLvl <= 5) {
+                        alert(`🎉 You won ${data.win.toLocaleString()} Biz777 coins! Level ${nextLvl} unlocked!`);
+                        setCupLevel(nextLvl);
+                    }
+                }, 200);
+            } else {
+                setTimeout(() => alert(`😢 Wrong 3D cup! Try this level again.`), 200);
+                document.getElementById('startCupGameBtn').innerText = "Start Round 🎮";
+                document.getElementById('startCupGameBtn').disabled = false;
+            }
+
+            localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
+            updateUI();
+            saveState();
+        }
+
+        // --- 3D SPIN WHEEL GAME LOGIC ---
+        let currentWheelRotation = 0;
+        let isSpinningWheel = false;
+
+        const wheelPrizes = [
+            { id: 0, label: "+2,000 Coins", type: "coins", val: 2000 },
+            { id: 1, label: "+500 Energy", type: "energy", val: 500 },
+            { id: 2, label: "+5,000 Jackpot", type: "coins", val: 5000 },
+            { id: 3, label: "Try Again", type: "none", val: 0 },
+            { id: 4, label: "+1,000 Coins", type: "coins", val: 1000 },
+            { id: 5, label: "+200 Energy", type: "energy", val: 200 }
+        ];
+
+        function spinTheWheel() {
+            if (isSpinningWheel) return;
+            let cost = 300;
+            if (score < cost) {
+                alert("Not enough Biz777 coins to spin! (Cost: 300 coins)");
+                return;
+            }
+
+            score -= cost;
+            updateUI();
+            saveState();
+
+            isSpinningWheel = true;
+            document.getElementById('spinWheelBtn').disabled = true;
+            document.getElementById('spinResultText').innerText = "Spinning... 🎡";
+
+            // Random prize index selection
+            let randomIndex = Math.floor(Math.random() * wheelPrizes.length);
+            let sliceDegree = 360 / wheelPrizes.length;
+            
+            // Calculate exact target rotation to land the arrow on the chosen slice center
+            let extraSpins = 5 * 360; // 5 full rotations
+            let targetDegree = currentWheelRotation + extraSpins + (360 - (randomIndex * sliceDegree + sliceDegree / 2)) - (currentWheelRotation % 360);
+            
+            currentWheelRotation = targetDegree;
+            const wheelEl = document.getElementById('spinWheelElement');
+            wheelEl.style.transform = `rotate(${currentWheelRotation}deg)`;
+
+            setTimeout(() => {
+                isSpinningWheel = false;
+                document.getElementById('spinWheelBtn').disabled = false;
+                
+                let prize = wheelPrizes[randomIndex];
+                if (prize.type === "coins") {
+                    score += prize.val;
+                    document.getElementById('spinResultText').innerText = `🎉 You won ${prize.label}!`;
+                } else if (prize.type === "energy") {
+                    energy = Math.min(maxEnergy, energy + prize.val);
+                    document.getElementById('spinResultText').innerText = `⚡ You won ${prize.label}!`;
+                } else {
+                    document.getElementById('spinResultText').innerText = `😢 Better luck next time!`;
+                }
+
+                updateUI();
+                saveState();
+            }, 4000);
         }
 
         function switchTab(tabId, btnElement) {
@@ -1072,6 +1535,9 @@
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             document.getElementById(`tab-${tabId}`).classList.add('active');
             btnElement.classList.add('active');
+            if(tabId === 'minigame') {
+                setCupLevel(currentCupLevel);
+            }
         }
 
         function saveState() {
@@ -1084,6 +1550,7 @@
         }
 
         updateUI();
+        setCupLevel(1);
     </script>
 </body>
 </html>
