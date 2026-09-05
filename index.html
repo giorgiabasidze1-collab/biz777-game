@@ -355,35 +355,49 @@
             opacity: 0.8;
         }
 
-        /* Games Selection Menu Style */
+        /* Improved Games Selection Menu Style */
         .games-menu {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             width: 100%;
-            padding: 10px;
+            padding: 5px;
+        }
+
+        .game-header-banner {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(30, 41, 59, 0.8));
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 5px;
         }
 
         .game-card-option {
             background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 2px solid rgba(255, 255, 255, 0.08);
             border-radius: 14px;
-            padding: 15px;
+            padding: 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            transition: border-color 0.2s;
+            transition: all 0.2s ease;
         }
 
         .game-card-option:hover {
             border-color: var(--accent);
+            transform: translateY(-2px);
+            background: rgba(30, 41, 59, 0.9);
         }
 
         .game-card-info h4 {
-            font-size: 16px;
+            font-size: 15px;
             color: var(--accent);
-            margin-bottom: 4px;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .game-card-info p {
@@ -403,11 +417,11 @@
             display: flex;
         }
 
-        /* Flappy Bird Game Styles */
+        /* Flappy Coin Game Styles */
         #flappyCanvas {
             background: linear-gradient(to bottom, #1e293b, #0f172a);
             border-radius: 14px;
-            border: 2px solid rgba(255,255,255,0.1);
+            border: 2px solid var(--accent);
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             cursor: pointer;
             margin: 10px 0;
@@ -611,45 +625,48 @@
 
             <!-- Tab 3: Games Hub (Contains both Flappy Coin & Cup Game) -->
             <div class="tab-pane" id="tab-minigame">
-                <!-- Game Selection Menu -->
+                <!-- Improved Game Selection Menu -->
                 <div class="games-menu" id="gamesMenu">
-                    <h3 style="font-size: 16px; color: var(--accent); margin-bottom: 5px;">🎮 Choose Mini-Game</h3>
+                    <div class="game-header-banner">
+                        <h3 style="font-size: 15px; color: var(--accent); margin-bottom: 3px;">🎮 Arcade Games Hub</h3>
+                        <p style="font-size: 11px; color: var(--text-secondary);">Select a game below to play and boost your earnings!</p>
+                    </div>
                     
                     <div class="game-card-option" onclick="openSubGame('flappy')">
                         <div class="game-card-info">
-                            <h4>🪙 Flappy Coin Game</h4>
-                            <p>Avoid obstacles & reach 10 score to earn +500 Energy daily!</p>
+                            <h4>🪙 Flappy Coin (Hand Obstacles)</h4>
+                            <p>Jump through hands, avoid obstacles & reach score 10 for +500 Energy!</p>
                         </div>
-                        <span style="font-size: 22px;">▶️</span>
+                        <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('cups')">
                         <div class="game-card-info">
                             <h4>🏆 Cup & Ball Game</h4>
-                            <p>Place bets, watch shuffle animations & guess 'Biz 777' ball!</p>
+                            <p>Pick level, watch shuffle animation & guess the winning Biz777 cup!</p>
                         </div>
-                        <span style="font-size: 22px;">▶️</span>
+                        <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
                 </div>
 
-                <!-- Sub-Game 1: Flappy Coin -->
+                <!-- Sub-Game 1: Flappy Coin with Hands -->
                 <div class="sub-game-container" id="subgame-flappy">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Back</button>
-                        <h3 style="font-size: 14px; color: var(--accent);">🪙 Flappy Coin</h3>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Back to Menu</button>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Playing: Flappy Coin</h3>
                         <div style="width: 50px;"></div>
                     </div>
                     <canvas id="flappyCanvas" width="300" height="340"></canvas>
-                    <div style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 5px;">
-                        Tap canvas to jump. Score 10 to claim +500 Energy!
+                    <div style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 3px;">
+                        Tap canvas to jump. Avoid hand obstacles!
                     </div>
                 </div>
 
                 <!-- Sub-Game 2: Cups & Ball -->
                 <div class="sub-game-container" id="subgame-cups">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Back</button>
-                        <h3 style="font-size: 14px; color: var(--accent);">🏆 Cup & Ball</h3>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Back to Menu</button>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Playing: Cup Game</h3>
                         <div style="width: 50px;"></div>
                     </div>
 
@@ -986,7 +1003,7 @@
             document.getElementById('gamesMenu').style.display = 'flex';
         }
 
-        // --- FLAPPY COIN GAME LOGIC ---
+        // --- FLAPPY COIN GAME LOGIC (WITH HANDS OBSTACLES) ---
         const canvas = document.getElementById('flappyCanvas');
         const ctx = canvas.getContext('2d');
         let flappyRunning = false;
@@ -1016,7 +1033,7 @@
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Bird physics
+            // Bird (Coin) physics
             bird.velocity += bird.gravity;
             bird.y += bird.velocity;
 
@@ -1039,10 +1056,10 @@
             ctx.textBaseline = 'middle';
             ctx.fillText('🪙', bird.x, bird.y);
 
-            // Pipes generation & movement
+            // Hands generation & movement (Obstacles)
             if (frameCount % 90 === 0) {
-                let pipeWidth = 50;
-                let gapHeight = 110;
+                let pipeWidth = 52;
+                let gapHeight = 115;
                 let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 80)) + 40;
                 pipes.push({ x: canvas.width, top: topHeight, bottom: canvas.height - topHeight - gapHeight, width: pipeWidth, passed: false });
             }
@@ -1050,10 +1067,16 @@
             for (let i = pipes.length - 1; i >= 0; i--) {
                 pipes[i].x -= 2.5;
 
-                // Draw obstacle hands/pipes
+                // Draw Hands obstacles (Top hand pointing down 👇, Bottom hand pointing up 👆)
                 ctx.fillStyle = '#38bdf8';
                 ctx.fillRect(pipes[i].x, 0, pipes[i].width, pipes[i].top);
                 ctx.fillRect(pipes[i].x, canvas.height - pipes[i].bottom, pipes[i].width, pipes[i].bottom);
+
+                // Draw hand emojis on obstacles for clarity
+                ctx.font = '22px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('👇', pipes[i].x + pipes[i].width / 2, pipes[i].top - 15);
+                ctx.fillText('👆', pipes[i].x + pipes[i].width / 2, canvas.height - pipes[i].bottom + 25);
 
                 // Collision detection
                 if (
@@ -1113,7 +1136,6 @@
             ctx.font = '13px sans-serif';
             ctx.fillText('Tap to Try Again', canvas.width / 2, canvas.height / 2 + 15);
             
-            // Allow restart on click
             canvas.onclick = () => {
                 canvas.onclick = null;
                 startFlappyGame();
@@ -1213,7 +1235,7 @@
                 let cupEl = document.getElementById(`cup${i}`);
                 cupEl.classList.add('lifted');
                 if (i === winningCupIndex) {
-                    document.getElementById(`cupIcon${i}`).innerText = "⚽"; // Biz 777 Ball
+                    document.getElementById(`cupIcon${i}`).innerText = "⚽";
                 } else {
                     document.getElementById(`cupIcon${i}`).innerText = "❌";
                 }
