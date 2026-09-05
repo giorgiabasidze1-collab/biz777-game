@@ -626,7 +626,7 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        let coinToken = { x: 50, y: 140, radius: 16, gravity: 0.45, lift: -6.5, velocity: 0 };
+        let coinToken = { x: 50, y: 140, radius: 16, gravity: 0.38, lift: -5.8, velocity: 0 }; // რბილი და უფრო ნელა მფრინავი ქოქნი
         let obstacles = [];
         let frameCount = 0;
         let gameScore = 0;
@@ -655,8 +655,8 @@
         });
 
         function spawnObstacle() {
-            let gap = 125;
-            let topHeight = Math.floor(Math.random() * (canvas.height - gap - 80)) + 40;
+            let gap = 135; // უფრო ფართო გასასვლელი (უფრო მარტივი)
+            let topHeight = Math.floor(Math.random() * (canvas.height - gap - 70)) + 35;
             obstacles.push({
                 x: canvas.width,
                 top: topHeight,
@@ -675,22 +675,22 @@
                 isGameOver = true;
             }
 
-            if (frameCount % 110 === 0) {
+            if (frameCount % 130 === 0) { // უფრო ნელა მოდიან დაბრკოლებები
                 spawnObstacle();
             }
 
-            // მთლიანი ხელების მოძრაობა ზემოთ-ქვემოთ
-            let handMoveOffset = Math.sin(frameCount * 0.08) * 35;
+            // უფრო ნელი და რბილი მოძრაობა ზემოთ-ქვემოთ
+            let handMoveOffset = Math.sin(frameCount * 0.04) * 25;
 
             for (let i = obstacles.length - 1; i >= 0; i--) {
-                obstacles[i].x -= 2.2;
+                obstacles[i].x -= 1.8; // სიჩქარე შემცირებულია (უფრო მარტივი თამაში)
 
                 let currentTopH = obstacles[i].top + handMoveOffset;
                 let currentBottomH = obstacles[i].bottom - handMoveOffset;
 
                 if (
                     coinToken.x + coinToken.radius > obstacles[i].x &&
-                    coinToken.x - coinToken.radius < obstacles[i].x + 48 &&
+                    coinToken.x - coinToken.radius < obstacles[i].x + 44 &&
                     (coinToken.y - coinToken.radius < currentTopH || coinToken.y + coinToken.radius > canvas.height - currentBottomH)
                 ) {
                     isGameOver = true;
@@ -737,13 +737,13 @@
             ctx.fillText('Biz777', coinToken.x, coinToken.y + 3);
             ctx.textAlign = 'left';
 
-            let handMoveOffset = Math.sin(frameCount * 0.08) * 35;
+            let handMoveOffset = Math.sin(frameCount * 0.04) * 25;
 
-            // Draw Hands (ზუსტად ფოტოს მსგავსი ფერი, 4 თითი სწორად, ცერი გვერდზე მიხატული)
+            // Draw Hands (ღია კრემისფერი, ცერი გვერდზე და თეთრი ფრჩხილები ზემოდან)
             for (let obs of obstacles) {
-                let skinColor = '#ffdfbe';  // ფოტოს მსგავსი ღია კრემისფერი
+                let skinColor = '#ffdfbe';  
                 let skinShadow = '#e0b896';
-                let nailColor = '#ffffff';
+                let nailColor = '#ffffff'; // თეთრი ფრჩხილები
 
                 let currentTopH = obs.top + handMoveOffset;
                 let currentBottomH = obs.bottom - handMoveOffset;
@@ -755,7 +755,7 @@
                 ctx.lineWidth = 2;
                 ctx.strokeRect(obs.x, 0, 44, currentTopH - 18);
 
-                // 4 Fingers (Top)
+                // 4 Fingers (Top) + თეთრი ფრჩხილები
                 for (let f = 0; f < 4; f++) {
                     let fx = obs.x + 3 + (f * 10);
                     let fy = currentTopH - 18;
@@ -764,25 +764,24 @@
                     ctx.fillStyle = skinColor;
                     ctx.fill();
                     ctx.stroke();
-                    // Nail
+                    // თეთრი ფრჩხილი თითის წვერზე
                     ctx.fillStyle = nailColor;
-                    ctx.fillRect(fx + 1, fy + 2, 6, 3);
+                    ctx.fillRect(fx + 1, fy + 1, 6, 4);
                 }
-                // Side Thumb (ცერი მარცხენა მხარეს გვერდზე)
+                // Side Thumb (ცერი გვერდზე) + თეთრი ფრჩხილი ცერზე
                 ctx.beginPath();
                 ctx.roundRect(obs.x - 8, currentTopH - 32, 10, 16, [4, 0, 0, 4]);
                 ctx.fillStyle = skinColor;
                 ctx.fill();
                 ctx.stroke();
-                // Thumb Nail
                 ctx.fillStyle = nailColor;
-                ctx.fillRect(obs.x - 6, currentTopH - 30, 3, 5);
+                ctx.fillRect(obs.x - 7, currentTopH - 31, 3, 4);
 
 
                 // --- BOTTOM HAND ---
                 let bottomY = canvas.height - currentBottomH;
 
-                // 4 Fingers (Bottom)
+                // 4 Fingers (Bottom) + თეთრი ფრჩხილები
                 for (let f = 0; f < 4; f++) {
                     let fx = obs.x + 3 + (f * 10);
                     let fy = bottomY;
@@ -791,19 +790,18 @@
                     ctx.fillStyle = skinColor;
                     ctx.fill();
                     ctx.stroke();
-                    // Nail
+                    // თეთრი ფრჩხილი თითის წვერზე (ქვედა ხელისთვის შიგნით მიმართული)
                     ctx.fillStyle = nailColor;
-                    ctx.fillRect(fx + 1, fy + 13, 6, 3);
+                    ctx.fillRect(fx + 1, fy + 13, 6, 4);
                 }
-                // Side Thumb (ქვედა ხელის ცერი მარცხენა მხარეს გვერდზე)
+                // Side Thumb (ქვედა ხელის ცერი გვერდზე) + თეთრი ფრჩხილი
                 ctx.beginPath();
                 ctx.roundRect(obs.x - 8, bottomY + 14, 10, 16, [0, 4, 4, 0]);
                 ctx.fillStyle = skinColor;
                 ctx.fill();
                 ctx.stroke();
-                // Thumb Nail
                 ctx.fillStyle = nailColor;
-                ctx.fillRect(obs.x - 6, bottomY + 23, 3, 5);
+                ctx.fillRect(obs.x - 7, bottomY + 25, 3, 4);
 
                 // Bottom Arm Body
                 ctx.fillStyle = skinColor;
