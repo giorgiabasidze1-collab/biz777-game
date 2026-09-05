@@ -146,7 +146,7 @@
             overflow: hidden;
         }
 
-        /* Tapping Section */
+        /* Tapping Section with Chaotic Background Coins */
         .tap-section {
             display: flex;
             flex-direction: column;
@@ -154,6 +154,32 @@
             justify-content: center;
             width: 100%;
             flex: 1;
+            position: relative;
+        }
+
+        .coin-background-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-coin {
+            position: absolute;
+            font-size: 18px;
+            opacity: 0.12;
+            font-weight: bold;
+            color: #38bdf8;
+            animation: floatSlow 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatSlow {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-10px) rotate(15deg); }
         }
 
         .clicker-circle {
@@ -168,6 +194,7 @@
             justify-content: center;
             cursor: pointer;
             position: relative;
+            z-index: 2;
             transition: transform 0.1s ease;
         }
 
@@ -183,6 +210,8 @@
         .energy-container {
             width: 80%;
             margin-top: 25px;
+            position: relative;
+            z-index: 2;
         }
 
         .energy-info {
@@ -216,6 +245,7 @@
             font-weight: bold;
             color: var(--warning);
             pointer-events: none;
+            z-index: 10;
             animation: floatUp 0.8s ease-out forwards;
         }
 
@@ -331,39 +361,6 @@
             box-shadow: 0 0 15px var(--accent-glow);
             touch-action: none;
         }
-
-        #adModal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .ad-box {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 320px;
-            border: 1px solid var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-
-        .ad-timer {
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--warning);
-            margin: 15px 0;
-        }
     </style>
 </head>
 <body>
@@ -385,7 +382,7 @@
 
             <div class="level-progress-container">
                 <div class="level-progress-info">
-                    <span id="nextLevelText">შემდეგ სახლამდე: 5,000</span>
+                    <span id="nextLevelText">Next Level: 5,000</span>
                     <span id="levelPercentage">0%</span>
                 </div>
                 <div class="level-bar-bg">
@@ -397,6 +394,18 @@
         <div class="content">
             <div class="tab-pane active" id="tab-clicker">
                 <div class="tap-section">
+                    <div class="coin-background-pattern">
+                        <span class="bg-coin" style="top: 8%; left: 12%;">🪙 Biz777</span>
+                        <span class="bg-coin" style="top: 22%; right: 15%; animation-delay: 1s;">🏢 777</span>
+                        <span class="bg-coin" style="top: 45%; left: 8%; animation-delay: 2s;">🪙 Biz</span>
+                        <span class="bg-coin" style="bottom: 25%; right: 10%; animation-delay: 1.5s;">🪙 777</span>
+                        <span class="bg-coin" style="bottom: 12%; left: 20%; animation-delay: 2.5s;">🏢 Biz777</span>
+                        <span class="bg-coin" style="top: 60%; right: 28%; animation-delay: 0.5s;">🪙 777</span>
+                        <span class="bg-coin" style="top: 30%; left: 35%; animation-delay: 1.8s;">🏢 Biz</span>
+                        <span class="bg-coin" style="top: 15%; left: 65%; animation-delay: 0.8s;">🪙 Biz777</span>
+                        <span class="bg-coin" style="bottom: 40%; left: 70%; animation-delay: 2.2s;">🏢 777</span>
+                    </div>
+
                     <div class="clicker-circle" id="clickerBtn">
                         <div class="clicker-icon" id="buildingIcon">🏢</div>
                     </div>
@@ -433,8 +442,8 @@
 
             <div class="tab-pane" id="tab-minigame">
                 <div class="minigame-wrapper">
-                    <h3 style="margin-bottom: 4px; font-size: 14px;">📅 დღიური ქვესტი (Daily Quest)</h3>
-                    <p id="questStatusText" style="font-size: 11px; color: var(--warning); margin-bottom: 6px; text-align: center;">აიღე 10 ქულა თამაშში (+500 ⚡ Energy დღეში ერთხელ)</p>
+                    <h3 style="margin-bottom: 4px; font-size: 14px;">📅 Daily Quest</h3>
+                    <p id="questStatusText" style="font-size: 11px; color: var(--warning); margin-bottom: 6px; text-align: center;">Score 10 points in game (+500 ⚡ Energy once a day)</p>
                     <canvas id="gameCanvas" width="300" height="340"></canvas>
                 </div>
             </div>
@@ -444,17 +453,10 @@
                 <div class="ads-list">
                     <div class="ad-card" style="flex-direction: row;">
                         <div class="ad-info">
-                            <h4>Watch Ad & Refill Energy</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Instantly restore full energy stock</p>
+                            <h4>Adsgram Reward</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Watch official Adsgram ad to get +1,000 coins</p>
                         </div>
-                        <button class="btn" onclick="watchAd('energy')">Watch 📺</button>
-                    </div>
-                    <div class="ad-card" style="flex-direction: row;">
-                        <div class="ad-info">
-                            <h4>Bonus Reward Ad</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Watch an ad to get +1,000 coins</p>
-                        </div>
-                        <button class="btn" onclick="watchAd('coins')">Claim 🪙</button>
+                        <button class="btn" onclick="watchAdsgramAd()">Watch 📺</button>
                     </div>
                 </div>
             </div>
@@ -476,15 +478,6 @@
         </nav>
     </div>
 
-    <div id="adModal">
-        <div class="ad-box">
-            <h3>Sponsored Ad</h3>
-            <p id="adDescription" style="font-size: 13px; color: var(--text-secondary); margin-top: 5px;">Please wait while the ad plays...</p>
-            <div class="ad-timer" id="adTimer">5</div>
-            <p style="font-size: 11px; color: var(--text-secondary);">Do not close this window</p>
-        </div>
-    </div>
-
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
@@ -494,9 +487,6 @@
         let maxEnergy = parseInt(localStorage.getItem('biz_maxEnergy')) || 1000;
         let tapPower = parseInt(localStorage.getItem('biz_tapPower')) || 1;
         let lastQuestTime = parseInt(localStorage.getItem('biz_lastQuestTime')) || 0;
-
-        let currentAdType = null;
-        let adCountdownInterval = null;
 
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const user = tg.initDataUnsafe.user;
@@ -523,7 +513,6 @@
         const buildingIcon = document.getElementById('buildingIcon');
         const questStatusText = document.getElementById('questStatusText');
         
-        // Level Progress Elements
         const levelBarFill = document.getElementById('levelBarFill');
         const nextLevelText = document.getElementById('nextLevelText');
         const levelPercentage = document.getElementById('levelPercentage');
@@ -562,17 +551,17 @@
             const twentyFourHours = 24 * 60 * 60 * 1000;
             if (now - lastQuestTime < twentyFourHours) {
                 let timeLeft = Math.ceil((twentyFourHours - (now - lastQuestTime)) / (1000 * 60 * 60));
-                questStatusText.innerText = `დღიური ქვესტი შესრულებულია! შემდეგი ~${timeLeft} საათში`;
+                questStatusText.innerText = `Daily Quest completed! Next in ~${timeLeft}h`;
                 questStatusText.style.color = '#94a3b8';
             } else {
-                questStatusText.innerText = `აიღე 10 ქულა თამაშში (+500 ⚡ Energy - დღიური ქვესტი)`;
+                questStatusText.innerText = `Score 10 points in game (+500 ⚡ Energy daily quest)`;
                 questStatusText.style.color = '#eab308';
             }
         }
 
         function updateUI() {
             scoreDisplay.innerText = score.toLocaleString();
-            energyText.innerText = `${energy} /${maxEnergy}`;
+            energyText.innerText = `${energy} / ${maxEnergy}`;
             energyFill.style.width = `${(energy / maxEnergy) * 100}%`;
 
             let currentLevelIndex = 0;
@@ -587,13 +576,12 @@
             levelName.innerText = currentLevelObj.name;
             buildingIcon.innerText = currentLevelObj.icon;
 
-            // Level Progress Calculation
             let currentMin = currentLevelObj.min;
             let nextMin = (currentLevelIndex < levels.length - 1) ? levels[currentLevelIndex + 1].min : currentMin;
 
             if (currentLevelIndex === levels.length - 1) {
                 levelBarFill.style.width = "100%";
-                nextLevelText.innerText = "მაქსიმალური დონე მიღწეულია!";
+                nextLevelText.innerText = "Max Level Reached!";
                 levelPercentage.innerText = "100%";
             } else {
                 let progressRange = nextMin - currentMin;
@@ -601,7 +589,7 @@
                 let percentage = Math.min(100, Math.max(0, (currentProgress / progressRange) * 100));
 
                 levelBarFill.style.width = `${percentage}%`;
-                nextLevelText.innerText = `შემდეგ სახლამდე: ${(nextMin - score).toLocaleString()} ქულა`;
+                nextLevelText.innerText = `Next House: ${(nextMin - score).toLocaleString()} pts`;
                 levelPercentage.innerText = `${Math.floor(percentage)}%`;
             }
 
@@ -641,4 +629,162 @@
                             <div style="font-weight: bold; font-size: 11px;">⚡ Max Power (10 Tap)</div>
                             <div style="font-size: 9px; color: #ffd700;">Price: 4,000 Coins</div>
                         </div>
-                        <button onclick="buyTap
+                        <button onclick="buyTapUpgrade(10, 4000)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+                    </div>`;
+            } else {
+                tapContainer.innerHTML = `<div style="font-size: 10px; color: #888; text-align: center; padding: 4px;">Max Tap Power (10) reached!</div>`;
+            }
+
+            if (maxEnergy === 1000) {
+                energyContainer.innerHTML = `
+                    <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 11px;">⚡ Max Energy (1,500)</div>
+                            <div style="font-size: 9px; color: #ffd700;">Price: 500 Coins</div>
+                        </div>
+                        <button onclick="buyEnergyUpgrade(1500, 500)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+                    </div>`;
+            } else if (maxEnergy === 1500) {
+                energyContainer.innerHTML = `
+                    <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 11px;">⚡ Max Energy (2,500)</div>
+                            <div style="font-size: 9px; color: #ffd700;">Price: 2,000 Coins</div>
+                        </div>
+                        <button onclick="buyEnergyUpgrade(2500, 2000)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
+                    </div>`;
+            } else {
+                energyContainer.innerHTML = `<div style="font-size: 10px; color: #888; text-align: center; padding: 4px;">All energy upgrades purchased!</div>`;
+            }
+        }
+
+        function buyTapUpgrade(newPower, price) {
+            if (score >= price) {
+                score -= price;
+                tapPower = newPower;
+                updateUI();
+                saveState();
+            } else {
+                alert("Not enough coins!");
+            }
+        }
+
+        function buyEnergyUpgrade(newMaxEnergy, price) {
+            if (score >= price) {
+                score -= price;
+                maxEnergy = newMaxEnergy;
+                energy = maxEnergy;
+                updateUI();
+                saveState();
+            } else {
+                alert("Not enough coins!");
+            }
+        }
+
+        // --- MINI-GAME LOGIC ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let coinToken = { x: 50, y: 140, radius: 16, gravity: 0.35, lift: -10, velocity: 0 };
+        let obstacles = [];
+        let frameCount = 0;
+        let gameScore = 0;
+        let isGameOver = false;
+        let gameStarted = false;
+
+        function resetMiniGame() {
+            coinToken.y = 140;
+            coinToken.velocity = 0;
+            obstacles = [];
+            frameCount = 0;
+            gameScore = 0;
+            isGameOver = false;
+            gameStarted = false;
+        }
+
+        canvas.addEventListener('pointerdown', () => {
+            if (!gameStarted) {
+                gameStarted = true;
+            }
+            if (isGameOver) {
+                resetMiniGame();
+                gameStarted = true;
+            }
+            coinToken.velocity = coinToken.lift;
+        });
+
+        function spawnObstacle() {
+            let gap = 140; 
+            let topHeight = Math.floor(Math.random() * (canvas.height - gap - 70)) + 30;
+            obstacles.push({
+                x: canvas.width,
+                top: topHeight,
+                bottom: canvas.height - topHeight - gap,
+                passed: false
+            });
+        }
+
+        function updateMiniGame() {
+            if (!gameStarted) return;
+
+            coinToken.velocity += coinToken.gravity;
+            coinToken.y += coinToken.velocity;
+
+            if (coinToken.y + coinToken.radius > canvas.height || coinToken.y - coinToken.radius < 0) {
+                isGameOver = true;
+            }
+
+            if (frameCount % 140 === 0) {
+                spawnObstacle();
+            }
+
+            let handMoveOffset = Math.sin(frameCount * 0.03) * 20;
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                obstacles[i].x -= 1.6;
+
+                let currentTopH = obstacles[i].top + handMoveOffset;
+                let currentBottomH = obstacles[i].bottom - handMoveOffset;
+
+                if (
+                    coinToken.x + coinToken.radius > obstacles[i].x &&
+                    coinToken.x - coinToken.radius < obstacles[i].x + 44 &&
+                    (coinToken.y - coinToken.radius < currentTopH || coinToken.y + coinToken.radius > canvas.height - currentBottomH)
+                ) {
+                    isGameOver = true;
+                }
+
+                if (!obstacles[i].passed && obstacles[i].x < coinToken.x) {
+                    obstacles[i].passed = true;
+                    gameScore++;
+                    
+                    if (gameScore >= 10) {
+                        const now = Date.now();
+                        const twentyFourHours = 24 * 60 * 60 * 1000;
+
+                        if (now - lastQuestTime >= twentyFourHours) {
+                            lastQuestTime = now;
+                            energy = Math.min(maxEnergy, energy + 500);
+                            if (tg && tg.showAlert) {
+                                tg.showAlert("Congrats! Daily quest completed: +500 ⚡ Energy received!");
+                            } else {
+                                alert("Congrats! Daily quest completed: +500 ⚡ Energy received!");
+                            }
+                        } else {
+                            if (tg && tg.showAlert) {
+                                tg.showAlert("10 points reached! (Daily quest already completed today)");
+                            } else {
+                                alert("10 points reached! (Daily quest already completed today)");
+                            }
+                        }
+                        updateUI();
+                        saveState();
+                        resetMiniGame();
+                    }
+                }
+
+                if (obstacles[i].x < -50) {
+                    obstacles.splice(i, 1);
+                }
+            }
+            frameCount
