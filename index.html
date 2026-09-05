@@ -992,7 +992,7 @@
         }
         requestAnimationFrame(gameLoop);
 
-        // --- SAFE ADSGRAM SDK INTEGRATION ---
+        // --- SAFE ADSGRAM INTEGRATION WITH FALLBACK ---
         let adsgramController = null;
 
         function initAdsgram() {
@@ -1023,19 +1023,27 @@
                     updateUI();
                     saveState();
                 }).catch((err) => {
-                    console.error("Ad error or skipped:", err);
+                    console.error("Ad error or skipped, falling back to test mode:", err);
+                    // Fallback: თუ რეკლამამ შეცდომა დააბრუნა, მაინც ვუწერთ ჯილდოს
+                    score += 1000;
                     if (tg && tg.showAlert) {
-                        tg.showAlert("Ad was skipped or failed to load.");
+                        tg.showAlert("Test Mode: +1,000 Coins added!");
                     } else {
-                        alert("Ad was skipped or failed to load.");
+                        alert("Test Mode: +1,000 Coins added!");
                     }
+                    updateUI();
+                    saveState();
                 });
             } else {
+                // Fallback: თუ SDK საერთოდ არ ჩაიტვირთა, მაინც ატანს მონეტებს
+                score += 1000;
                 if (tg && tg.showAlert) {
-                    tg.showAlert("Adsgram SDK is still loading or blocked. Check your connection!");
+                    tg.showAlert("Test Mode: +1,000 Coins added (SDK not loaded)!");
                 } else {
-                    alert("Adsgram SDK is still loading or blocked. Check your connection!");
+                    alert("Test Mode: +1,000 Coins added (SDK not loaded)!");
                 }
+                updateUI();
+                saveState();
             }
         }
 
