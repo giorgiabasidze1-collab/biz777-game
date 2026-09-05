@@ -397,7 +397,7 @@
                 </div>
             </div>
 
-            <!-- Tab 3: Mini-Game (Hand & Finger Obstacles) -->
+            <!-- Tab 3: Mini-Game -->
             <div class="tab-pane" id="tab-minigame">
                 <div class="minigame-wrapper">
                     <h3 style="margin-bottom: 6px; font-size: 15px;">Hand & Finger Challenge</h3>
@@ -506,7 +506,7 @@
         const buyTapBtn = document.getElementById('buyTapBtn');
         const buyEnergyBtn = document.getElementById('buyEnergyBtn');
 
-        // Main Tap Event Handler (Multi-touch support)
+        // Main Tap Event Handler
         clickerBtn.addEventListener('pointerdown', (e) => {
             if (energy >= tapPower) {
                 energy -= tapPower;
@@ -529,7 +529,7 @@
             setTimeout(() => el.remove(), 800);
         }
 
-        // Energy Regeneration Loop (2 energy every sec)
+        // Energy Regeneration Loop
         setInterval(() => {
             if (energy < maxEnergy) {
                 energy = Math.min(maxEnergy, energy + 2);
@@ -579,7 +579,7 @@
             saveState();
         }
 
-        // --- MINI-GAME LOGIC (Coin Token & Hand/Finger Obstacles) ---
+        // --- MINI-GAME LOGIC (Original Skin-Toned Hands & Coin Token) ---
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -686,19 +686,48 @@
             ctx.font = 'bold 12px sans-serif';
             ctx.fillText('🪙', coinToken.x - 7, coinToken.y + 4);
 
-            // Draw Hand & Finger Obstacles
+            // Draw Original Skin-Toned Hands & Fingers
             for (let obs of obstacles) {
-                // Top Hand/Finger Obstacle
-                ctx.fillStyle = '#38bdf8';
-                ctx.fillRect(obs.x, 0, 42, obs.top);
-                ctx.fillStyle = '#f8fafc';
-                ctx.font = '20px sans-serif';
-                ctx.fillText('✋', obs.x + 8, obs.top - 8);
+                let skinColor = '#eac086';
+                let skinShadow = '#cca065';
+                let nailColor = '#fff5e6';
 
-                // Bottom Hand/Finger Obstacle
-                ctx.fillStyle = '#38bdf8';
-                ctx.fillRect(obs.x, canvas.height - obs.bottom, 42, obs.bottom);
-                ctx.fillText('✊', obs.x + 8, canvas.height - obs.bottom + 26);
+                // Top Hand (Pointing Down)
+                let topH = obs.top;
+                ctx.fillStyle = skinColor;
+                ctx.fillRect(obs.x, 0, 45, topH - 22);
+                ctx.strokeStyle = skinShadow;
+                ctx.lineWidth = 2;
+                ctx.strokeRect(obs.x, 0, 45, topH - 22);
+
+                // Fingers (Top)
+                for (let f = 0; f < 3; f++) {
+                    let fx = obs.x + 4 + (f * 13);
+                    ctx.fillStyle = skinColor;
+                    ctx.fillRect(fx, topH - 22, 10, 22);
+                    ctx.strokeRect(fx, topH - 22, 10, 22);
+                    ctx.fillStyle = nailColor;
+                    ctx.fillRect(fx + 2, topH - 5, 6, 3);
+                }
+
+                // Bottom Hand (Pointing Up)
+                let bottomY = canvas.height - obs.bottom;
+                let bottomH = obs.bottom;
+
+                // Fingers (Bottom)
+                for (let f = 0; f < 3; f++) {
+                    let fx = obs.x + 4 + (f * 13);
+                    ctx.fillStyle = skinColor;
+                    ctx.fillRect(fx, bottomY, 10, 22);
+                    ctx.strokeRect(fx, bottomY, 10, 22);
+                    ctx.fillStyle = nailColor;
+                    ctx.fillRect(fx + 2, bottomY + 2, 6, 3);
+                }
+
+                // Palm (Bottom)
+                ctx.fillStyle = skinColor;
+                ctx.fillRect(obs.x, bottomY + 22, 45, bottomH - 22);
+                ctx.strokeRect(obs.x, bottomY + 22, 45, bottomH - 22);
             }
 
             // Draw Score
