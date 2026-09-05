@@ -96,7 +96,7 @@
         <div class="modal-content" style="border-color: #00bcd4;">
             <h2 style="color: #00bcd4; margin-top: 0; text-align: center; font-size: 18px;">🛒 Biz777 Shop</h2>
             
-            <!-- Tap 2 -->
+            <!-- Tap 2 (ერთჯერადი) -->
             <div id="itemTap2" style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 12px;">👆 Power (2 Tap)</div>
@@ -105,7 +105,7 @@
                 <button onclick="buyUpgrade(2, 300)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
             </div>
 
-            <!-- Tap 5 -->
+            <!-- Tap 5 (ერთჯერადი) -->
             <div id="itemTap5" style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 12px;">🔥 Power (5 Tap)</div>
@@ -114,7 +114,7 @@
                 <button onclick="buyUpgrade(5, 1200)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
             </div>
 
-            <!-- Tap 10 -->
+            <!-- Tap 10 (ერთჯერადი) -->
             <div id="itemTap10" style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 12px;">⚡ Power (10 Tap)</div>
@@ -123,7 +123,7 @@
                 <button onclick="buyUpgrade(10, 4000)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
             </div>
 
-            <!-- Energy Vault -->
+            <!-- Energy Vault (პროგრესული სეიფი) -->
             <div style="margin-bottom: 12px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div id="vaultTitle" style="font-weight: bold; font-size: 12px;">🏦 Energy Vault (2,000 ⚡)</div>
@@ -330,7 +330,6 @@
                 updateGame();
                 updateShopUI();
                 alert("Successfully purchased! Power is now: " + tapPower);
-                closeModal('shopModal');
             } else {
                 alert("Not enough coins! Required: " + cost.toLocaleString());
             }
@@ -362,7 +361,6 @@
                 updateGame();
                 updateShopUI();
                 alert("Successfully upgraded Energy Vault to " + maxEnergy + " ⚡!");
-                closeModal('shopModal');
             } else {
                 alert("Not enough coins! Required: " + cost.toLocaleString());
             }
