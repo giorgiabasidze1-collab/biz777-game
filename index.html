@@ -99,7 +99,6 @@
             
             <div style="font-size: 11px; color: #00f2fe; font-weight: bold; margin-bottom: 5px;">⚡ Tap Power Upgrades</div>
             
-            <!-- Tap 2 -->
             <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 11px;">👆 Power (2 Tap)</div>
@@ -108,7 +107,6 @@
                 <button id="btnTap2" onclick="buyTapUpgrade(2, 300)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
             </div>
 
-            <!-- Tap 5 -->
             <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 11px;">🔥 Power (5 Tap)</div>
@@ -117,7 +115,6 @@
                 <button id="btnTap5" onclick="buyTapUpgrade(5, 1200)" style="background: #00ff88; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
             </div>
 
-            <!-- Tap 10 -->
             <div style="margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 11px;">⚡ Power (10 Tap)</div>
@@ -128,7 +125,6 @@
 
             <div style="font-size: 11px; color: #ffb703; font-weight: bold; margin-bottom: 5px;">🔋 Max Energy (Stock) Upgrades</div>
 
-            <!-- Energy 1500 -->
             <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 11px;">🔋 Stock 1,500 ⚡</div>
@@ -137,7 +133,6 @@
                 <button id="btnEnergy1500" onclick="buyEnergyUpgrade(1500, 500)" style="background: #ffd700; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
             </div>
 
-            <!-- Energy 2000 -->
             <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 11px;">🔋 Stock 2,000 ⚡</div>
@@ -146,7 +141,6 @@
                 <button id="btnEnergy2000" onclick="buyEnergyUpgrade(2000, 1500)" style="background: #ffd700; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
             </div>
 
-            <!-- Energy 3000 -->
             <div style="margin-bottom: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 11px;">🔋 Stock 3,000 ⚡</div>
@@ -155,7 +149,6 @@
                 <button id="btnEnergy3000" onclick="buyEnergyUpgrade(3000, 4000)" style="background: #ffd700; color: #000; border: none; padding: 5px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 10px;">Buy</button>
             </div>
 
-            <!-- Energy 5000 -->
             <div style="margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 11px;">🔋 Stock 5,000 ⚡</div>
@@ -340,7 +333,6 @@
             }, 800);
         }
 
-        // --- SHOP FUNCTIONS ---
         function openModal(modalId) {
             document.getElementById(modalId).style.display = "flex";
             if (modalId === 'shopModal') {
@@ -377,7 +369,7 @@
             if (score >= cost) {
                 score -= cost;
                 maxEnergy = targetMaxEnergy;
-                energy = maxEnergy; // ავსებს სრულად ახალ ლიმიტამდე
+                energy = maxEnergy;
                 saveGame();
                 updateGame();
                 updateShopUI();
@@ -396,7 +388,6 @@
             var btnEnergy3000 = document.getElementById("btnEnergy3000");
             var btnEnergy5000 = document.getElementById("btnEnergy5000");
 
-            // Tap Upgrades UI state
             if (tapPower >= 2) {
                 btnTap2.innerText = "Purchased";
                 btnTap2.style.background = "#555";
@@ -433,7 +424,6 @@
                 btnTap10.style.cursor = "pointer";
             }
 
-            // Energy Upgrades UI state
             if (maxEnergy >= 1500) {
                 btnEnergy1500.innerText = "Purchased";
                 btnEnergy1500.style.background = "#555";
@@ -515,7 +505,6 @@
         updateGame();
         updateShopUI();
 
-        // --- MINI-GAME LOGIC ---
         var canvas = document.getElementById("birdCanvas");
         var ctx = canvas.getContext("2d");
         var birdGameRunning = false;
