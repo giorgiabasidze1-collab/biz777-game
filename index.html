@@ -381,6 +381,7 @@
 </head>
 <body>
     <div class="app-container">
+        <!-- Header -->
         <header>
             <div class="header-top">
                 <div class="user-info">
@@ -396,6 +397,7 @@
                 </div>
             </div>
 
+            <!-- Header Level Progress Bar -->
             <div class="level-progress-container">
                 <div class="level-progress-info">
                     <span id="nextLevelText">Next Level: 1,000</span>
@@ -407,8 +409,11 @@
             </div>
         </header>
 
+        <!-- Content Panels -->
         <div class="content">
+            <!-- Tab 1: Tap / Clicker -->
             <div class="tab-pane active" id="tab-clicker">
+                <!-- Large Chaotic Background Pattern with Currency Emojis -->
                 <div class="coin-background-pattern">
                     <span class="bg-coin" style="top: 5%; left: 10%;">🪙 Biz777</span>
                     <span class="bg-coin" style="top: 18%; right: 12%; animation-delay: 1s;">💵 $</span>
@@ -423,6 +428,7 @@
 
                 <div class="tap-section"></div>
 
+                <!-- Interactive Clicker Area -->
                 <div class="interactive-clicker-area" id="clickerBtn">
                     <div class="clicker-circle">
                         <div class="clicker-icon" id="buildingIcon">🏗️</div>
@@ -440,24 +446,26 @@
                 </div>
             </div>
 
+            <!-- Tab 2: Shop / Upgrades -->
             <div class="tab-pane" id="tab-shop">
                 <h3 style="margin-bottom: 15px; align-self: flex-start;">Upgrades</h3>
                 <div class="shop-list">
                     <div class="shop-card">
                         <div class="shop-info">
-                            <h4>Tap Power Upgrades (Max: 10)</h4>
+                            <h4>Tap Power Upgrades (1 to 10)</h4>
                         </div>
                         <div id="tapShopContainer" style="margin-top: 8px; width: 100%;"></div>
                     </div>
                     <div class="shop-card">
                         <div class="shop-info">
-                            <h4>Energy Upgrades (Max: 5000)</h4>
+                            <h4>Energy Upgrades (1000 to 5000)</h4>
                         </div>
                         <div id="energyShopContainer" style="margin-top: 8px; width: 100%;"></div>
                     </div>
                 </div>
             </div>
 
+            <!-- Tab 3: Mini-Game -->
             <div class="tab-pane" id="tab-minigame">
                 <div class="minigame-wrapper">
                     <h3 style="margin-bottom: 4px; font-size: 14px;">📅 Daily Quest</h3>
@@ -466,6 +474,7 @@
                 </div>
             </div>
 
+            <!-- Tab 4: Ads & Rewards Section -->
             <div class="tab-pane" id="tab-ads">
                 <h3 style="margin-bottom: 15px; align-self: flex-start;">Earn & Ads</h3>
                 <div class="ads-list">
@@ -480,6 +489,7 @@
             </div>
         </div>
 
+        <!-- Navigation Bar -->
         <nav>
             <button class="nav-item active" onclick="switchTab('clicker', this)">
                 <span>⚡</span> Tap
@@ -622,17 +632,17 @@
             tapContainer.innerHTML = "";
             energyContainer.innerHTML = "";
 
-            // --- TAP POWER UPGRADES (Levels 1 to 10) ---
+            // --- TAP POWER UPGRADES (Levels 1 to 10 step by step) ---
             const tapPrices = {
-                2: 250,
-                3: 750,
-                4: 1800,
-                5: 4000,
-                6: 8500,
-                7: 17000,
-                8: 35000,
-                9: 70000,
-                10: 150000
+                2: 200,
+                3: 600,
+                4: 1500,
+                5: 3500,
+                6: 7500,
+                7: 15000,
+                8: 30000,
+                9: 60000,
+                10: 120000
             };
 
             if (tapPower < 10) {
@@ -650,16 +660,16 @@
                 tapContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Tap Power (10) Purchased!</div>`;
             }
 
-            // --- ENERGY UPGRADES (1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000) ---
+            // --- ENERGY UPGRADES (1000-1500-2000-2500-3000-3500-4000-4500-5000) ---
             const energyTiers = [
-                { target: 1500, price: 300 },
-                { target: 2000, price: 800 },
-                { target: 2500, price: 1800 },
-                { target: 3000, price: 3500 },
-                { target: 3500, price: 7000 },
-                { target: 4000, price: 14000 },
-                { target: 4500, price: 28000 },
-                { target: 5000, price: 60000 }
+                { target: 1500, price: 250 },
+                { target: 2000, price: 700 },
+                { target: 2500, price: 1600 },
+                { target: 3000, price: 3200 },
+                { target: 3500, price: 6500 },
+                { target: 4000, price: 13000 },
+                { target: 4500, price: 26000 },
+                { target: 5000, price: 50000 }
             ];
 
             let nextTier = energyTiers.find(t => t.target > maxEnergy);
@@ -757,4 +767,220 @@
                 spawnObstacle();
             }
 
-            let handMoveOffset = Math
+            let handMoveOffset = Math.sin(frameCount * 0.03) * 20;
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                obstacles[i].x -= 1.6;
+
+                let currentTopH = obstacles[i].top + handMoveOffset;
+                let currentBottomH = obstacles[i].bottom - handMoveOffset;
+
+                if (
+                    coinToken.x + coinToken.radius > obstacles[i].x &&
+                    coinToken.x - coinToken.radius < obstacles[i].x + 44 &&
+                    (coinToken.y - coinToken.radius < currentTopH || coinToken.y + coinToken.radius > canvas.height - currentBottomH)
+                ) {
+                    isGameOver = true;
+                }
+
+                if (!obstacles[i].passed && obstacles[i].x < coinToken.x) {
+                    obstacles[i].passed = true;
+                    gameScore++;
+                    
+                    if (gameScore >= 10) {
+                        const now = Date.now();
+                        const twentyFourHours = 24 * 60 * 60 * 1000;
+
+                        if (now - lastQuestTime >= twentyFourHours) {
+                            lastQuestTime = now;
+                            energy = Math.min(maxEnergy, energy + 500);
+                            if (tg && tg.showAlert) {
+                                tg.showAlert("Congrats! Daily quest completed: +500 ⚡ Energy received!");
+                            } else {
+                                alert("Congrats! Daily quest completed: +500 ⚡ Energy received!");
+                            }
+                        } else {
+                            if (tg && tg.showAlert) {
+                                tg.showAlert("10 points reached! (Daily quest already completed today)");
+                            } else {
+                                alert("10 points reached! (Daily quest already completed today)");
+                            }
+                        }
+                        updateUI();
+                        saveState();
+                        resetMiniGame();
+                    }
+                }
+
+                if (obstacles[i].x < -50) {
+                    obstacles.splice(i, 1);
+                }
+            }
+            frameCount++;
+        }
+
+        function drawMiniGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#eab308';
+            ctx.beginPath();
+            ctx.arc(coinToken.x, coinToken.y, coinToken.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#fef08a';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 8px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Biz777', coinToken.x, coinToken.y + 3);
+            ctx.textAlign = 'left';
+
+            let handMoveOffset = Math.sin(frameCount * 0.03) * 20;
+
+            for (let obs of obstacles) {
+                let skinColor = '#ffdfbe';  
+                let skinShadow = '#e0b896';
+                let nailColor = '#ffffff';
+
+                let currentTopH = obs.top + handMoveOffset;
+                let currentBottomH = obs.bottom - handMoveOffset;
+
+                // --- TOP HAND ---
+                ctx.fillStyle = skinColor;
+                ctx.fillRect(obs.x, 0, 44, currentTopH - 18);
+                ctx.strokeStyle = skinShadow;
+                ctx.lineWidth = 2;
+                ctx.strokeRect(obs.x, 0, 44, currentTopH - 18);
+
+                for (let f = 0; f < 4; f++) {
+                    let fx = obs.x + 3 + (f * 10);
+                    let fy = currentTopH - 18;
+                    ctx.beginPath();
+                    ctx.roundRect(fx, fy, 8, 18, [0, 0, 4, 4]);
+                    ctx.fillStyle = skinColor;
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.fillStyle = nailColor;
+                    ctx.fillRect(fx + 1, fy + 1, 6, 4);
+                }
+                ctx.beginPath();
+                ctx.roundRect(obs.x - 8, currentTopH - 32, 10, 16, [4, 0, 0, 4]);
+                ctx.fillStyle = skinColor;
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = nailColor;
+                ctx.fillRect(obs.x - 7, currentTopH - 31, 3, 4);
+
+                // --- BOTTOM HAND ---
+                let bottomY = canvas.height - currentBottomH;
+
+                for (let f = 0; f < 4; f++) {
+                    let fx = obs.x + 3 + (f * 10);
+                    let fy = bottomY;
+                    ctx.beginPath();
+                    ctx.roundRect(fx, fy, 8, 18, [4, 4, 0, 0]);
+                    ctx.fillStyle = skinColor;
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.fillStyle = nailColor;
+                    ctx.fillRect(fx + 1, fy + 13, 6, 4);
+                }
+                ctx.beginPath();
+                ctx.roundRect(obs.x - 8, bottomY + 14, 10, 16, [0, 4, 4, 0]);
+                ctx.fillStyle = skinColor;
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = nailColor;
+                ctx.fillRect(obs.x - 7, bottomY + 25, 3, 4);
+
+                ctx.fillStyle = skinColor;
+                ctx.fillRect(obs.x, bottomY + 18, 44, currentBottomH - 18);
+                ctx.strokeRect(obs.x, bottomY + 18, 44, currentBottomH - 18);
+            }
+
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = 'bold 16px sans-serif';
+            ctx.fillText(`Score: ${gameScore} / 10`, 15, 25);
+
+            if (!gameStarted) {
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#38bdf8';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Tap screen to start!', canvas.width / 2, canvas.height / 2);
+                ctx.textAlign = 'left';
+            }
+
+            if (isGameOver) {
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#ef4444';
+                ctx.font = 'bold 18px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 15);
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = '13px sans-serif';
+                ctx.fillText('Tap screen to restart', canvas.width / 2, canvas.height / 2 + 15);
+                ctx.textAlign = 'left';
+            }
+        }
+
+        function gameLoop() {
+            updateMiniGame();
+            drawMiniGame();
+            requestAnimationFrame(gameLoop);
+        }
+        requestAnimationFrame(gameLoop);
+
+        // --- ADSGRAM INTEGRATION ---
+        function watchAdsgramAd() {
+            if (window.Adsgram) {
+                window.Adsgram.init({ blockId: "YOUR_ADSGRAM_BLOCK_ID" }).show().then((result) => {
+                    score += 1000;
+                    if (tg && tg.showAlert) {
+                        tg.showAlert("Reward claimed: +1,000 Coins via Adsgram!");
+                    } else {
+                        alert("Reward claimed: +1,000 Coins via Adsgram!");
+                    }
+                    updateUI();
+                    saveState();
+                }).catch((err) => {
+                    console.error(err);
+                    alert("Ad was skipped or failed to load.");
+                });
+            } else {
+                setTimeout(() => {
+                    score += 1000;
+                    if (tg && tg.showAlert) {
+                        tg.showAlert("Reward claimed: +1,000 Coins (Simulated Adsgram)!");
+                    } else {
+                        alert("Reward claimed: +1,000 Coins (Simulated Adsgram)!");
+                    }
+                    updateUI();
+                    saveState();
+                }, 1000);
+            }
+        }
+
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        function saveState() {
+            localStorage.setItem('biz_score', score);
+            localStorage.setItem('biz_energy', energy);
+            localStorage.setItem('biz_maxEnergy', maxEnergy);
+            localStorage.setItem('biz_tapPower', tapPower);
+            localStorage.setItem('biz_lastQuestTime', lastQuestTime);
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
