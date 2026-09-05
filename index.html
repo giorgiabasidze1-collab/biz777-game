@@ -622,7 +622,7 @@
             }
         }
 
-        // --- MINI-GAME LOGIC (Biz777 Coin & Round-Fingered Hands) ---
+        // --- MINI-GAME LOGIC (Biz777 Coin & 5-Fingered Hands Moving) ---
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -732,7 +732,10 @@
             ctx.fillText('Biz777', coinToken.x, coinToken.y + 3);
             ctx.textAlign = 'left';
 
-            // Draw Hands with Rounded Fingers
+            // Simple Up & Down Moving Offset for Hand Fingers
+            let fingerMove = Math.sin(frameCount * 0.1) * 3;
+
+            // Draw Hands with 5 Rounded Fingers
             for (let obs of obstacles) {
                 let skinColor = '#eac086';
                 let skinShadow = '#cca065';
@@ -741,44 +744,50 @@
                 // Top Hand Body
                 let topH = obs.top;
                 ctx.fillStyle = skinColor;
-                ctx.fillRect(obs.x, 0, 45, topH - 22);
+                ctx.fillRect(obs.x, 0, 48, topH - 22);
                 ctx.strokeStyle = skinShadow;
                 ctx.lineWidth = 2;
-                ctx.strokeRect(obs.x, 0, 45, topH - 22);
+                ctx.strokeRect(obs.x, 0, 48, topH - 22);
 
-                // Rounded Fingers (Top)
-                for (let f = 0; f < 3; f++) {
-                    let fx = obs.x + 4 + (f * 13);
+                // 5 Rounded Fingers (Top) + Moving Offset
+                for (let f = 0; f < 5; f++) {
+                    let fx = obs.x + 2 + (f * 9);
+                    let fYOffset = (f === 0 || f === 4) ? fingerMove : -fingerMove; // Side thumb/finger moves slightly
+                    let currentFingerY = topH - 22 + fYOffset;
+
                     ctx.beginPath();
-                    ctx.roundRect(fx, topH - 22, 10, 22, [0, 0, 6, 6]);
+                    ctx.roundRect(fx, currentFingerY, 8, 22, [0, 0, 5, 5]);
                     ctx.fillStyle = skinColor;
                     ctx.fill();
                     ctx.stroke();
                     // Nail
                     ctx.fillStyle = nailColor;
-                    ctx.fillRect(fx + 2, topH - 5, 6, 3);
+                    ctx.fillRect(fx + 1, currentFingerY + 2, 6, 3);
                 }
 
                 // Bottom Hand Body
                 let bottomY = canvas.height - obs.bottom;
                 let bottomH = obs.bottom;
 
-                // Rounded Fingers (Bottom)
-                for (let f = 0; f < 3; f++) {
-                    let fx = obs.x + 4 + (f * 13);
+                // 5 Rounded Fingers (Bottom) + Moving Offset
+                for (let f = 0; f < 5; f++) {
+                    let fx = obs.x + 2 + (f * 9);
+                    let fYOffset = (f === 0 || f === 4) ? -fingerMove : fingerMove;
+                    let currentFingerY = bottomY + fYOffset;
+
                     ctx.beginPath();
-                    ctx.roundRect(fx, bottomY, 10, 22, [6, 6, 0, 0]);
+                    ctx.roundRect(fx, currentFingerY, 8, 22, [5, 5, 0, 0]);
                     ctx.fillStyle = skinColor;
                     ctx.fill();
                     ctx.stroke();
                     // Nail
                     ctx.fillStyle = nailColor;
-                    ctx.fillRect(fx + 2, bottomY + 2, 6, 3);
+                    ctx.fillRect(fx + 1, currentFingerY + 16, 6, 3);
                 }
 
                 ctx.fillStyle = skinColor;
-                ctx.fillRect(obs.x, bottomY + 22, 45, bottomH - 22);
-                ctx.strokeRect(obs.x, bottomY + 22, 45, bottomH - 22);
+                ctx.fillRect(obs.x, bottomY + 22, 48, bottomH - 22);
+                ctx.strokeRect(obs.x, bottomY + 22, 48, bottomH - 22);
             }
 
             // Draw Score
