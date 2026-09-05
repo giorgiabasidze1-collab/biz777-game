@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Biz777</title>
+    <title>Biz777 - Tap & Mini-Game</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @keyframes floatUp {
@@ -48,49 +48,53 @@
         }
     </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #0b0c10; color: #ffffff; font-family: sans-serif; height: 100vh; overflow: hidden; user-select: none; -webkit-user-select: none;">
+<body id="gameBody" style="margin: 0; padding: 0; background-color: #0b0c10; color: #ffffff; font-family: sans-serif; height: 100vh; overflow: hidden; user-select: none; -webkit-user-select: none;">
 
-    <!-- MAIN GAME LAYOUT -->
+    <div style="position: absolute; top: 3%; left: -15px; width: 110px; height: 110px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 26px; opacity: 0.25; transform: rotate(-25deg); z-index: 1; pointer-events: none;">💵</div>
+    <div style="position: absolute; top: 7%; right: -25px; width: 130px; height: 130px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 30px; opacity: 0.2; transform: rotate(18deg); z-index: 1; pointer-events: none;">€</div>
+    <div style="position: absolute; top: 32%; left: -40px; width: 125px; height: 125px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 28px; opacity: 0.2; transform: rotate(40deg); z-index: 1; pointer-events: none;">💰</div>
+    <div style="position: absolute; top: 36%; right: -35px; width: 140px; height: 140px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 32px; opacity: 0.2; transform: rotate(-35deg); z-index: 1; pointer-events: none;">£</div>
+    <div style="position: absolute; bottom: 22%; left: -20px; width: 115px; height: 115px; border-radius: 50%; border: 3px solid #00ff88; color: #00ff88; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 26px; opacity: 0.25; transform: rotate(15deg); z-index: 1; pointer-events: none;">¥</div>
+    <div style="position: absolute; bottom: 18%; right: -15px; width: 120px; height: 120px; border-radius: 50%; border: 3px solid #ffd700; color: #ffd700; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 28px; opacity: 0.25; transform: rotate(-12deg); z-index: 1; pointer-events: none;">💵</div>
+
     <div style="position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 15px 0; box-sizing: border-box;">
         
-        <!-- HEADER / SCORE & LEVEL -->
         <div style="text-align: center; width: 85%;">
-            <div id="score" style="font-size: 40px; font-weight: 900; color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.6);">0</div>
-            <div style="font-size: 13px; font-weight: bold; color: #00f2fe; margin-top: 2px;">Level: <span id="levelName">Tent ⛺</span> | Power: +<span id="tapPowerDisplay">1</span></div>
+            <div id="score" style="font-size: 42px; font-weight: 900; color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.6);">0</div>
+            <div id="levelTitle" style="font-size: 16px; font-weight: bold; color: #00f2fe; margin-top: 3px;">1. Bronze Foundation 🏗️</div>
+            <div style="font-size: 12px; font-weight: bold; color: #00ff88; margin-top: 2px;">Power: +<span id="tapPowerDisplay">1</span> / Tap</div>
+            
+            <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2);">
+                <div id="progressFill" style="height: 100%; width: 0%; background: #00f2fe; transition: width 0.2s;"></div>
+            </div>
         </div>
 
-        <!-- TAP AREA (BUILDING) -->
-        <div id="tapArea" style="position: relative; width: 175px; height: 175px; background: rgba(255, 255, 255, 0.04); border: 2px dashed #ffd700; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation;">
-            <div id="buildingIcon" style="font-size: 85px; pointer-events: none; transition: transform 0.05s;">⛺</div>
+        <div id="tapArea" style="position: relative; width: 185px; height: 185px; background: rgba(255, 255, 255, 0.04); border: 2px dashed #ffd700; border-radius: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; touch-action: manipulation;">
+            <div id="buildingIcon" style="font-size: 95px; pointer-events: none; transition: transform 0.05s;">🏗️</div>
         </div>
 
-        <!-- FOOTER / ENERGY & MENU BUTTONS -->
         <div style="width: 85%; text-align: center;">
-            <div style="font-size: 13px; font-weight: bold; color: #ffb703; margin-bottom: 3px;">⚡ Energy: <span id="energyText">1000</span> / <span id="maxEnergyText">1000</span></div>
-            <div style="width: 100%; height: 7px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 8px;">
+            <div style="font-size: 14px; font-weight: bold; color: #ffb703; margin-bottom: 4px;">⚡ Energy: <span id="energyText">1000</span> / <span id="maxEnergyText">1000</span></div>
+            <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 8px;">
                 <div id="energyFill" style="height: 100%; width: 100%; background: #ffb703;"></div>
             </div>
 
-            <!-- ROW 1: SHOP & MINI-GAME -->
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
                 <button onclick="openModal('shopModal')" style="flex: 1; padding: 10px; background: #00bcd4; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px;">🛒 Shop</button>
-                <button onclick="openMiniGame()" style="flex: 1; padding: 10px; background: linear-gradient(135deg, #f72585, #7209b7); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px;">🕹️ Mini-Game</button>
+                <button onclick="openMiniGame()" style="flex: 1; padding: 10px; background: linear-gradient(135deg, #f72585, #7209b7); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px;">🕹️ Daily Quest</button>
             </div>
 
-            <!-- ROW 2: FRIENDS, ADS, ACHIEVEMENTS -->
             <div style="display: flex; gap: 6px;">
-                <button onclick="openModal('friendsModal')" style="flex: 1; padding: 8px; background: #4cc9f0; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 11px;">👥 Friends</button>
-                <button onclick="openModal('adsModal')" style="flex: 1; padding: 8px; background: #f77f00; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 11px;">📺 Watch Ad</button>
-                <button onclick="openModal('achievementsModal')" style="flex: 1; padding: 8px; background: #7209b7; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 11px;">🏆 Goals</button>
+                <button onclick="watchAd()" style="flex: 1; padding: 8px 2px; background: #2196F3; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 11px;">🎬 Ad (+500⚡)</button>
+                <button onclick="inviteFriend()" style="flex: 1; padding: 8px 2px; background: #4CAF50; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 11px;">👥 Invite (+1000⚡)</button>
             </div>
         </div>
 
     </div>
 
-    <!-- SHOP MODAL -->
     <div id="shopModal" class="modal-overlay">
         <div class="modal-content" style="border-color: #00bcd4;">
-            <h2 style="color: #00bcd4; margin-top: 0; text-align: center; font-size: 18px;">🛒 Shop</h2>
+            <h2 style="color: #00bcd4; margin-top: 0; text-align: center; font-size: 18px;">🛒 Biz777 Shop</h2>
             
             <div style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
@@ -128,50 +132,32 @@
         </div>
     </div>
 
-    <!-- FRIENDS MODAL -->
-    <div id="friendsModal" class="modal-overlay">
-        <div class="modal-content" style="border-color: #4cc9f0; text-align: center;">
-            <h2 style="color: #4cc9f0; margin-top: 0; font-size: 18px;">👥 Invite Friends</h2>
-            <p style="font-size: 12px; color: #ccc;">Invite your friends and get <b style="color: #ffd700;">+500 Coins</b> for each referral!</p>
-            <button onclick="inviteFriend()" style="width: 100%; padding: 10px; background: #4cc9f0; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; margin-bottom: 10px;">🔗 Copy Invite Link</button>
-            <button onclick="closeModal('friendsModal')" style="width: 100%; padding: 8px; background: #ff4757; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Close</button>
-        </div>
-    </div>
-
-    <!-- ADS MODAL -->
-    <div id="adsModal" class="modal-overlay">
-        <div class="modal-content" style="border-color: #f77f00; text-align: center;">
-            <h2 style="color: #f77f00; margin-top: 0; font-size: 18px;">📺 Watch & Earn</h2>
-            <p style="font-size: 12px; color: #ccc;">Watch a short advertisement to instantly earn <b style="color: #ffd700;">+150 Coins</b>!</p>
-            <button onclick="watchAd()" style="width: 100%; padding: 10px; background: #f77f00; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; margin-bottom: 10px;">▶️ Watch Ad</button>
-            <button onclick="closeModal('adsModal')" style="width: 100%; padding: 8px; background: #ff4757; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Close</button>
-        </div>
-    </div>
-
-    <!-- ACHIEVEMENTS MODAL -->
-    <div id="achievementsModal" class="modal-overlay">
-        <div class="modal-content" style="border-color: #7209b7;">
-            <h2 style="color: #7209b7; margin-top: 0; font-size: 18px; text-align: center;">🏆 Achievements</h2>
-            <div style="font-size: 12px; color: #ccc; margin-bottom: 10px; text-align: center;">Total Mini-Game Tunnels: <span id="achScoreDisplay" style="color: #ffd700; font-weight: bold;">0</span></div>
-            <div id="achievementStatus" style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; font-size: 12px; text-align: center; margin-bottom: 12px; color: #00ff88;">Keep playing to unlock rewards!</div>
-            <button onclick="closeModal('achievementsModal')" style="width: 100%; padding: 8px; background: #ff4757; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Close</button>
-        </div>
-    </div>
-
-    <!-- MINI-GAME MODAL -->
-    <div id="miniGameModal" class="modal-overlay">
-        <div style="width: 100%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <div style="color: #ffd700; font-weight: bold; font-size: 14px;">Score: <span id="questTunnelCount">0</span></div>
-            <button onclick="closeMiniGame()" style="background: #ff4757; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px;">✕ Exit</button>
+    <div id="miniGameModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 200; flex-direction: column; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box;">
+        <div style="width: 100%; max-width: 360px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="color: #ffd700; font-weight: bold; font-size: 15px;">Hands Passed: <span id="questTunnelCount">0</span>/10</div>
+            <button onclick="closeMiniGame()" style="background: #ff4757; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">✕ Exit</button>
         </div>
         
-        <div style="position: relative; border: 2px solid #00f2fe; border-radius: 10px; overflow: hidden; background: #111;">
-            <canvas id="birdCanvas" width="340" height="420" style="display: block; cursor: pointer;"></canvas>
-            <div id="gameStartOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.8);">
-                <h3 style="color: #ffd700; margin: 0 0 8px 0; font-size: 16px;">✋ Hands Obstacles</h3>
-                <p style="color: #fff; font-size: 12px; text-align: center; padding: 0 15px; margin-bottom: 12px;">Tap screen to fly and avoid hands!</p>
-                <button onclick="startBirdGame()" style="padding: 8px 20px; background: #00ff88; color: #000; border: none; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer;">Start</button>
+        <div style="position: relative; border: 3px solid #00f2fe; border-radius: 12px; overflow: hidden; background: #111;">
+            <canvas id="birdCanvas" width="340" height="460" style="display: block; cursor: pointer;"></canvas>
+            <div id="gameStartOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.7);">
+                <h3 style="color: #ffd700; margin: 0 0 10px 0;">✋ Hand & Finger Obstacles</h3>
+                <p style="color: #fff; font-size: 13px; text-align: center; padding: 0 20px; margin-bottom: 15px;">Pass 10 hand obstacles to win +500 Energy!</p>
+                <button onclick="startBirdGame()" style="padding: 10px 25px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer;">Start Game</button>
             </div>
+        </div>
+
+        <div id="questRewardBox" style="display: none; margin-top: 12px; text-align: center;">
+            <p style="color: #00ff88; font-weight: bold; margin: 0 0 8px 0;">🎉 Quest Completed! (10 Passed)</p>
+            <button onclick="claimQuestReward()" style="padding: 10px 20px; background: #ffd700; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Claim +500 ⚡ Energy</button>
+        </div>
+    </div>
+
+    <div id="winModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center;">
+        <div style="background: #1a1d24; padding: 25px; border-radius: 20px; text-align: center; border: 2px solid #ffd700; width: 80%;">
+            <h2 style="color: #ffd700; margin: 0 0 10px 0;">🎉 Congratulations!</h2>
+            <p style="color: #fff; margin: 5px 0;">You built the <b>Biz777 Legend HQ! 👑</b></p>
+            <button onclick="document.getElementById('winModal').style.display='none'" style="padding: 10px 20px; background: #ffd700; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Continue</button>
         </div>
     </div>
 
@@ -184,64 +170,105 @@
         if (isNaN(energy)) energy = 1000;
         var maxEnergy = 1000;
         var tapPower = parseInt(localStorage.getItem("biz777_tap_power")) || 1;
-        var totalTunnelsPassed = parseInt(localStorage.getItem("biz777_tunnels")) || 0;
+
+        var lastEnergyTime = parseInt(localStorage.getItem("biz777_last_energy_time")) || 0;
+        var currentTime = new Date().getTime();
+        var twentyFourHours = 24 * 60 * 60 * 1000;
+
+        if (currentTime - lastEnergyTime >= twentyFourHours) {
+            energy = maxEnergy;
+            localStorage.setItem("biz777_last_energy_time", currentTime);
+            saveGame();
+        }
+
+        var STAGES = [
+            { name: "1. Bronze Foundation", icon: "🏗️", min: 0, max: 1000 },
+            { name: "2. Bronze Hut", icon: "🛖", min: 1000, max: 5000 },
+            { name: "3. Silver House", icon: "🏡", min: 5000, max: 25000 },
+            { name: "4. Silver Villa", icon: "🏠", min: 25000, max: 100000 },
+            { name: "5. Gold Office", icon: "🏢", min: 100000, max: 500000 },
+            { name: "6. Gold Skyscraper", icon: "🌆", min: 500000, max: 2000000 },
+            { name: "7. Diamond Tower", icon: "🏙️", min: 2000000, max: 5000000 },
+            { name: "8. Biz777 Legend HQ", icon: "👑", min: 5000000, max: 10000000 }
+        ];
 
         var scoreEl = document.getElementById("score");
-        var levelNameEl = document.getElementById("levelName");
+        var levelTitleEl = document.getElementById("levelTitle");
         var tapPowerDisplayEl = document.getElementById("tapPowerDisplay");
+        var progressFillEl = document.getElementById("progressFill");
+        var buildingIcon = document.getElementById("buildingIcon");
         var energyTextEl = document.getElementById("energyText");
         var maxEnergyTextEl = document.getElementById("maxEnergyText");
         var energyFillEl = document.getElementById("energyFill");
         var tapArea = document.getElementById("tapArea");
-        var buildingIcon = document.getElementById("buildingIcon");
-
-        // შენობების / ლეველების სია
-        const levels = [
-            { minScore: 0, name: "Tent ⛺", icon: "⛺" },
-            { minScore: 1000, name: "Wooden Hut 🛖", icon: "🛖" },
-            { minScore: 5000, name: "House 🏠", icon: "🏠" },
-            { minScore: 15000, name: "Modern Villa 🏡", icon: "🏡" },
-            { minScore: 40000, name: "Office 🏢", icon: "🏢" },
-            { minScore: 100000, name: "Skyscraper 🏙️", icon: "🏙️" },
-            { minScore: 250000, name: "Business Empire 🏰", icon: "🏰" }
-        ];
-
-        function getCurrentLevel() {
-            let current = levels[0];
-            for (let i = 0; i < levels.length; i++) {
-                if (score >= levels[i].minScore) {
-                    current = levels[i];
-                } else {
-                    break;
-                }
-            }
-            return current;
-        }
 
         function saveGame() {
             localStorage.setItem("biz777_score", score);
             localStorage.setItem("biz777_energy", energy);
             localStorage.setItem("biz777_tap_power", tapPower);
-            localStorage.setItem("biz777_tunnels", totalTunnelsPassed);
         }
 
-        function handleTapAction(clientX, clientY, targetElement) {
-            if (energy < tapPower) return;
+        tapArea.addEventListener("touchstart", function(e) {
+            e.preventDefault();
+            var touches = e.changedTouches;
+
+            if (energy < tapPower) {
+                alert("Out of energy!");
+                return;
+            }
+
+            var actualTaps = Math.min(touches.length, Math.floor(energy / tapPower));
+            if (actualTaps < 1 && energy >= tapPower) actualTaps = 1;
+
+            var totalEarned = actualTaps * tapPower;
+            score += totalEarned;
+            energy -= totalEarned;
+            saveGame();
+
+            for (var i = 0; i < touches.length; i++) {
+                var touch = touches[i];
+                var rect = tapArea.getBoundingClientRect();
+                var x = touch.clientX - rect.left;
+                var y = touch.clientY - rect.top;
+
+                var coin = document.createElement("div");
+                coin.className = "floating-coin";
+                coin.innerText = "+" + tapPower;
+                coin.style.left = (x - 15) + "px";
+                coin.style.top = (y - 20) + "px";
+                tapArea.appendChild(coin);
+
+                setTimeout(function(c) {
+                    c.remove();
+                }, 700, coin);
+            }
+
+            buildingIcon.style.transform = "scale(0.88)";
+            setTimeout(function() { buildingIcon.style.transform = "scale(1)"; }, 60);
+
+            updateGame();
+        }, { passive: false });
+
+        tapArea.addEventListener("click", function(e) {
+            if (energy < tapPower) {
+                alert("Out of energy!");
+                return;
+            }
 
             score += tapPower;
             energy -= tapPower;
             saveGame();
 
-            var rect = targetElement.getBoundingClientRect();
-            var x = clientX - rect.left;
-            var y = clientY - rect.top;
+            var rect = tapArea.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
 
             var coin = document.createElement("div");
             coin.className = "floating-coin";
             coin.innerText = "+" + tapPower;
             coin.style.left = (x - 15) + "px";
             coin.style.top = (y - 20) + "px";
-            targetElement.appendChild(coin);
+            tapArea.appendChild(coin);
 
             setTimeout(function(c) {
                 c.remove();
@@ -251,47 +278,30 @@
             setTimeout(function() { buildingIcon.style.transform = "scale(1)"; }, 60);
 
             updateGame();
-        }
-
-        tapArea.addEventListener("touchstart", function(e) {
-            e.preventDefault();
-            if (e.changedTouches && e.changedTouches.length > 0) {
-                var touch = e.changedTouches[0];
-                handleTapAction(touch.clientX, touch.clientY, tapArea);
-            }
-        }, { passive: false });
-
-        tapArea.addEventListener("click", function(e) {
-            handleTapAction(e.clientX, e.clientY, tapArea);
         });
 
-        setInterval(function() {
-            if (energy < maxEnergy) {
-                energy = Math.min(energy + 2, maxEnergy);
-                saveGame();
-                updateGame();
+        function inviteFriend() {
+            var botUsername = "biz_777_bot";
+            var inviteLink = "https://t.me/" + botUsername + "?start=ref_" + (tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "user");
+            var shareText = "Join Biz777!";
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink("https://t.me/share/url?url=" + encodeURIComponent(inviteLink) + "&text=" + encodeURIComponent(shareText));
+            } else {
+                alert("Invite link generated!");
             }
-        }, 1000);
-
-        function updateGame() {
-            scoreEl.innerText = score.toLocaleString();
-            tapPowerDisplayEl.innerText = tapPower;
-            energyTextEl.innerText = energy;
-            maxEnergyTextEl.innerText = maxEnergy;
-
-            var fillPercent = Math.min((energy / maxEnergy) * 100, 100);
-            energyFillEl.style.width = fillPercent + "%";
-            document.getElementById("achScoreDisplay").innerText = totalTunnelsPassed;
-
-            // განახლდეს ლეველი და იკონკა
-            let lvl = getCurrentLevel();
-            levelNameEl.innerText = lvl.name;
-            buildingIcon.innerText = lvl.icon;
         }
 
-        updateGame();
+        function watchAd() {
+            alert("Loading ad...");
+            setTimeout(function() {
+                energy = Math.min(energy + 500, maxEnergy);
+                saveGame();
+                updateGame();
+                alert("+500 ⚡ Energy added!");
+            }, 800);
+        }
 
-        // --- MODALS HELPER ---
+        // --- SHOP FUNCTIONS ---
         function openModal(modalId) {
             document.getElementById(modalId).style.display = "flex";
         }
@@ -300,7 +310,6 @@
             document.getElementById(modalId).style.display = "none";
         }
 
-        // --- SHOP & REWARDS LOGIC ---
         function buyUpgrade(powerAdd, cost) {
             if (score >= cost) {
                 score -= cost;
@@ -328,31 +337,48 @@
             }
         }
 
-        function inviteFriend() {
-            score += 500;
-            saveGame();
-            updateGame();
-            alert("Friend invited successfully! +500 Coins added!");
-            closeModal('friendsModal');
+        function updateGame() {
+            scoreEl.innerText = score.toLocaleString();
+            tapPowerDisplayEl.innerText = tapPower;
+            energyTextEl.innerText = energy;
+            maxEnergyTextEl.innerText = maxEnergy;
+
+            var fillPercent = Math.min((energy / maxEnergy) * 100, 100);
+            energyFillEl.style.width = fillPercent + "%";
+
+            var currentStage = STAGES[0];
+            for (var i = 0; i < STAGES.length; i++) {
+                if (score >= STAGES[i].min) {
+                    currentStage = STAGES[i];
+                }
+            }
+
+            levelTitleEl.innerText = currentStage.name;
+            buildingIcon.innerText = currentStage.icon;
+
+            var range = currentStage.max - currentStage.min;
+            var progress = score - currentStage.min;
+            var percent = Math.min((progress / range) * 100, 100);
+            progressFillEl.style.width = percent + "%";
+
+            if (score >= 10000000) {
+                document.getElementById("winModal").style.display = "flex";
+            }
         }
 
-        function watchAd() {
-            score += 150;
-            saveGame();
-            updateGame();
-            alert("Ad watched! +150 Coins added!");
-            closeModal('adsModal');
-        }
+        updateGame();
 
         // --- MINI-GAME LOGIC ---
         var canvas = document.getElementById("birdCanvas");
         var ctx = canvas.getContext("2d");
         var birdGameRunning = false;
         var bird, pipes, tunnelScore, animFrame = 0;
+        var questClaimed = localStorage.getItem("biz777_quest_claimed") === "true";
 
         function openMiniGame() {
             document.getElementById("miniGameModal").style.display = "flex";
             document.getElementById("gameStartOverlay").style.display = "flex";
+            document.getElementById("questRewardBox").style.display = "none";
             tunnelScore = 0;
             document.getElementById("questTunnelCount").innerText = tunnelScore;
             resetBirdGame();
@@ -364,12 +390,15 @@
         }
 
         function resetBirdGame() {
-            bird = { x: 50, y: 200, radius: 16, gravity: 0.38, lift: -6.6, velocity: 0 };
+            bird = { x: 60, y: 220, radius: 17, gravity: 0.38, lift: -6.8, velocity: 0 };
             pipes = [];
             animFrame = 0;
         }
 
         function startBirdGame() {
+            if (questClaimed) {
+                alert("Reward already claimed today!");
+            }
             document.getElementById("gameStartOverlay").style.display = "none";
             resetBirdGame();
             tunnelScore = 0;
@@ -379,11 +408,15 @@
         }
 
         canvas.addEventListener("click", function() {
-            if (birdGameRunning) { bird.velocity = bird.lift; }
+            if (birdGameRunning) {
+                bird.velocity = bird.lift;
+            }
         });
         canvas.addEventListener("touchstart", function(e) {
             e.preventDefault();
-            if (birdGameRunning) { bird.velocity = bird.lift; }
+            if (birdGameRunning) {
+                bird.velocity = bird.lift;
+            }
         }, { passive: false });
 
         function drawRoundedHandColumn(x, boundaryHeight, width, isTop) {
@@ -399,10 +432,14 @@
                 for (var f = 0; f < 4; f++) {
                     var fx = x + f * fingerW;
                     ctx.beginPath();
-                    ctx.roundRect(fx, boundaryHeight, fingerW, 35, [0, 0, 10, 10]);
+                    ctx.roundRect(fx, boundaryHeight, fingerW, 40, [0, 0, 12, 12]);
                     ctx.fill();
                     ctx.stroke();
                 }
+                ctx.beginPath();
+                ctx.roundRect(x - 12, boundaryHeight + 5, 12, 28, [8, 0, 0, 8]);
+                ctx.fill();
+                ctx.stroke();
             } else {
                 var pipeY = boundaryHeight;
                 var pipeH = canvas.height - boundaryHeight;
@@ -413,10 +450,14 @@
                 for (var f = 0; f < 4; f++) {
                     var fx = x + f * fingerW;
                     ctx.beginPath();
-                    ctx.roundRect(fx, pipeY - 35, fingerW, 35, [10, 10, 0, 0]);
+                    ctx.roundRect(fx, pipeY - 40, fingerW, 40, [12, 12, 0, 0]);
                     ctx.fill();
                     ctx.stroke();
                 }
+                ctx.beginPath();
+                ctx.roundRect(x - 12, pipeY - 33, 12, 28, [8, 0, 0, 8]);
+                ctx.fill();
+                ctx.stroke();
             }
         }
 
@@ -438,10 +479,16 @@
             ctx.strokeStyle = "#fff";
             ctx.stroke();
 
-            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 240) {
-                var gapSize = 220;
+            ctx.fillStyle = "#000";
+            ctx.font = "bold 8px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("Biz777", bird.x, bird.y);
+
+            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 205) {
+                var gapSize = 195;
                 var minHeight = 30;
-                var maxHeight = canvas.height - gapSize - 30;
+                var maxHeight = canvas.height - gapSize - 40;
                 var topH = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
                 pipes.push({ x: canvas.width, top: topH, bottom: topH + gapSize, passed: false });
             }
@@ -449,27 +496,33 @@
             for (var i = pipes.length - 1; i >= 0; i--) {
                 pipes[i].x -= 1.8;
 
-                var topBoundary = pipes[i].top;
-                var bottomBoundary = pipes[i].bottom;
+                var handOffset = Math.sin(animFrame * 0.05) * 4;
+                var topBoundary = pipes[i].top + handOffset;
+                var bottomBoundary = pipes[i].bottom - handOffset;
 
-                drawRoundedHandColumn(pipes[i].x, topBoundary, 55, true);
-                drawRoundedHandColumn(pipes[i].x, bottomBoundary, 55, false);
+                drawRoundedHandColumn(pipes[i].x, topBoundary, 60, true);
+                drawRoundedHandColumn(pipes[i].x, bottomBoundary, 60, false);
 
-                if (!pipes[i].passed && pipes[i].x + 55 < bird.x) {
+                if (!pipes[i].passed && pipes[i].x + 60 < bird.x) {
                     pipes[i].passed = true;
                     tunnelScore++;
-                    totalTunnelsPassed++;
-                    saveGame();
                     document.getElementById("questTunnelCount").innerText = tunnelScore;
+
+                    if (tunnelScore >= 10 && !questClaimed) {
+                        birdGameRunning = false;
+                        document.getElementById("questRewardBox").style.display = "block";
+                    }
                 }
 
-                if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 55) {
-                    if (bird.y - bird.radius < topBoundary || bird.y + bird.radius > bottomBoundary) {
+                var topHitbox = topBoundary + 35;
+                var bottomHitbox = bottomBoundary - 35;
+                if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 60) {
+                    if (bird.y - bird.radius < topHitbox || bird.y + bird.radius > bottomHitbox) {
                         endBirdGame();
                     }
                 }
 
-                if (pipes[i].x < -60) {
+                if (pipes[i].x < -70) {
                     pipes.splice(i, 1);
                 }
             }
@@ -486,10 +539,19 @@
         function endBirdGame() {
             birdGameRunning = false;
             document.getElementById("gameStartOverlay").style.display = "flex";
-            document.querySelector("#gameStartOverlay h3").innerText = "💥 Game Over!";
-            document.querySelector("#gameStartOverlay p").innerText = "Score: " + tunnelScore + ". Saved to Achievements!";
+            document.querySelector("#gameStartOverlay h3").innerText = "💥 Caught!";
+            document.querySelector("#gameStartOverlay p").innerText = "Passed: " + tunnelScore + "/10. Try again!";
             document.querySelector("#gameStartOverlay button").innerText = "Try Again";
+        }
+
+        function claimQuestReward() {
+            questClaimed = true;
+            localStorage.setItem("biz777_quest_claimed", "true");
+            energy = Math.min(energy + 500, maxEnergy);
+            saveGame();
             updateGame();
+            alert("+500 ⚡ Energy added!");
+            closeMiniGame();
         }
     </script>
 </body>
