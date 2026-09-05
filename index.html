@@ -120,12 +120,21 @@
                 <button onclick="buyUpgrade(10, 4000)" style="background: #00ff88; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
             </div>
 
-            <div style="margin-bottom: 12px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="margin-bottom: 8px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: bold; font-size: 12px;">🔋 Energy Refill</div>
                     <div style="font-size: 10px; color: #ffd700;">Price: 200 Coins</div>
                 </div>
                 <button onclick="buyEnergyRefill()" style="background: #ffb703; color: #000; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
+            </div>
+
+            <!-- პროგრესული ენერგიის სეიფი (Up to 5000 max) -->
+            <div style="margin-bottom: 12px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div id="vaultTitle" style="font-weight: bold; font-size: 12px;">🏦 Energy Vault (2,000 ⚡)</div>
+                    <div id="vaultPrice" style="font-size: 10px; color: #ffd700;">Price: 2,000 Coins</div>
+                </div>
+                <button id="vaultBtn" onclick="buyEnergyVault()" style="background: #9c27b0; color: white; border: none; padding: 6px 8px; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 11px;">Buy</button>
             </div>
 
             <button onclick="closeModal('shopModal')" style="width: 100%; padding: 8px; background: #ff4757; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Close</button>
@@ -166,9 +175,9 @@
         if (tg) tg.expand();
 
         var score = parseInt(localStorage.getItem("biz777_score")) || 0;
+        var maxEnergy = parseInt(localStorage.getItem("biz777_max_energy")) || 1000;
         var energy = parseInt(localStorage.getItem("biz777_energy"));
-        if (isNaN(energy)) energy = 1000;
-        var maxEnergy = 1000;
+        if (isNaN(energy)) energy = maxEnergy;
         var tapPower = parseInt(localStorage.getItem("biz777_tap_power")) || 1;
 
         var lastEnergyTime = parseInt(localStorage.getItem("biz777_last_energy_time")) || 0;
@@ -205,6 +214,7 @@
         function saveGame() {
             localStorage.setItem("biz777_score", score);
             localStorage.setItem("biz777_energy", energy);
+            localStorage.setItem("biz777_max_energy", maxEnergy);
             localStorage.setItem("biz777_tap_power", tapPower);
         }
 
@@ -304,6 +314,9 @@
         // --- SHOP FUNCTIONS ---
         function openModal(modalId) {
             document.getElementById(modalId).style.display = "flex";
+            if (modalId === 'shopModal') {
+                updateShopUI();
+            }
         }
 
         function closeModal(modalId) {
@@ -334,6 +347,68 @@
                 closeModal('shopModal');
             } else {
                 alert("Not enough coins! Required: 200");
+            }
+        }
+
+        // პროგრესული სეიფის / საცავის ყიდვის სისტემა (1000 ➡️ 2000 ➡️ 3500 ➡️ 5000)
+        function buyEnergyVault() {
+            var cost = 0;
+            var targetEnergy = 0;
+
+            if (maxEnergy < 2000) {
+                cost = 2000;
+                targetEnergy = 2000;
+            } else if (maxEnergy < 3500) {
+                cost = 3500;
+                targetEnergy = 3500;
+            } else if (maxEnergy < 5000) {
+                cost = 5000;
+                targetEnergy = 5000;
+            } else {
+                alert("Vault is already at maximum capacity (5,000 ⚡)!");
+                return;
+            }
+
+            if (score >= cost) {
+                score -= cost;
+                maxEnergy = targetEnergy;
+                energy = maxEnergy; // ყიდვისას ავტომატურად ივსება ახალი ენერგია
+                saveGame();
+                updateGame();
+                updateShopUI();
+                alert("Successfully upgraded Energy Vault to " + maxEnergy + " ⚡!");
+                closeModal('shopModal');
+            } else {
+                alert("Not enough coins! Required: " + cost.toLocaleString());
+            }
+        }
+
+        function updateShopUI() {
+            var vaultTitle = document.getElementById("vaultTitle");
+            var vaultPrice = document.getElementById("vaultPrice");
+            var vaultBtn = document.getElementById("vaultBtn");
+
+            if (!vaultTitle) return;
+
+            if (maxEnergy < 2000) {
+                vaultTitle.innerText = "🏦 Energy Vault (2,000 ⚡)";
+                vaultPrice.innerText = "Price: 2,000 Coins";
+                vaultBtn.style.display = "block";
+                vaultBtn.innerText = "Buy";
+            } else if (maxEnergy < 3500) {
+                vaultTitle.innerText = "🏦 Energy Vault (3,500 ⚡)";
+                vaultPrice.innerText = "Price: 3,500 Coins";
+                vaultBtn.style.display = "block";
+                vaultBtn.innerText = "Buy";
+            } else if (maxEnergy < 5000) {
+                vaultTitle.innerText = "🏦 Energy Vault (5,000 ⚡)";
+                vaultPrice.innerText = "Price: 5,000 Coins";
+                vaultBtn.style.display = "block";
+                vaultBtn.innerText = "Buy";
+            } else {
+                vaultTitle.innerText = "🏦 Energy Vault (MAX 5,000 ⚡)";
+                vaultPrice.innerText = "Status: Maxed Out";
+                vaultBtn.style.display = "none";
             }
         }
 
@@ -544,7 +619,7 @@
             document.querySelector("#gameStartOverlay button").innerText = "Try Again";
         }
 
-        function claimQuestReward() {
+        function questRewardClaim() {
             questClaimed = true;
             localStorage.setItem("biz777_quest_claimed", "true");
             energy = Math.min(energy + 500, maxEnergy);
