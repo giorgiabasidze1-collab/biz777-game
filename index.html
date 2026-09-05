@@ -634,8 +634,8 @@
                     
                     <div class="game-card-option" onclick="openSubGame('flappy')">
                         <div class="game-card-info">
-                            <h4>🪙 Flappy Coin (Hand Obstacles)</h4>
-                            <p>Jump through hands, avoid obstacles & reach score 10 for +500 Energy!</p>
+                            <h4>🪙 Flappy Coin (Moving Hands)</h4>
+                            <p>Avoid moving hands with fingers, score 10 for +500 Energy!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
@@ -649,7 +649,7 @@
                     </div>
                 </div>
 
-                <!-- Sub-Game 1: Flappy Coin with Hands -->
+                <!-- Sub-Game 1: Flappy Coin with Moving Hand Obstacles -->
                 <div class="sub-game-container" id="subgame-flappy">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
                         <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Back to Menu</button>
@@ -658,7 +658,7 @@
                     </div>
                     <canvas id="flappyCanvas" width="300" height="340"></canvas>
                     <div style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 3px;">
-                        Tap canvas to jump. Avoid hand obstacles!
+                        Tap canvas to jump. Avoid moving hand obstacles!
                     </div>
                 </div>
 
@@ -1003,7 +1003,7 @@
             document.getElementById('gamesMenu').style.display = 'flex';
         }
 
-        // --- FLAPPY COIN GAME LOGIC (WITH HANDS OBSTACLES) ---
+        // --- FLAPPY COIN GAME LOGIC (WITH DETAILED FINGER HANDS & MOVEMENT) ---
         const canvas = document.getElementById('flappyCanvas');
         const ctx = canvas.getContext('2d');
         let flappyRunning = false;
@@ -1033,7 +1033,7 @@
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Bird (Coin) physics
+            // Bird physics
             bird.velocity += bird.gravity;
             bird.y += bird.velocity;
 
@@ -1058,31 +1058,70 @@
 
             // Hands generation & movement (Obstacles)
             if (frameCount % 90 === 0) {
-                let pipeWidth = 52;
+                let pipeWidth = 56;
                 let gapHeight = 115;
                 let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 80)) + 40;
-                pipes.push({ x: canvas.width, top: topHeight, bottom: canvas.height - topHeight - gapHeight, width: pipeWidth, passed: false });
+                // Added vertical movement offset speed (verticalSpeed) for lively moving hands
+                pipes.push({ 
+                    x: canvas.width, 
+                    top: topHeight, 
+                    bottom: canvas.height - topHeight - gapHeight, 
+                    width: pipeWidth, 
+                    passed: false,
+                    vOffset: 0,
+                    vSpeed: (Math.random() > 0.5 ? 1 : -1) * 0.8
+                });
             }
 
             for (let i = pipes.length - 1; i >= 0; i--) {
                 pipes[i].x -= 2.5;
 
-                // Draw Hands obstacles (Top hand pointing down 👇, Bottom hand pointing up 👆)
-                ctx.fillStyle = '#38bdf8';
-                ctx.fillRect(pipes[i].x, 0, pipes[i].width, pipes[i].top);
-                ctx.fillRect(pipes[i].x, canvas.height - pipes[i].bottom, pipes[i].width, pipes[i].bottom);
+                // Animate vertical movement of hands
+                pipes[i].vOffset += pipes[i].vSpeed;
+                if (pipes[i].vOffset > 25 || pipes[i].vOffset < -25) {
+                    pipes[i].vSpeed *= -1;
+                }
 
-                // Draw hand emojis on obstacles for clarity
-                ctx.font = '22px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText('👇', pipes[i].x + pipes[i].width / 2, pipes[i].top - 15);
-                ctx.fillText('👆', pipes[i].x + pipes[i].width / 2, canvas.height - pipes[i].bottom + 25);
+                let currentTop = pipes[i].top + pipes[i].vOffset;
+                let currentBottom = pipes[i].bottom - pipes[i].vOffset;
 
-                // Collision detection
+                let handColor = '#ffdbac'; // Skin tone matching the image style
+                let outlineColor = '#e0ac69';
+
+                // --- DRAW TOP HAND (Pointing down) ---
+                ctx.fillStyle = handColor;
+                ctx.strokeStyle = outlineColor;
+                ctx.lineWidth = 2;
+                ctx.fillRect(pipes[i].x, 0, pipes[i].width, currentTop);
+                ctx.strokeRect(pipes[i].x, 0, pipes[i].width, currentTop);
+
+                // Draw fingers at the bottom of the top hand
+                let fingerWidth = pipes[i].width / 4;
+                for (let f = 0; f < 4; f++) {
+                    let fx = pipes[i].x + (f * fingerWidth);
+                    ctx.fillRect(fx, currentTop, fingerWidth - 2, 16);
+                    ctx.strokeRect(fx, currentTop, fingerWidth - 2, 16);
+                }
+
+                // --- DRAW BOTTOM HAND (Pointing up) ---
+                let bottomY = canvas.height - currentBottom;
+                ctx.fillStyle = handColor;
+                ctx.strokeStyle = outlineColor;
+                ctx.fillRect(pipes[i].x, bottomY, pipes[i].width, currentBottom);
+                ctx.strokeRect(pipes[i].x, bottomY, pipes[i].width, currentBottom);
+
+                // Draw fingers at the top of the bottom hand
+                for (let f = 0; f < 4; f++) {
+                    let fx = pipes[i].x + (f * fingerWidth);
+                    ctx.fillRect(fx, bottomY - 16, fingerWidth - 2, 16);
+                    ctx.strokeRect(fx, bottomY - 16, fingerWidth - 2, 16);
+                }
+
+                // Collision detection with moving hands
                 if (
                     bird.x + bird.radius > pipes[i].x &&
                     bird.x - bird.radius < pipes[i].x + pipes[i].width &&
-                    (bird.y - bird.radius < pipes[i].top || bird.y + bird.radius > canvas.height - pipes[i].bottom)
+                    (bird.y - bird.radius < currentTop || bird.y + bird.radius > bottomY)
                 ) {
                     endFlappyGame();
                     return;
