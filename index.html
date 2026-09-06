@@ -459,7 +459,7 @@
             transform: translateZ(20px);
         }
 
-        .slot-machine-wrapper {
+        .slot-machine-wrapper, .jeiran-game-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -786,7 +786,7 @@
 
             <div class="tab-pane" id="tab-leaderboard">
                 <div class="leaderboard-card">
-                    <h3 style="margin-bottom: 15px; text-align: center; color: var(--accent);">🏆 ლიდერბორდი</h3>
+                    <h3 style="margin-bottom: 15px; text-align: center; color: var(--accent);">🏆 Leaderboard</h3>
                     <div class="leaderboard-container" id="leaderboardContainer">
                     </div>
                 </div>
@@ -819,6 +819,14 @@
                         <div class="game-card-info">
                             <h4 style="color: var(--accent); font-size: 15px;">🎰 Biz777 3D Slot Spin</h4>
                             <p style="font-size: 11px; color: var(--text-secondary);">Cost: 500 Coins | 3x biz777 = 5,000,000 Coins Jackpot!</p>
+                        </div>
+                        <span style="font-size: 22px; color: var(--accent);">👉</span>
+                    </div>
+
+                    <div class="game-card-option" onclick="openSubGame('jeiran')">
+                        <div class="game-card-info">
+                            <h4 style="color: var(--accent); font-size: 15px;">✂️ Jeiran (Online PvP)</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Rock, Paper, Scissors Best of 3 vs Online Opponent!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
@@ -903,6 +911,40 @@
                             <button class="btn" id="spinSlotBtn" onclick="spinSlotMachine()" style="width: 100%;">SPIN SLOT (500 🪙) 🎰</button>
                             <div id="slotResultText" style="font-size: 11px; color: var(--text-secondary); text-align: center; height: 16px;"></div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="sub-game-container" id="subgame-jeiran">
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Jeiran Online PvP</h3>
+                        <div style="width: 50px;"></div>
+                    </div>
+
+                    <div class="jeiran-game-wrapper">
+                        <div style="font-size: 11px; color: var(--text-secondary); text-align: center;">
+                            Select stake & match in Best of 3 rounds! Random choices ensure total fairness.
+                        </div>
+
+                        <div class="levels-container" style="flex-wrap: wrap;">
+                            <button class="level-btn active-level" id="jeiranBet500" onclick="setJeiranBet(500)">500 Coins</button>
+                            <button class="level-btn" id="jeiranBet1000" onclick="setJeiranBet(1000)">1000 Coins</button>
+                            <button class="level-btn" id="jeiranBet5000" onclick="setJeiranBet(5000)">5000 Coins</button>
+                            <button class="level-btn" id="jeiranBet10000" onclick="setJeiranBet(10000)">10000 Coins</button>
+                        </div>
+
+                        <div id="jeiranStatusBoard" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; width: 100%; text-align: center;">
+                            <div style="font-size: 13px; font-weight: bold; color: var(--warning); margin-bottom: 4px;" id="jeiranRoundIndicator">Match Setup: Ready</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);" id="jeiranScoreBoardText">You (0) - Opponent (0)</div>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; width: 100%; justify-content: center; margin-top: 5px;" id="jeiranActionButtons">
+                            <button class="btn" onclick="playJeiranRound('rock')" style="flex: 1; font-size: 12px;">🪨 Rock</button>
+                            <button class="btn" onclick="playJeiranRound('paper')" style="flex: 1; font-size: 12px;">📄 Paper</button>
+                            <button class="btn" onclick="playJeiranRound('scissors')" style="flex: 1; font-size: 12px;">✂️ Scissors</button>
+                        </div>
+
+                        <button class="btn" id="startJeiranMatchBtn" onclick="startJeiranMatch()" style="width: 100%; background: #22c55e; color: #000;">Start Match ⚔️</button>
                     </div>
                 </div>
             </div>
@@ -1220,10 +1262,12 @@
             document.getElementById(`subgame-${gameName}`).classList.add('active-subgame');
             if (gameName === 'flappy' && !flappyRunning) { startFlappyGame(); }
             if (gameName === 'cups') { initCupStageUI(); }
+            if (gameName === 'jeiran') { resetJeiranLobby(); }
         }
 
         function backToGamesMenu() {
             flappyRunning = false;
+            jeiranActiveMatch = false;
             document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
             document.getElementById('gamesMenu').style.display = 'flex';
         }
@@ -1698,8 +1742,119 @@
             saveState();
         }
 
+        // --- Jeiran (Rock, Paper, Scissors) Online PvP Logic ---
+        let jeiranCurrentBet = 500;
+        let jeiranUserScore = 0;
+        let jeiranOpponentScore = 0;
+        let jeiranCurrentRound = 0;
+        let jeiranActiveMatch = false;
+
+        function setJeiranBet(amount) {
+            if (jeiranActiveMatch) return;
+            jeiranCurrentBet = amount;
+            [500, 1000, 5000, 10000].forEach(val => {
+                let btn = document.getElementById(`jeiranBet${val}`);
+                if (val === amount) {
+                    btn.classList.add('active-level');
+                } else {
+                    btn.classList.remove('active-level');
+                }
+            });
+        }
+
+        function resetJeiranLobby() {
+            jeiranUserScore = 0;
+            jeiranOpponentScore = 0;
+            jeiranCurrentRound = 0;
+            jeiranActiveMatch = false;
+            document.getElementById('jeiranRoundIndicator').innerText = `Match Setup: Ready (Bet: ${jeiranCurrentBet.toLocaleString()} Coins)`;
+            document.getElementById('jeiranScoreBoardText').innerText = `You (0) - Opponent (0)`;
+            document.getElementById('jeiranActionButtons').style.display = 'none';
+            document.getElementById('startJeiranMatchBtn').style.display = 'block';
+            document.getElementById('startJeiranMatchBtn').innerText = `Start Match (${jeiranCurrentBet.toLocaleString()} 🪙) ⚔️`;
+        }
+
+        function startJeiranMatch() {
+            if (score < jeiranCurrentBet) {
+                alert("Not enough coins for this bet!");
+                return;
+            }
+            score -= jeiranCurrentBet;
+            updateUI();
+            saveState();
+
+            jeiranUserScore = 0;
+            jeiranOpponentScore = 0;
+            jeiranCurrentRound = 1;
+            jeiranActiveMatch = true;
+
+            document.getElementById('startJeiranMatchBtn').style.display = 'none';
+            document.getElementById('jeiranActionButtons').style.display = 'flex';
+            document.getElementById('jeiranRoundIndicator').innerText = `Round 1 / 3 (Best of 3)`;
+            document.getElementById('jeiranScoreBoardText').innerText = `You (0) - Opponent (0)`;
+        }
+
+        function playJeiranRound(userChoice) {
+            if (!jeiranActiveMatch) return;
+
+            const choices = ['rock', 'paper', 'scissors'];
+            const choiceEmojis = { rock: '🪨 Rock', paper: '📄 Paper', scissors: '✂️ Scissors' };
+            let opponentChoice = choices[Math.floor(Math.random() * choices.length)];
+
+            let roundResultText = "";
+            if (userChoice === opponentChoice) {
+                roundResultText = `Round ${jeiranCurrentRound}: Tie! You both chose ${choiceEmojis[userChoice]}`;
+            } else if (
+                (userChoice === 'rock' && opponentChoice === 'scissors') ||
+                (userChoice === 'paper' && opponentChoice === 'rock') ||
+                (userChoice === 'scissors' && opponentChoice === 'paper')
+            ) {
+                jeiranUserScore++;
+                roundResultText = `Round ${jeiranCurrentRound}: You Won! (${choiceEmojis[userChoice]} vs ${choiceEmojis[opponentChoice]})`;
+            } else {
+                jeiranOpponentScore++;
+                roundResultText = `Round ${jeiranCurrentRound}: Opponent Won! (${choiceEmojis[userChoice]} vs ${choiceEmojis[opponentChoice]})`;
+            }
+
+            document.getElementById('jeiranScoreBoardText').innerText = `You (${jeiranUserScore}) - Opponent (${jeiranOpponentScore})`;
+            document.getElementById('jeiranRoundIndicator').innerText = roundResultText;
+
+            if (jeiranUserScore === 2 || jeiranOpponentScore === 2 || jeiranCurrentRound === 3) {
+                jeiranActiveMatch = false;
+                document.getElementById('jeiranActionButtons').style.display = 'none';
+                document.getElementById('startJeiranMatchBtn').style.display = 'block';
+                document.getElementById('startJeiranMatchBtn').innerText = `Play Again ⚔️`;
+
+                if (jeiranUserScore > jeiranOpponentScore) {
+                    let prize = jeiranCurrentBet * 2;
+                    score += prize;
+                    updateUI();
+                    saveState();
+                    alert(`🎉 Match Won! You won ${prize.toLocaleString()} Coins!`);
+                    document.getElementById('jeiranRoundIndicator').innerText = `Victory! Won ${prize.toLocaleString()} Coins! 🎉`;
+                } else if (jeiranUserScore < jeiranOpponentScore) {
+                    alert(`😢 Match Lost! Better luck next time.`);
+                    document.getElementById('jeiranRoundIndicator').innerText = `Defeat! Match Lost.`;
+                } else {
+                    score += jeiranCurrentBet; // Refund on draw match
+                    updateUI();
+                    saveState();
+                    alert(`🤝 Match Drawn! Your bet has been refunded.`);
+                    document.getElementById('jeiranRoundIndicator').innerText = `Match Drawn. Bet Refunded.`;
+                }
+            } else {
+                jeiranCurrentRound++;
+                setTimeout(() => {
+                    if (jeiranActiveMatch) {
+                        document.getElementById('jeiranRoundIndicator').innerText = `Round ${jeiranCurrentRound} / 3 (Make your move!)`;
+                    }
+                }, 1500);
+            }
+        }
+
         function switchTab(tabId, btnElement) {
             flappyRunning = false;
+            jeiranActiveMatch = false;
             document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             document.getElementById(`tab-${tabId}`).classList.add('active');
