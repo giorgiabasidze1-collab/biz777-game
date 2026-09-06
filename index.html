@@ -50,7 +50,6 @@
             transform-style: preserve-3d;
         }
 
-        /* 3D Header */
         header {
             padding: 15px;
             display: flex;
@@ -143,7 +142,6 @@
             transition: width 0.3s ease;
         }
 
-        /* 3D Content Area */
         .content {
             flex: 1;
             display: flex;
@@ -181,7 +179,6 @@
             100% { transform: translateY(-30px) rotate(45deg) translateZ(50px); }
         }
 
-        /* 3D Clicker Coin/Building Button */
         .interactive-clicker-area {
             position: relative;
             z-index: 5;
@@ -269,7 +266,6 @@
             100% { opacity: 0; transform: translateY(-90px) scale(1.3) translateZ(120px); }
         }
 
-        /* 3D Navigation Bar */
         nav {
             display: flex;
             background: linear-gradient(145deg, #1e293b, #0f172a);
@@ -325,7 +321,6 @@
             display: flex;
         }
 
-        /* 3D Cards inside Tabs */
         .shop-list, .ads-list, .friends-list, .games-menu {
             width: 100%;
             display: flex;
@@ -410,7 +405,6 @@
             transform: translateZ(20px);
         }
 
-        /* --- SLOT MACHINE 3D STYLES --- */
         .slot-machine-wrapper {
             display: flex;
             flex-direction: column;
@@ -528,7 +522,6 @@
             box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
         }
 
-        /* --- FULL 3D CUP & TABLE ARENA --- */
         .cups-board-3d {
             perspective: 1000px;
             width: 100%;
@@ -1131,7 +1124,6 @@
             document.getElementById('gamesMenu').style.display = 'flex';
         }
 
-        // --- FLAPPY BIZ777 GAME ---
         const canvas = document.getElementById('flappyCanvas');
         const ctx = canvas.getContext('2d');
         let flappyRunning = false;
@@ -1304,7 +1296,6 @@
             };
         }
 
-        // --- BIZ777 SLOT MACHINE 3D ---
         const slotItemsList = [
             { icon: '🪙', label: 'biz777' },
             { icon: '💰', label: 'biz777' },
@@ -1317,7 +1308,7 @@
         function spinSlotMachine() {
             const cost = 500;
             if (score < cost) {
-                alert("არ გაქვს საკმარისი ბიზ777 მონეტები! საჭიროა 500 მონეტა.");
+                alert("Not enough biz777 coins! Required: 500 coins.");
                 return;
             }
 
@@ -1329,11 +1320,9 @@
             let resText = document.getElementById('slotResultText');
             btn.disabled = true;
             btn.style.opacity = "0.5";
-            resText.innerText = "სლოტი ტრიალებს... 🎰";
+            resText.innerText = "Slot spinning... 🎰";
 
-            // შანსი: 3 ცალი biz777-ის (რომელიც ეწერება მონეტებზე) დაჯდომის არის ძალიან იშვიათი (~2 მილიონში ერთხელ)
             let isMegaJackpot = Math.floor(Math.random() * 2000000) === 777;
-            // 2 ცალი biz777-ის შანსი (იშვიათი)
             let isDoubleMatch = Math.floor(Math.random() * 25) === 7;
 
             let finalResults = [];
@@ -1346,7 +1335,6 @@
             } else if (isDoubleMatch) {
                 let randomSym = slotItemsList[Math.floor(Math.random() * slotItemsList.length)];
                 finalResults = [randomSym, randomSym, slotItemsList[Math.floor(Math.random() * slotItemsList.length)]];
-                // ვუზრუნველყოფთ რომ ბოლო არ იყოს ზუსტად იგივე, რომ ზუსტად 2 ცალი გამოვიდეს
                 if(finalResults[2].icon === randomSym.icon) {
                     finalResults[2] = { icon: '💎', label: 'biz777' };
                 }
@@ -1356,7 +1344,6 @@
                     slotItemsList[Math.floor(Math.random() * slotItemsList.length)],
                     slotItemsList[Math.floor(Math.random() * slotItemsList.length)]
                 ];
-                // გამოვრიცხოთ შემთხვევითი 3 ან 2 დამთხვევა თუ არ უნდა დაეჯინოს
                 if (finalResults[0].icon === finalResults[1].icon && finalResults[1].icon === finalResults[2].icon) {
                     finalResults[2] = { icon: '🎁', label: 'biz777' };
                 }
@@ -1375,31 +1362,29 @@
                     document.getElementById('reel1').innerHTML = `<span>${finalResults[1].icon}</span>${finalResults[1].label}`;
                     document.getElementById('reel2').innerHTML = `<span>${finalResults[2].icon}</span>${finalResults[2].label}`;
 
-                    // შემოწმება შედეგების
                     if (finalResults[0].icon === '🪙' && finalResults[1].icon === '🪙' && finalResults[2].icon === '🪙' && isMegaJackpot) {
                         score += 500000;
-                        resText.innerText = "მეგა ჯეკპოტი! +500,000 მონეტა! 🎉";
-                        alert("🎉 წარმოუდგენელია! 3-ვე biz777 მონეტა დაჯდა და მოიგე 500,000 მონეტა!");
+                        resText.innerText = "Mega Jackpot! +500,000 coins! 🎉";
+                        alert("🎉 Incredible! All 3 biz777 coins landed and you won 500,000 coins!");
                     } else if (finalResults[0].icon === finalResults[1].icon && finalResults[1].icon === finalResults[2].icon) {
                         score += 5000;
-                        resText.innerText = "სამივე ერთნაირი! +5,000 მონეტა!";
-                        alert("🌟 სამივე სიმბოლო დაემთხვა! მოიგე 5,000 მონეტა!");
+                        resText.innerText = "Three of a kind! +5,000 coins!";
+                        alert("🌟 All 3 symbols matched! You won 5,000 coins!");
                     } else if (
                         (finalResults[0].icon === finalResults[1].icon) || 
                         (finalResults[1].icon === finalResults[2].icon) || 
                         (finalResults[0].icon === finalResults[2].icon)
                     ) {
                         score += 1000;
-                        resText.innerText = "2 დაჯდა! +1,000 მონეტა!";
-                        alert("✨ დაგიჯდა 2 დამთხვევა! გადმოგეცა 1,000 მონეტა!");
+                        resText.innerText = "2 matched! +1,000 coins!";
+                        alert("✨ You got 2 matching symbols! 1,000 coins awarded!");
                     } else {
-                        // თუ არაფერი დაჯდა ან მხოლოდ 50 მონეტა
                         let giveConsolation = Math.random() > 0.5;
                         if(giveConsolation) {
                             score += 50;
-                            resText.innerText = "+50 მონეტა შუა გზაზე!";
+                            resText.innerText = "+50 coins consolation bonus!";
                         } else {
-                            resText.innerText = "ვერ დაჯდა, სცადე თავიდან!";
+                            resText.innerText = "No match, try again!";
                         }
                     }
 
@@ -1411,7 +1396,6 @@
             }, 90);
         }
 
-        // --- 3D CUP & BALL GAME LOGIC ---
         let currentCupLevel = 1;
         let winningIndex = 1;
         let cupPositions = [0, 1, 2];
@@ -1610,10 +1594,11 @@
                         setCupLevel(nextLvl);
                     } else {
                         alert(`🎉 Correct! You won ${data.win.toLocaleString()} coins AND +${data.energyReward.toLocaleString()} Energy!`);
+                        initCupStageUI();
                     }
-                }, 200);
+                }, 300);
             } else {
-                setTimeout(() => alert(`😢 Wrong 3D cup! Try this level again.`), 200);
+                setTimeout(() => alert(`😢 Wrong cup! Try again.`), 300);
                 document.getElementById('startCupGameBtn').innerText = "Start Round 🎮";
                 document.getElementById('startCupGameBtn').disabled = false;
             }
