@@ -322,7 +322,7 @@
             display: flex;
         }
 
-        .shop-list, .ads-list, .friends-list, .games-menu, .leaderboard-list {
+        .shop-list, .ads-list, .friends-list, .games-menu {
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -352,7 +352,6 @@
             border-color: var(--accent);
         }
 
-        /* 3D ლიდერბორდის სტილები */
         .leaderboard-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -785,12 +784,12 @@
                 </div>
             </div>
 
-            <!-- ლიდერბორდის ჩანართი სუფთა HTML/CSS სტრუქტურით -->
+            <!-- ლიდერბორდი: ტოპ 30 ადამიანის სრული სია -->
             <div class="tab-pane" id="tab-leaderboard">
                 <div class="leaderboard-card">
-                    <h3 style="margin-bottom: 15px; text-align: center; color: var(--accent);">🏆 ლიდერბორდი</h3>
+                    <h3 style="margin-bottom: 15px; text-align: center; color: var(--accent);">🏆 Top 30 Leaderboard</h3>
                     <div class="leaderboard-container" id="leaderboardContainer">
-                        <!-- აქ ჯავასკრიპტი დინამიკურად ჩასვამს ადგილებს და შენს პროფილს -->
+                        <!-- აქ ჯავასკრიპტი დინამიკურად ჩასვამს ტოპ 30 მონაწილეს -->
                     </div>
                 </div>
             </div>
@@ -1134,7 +1133,7 @@
             }
         }
 
-        // ლიდერბორდის აგების ფუნქცია (ინტეგრირებული შენს ძირითად თამაშთან)
+        // ლიდერბორდის აგება: აჩვენებს ზუსტად ტოპ 30 მონაწილეს შენი ჩათვლით
         function renderLeaderboard() {
             const container = document.getElementById('leaderboardContainer');
             container.innerHTML = "";
