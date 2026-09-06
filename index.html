@@ -784,12 +784,12 @@
                 </div>
             </div>
 
-            <!-- ლიდერბორდი: ტოპ 30 ადამიანის სრული სია -->
+            <!-- Leaderboard: Top 30 full list -->
             <div class="tab-pane" id="tab-leaderboard">
                 <div class="leaderboard-card">
                     <h3 style="margin-bottom: 15px; text-align: center; color: var(--accent);">🏆 Top 30 Leaderboard</h3>
                     <div class="leaderboard-container" id="leaderboardContainer">
-                        <!-- აქ ჯავასკრიპტი დინამიკურად ჩასვამს ტოპ 30 მონაწილეს -->
+                        <!-- Script dynamically injects top 30 participants here -->
                     </div>
                 </div>
             </div>
@@ -1133,7 +1133,7 @@
             }
         }
 
-        // ლიდერბორდის აგება: აჩვენებს ზუსტად ტოპ 30 მონაწილეს შენი ჩათვლით
+        // Leaderboard rendering: Shows exact Top 30 participants including user
         function renderLeaderboard() {
             const container = document.getElementById('leaderboardContainer');
             container.innerHTML = "";
