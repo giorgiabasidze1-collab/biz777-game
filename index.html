@@ -321,7 +321,7 @@
             display: flex;
         }
 
-        .shop-list, .ads-list, .friends-list, .games-menu {
+        .shop-list, .ads-list, .friends-list, .games-menu, .leaderboard-list {
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -330,7 +330,7 @@
             transform-style: preserve-3d;
         }
 
-        .shop-card, .ad-card, .friend-card, .game-card-option, .game-header-banner {
+        .shop-card, .ad-card, .friend-card, .game-card-option, .game-header-banner, .leaderboard-item {
             background: linear-gradient(135deg, #1e293b 0%, #111827 100%);
             padding: 16px;
             border-radius: 16px;
@@ -345,11 +345,41 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .shop-card:hover, .ad-card:hover, .friend-card:hover, .game-card-option:hover {
+        .shop-card:hover, .ad-card:hover, .friend-card:hover, .game-card-option:hover, .leaderboard-item:hover {
             transform: translateZ(25px) scale(1.02);
             box-shadow: 0 15px 30px rgba(0,0,0,0.7), 0 0 15px rgba(56, 189, 248, 0.2);
             border-color: var(--accent);
         }
+
+        /* Leaderboard Specific Styles */
+        .leaderboard-item {
+            flex-direction: row;
+            padding: 12px 16px;
+        }
+
+        .leaderboard-item.top-one {
+            border-color: #facc15;
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
+        }
+
+        .leaderboard-item.top-two {
+            border-color: #94a3b8;
+        }
+
+        .leaderboard-item.top-three {
+            border-color: #b45309;
+        }
+
+        .rank-number {
+            font-weight: bold;
+            font-size: 15px;
+            width: 35px;
+            color: var(--text-secondary);
+        }
+
+        .top-one .rank-number { color: #facc15; }
+        .top-two .rank-number { color: #94a3b8; }
+        .top-three .rank-number { color: #d97706; }
 
         .btn {
             background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
@@ -730,6 +760,11 @@
                 </div>
             </div>
 
+            <div class="tab-pane" id="tab-leaderboard">
+                <h3 style="margin-bottom: 12px; align-self: flex-start; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">🏆 Top 50 Leaderboard</h3>
+                <div class="leaderboard-list" id="leaderboardContainer"></div>
+            </div>
+
             <div class="tab-pane" id="tab-minigame">
                 <div class="games-menu" id="gamesMenu">
                     <div class="game-header-banner">
@@ -873,6 +908,7 @@
         <nav>
             <button class="nav-item active" onclick="switchTab('clicker', this)"><span>⚡</span> Tap</button>
             <button class="nav-item" onclick="switchTab('shop', this)"><span>🛒</span> Shop</button>
+            <button class="nav-item" onclick="switchTab('leaderboard', this)"><span>🏆</span> Rank</button>
             <button class="nav-item" onclick="switchTab('minigame', this)"><span>🎮</span> Game</button>
             <button class="nav-item" onclick="switchTab('friends', this)"><span>👥</span> Friends</button>
             <button class="nav-item" onclick="switchTab('ads', this)"><span>📺</span> Boost</button>
@@ -912,10 +948,12 @@
         let globalCupCooldownTimestamp = localStorage.getItem('biz_cup_global_cooldown') || "";
 
         let userId = "user";
+        let currentUserName = "Biz777 User";
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const user = tg.initDataUnsafe.user;
             userId = user.id;
-            document.getElementById('userName').innerText = user.first_name || "Biz777 User";
+            currentUserName = user.first_name || "Biz777 User";
+            document.getElementById('userName').innerText = currentUserName;
             document.getElementById('userAvatar').innerText = (user.first_name || "B")[0].toUpperCase();
         }
 
@@ -1064,6 +1102,47 @@
             } else {
                 energyContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Energy (5,000) Purchased!</div>`;
             }
+        }
+
+        function renderLeaderboard() {
+            const container = document.getElementById('leaderboardContainer');
+            container.innerHTML = "";
+
+            let mockLeaderboard = [];
+            mockLeaderboard.push({ name: currentUserName, score: score });
+
+            for (let i = 2; i <= 50; i++) {
+                let randomScore = Math.max(100, 2000000 - (i * 35000) + Math.floor(Math.random() * 5000));
+                mockLeaderboard.push({ name: `Player_${i}`, score: randomScore });
+            }
+
+            mockLeaderboard.sort((a, b) => b.score - a.score);
+
+            mockLeaderboard.forEach((player, index) => {
+                let rank = index + 1;
+                let rankClass = "";
+                if (rank === 1) rankClass = "top-one";
+                else if (rank === 2) rankClass = "top-two";
+                else if (rank === 3) rankClass = "top-three";
+
+                let medalIcon = "";
+                if (rank === 1) medalIcon = "👑 ";
+                else if (rank === 2) medalIcon = "🥈 ";
+                else if (rank === 3) medalIcon = "🥉 ";
+
+                let itemHTML = `
+                    <div class="leaderboard-item ${rankClass}">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="rank-number">#${rank}</span>
+                            <span style="font-weight: 600; font-size: 14px;">${medalIcon}${player.name}</span>
+                        </div>
+                        <div style="font-weight: bold; color: var(--accent); font-size: 14px;">
+                            ${player.score.toLocaleString()} 🪙
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += itemHTML;
+            });
         }
 
         function buyTapUpgrade(newPower, price) {
@@ -1322,17 +1401,13 @@
             btn.style.opacity = "0.5";
             resText.innerText = "Slot spinning... 🎰";
 
-            // კაზინოს პრინციპი: წონები (weights) ალბათობისთვის. უმეტესად იქნება წაგება (ცარიელი/არამსგავსი).
-            // ჯეკპოტი (3 ოქრო) არის უკიდურესად იშვიათი.
             const slotWeights = [
                 { symbols: [{icon:'🪙', label:'biz777'}, {icon:'🪙', label:'biz777'}, {icon:'🪙', label:'biz777'}], weight: 1, reward: 5000000, type: 'mega' },
                 { symbols: [{icon:'💎', label:'biz777'}, {icon:'💎', label:'biz777'}, {icon:'💎', label:'biz777'}], weight: 5, reward: 10000, type: 'triple' },
                 { symbols: [{icon:'⭐', label:'biz777'}, {icon:'⭐', label:'biz777'}, {icon:'⭐', label:'biz777'}], weight: 10, reward: 5000, type: 'triple' },
                 { symbols: [{icon:'💰', label:'biz777'}, {icon:'💰', label:'biz777'}, {icon:'💰', label:'biz777'}], weight: 15, reward: 3000, type: 'triple' },
-                // ორმაგი დამთხვევები (იშვიათი)
                 { symbols: [{icon:'🪙', label:'biz777'}, {icon:'🪙', label:'biz777'}, {icon:'🎁', label:'biz777'}], weight: 40, reward: 800, type: 'double' },
                 { symbols: [{icon:'💎', label:'biz777'}, {icon:'⭐', label:'biz777'}, {icon:'💎', label:'biz777'}], weight: 50, reward: 500, type: 'double' },
-                // დანარჩენი 879%+ არის მკაცრი წაგება
                 { symbols: [{icon:'💵', label:'biz777'}, {icon:'🪙', label:'biz777'}, {icon:'🎁', label:'biz777'}], weight: 8879, reward: 0, type: 'loss' }
             ];
 
@@ -1604,8 +1679,12 @@
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             document.getElementById(`tab-${tabId}`).classList.add('active');
             btnElement.classList.add('active');
+            
             if(tabId === 'minigame') {
                 setCupLevel(currentCupLevel);
+            }
+            if(tabId === 'leaderboard') {
+                renderLeaderboard();
             }
         }
 
