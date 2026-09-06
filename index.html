@@ -325,7 +325,7 @@
             display: flex;
         }
 
-        /* 3D Cards inside Tabs (Shop, Friends, Ads, Games) */
+        /* 3D Cards inside Tabs */
         .shop-list, .ads-list, .friends-list, .games-menu {
             width: 100%;
             display: flex;
@@ -458,7 +458,6 @@
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* 6 sectors coloring & rotation */
         .wheel-sector:nth-child(1) { transform: rotate(0deg) skewY(-30deg); background: rgba(56, 189, 248, 0.8); }
         .wheel-sector:nth-child(2) { transform: rotate(60deg) skewY(-30deg); background: rgba(34, 197, 94, 0.8); }
         .wheel-sector:nth-child(3) { transform: rotate(120deg) skewY(-30deg); background: rgba(234, 179, 8, 0.8); }
@@ -624,7 +623,6 @@
             transition: opacity 0.3s ease;
         }
 
-        /* 3D Realistic Red Cup Styling */
         .cup-3d {
             position: absolute;
             width: 80px;
@@ -731,10 +729,10 @@
         <div class="content">
             <div class="tab-pane active" id="tab-clicker">
                 <div class="coin-background-pattern">
-                    <span class="bg-coin" style="top: 2%; left: 5%;">🪙 Biz777</span>
-                    <span class="bg-coin" style="top: 10%; right: 8%;">💵 Biz777</span>
-                    <span class="bg-coin" style="bottom: 22%; left: 8%;">🪙 Biz777</span>
-                    <span class="bg-coin" style="bottom: 10%; right: 12%;">💰 Biz777</span>
+                    <span class="bg-coin" style="top: 2%; left: 5%;">🪙 biz777</span>
+                    <span class="bg-coin" style="top: 10%; right: 8%;">💵 biz777</span>
+                    <span class="bg-coin" style="bottom: 22%; left: 8%;">🪙 biz777</span>
+                    <span class="bg-coin" style="bottom: 10%; right: 12%;">💰 biz777</span>
                 </div>
 
                 <div class="interactive-clicker-area" id="clickerBtn">
@@ -778,7 +776,7 @@
                     <div class="game-card-option" onclick="openSubGame('flappy')">
                         <div class="game-card-info">
                             <h4 style="color: var(--accent); font-size: 15px;">🪙 Flappy Biz777 (Hard Mode)</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Avoid custom rounded moving hands (5 fingers)! Score 10 for +500 Energy!</p>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Avoid rounded moving hands! Score 10 for +500 Energy!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
@@ -808,7 +806,7 @@
                     </div>
                     <canvas id="flappyCanvas" width="300" height="340"></canvas>
                     <div style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 3px;">
-                        Tap canvas to jump smoothly. Avoid moving hands!
+                        Tap canvas to jump smoothly. Avoid rounded obstacles & distance!
                     </div>
                 </div>
 
@@ -866,12 +864,12 @@
                         <div class="wheel-container">
                             <div class="wheel-pointer"></div>
                             <div class="wheel" id="luckyWheel">
-                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">100 Coins</div></div>
-                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">500 Coins</div></div>
-                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">50 Coins</div></div>
-                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">1,000 Coins</div></div>
-                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">200 Coins</div></div>
-                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">5,000 Coins</div></div>
+                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">100 biz777</div></div>
+                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">500 biz777</div></div>
+                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">50 biz777</div></div>
+                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">1,000 biz777</div></div>
+                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">200 biz777</div></div>
+                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">5,000 biz777</div></div>
                             </div>
                             <div class="wheel-center-hub">🎯</div>
                         </div>
@@ -1061,7 +1059,7 @@
                     <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <div style="font-weight: bold; font-size: 12px;">👆 Upgrade Tap Power (${tapPower} ➔ ${nextPower})</div>
-                            <div style="font-size: 10px; color: #ffd700;">Price: ${price.toLocaleString()} Biz777</div>
+                            <div style="font-size: 10px; color: #ffd700;">Price: ${price.toLocaleString()} biz777</div>
                         </div>
                         <button onclick="buyTapUpgrade(${nextPower}, ${price})" class="btn" style="padding: 6px 12px; font-size: 11px;">Buy</button>
                     </div>`;
@@ -1095,7 +1093,7 @@
                     <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <div style="font-weight: bold; font-size: 12px;">⚡ Max Energy (${maxEnergy} ➔ ${nextTier.target})</div>
-                            <div style="font-size: 10px; color: #ffd700;">Price: ${nextTier.price.toLocaleString()} Biz777</div>
+                            <div style="font-size: 10px; color: #ffd700;">Price: ${nextTier.price.toLocaleString()} biz777</div>
                         </div>
                         <button onclick="buyEnergyUpgrade(${nextTier.target}, ${nextTier.price})" class="btn" style="padding: 6px 12px; font-size: 11px;">Buy</button>
                     </div>`;
@@ -1106,7 +1104,7 @@
 
         function buyTapUpgrade(newPower, price) {
             if (score >= price) { score -= price; tapPower = newPower; updateUI(); saveState(); }
-            else { alert("Not enough Biz777 coins!"); }
+            else { alert("Not enough biz777 coins!"); }
         }
 
         function claimFreeTap20() {
@@ -1118,7 +1116,7 @@
 
         function buyEnergyUpgrade(newMaxEnergy, price) {
             if (score >= price) { score -= price; maxEnergy = newMaxEnergy; energy = maxEnergy; updateUI(); saveState(); }
-            else { alert("Not enough Biz777 coins!"); }
+            else { alert("Not enough biz777 coins!"); }
         }
 
         function inviteFriendLink() {
@@ -1163,11 +1161,11 @@
             document.getElementById('gamesMenu').style.display = 'flex';
         }
 
-        // --- FLAPPY BIZ777 GAME ---
+        // --- FLAPPY BIZ777 GAME (ROUNDED HANDS & BIZ777 COIN) ---
         const canvas = document.getElementById('flappyCanvas');
         const ctx = canvas.getContext('2d');
         let flappyRunning = false;
-        let bird = { x: 50, y: 150, radius: 14, gravity: 0.45, lift: -6.5, velocity: 0 };
+        let bird = { x: 50, y: 150, radius: 15, gravity: 0.42, lift: -6.2, velocity: 0 };
         let pipes = [];
         let frameCount = 0;
         let flappyScore = 0;
@@ -1202,23 +1200,25 @@
                 return;
             }
 
+            // Draw Coin (biz777) as the jumping item
             ctx.beginPath();
             ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
-            ctx.fillStyle = '#ffd700';
+            ctx.fillStyle = '#facc15';
             ctx.fill();
             ctx.lineWidth = 2;
-            ctx.strokeStyle = '#fff';
+            ctx.strokeStyle = '#fef08a';
             ctx.stroke();
             ctx.fillStyle = '#000';
-            ctx.font = '12px sans-serif';
+            ctx.font = 'bold 9px sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('🪙', bird.x, bird.y);
+            ctx.fillText('biz777', bird.x, bird.y);
 
-            if (frameCount % 95 === 0) {
-                let pipeWidth = 62;
-                let gapHeight = 145;
-                let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 80)) + 35;
+            // Spawn Obstacles with Distance and Rounded Hands
+            if (frameCount % 100 === 0) {
+                let pipeWidth = 65;
+                let gapHeight = 150;
+                let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 80)) + 40;
                 pipes.push({ 
                     x: canvas.width, 
                     top: topHeight, 
@@ -1226,14 +1226,14 @@
                     width: pipeWidth, 
                     passed: false,
                     vOffset: 0,
-                    vSpeed: (Math.random() > 0.5 ? 1 : -1) * 1.0
+                    vSpeed: (Math.random() > 0.5 ? 1 : -1) * 0.8
                 });
             }
 
             for (let i = pipes.length - 1; i >= 0; i--) {
-                pipes[i].x -= 2.6;
+                pipes[i].x -= 2.4; // Controlled smooth distance speed
                 pipes[i].vOffset += pipes[i].vSpeed;
-                if (pipes[i].vOffset > 18 || pipes[i].vOffset < -18) {
+                if (pipes[i].vOffset > 15 || pipes[i].vOffset < -15) {
                     pipes[i].vSpeed *= -1;
                 }
 
@@ -1247,33 +1247,42 @@
                 ctx.strokeStyle = outlineColor;
                 ctx.lineWidth = 2;
 
+                // Top rounded obstacle (Hand)
                 ctx.beginPath();
-                ctx.roundRect(pipes[i].x, 0, pipes[i].width, currentTop, [0, 0, 12, 12]);
+                ctx.roundRect(pipes[i].x, 0, pipes[i].width, currentTop, [0, 0, 18, 18]);
                 ctx.fill();
                 ctx.stroke();
 
+                // Fingers on top obstacle
                 let fingerWidth = pipes[i].width / 5;
                 for (let f = 0; f < 5; f++) {
                     let fx = pipes[i].x + (f * fingerWidth);
-                    ctx.fillRect(fx, currentTop, fingerWidth - 1, 15);
-                    ctx.strokeRect(fx, currentTop, fingerWidth - 1, 15);
+                    ctx.beginPath();
+                    ctx.roundRect(fx, currentTop - 8, fingerWidth - 1, 14, [6, 6, 0, 0]);
+                    ctx.fill();
+                    ctx.stroke();
                 }
 
+                // Bottom rounded obstacle (Hand)
                 let bottomY = canvas.height - currentBottom;
                 ctx.beginPath();
-                ctx.roundRect(pipes[i].x, bottomY, pipes[i].width, currentBottom, [12, 12, 0, 0]);
+                ctx.roundRect(pipes[i].x, bottomY, pipes[i].width, currentBottom, [18, 18, 0, 0]);
                 ctx.fill();
                 ctx.stroke();
 
+                // Fingers on bottom obstacle
                 for (let f = 0; f < 5; f++) {
                     let fx = pipes[i].x + (f * fingerWidth);
-                    ctx.fillRect(fx, bottomY - 15, fingerWidth - 1, 15);
-                    ctx.strokeRect(fx, bottomY - 15, fingerWidth - 1, 15);
+                    ctx.beginPath();
+                    ctx.roundRect(fx, bottomY, fingerWidth - 1, 14, [0, 0, 6, 6]);
+                    ctx.fill();
+                    ctx.stroke();
                 }
 
+                // Collision Detection
                 if (
-                    bird.x + bird.radius > pipes[i].x - 6 &&
-                    bird.x - bird.radius < pipes[i].x + pipes[i].width + 6 &&
+                    bird.x + bird.radius > pipes[i].x - 4 &&
+                    bird.x - bird.radius < pipes[i].x + pipes[i].width + 4 &&
                     (bird.y - bird.radius < currentTop || bird.y + bird.radius > bottomY)
                 ) {
                     endFlappyGame();
@@ -1293,10 +1302,11 @@
                 }
             }
 
+            // Score Display
             ctx.fillStyle = '#fff';
-            ctx.font = 'bold 16px sans-serif';
+            ctx.font = 'bold 15px sans-serif';
             ctx.textAlign = 'left';
-            ctx.fillText(`Score: ${flappyScore} / 10`, 15, 25);
+            ctx.fillText(`Distance Score: ${flappyScore} / 10`, 15, 25);
 
             frameCount++;
             requestAnimationFrame(loopFlappy);
@@ -1384,7 +1394,7 @@
                 lastSpinTimestamp = new Date().getTime().toString();
                 localStorage.setItem('biz_last_spin_time', lastSpinTimestamp);
 
-                alert(`🎉 Congratulations! You won ${reward.toLocaleString()} Biz777 coins!`);
+                alert(`🎉 Congratulations! You won ${reward.toLocaleString()} biz777 coins!`);
                 checkSpinCooldown();
             }, 4100);
         }
@@ -1466,7 +1476,7 @@
             document.getElementById(`lvlBtn${lvl}`).classList.add('active-level');
 
             let data = cupLevelsData[lvl];
-            document.getElementById('cupGameInfo').innerText = `Cost: ${data.cost.toLocaleString()} Biz777 | Win: ${data.win.toLocaleString()} Biz777`;
+            document.getElementById('cupGameInfo').innerText = `Cost: ${data.cost.toLocaleString()} biz777 | Win: ${data.win.toLocaleString()} biz777`;
             
             checkGlobalCooldown();
             initCupStageUI();
@@ -1505,7 +1515,7 @@
             if (checkGlobalCooldown()) return;
 
             let data = cupLevelsData[currentCupLevel];
-            if (score < data.cost) { alert("Not enough Biz777 coins!"); return; }
+            if (score < data.cost) { alert("Not enough biz777 coins!"); return; }
 
             score -= data.cost;
             updateUI();
@@ -1583,7 +1593,7 @@
 
                 setTimeout(() => {
                     if (nextLvl <= 5) {
-                        alert(`🎉 You won ${data.win.toLocaleString()} Biz777 coins! Level ${nextLvl} unlocked!`);
+                        alert(`🎉 You won ${data.win.toLocaleString()} biz777 coins! Level ${nextLvl} unlocked!`);
                         setCupLevel(nextLvl);
                     }
                 }, 200);
