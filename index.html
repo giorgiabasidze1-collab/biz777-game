@@ -1322,32 +1322,30 @@
             btn.style.opacity = "0.5";
             resText.innerText = "Slot spinning... 🎰";
 
-            // 5 მილიონიდან 1 შანსი (5,000,000-დან ზუსტად 1 კომბინაცია)
-            let isMegaJackpot = Math.floor(Math.random() * 5000000) === 7777;
-            let isDoubleMatch = Math.floor(Math.random() * 25) === 7;
+            // კაზინოს პრინციპი: წონები (weights) ალბათობისთვის. უმეტესად იქნება წაგება (ცარიელი/არამსგავსი).
+            // ჯეკპოტი (3 ოქრო) არის უკიდურესად იშვიათი.
+            const slotWeights = [
+                { symbols: [{icon:'🪙', label:'biz777'}, {icon:'🪙', label:'biz777'}, {icon:'🪙', label:'biz777'}], weight: 1, reward: 5000000, type: 'mega' },
+                { symbols: [{icon:'💎', label:'biz777'}, {icon:'💎', label:'biz777'}, {icon:'💎', label:'biz777'}], weight: 5, reward: 10000, type: 'triple' },
+                { symbols: [{icon:'⭐', label:'biz777'}, {icon:'⭐', label:'biz777'}, {icon:'⭐', label:'biz777'}], weight: 10, reward: 5000, type: 'triple' },
+                { symbols: [{icon:'💰', label:'biz777'}, {icon:'💰', label:'biz777'}, {icon:'💰', label:'biz777'}], weight: 15, reward: 3000, type: 'triple' },
+                // ორმაგი დამთხვევები (იშვიათი)
+                { symbols: [{icon:'🪙', label:'biz777'}, {icon:'🪙', label:'biz777'}, {icon:'🎁', label:'biz777'}], weight: 40, reward: 800, type: 'double' },
+                { symbols: [{icon:'💎', label:'biz777'}, {icon:'⭐', label:'biz777'}, {icon:'💎', label:'biz777'}], weight: 50, reward: 500, type: 'double' },
+                // დანარჩენი 879%+ არის მკაცრი წაგება
+                { symbols: [{icon:'💵', label:'biz777'}, {icon:'🪙', label:'biz777'}, {icon:'🎁', label:'biz777'}], weight: 8879, reward: 0, type: 'loss' }
+            ];
 
-            let finalResults = [];
-            if (isMegaJackpot) {
-                finalResults = [
-                    { icon: '🪙', label: 'biz777' },
-                    { icon: '🪙', label: 'biz777' },
-                    { icon: '🪙', label: 'biz777' }
-                ];
-            } else if (isDoubleMatch) {
-                let randomSym = slotItemsList[Math.floor(Math.random() * slotItemsList.length)];
-                finalResults = [randomSym, randomSym, slotItemsList[Math.floor(Math.random() * slotItemsList.length)]];
-                if(finalResults[2].icon === randomSym.icon) {
-                    finalResults[2] = { icon: '💎', label: 'biz777' };
-                }
-            } else {
-                finalResults = [
-                    slotItemsList[Math.floor(Math.random() * slotItemsList.length)],
-                    slotItemsList[Math.floor(Math.random() * slotItemsList.length)],
-                    slotItemsList[Math.floor(Math.random() * slotItemsList.length)]
-                ];
-                // რომ შემთხვევით ჩვეულებრივად არ დაემთხვეს 3 ოქრო (ჯეკპოტის გარდა)
-                if (finalResults[0].icon === '🪙' && finalResults[1].icon === '🪙' && finalResults[2].icon === '🪙') {
-                    finalResults[2] = { icon: '🎁', label: 'biz777' };
+            let totalWeight = slotWeights.reduce((sum, item) => sum + item.weight, 0);
+            let randomNum = Math.random() * totalWeight;
+            let currentSum = 0;
+            let selectedOutcome = slotWeights[slotWeights.length - 1];
+
+            for (let item of slotWeights) {
+                currentSum += item.weight;
+                if (randomNum <= currentSum) {
+                    selectedOutcome = item;
+                    break;
                 }
             }
 
@@ -1360,34 +1358,24 @@
 
                 if (counter > 20) {
                     clearInterval(spinInterval);
-                    document.getElementById('reel0').innerHTML = `<span>${finalResults[0].icon}</span>${finalResults[0].label}`;
-                    document.getElementById('reel1').innerHTML = `<span>${finalResults[1].icon}</span>${finalResults[1].label}`;
-                    document.getElementById('reel2').innerHTML = `<span>${finalResults[2].icon}</span>${finalResults[2].label}`;
+                    document.getElementById('reel0').innerHTML = `<span>${selectedOutcome.symbols[0].icon}</span>${selectedOutcome.symbols[0].label}`;
+                    document.getElementById('reel1').innerHTML = `<span>${selectedOutcome.symbols[1].icon}</span>${selectedOutcome.symbols[1].label}`;
+                    document.getElementById('reel2').innerHTML = `<span>${selectedOutcome.symbols[2].icon}</span>${selectedOutcome.symbols[2].label}`;
 
-                    if (finalResults[0].icon === '🪙' && finalResults[1].icon === '🪙' && finalResults[2].icon === '🪙' && isMegaJackpot) {
-                        score += 5000000;
+                    if (selectedOutcome.type === 'mega') {
+                        score += selectedOutcome.reward;
                         resText.innerText = "Mega Jackpot! +5,000,000 coins! 🎉";
                         alert("🎉 Incredible! All 3 biz777 coins landed and you won 5,000,000 coins Jackpot!");
-                    } else if (finalResults[0].icon === finalResults[1].icon && finalResults[1].icon === finalResults[2].icon) {
-                        score += 5000;
-                        resText.innerText = "Three of a kind! +5,000 coins!";
-                        alert("🌟 All 3 symbols matched! You won 5,000 coins!");
-                    } else if (
-                        (finalResults[0].icon === finalResults[1].icon) || 
-                        (finalResults[1].icon === finalResults[2].icon) || 
-                        (finalResults[0].icon === finalResults[2].icon)
-                    ) {
-                        score += 1000;
-                        resText.innerText = "2 matched! +1,000 coins!";
-                        alert("✨ You got 2 matching symbols! 1,000 coins awarded!");
+                    } else if (selectedOutcome.type === 'triple') {
+                        score += selectedOutcome.reward;
+                        resText.innerText = `Three of a kind! +${selectedOutcome.reward.toLocaleString()} coins!`;
+                        alert(`🌟 All 3 symbols matched! You won ${selectedOutcome.reward.toLocaleString()} coins!`);
+                    } else if (selectedOutcome.type === 'double') {
+                        score += selectedOutcome.reward;
+                        resText.innerText = `Partial match! +${selectedOutcome.reward.toLocaleString()} coins!`;
+                        alert(`✨ Matching symbols found! ${selectedOutcome.reward.toLocaleString()} coins awarded!`);
                     } else {
-                        let giveConsolation = Math.random() > 0.5;
-                        if(giveConsolation) {
-                            score += 50;
-                            resText.innerText = "+50 coins consolation bonus!";
-                        } else {
-                            resText.innerText = "No match, try again!";
-                        }
+                        resText.innerText = "No match, try again!";
                     }
 
                     updateUI();
