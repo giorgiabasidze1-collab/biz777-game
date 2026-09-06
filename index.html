@@ -410,8 +410,8 @@
             transform: translateZ(20px);
         }
 
-        /* --- SPIN WHEEL STYLES --- */
-        .spin-wheel-wrapper {
+        /* --- SLOT MACHINE 3D STYLES (COIN MASTER STYLE) --- */
+        .slot-machine-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -421,93 +421,91 @@
             transform-style: preserve-3d;
         }
 
-        .wheel-container {
+        .slot-board-3d {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 320px;
+            height: 210px;
+            background: radial-gradient(circle, #1e293b 0%, #080c14 90%);
+            border-radius: 20px;
+            border: 4px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             position: relative;
-            width: 260px;
-            height: 260px;
-            margin: 10px auto;
-            transform-style: preserve-3d;
+            margin: 5px 0;
+            overflow: hidden;
+            box-shadow: inset 0 10px 25px rgba(0,0,0,0.9), 0 15px 35px rgba(0,0,0,0.7);
             transform: translateZ(25px);
         }
 
-        .wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 6px solid var(--accent);
+        .slots-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            transform: translateZ(20px);
+        }
+
+        .slot-reel {
+            width: 75px;
+            height: 110px;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.5);
             position: relative;
             overflow: hidden;
-            transition: transform 4s cubic-bezier(0.15, 0.9, 0.2, 1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 30px var(--accent-glow);
-            background: #0f172a;
         }
 
-        .wheel-sector {
+        .slot-reel::before, .slot-reel::after {
+            content: '';
             position: absolute;
-            width: 50%;
-            height: 50%;
-            transform-origin: 100% 100%;
             left: 0;
-            top: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: bold;
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .wheel-sector:nth-child(1) { transform: rotate(0deg) skewY(-30deg); background: rgba(56, 189, 248, 0.8); }
-        .wheel-sector:nth-child(2) { transform: rotate(60deg) skewY(-30deg); background: rgba(34, 197, 94, 0.8); }
-        .wheel-sector:nth-child(3) { transform: rotate(120deg) skewY(-30deg); background: rgba(234, 179, 8, 0.8); }
-        .wheel-sector:nth-child(4) { transform: rotate(180deg) skewY(-30deg); background: rgba(239, 68, 68, 0.8); }
-        .wheel-sector:nth-child(5) { transform: rotate(240deg) skewY(-30deg); background: rgba(168, 85, 247, 0.8); }
-        .wheel-sector:nth-child(6) { transform: rotate(300deg) skewY(-30deg); background: rgba(236, 72, 153, 0.8); }
-
-        .sector-text {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            text-align: center;
-            transform: skewY(30deg) rotate(30deg);
-            font-size: 11px;
-            font-weight: bold;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-            left: -15px;
-            top: 25px;
-        }
-
-        .wheel-pointer {
-            position: absolute;
-            top: -16px;
-            left: 50%;
-            transform: translateX(-50%) translateZ(40px);
-            width: 0;
-            height: 0;
-            border-left: 12px solid transparent;
-            border-right: 12px solid transparent;
-            border-bottom: 24px solid var(--warning);
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.8));
-            z-index: 20;
-        }
-
-        .wheel-center-hub {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) translateZ(35px);
-            width: 50px;
-            height: 50px;
-            background: radial-gradient(circle, #f8fafc, #64748b);
-            border-radius: 50%;
-            border: 3px solid var(--accent);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+            width: 100%;
+            height: 25px;
             z-index: 10;
+            pointer-events: none;
+        }
+        .slot-reel::before {
+            top: 0;
+            background: linear-gradient(to bottom, rgba(15,23,42,0.9), transparent);
+        }
+        .slot-reel::after {
+            bottom: 0;
+            background: linear-gradient(to top, rgba(15,23,42,0.9), transparent);
+        }
+
+        .slot-reel-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: absolute;
+            transition: transform 0.1s linear;
+        }
+
+        .slot-item {
+            height: 110px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 38px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+        }
+
+        .slot-lever-area {
+            margin-top: 8px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
         }
 
         .cup-game-wrapper {
@@ -789,10 +787,10 @@
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
-                    <div class="game-card-option" onclick="openSubGame('spin')">
+                    <div class="game-card-option" onclick="openSubGame('slot')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🎡 Lucky Spin Wheel</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Spin the wheel daily for free random coin bonuses!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🎰 Biz777 3D Slot Spin</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Cost: 500 Energy | Match 3 biz777 for 50,000 Coins!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
@@ -853,29 +851,30 @@
                     </div>
                 </div>
 
-                <div class="sub-game-container" id="subgame-spin">
+                <div class="sub-game-container" id="subgame-slot">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
                         <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Lucky Spin Wheel</h3>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Biz777 3D Slot Spin</h3>
                         <div style="width: 50px;"></div>
                     </div>
 
-                    <div class="spin-wheel-wrapper">
-                        <div class="wheel-container">
-                            <div class="wheel-pointer"></div>
-                            <div class="wheel" id="luckyWheel">
-                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">100 biz777</div></div>
-                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">500 biz777</div></div>
-                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">50 biz777</div></div>
-                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">1,000 biz777</div></div>
-                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">200 biz777</div></div>
-                                <div class="wheel-sector"><div class="sector-text" style="transform: skewY(30deg) rotate(30deg);">5,000 biz777</div></div>
-                            </div>
-                            <div class="wheel-center-hub">🎯</div>
+                    <div class="slot-machine-wrapper">
+                        <div style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
+                            Cost: 500 Energy | 3x biz777 Jackpots = 50,000 Coins!
                         </div>
 
-                        <button class="btn" id="spinWheelBtn" onclick="spinTheWheel()" style="width: 100%;">Spin Wheel 🎡</button>
-                        <div id="spinCooldownText" style="font-size: 11px; color: var(--text-secondary); text-align: center;"></div>
+                        <div class="slot-board-3d">
+                            <div class="slots-row">
+                                <div class="slot-reel" id="reel0">🪙</div>
+                                <div class="slot-reel" id="reel1">🪙</div>
+                                <div class="slot-reel" id="reel2">🪙</div>
+                            </div>
+                        </div>
+
+                        <div class="slot-lever-area">
+                            <button class="btn" id="spinSlotBtn" onclick="spinSlotMachine()" style="width: 100%;">SPIN SLOT (500 ⚡) 🎰</button>
+                            <div id="slotResultText" style="font-size: 11px; color: var(--text-secondary); text-align: center; height: 16px;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -945,7 +944,6 @@
             5: { unlocked: false, completed: false }
         };
         let globalCupCooldownTimestamp = localStorage.getItem('biz_cup_global_cooldown') || "";
-        let lastSpinTimestamp = localStorage.getItem('biz_last_spin_time') || "";
 
         let userId = "user";
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -1152,7 +1150,6 @@
             document.getElementById(`subgame-${gameName}`).classList.add('active-subgame');
             if (gameName === 'flappy' && !flappyRunning) { startFlappyGame(); }
             if (gameName === 'cups') { initCupStageUI(); }
-            if (gameName === 'spin') { checkSpinCooldown(); }
         }
 
         function backToGamesMenu() {
@@ -1161,7 +1158,7 @@
             document.getElementById('gamesMenu').style.display = 'flex';
         }
 
-        // --- FLAPPY BIZ777 GAME (ROUNDED HANDS & BIZ777 COIN) ---
+        // --- FLAPPY BIZ777 GAME ---
         const canvas = document.getElementById('flappyCanvas');
         const ctx = canvas.getContext('2d');
         let flappyRunning = false;
@@ -1334,64 +1331,79 @@
             };
         }
 
-        // --- LUCKY SPIN WHEEL LOGIC ---
-        const spinRewards = [100, 500, 50, 1000, 200, 5000];
+        // --- BIZ777 SLOT MACHINE (COIN MASTER STYLE 3D) ---
+        const slotItemsList = ['🪙', '💰', '💵', '⭐', '💎', '🎁'];
 
-        function checkSpinCooldown() {
-            let now = new Date().getTime();
-            let btn = document.getElementById('spinWheelBtn');
-            let cooldownText = document.getElementById('spinCooldownText');
-
-            if (lastSpinTimestamp) {
-                let diff = now - parseInt(lastSpinTimestamp);
-                let dayMs = 24 * 60 * 60 * 1000;
-                if (diff < dayMs) {
-                    let timeLeft = dayMs - diff;
-                    let hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                    let mins = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    btn.disabled = true;
-                    btn.style.opacity = "0.5";
-                    cooldownText.innerText = `⏳ Next free spin in ${hours}h ${mins}m`;
-                    return true;
-                }
+        function spinSlotMachine() {
+            if (energy < 500) {
+                alert("Not enough energy! You need 500 energy to spin.");
+                return;
             }
-            btn.disabled = false;
-            btn.style.opacity = "1";
-            cooldownText.innerText = "";
-            return false;
-        }
 
-        function spinTheWheel() {
-            if (checkSpinCooldown()) return;
+            energy -= 500;
+            updateUI();
+            saveState();
 
-            let btn = document.getElementById('spinWheelBtn');
+            let btn = document.getElementById('spinSlotBtn');
+            let resText = document.getElementById('slotResultText');
             btn.disabled = true;
             btn.style.opacity = "0.5";
+            resText.innerText = "Spinning slots... 🎰";
 
-            let winningIndex = Math.floor(Math.random() * spinRewards.length);
-            let degreesPerSector = 360 / spinRewards.length;
-            let extraSpins = 5; 
-            let targetDegree = (extraSpins * 360) + (winningIndex * degreesPerSector) + (degreesPerSector / 2);
+            // 1-in-2,000,000 chance for 3 biz777 jackpots (50,000 coins)
+            let isJackpot = Math.floor(Math.random() * 2000000) === 777;
             
-            let wheel = document.getElementById('luckyWheel');
-            wheel.style.transition = 'transform 4s cubic-bezier(0.15, 0.9, 0.2, 1)';
-            wheel.style.transform = `rotate(-${targetDegree}deg)`;
+            let finalResults = [];
+            if (isJackpot) {
+                finalResults = ['🪙', '🪙', '🪙'];
+            } else {
+                // Regular random spins (with low chance of normal match)
+                finalResults = [
+                    slotItemsList[Math.floor(Math.random() * slotItemsList.length)],
+                    slotItemsList[Math.floor(Math.random() * slotItemsList.length)],
+                    slotItemsList[Math.floor(Math.random() * slotItemsList.length)]
+                ];
+                // Ensure it doesn't accidentally hit 3 biz777s on regular random
+                if (finalResults[0] === '🪙' && finalResults[1] === '🪙' && finalResults[2] === '🪙') {
+                    finalResults[2] = '💰';
+                }
+            }
 
-            setTimeout(() => {
-                let reward = spinRewards[winningIndex];
-                score += reward;
-                updateUI();
-                saveState();
+            // Animation simulation for reels
+            let counter = 0;
+            let spinInterval = setInterval(() => {
+                document.getElementById('reel0').innerText = slotItemsList[Math.floor(Math.random() * slotItemsList.length)];
+                document.getElementById('reel1').innerText = slotItemsList[Math.floor(Math.random() * slotItemsList.length)];
+                document.getElementById('reel2').innerText = slotItemsList[Math.floor(Math.random() * slotItemsList.length)];
+                counter++;
 
-                lastSpinTimestamp = new Date().getTime().toString();
-                localStorage.setItem('biz_last_spin_time', lastSpinTimestamp);
+                if (counter > 20) {
+                    clearInterval(spinInterval);
+                    document.getElementById('reel0').innerText = finalResults[0];
+                    document.getElementById('reel1').innerText = finalResults[1];
+                    document.getElementById('reel2').innerText = finalResults[2];
 
-                alert(`🎉 Congratulations! You won ${reward.toLocaleString()} biz777 coins!`);
-                checkSpinCooldown();
-            }, 4100);
+                    if (finalResults[0] === '🪙' && finalResults[1] === '🪙' && finalResults[2] === '🪙') {
+                        score += 50000;
+                        resText.innerText = "JACKPOT! +50,000 Coins! 🎉";
+                        alert("🎉 JACKPOT! You hit 3 biz777 coins and won 50,000 coins!");
+                    } else if (finalResults[0] === finalResults[1] && finalResults[1] === finalResults[2]) {
+                        score += 5000;
+                        resText.innerText = "Nice! +5,000 Coins!";
+                        alert("🌟 Triple match! You won 5,000 coins!");
+                    } else {
+                        resText.innerText = "No match. Try again!";
+                    }
+
+                    updateUI();
+                    saveState();
+                    btn.disabled = false;
+                    btn.style.opacity = "1";
+                }
+            }, 90);
         }
 
-        // --- 3D CUP & BALL GAME LOGIC (WITH ENERGY REWARDS) ---
+        // --- 3D CUP & BALL GAME LOGIC ---
         let currentCupLevel = 1;
         let winningIndex = 1;
         let cupPositions = [0, 1, 2];
@@ -1572,7 +1584,7 @@
 
             if (chosenCupId === winningCupId) {
                 score += data.win;
-                energy = Math.min(maxEnergy, energy + data.energyReward); // მიცემული ენერგია
+                energy = Math.min(maxEnergy, energy + data.energyReward);
                 cupLevelDataState[currentCupLevel].completed = true;
                 
                 let nextLvl = currentCupLevel + 1;
