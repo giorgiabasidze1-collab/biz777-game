@@ -784,13 +784,10 @@
                 </div>
             </div>
 
-            <!-- Leaderboard: Top 30 full list -->
             <div class="tab-pane" id="tab-leaderboard">
                 <div class="leaderboard-card">
                     <h3 style="margin-bottom: 15px; text-align: center; color: var(--accent);">🏆 Top 30 Leaderboard</h3>
-                    <div class="leaderboard-container" id="leaderboardContainer">
-                        <!-- Script dynamically injects top 30 participants here -->
-                    </div>
+                    <div class="leaderboard-container" id="leaderboardContainer"></div>
                 </div>
             </div>
 
@@ -803,8 +800,8 @@
                     
                     <div class="game-card-option" onclick="openSubGame('flappy')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🪙 Flappy Biz777 (Hard Mode)</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Avoid rounded moving hands! Score 10 for +500 Energy!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🪙 Flappy Biz777 (Hands Mode)</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Land on moving hands & score classically! Score 10 for +500 Energy!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
@@ -829,12 +826,12 @@
                 <div class="sub-game-container" id="subgame-flappy">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
                         <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Flappy Biz777 (3D)</h3>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Flappy Biz777 (Hands)</h3>
                         <div style="width: 50px;"></div>
                     </div>
                     <canvas id="flappyCanvas" width="300" height="340"></canvas>
                     <div style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 3px;">
-                        Tap canvas to jump smoothly. Avoid rounded obstacles & distance!
+                        Tap to jump, land on moving hands, and score classically!
                     </div>
                 </div>
 
@@ -1133,7 +1130,6 @@
             }
         }
 
-        // Leaderboard rendering: Shows exact Top 30 participants including user
         function renderLeaderboard() {
             const container = document.getElementById('leaderboardContainer');
             container.innerHTML = "";
@@ -1231,10 +1227,11 @@
             document.getElementById('gamesMenu').style.display = 'flex';
         }
 
+        // Flappy / Escape Hand Arcade Game Logic (Coin jumping on Hands)
         const canvas = document.getElementById('flappyCanvas');
         const ctx = canvas.getContext('2d');
         let flappyRunning = false;
-        let bird = { x: 50, y: 150, radius: 15, gravity: 0.42, lift: -6.2, velocity: 0 };
+        let bird = { x: 50, y: 150, radius: 14, gravity: 0.4, lift: -6, velocity: 0 };
         let pipes = [];
         let frameCount = 0;
         let flappyScore = 0;
@@ -1261,14 +1258,17 @@
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            // Physics
             bird.velocity += bird.gravity;
             bird.y += bird.velocity;
 
+            // Boundaries check
             if (bird.y + bird.radius > canvas.height || bird.y - bird.radius < 0) {
                 endFlappyGame();
                 return;
             }
 
+            // Draw Coin Character
             ctx.beginPath();
             ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
             ctx.fillStyle = '#facc15';
@@ -1280,94 +1280,67 @@
             ctx.font = 'bold 9px sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('biz777', bird.x, bird.y);
+            ctx.fillText('COIN', bird.x, bird.y);
 
-            if (frameCount % 100 === 0) {
-                let pipeWidth = 65;
-                let gapHeight = 150;
-                let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 80)) + 40;
-                pipes.push({ 
-                    x: canvas.width, 
-                    top: topHeight, 
-                    bottom: canvas.height - topHeight - gapHeight, 
-                    width: pipeWidth, 
-                    passed: false,
-                    vOffset: 0,
-                    vSpeed: (Math.random() > 0.5 ? 1 : -1) * 0.8
+            // Spawn Hands (Platforms to jump/land on)
+            if (frameCount % 90 === 0) {
+                let handWidth = 100;
+                let handHeight = 25;
+                let randomX = Math.random() * (canvas.width - handWidth);
+                let randomY = canvas.height - 60 - (Math.random() * 150);
+                pipes.push({
+                    x: randomX,
+                    y: randomY,
+                    w: handWidth,
+                    h: handHeight,
+                    passed: false
                 });
             }
 
+            // Move and draw hands
             for (let i = pipes.length - 1; i >= 0; i--) {
-                pipes[i].x -= 2.4;
-                pipes[i].vOffset += pipes[i].vSpeed;
-                if (pipes[i].vOffset > 15 || pipes[i].vOffset < -15) {
-                    pipes[i].vSpeed *= -1;
+                let h = pipes[i];
+                h.x += 1.5;
+                if (h.x + h.w > canvas.width || h.x < 0) {
+                    h.w *= -1;
                 }
 
-                let currentTop = pipes[i].top + pipes[i].vOffset;
-                let currentBottom = pipes[i].bottom - pipes[i].vOffset;
-
-                let handColor = '#ffdbac';
-                let outlineColor = '#e0ac69';
-
-                ctx.fillStyle = handColor;
-                ctx.strokeStyle = outlineColor;
+                // Draw Hand Graphics
+                ctx.fillStyle = '#ffdbac';
+                ctx.strokeStyle = '#e0ac69';
                 ctx.lineWidth = 2;
-
                 ctx.beginPath();
-                ctx.roundRect(pipes[i].x, 0, pipes[i].width, currentTop, [0, 0, 18, 18]);
+                ctx.roundRect(h.x, h.y, h.w, h.h, [8, 8, 8, 8]);
                 ctx.fill();
                 ctx.stroke();
 
-                let fingerWidth = pipes[i].width / 5;
-                for (let f = 0; f < 5; f++) {
-                    let fx = pipes[i].x + (f * fingerWidth);
-                    ctx.beginPath();
-                    ctx.roundRect(fx, currentTop - 8, fingerWidth - 1, 14, [6, 6, 0, 0]);
-                    ctx.fill();
-                    ctx.stroke();
-                }
-
-                let bottomY = canvas.height - currentBottom;
-                ctx.beginPath();
-                ctx.roundRect(pipes[i].x, bottomY, pipes[i].width, currentBottom, [18, 18, 0, 0]);
-                ctx.fill();
-                ctx.stroke();
-
-                for (let f = 0; f < 5; f++) {
-                    let fx = pipes[i].x + (f * fingerWidth);
-                    ctx.beginPath();
-                    ctx.roundRect(fx, bottomY, fingerWidth - 1, 14, [0, 0, 6, 6]);
-                    ctx.fill();
-                    ctx.stroke();
-                }
-
+                // Collision & Land check
                 if (
-                    bird.x + bird.radius > pipes[i].x - 4 &&
-                    bird.x - bird.radius < pipes[i].x + pipes[i].width + 4 &&
-                    (bird.y - bird.radius < currentTop || bird.y + bird.radius > bottomY)
+                    bird.x + bird.radius > h.x &&
+                    bird.x - bird.radius < h.x + h.w &&
+                    bird.y + bird.radius >= h.y &&
+                    bird.y + bird.radius <= h.y + h.h + 8 &&
+                    bird.velocity > 0
                 ) {
-                    endFlappyGame();
-                    return;
-                }
-
-                if (!pipes[i].passed && pipes[i].x + pipes[i].width < bird.x) {
-                    pipes[i].passed = true;
-                    flappyScore++;
-                    if (flappyScore === 10) {
-                        checkFlappyReward();
+                    // Successfully landed on the hand!
+                    bird.velocity = bird.lift; // Bounce up automatically
+                    if (!h.passed) {
+                        h.passed = true;
+                        flappyScore++; // Classic scoring
+                        score += 10;   // Adds to main balance as well
+                        updateUI();
+                        if (flappyScore === 10) {
+                            checkFlappyReward();
+                        }
                     }
-                }
-
-                if (pipes[i].x + pipes[i].width < 0) {
-                    pipes.splice(i, 1);
                 }
             }
 
+            // Render Classic Score
             ctx.fillStyle = '#fff';
             ctx.font = 'bold 15px sans-serif';
             ctx.textAlign = 'left';
-            ctx.fillText(`Distance Score: ${flappyScore} / 10`, 15, 25);
+            ctx.fillText(`Score: ${flappyScore} / 10`, 15, 25);
 
             frameCount++;
             requestAnimationFrame(loopFlappy);
