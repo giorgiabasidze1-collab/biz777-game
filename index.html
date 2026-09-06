@@ -783,8 +783,8 @@
 
                     <div class="game-card-option" onclick="openSubGame('cups')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Biz777 Cup & Ball (3D Levels)</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Play through 5 progressive 3D levels! Complete all 5 to reset daily.</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Biz777 Find Ball (3D Levels)</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Find the biz777 ball to win coins AND bonus energy!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
@@ -813,7 +813,7 @@
                 <div class="sub-game-container" id="subgame-cups">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
                         <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Biz777 3D Cup Game</h3>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Find Biz777 Ball</h3>
                         <div style="width: 50px;"></div>
                     </div>
 
@@ -827,7 +827,7 @@
                         </div>
 
                         <div id="cupGameInfo" style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
-                            Cost: 500 Biz777 | Win: 1,000 Biz777
+                            Cost: 500 Biz777 | Win: 1,000 Coins + 200 Energy
                         </div>
 
                         <div class="cups-board-3d">
@@ -1200,7 +1200,6 @@
                 return;
             }
 
-            // Draw Coin (biz777) as the jumping item
             ctx.beginPath();
             ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
             ctx.fillStyle = '#facc15';
@@ -1214,7 +1213,6 @@
             ctx.textBaseline = 'middle';
             ctx.fillText('biz777', bird.x, bird.y);
 
-            // Spawn Obstacles with Distance and Rounded Hands
             if (frameCount % 100 === 0) {
                 let pipeWidth = 65;
                 let gapHeight = 150;
@@ -1231,7 +1229,7 @@
             }
 
             for (let i = pipes.length - 1; i >= 0; i--) {
-                pipes[i].x -= 2.4; // Controlled smooth distance speed
+                pipes[i].x -= 2.4;
                 pipes[i].vOffset += pipes[i].vSpeed;
                 if (pipes[i].vOffset > 15 || pipes[i].vOffset < -15) {
                     pipes[i].vSpeed *= -1;
@@ -1247,13 +1245,11 @@
                 ctx.strokeStyle = outlineColor;
                 ctx.lineWidth = 2;
 
-                // Top rounded obstacle (Hand)
                 ctx.beginPath();
                 ctx.roundRect(pipes[i].x, 0, pipes[i].width, currentTop, [0, 0, 18, 18]);
                 ctx.fill();
                 ctx.stroke();
 
-                // Fingers on top obstacle
                 let fingerWidth = pipes[i].width / 5;
                 for (let f = 0; f < 5; f++) {
                     let fx = pipes[i].x + (f * fingerWidth);
@@ -1263,14 +1259,12 @@
                     ctx.stroke();
                 }
 
-                // Bottom rounded obstacle (Hand)
                 let bottomY = canvas.height - currentBottom;
                 ctx.beginPath();
                 ctx.roundRect(pipes[i].x, bottomY, pipes[i].width, currentBottom, [18, 18, 0, 0]);
                 ctx.fill();
                 ctx.stroke();
 
-                // Fingers on bottom obstacle
                 for (let f = 0; f < 5; f++) {
                     let fx = pipes[i].x + (f * fingerWidth);
                     ctx.beginPath();
@@ -1279,7 +1273,6 @@
                     ctx.stroke();
                 }
 
-                // Collision Detection
                 if (
                     bird.x + bird.radius > pipes[i].x - 4 &&
                     bird.x - bird.radius < pipes[i].x + pipes[i].width + 4 &&
@@ -1302,7 +1295,6 @@
                 }
             }
 
-            // Score Display
             ctx.fillStyle = '#fff';
             ctx.font = 'bold 15px sans-serif';
             ctx.textAlign = 'left';
@@ -1399,7 +1391,7 @@
             }, 4100);
         }
 
-        // --- 3D CUP & BALL GAME LOGIC ---
+        // --- 3D CUP & BALL GAME LOGIC (WITH ENERGY REWARDS) ---
         let currentCupLevel = 1;
         let winningIndex = 1;
         let cupPositions = [0, 1, 2];
@@ -1407,11 +1399,11 @@
         let isShuffling = false;
 
         const cupLevelsData = {
-            1: { cost: 500, win: 1000, shuffles: 4, speed: 350 },
-            2: { cost: 2500, win: 5000, shuffles: 7, speed: 250 },
-            3: { cost: 10000, win: 25000, shuffles: 11, speed: 180 },
-            4: { cost: 50000, win: 150000, shuffles: 16, speed: 120 },
-            5: { cost: 200000, win: 800000, shuffles: 24, speed: 80 }
+            1: { cost: 500, win: 1000, energyReward: 200, shuffles: 4, speed: 350 },
+            2: { cost: 2500, win: 5000, energyReward: 1000, shuffles: 7, speed: 250 },
+            3: { cost: 10000, win: 25000, energyReward: 3500, shuffles: 11, speed: 180 },
+            4: { cost: 50000, win: 150000, energyReward: 10000, shuffles: 16, speed: 120 },
+            5: { cost: 200000, win: 800000, energyReward: 30000, shuffles: 24, speed: 80 }
         };
 
         const SLOT_DISTANCE = 105;
@@ -1476,7 +1468,7 @@
             document.getElementById(`lvlBtn${lvl}`).classList.add('active-level');
 
             let data = cupLevelsData[lvl];
-            document.getElementById('cupGameInfo').innerText = `Cost: ${data.cost.toLocaleString()} biz777 | Win: ${data.win.toLocaleString()} biz777`;
+            document.getElementById('cupGameInfo').innerText = `Cost: ${data.cost.toLocaleString()} Biz777 | Win: ${data.win.toLocaleString()} Coins + ${data.energyReward.toLocaleString()} Energy`;
             
             checkGlobalCooldown();
             initCupStageUI();
@@ -1580,6 +1572,7 @@
 
             if (chosenCupId === winningCupId) {
                 score += data.win;
+                energy = Math.min(maxEnergy, energy + data.energyReward); // მიცემული ენერგია
                 cupLevelDataState[currentCupLevel].completed = true;
                 
                 let nextLvl = currentCupLevel + 1;
@@ -1593,8 +1586,10 @@
 
                 setTimeout(() => {
                     if (nextLvl <= 5) {
-                        alert(`🎉 You won ${data.win.toLocaleString()} biz777 coins! Level ${nextLvl} unlocked!`);
+                        alert(`🎉 Correct! You won ${data.win.toLocaleString()} coins AND +${data.energyReward.toLocaleString()} Energy! Level ${nextLvl} unlocked!`);
                         setCupLevel(nextLvl);
+                    } else {
+                        alert(`🎉 Correct! You won ${data.win.toLocaleString()} coins AND +${data.energyReward.toLocaleString()} Energy!`);
                     }
                 }, 200);
             } else {
