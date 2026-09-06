@@ -459,7 +459,7 @@
             transform: translateZ(20px);
         }
 
-        .slot-machine-wrapper, .rps-game-wrapper {
+        .slot-machine-wrapper, .jeiran-game-wrapper, .paperwrapsrock-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -823,10 +823,11 @@
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
-                    <div class="game-card-option" onclick="openSubGame('rps')">
+                    <!-- შეიცვალა მეოთხე თამაში ვიდეოს მიხედვით -->
+                    <div class="game-card-option" onclick="openSubGame('paperwrapsrock')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">✂️ Rock Paper Scissors PvP</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Rock, Paper, Scissors Best of 3 vs Online Opponent!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">✌️ Paper Wraps Rock</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Classic Battle with Hands UI, Timer & Score! Win coins!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
@@ -914,39 +915,52 @@
                     </div>
                 </div>
 
-                <div class="sub-game-container" id="subgame-rps">
+                <!-- ზუსტად ვიდეოდან აღებული Paper Wraps Rock თამაში ხელების ვიზუალით, ტაიმერით და ქულებით -->
+                <div class="sub-game-container" id="subgame-paperwrapsrock">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
                         <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Rock Paper Scissors PvP</h3>
+                        <h3 style="font-size: 13px; color: var(--accent);">✌️ Paper Wraps Rock</h3>
                         <div style="width: 50px;"></div>
                     </div>
 
-                    <div class="rps-game-wrapper">
-                        <div style="font-size: 11px; color: var(--text-secondary); text-align: center;">
-                            Select stake & match in Best of 3 rounds! Random choices ensure total fairness.
+                    <div class="paperwrapsrock-wrapper">
+                        <div style="display: flex; justify-content: space-between; width: 100%; padding: 0 10px; font-weight: bold; font-size: 13px; color: var(--warning);">
+                            <span id="pwrTimer">⏱️ 45 sec</span>
+                            <span id="pwrScore">Score: 0</span>
                         </div>
 
-                        <div class="levels-container" style="flex-wrap: wrap;">
-                            <button class="level-btn active-level" id="rpsBet500" onclick="setRpsBet(500)">500 Coins</button>
-                            <button class="level-btn" id="rpsBet1000" onclick="setRpsBet(1000)">1000 Coins</button>
-                            <button class="level-btn" id="rpsBet5000" onclick="setRpsBet(5000)">5000 Coins</button>
-                            <button class="level-btn" id="rpsBet10000" onclick="setRpsBet(10000)">10000 Coins</button>
+                        <!-- ვიდეოს დიზაინის მსგავსი ვიზუალური სათამაშო არე ხელებით -->
+                        <div style="position: relative; width: 100%; height: 180px; background: radial-gradient(circle, #2a1b4e 0%, #0d0918 90%); border: 3px solid var(--accent); border-radius: 16px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);">
+                            <div style="text-align: left; z-index: 2;">
+                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold;">PLAYER 1</div>
+                                <div id="pwrLeftHand" style="font-size: 48px; filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));">✊</div>
+                            </div>
+
+                            <div style="position: absolute; width: 100%; text-align: center; pointer-events: none; z-index: 1;">
+                                <div id="pwrActionText" style="font-size: 18px; font-weight: 900; color: #facc15; text-shadow: 0 2px 5px rgba(0,0,0,0.9); transform: rotate(-5deg);">PAPER WRAPS ROCK</div>
+                            </div>
+
+                            <div style="text-align: right; z-index: 2;">
+                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold;">OPPONENT</div>
+                                <div id="pwrRightHand" style="font-size: 48px; transform: scaleX(-1); filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));">✊</div>
+                            </div>
                         </div>
 
-                        <div id="rpsStatusBoard" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; width: 100%; text-align: center;">
-                            <div style="font-size: 13px; font-weight: bold; color: var(--warning); margin-bottom: 4px;" id="rpsRoundIndicator">Match Setup: Ready</div>
-                            <div style="font-size: 12px; color: var(--text-secondary);" id="rpsScoreBoardText">You (0) - Opponent (0)</div>
+                        <!-- PLAYER 1 კონტროლის ღილაკები ვიდეოს მიხედვით -->
+                        <div style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
+                            <div style="font-size: 11px; color: var(--text-secondary); text-align: center; font-weight: bold;">PLAYER 1 CONTROLS: Choose your sign!</div>
+                            <div style="display: flex; gap: 8px; justify-content: center;">
+                                <button class="btn" onclick="playPwrChoice('scissors')" style="flex: 1; font-size: 12px;">✌️ Scissors</button>
+                                <button class="btn" onclick="playPwrChoice('paper')" style="flex: 1; font-size: 12px;">✋ Paper</button>
+                                <button class="btn" onclick="playPwrChoice('rock')" style="flex: 1; font-size: 12px;">✊ Rock</button>
+                            </div>
                         </div>
 
-                        <div style="display: none; gap: 10px; width: 100%; justify-content: center; margin-top: 5px;" id="rpsActionButtons">
-                            <button class="btn" onclick="playRpsRound('rock')" style="flex: 1; font-size: 12px;">🪨 Rock</button>
-                            <button class="btn" onclick="playRpsRound('paper')" style="flex: 1; font-size: 12px;">📄 Paper</button>
-                            <button class="btn" onclick="playRpsRound('scissors')" style="flex: 1; font-size: 12px;">✂️ Scissors</button>
-                        </div>
-
-                        <button class="btn" id="startRpsMatchBtn" onclick="startRpsMatch()" style="width: 100%; background: #22c55e; color: #000;">Start Match ⚔️</button>
+                        <button class="btn" id="startPwrBtn" onclick="startPwrGame()" style="width: 100%; background: #22c55e; color: #000;">Start Battle 🚀 (Cost: 200 🪙)</button>
+                        <div id="pwrResultMsg" style="font-size: 11px; color: var(--text-secondary); text-align: center; height: 16px;"></div>
                     </div>
                 </div>
+
             </div>
 
             <div class="tab-pane" id="tab-friends">
@@ -1262,12 +1276,12 @@
             document.getElementById(`subgame-${gameName}`).classList.add('active-subgame');
             if (gameName === 'flappy' && !flappyRunning) { startFlappyGame(); }
             if (gameName === 'cups') { initCupStageUI(); }
-            if (gameName === 'rps') { resetRpsLobby(); }
+            if (gameName === 'paperwrapsrock') { resetPwrLobby(); }
         }
 
         function backToGamesMenu() {
             flappyRunning = false;
-            rpsActiveMatch = false;
+            pwrGameActive = false;
             document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
             document.getElementById('gamesMenu').style.display = 'flex';
         }
@@ -1742,120 +1756,116 @@
             saveState();
         }
 
-        // --- Rock Paper Scissors PvP Logic ---
-        let rpsCurrentBet = 500;
-        let rpsUserScore = 0;
-        let rpsOpponentScore = 0;
-        let rpsCurrentRound = 0;
-        let rpsActiveMatch = false;
+        // --- Paper Wraps Rock (ვიდეოში ნაჩვენები მინი-თამაშის სრული ლოგიკა) ---
+        let pwrGameActive = false;
+        let pwrScore = 0;
+        let pwrTimeLeft = 45;
+        let pwrTimerInterval = null;
 
-        function setRpsBet(amount) {
-            if (rpsActiveMatch) return;
-            rpsCurrentBet = amount;
-            [500, 1000, 5000, 10000].forEach(val => {
-                let btn = document.getElementById(`rpsBet${val}`);
-                if (val === amount) {
-                    btn.classList.add('active-level');
-                } else {
-                    btn.classList.remove('active-level');
-                }
-            });
-            document.getElementById('startRpsMatchBtn').innerText = `Start Match (${rpsCurrentBet.toLocaleString()} 🪙) ⚔️`;
+        const handSigns = {
+            rock: '✊',
+            paper: '✋',
+            scissors: '✌️'
+        };
+
+        function resetPwrLobby() {
+            pwrGameActive = false;
+            pwrScore = 0;
+            pwrTimeLeft = 45;
+            if (pwrTimerInterval) clearInterval(pwrTimerInterval);
+            document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimeLeft} sec`;
+            document.getElementById('pwrScore').innerText = `Score: 0`;
+            document.getElementById('pwrActionText').innerText = `PAPER WRAPS ROCK`;
+            document.getElementById('pwrLeftHand').innerText = '✊';
+            document.getElementById('pwrRightHand').innerText = '✊';
+            document.getElementById('startPwrBtn').style.display = 'block';
+            document.getElementById('startPwrBtn').innerText = `Start Battle 🚀 (Cost: 200 🪙)`;
+            document.getElementById('pwrResultMsg').innerText = "";
         }
 
-        function resetRpsLobby() {
-            rpsUserScore = 0;
-            rpsOpponentScore = 0;
-            rpsCurrentRound = 0;
-            rpsActiveMatch = false;
-            document.getElementById('rpsRoundIndicator').innerText = `Match Setup: Ready (Bet: ${rpsCurrentBet.toLocaleString()} Coins)`;
-            document.getElementById('rpsScoreBoardText').innerText = `You (0) - Opponent (0)`;
-            document.getElementById('rpsActionButtons').style.display = 'none';
-            document.getElementById('startRpsMatchBtn').style.display = 'block';
-            document.getElementById('startRpsMatchBtn').innerText = `Start Match (${rpsCurrentBet.toLocaleString()} 🪙) ⚔️`;
-        }
-
-        function startRpsMatch() {
-            if (score < rpsCurrentBet) {
-                alert("Not enough coins for this bet!");
+        function startPwrGame() {
+            const cost = 200;
+            if (score < cost) {
+                alert("Not enough coins! Cost is 200 coins.");
                 return;
             }
-            score -= rpsCurrentBet;
+
+            score -= cost;
             updateUI();
             saveState();
 
-            rpsUserScore = 0;
-            rpsOpponentScore = 0;
-            rpsCurrentRound = 1;
-            rpsActiveMatch = true;
+            pwrGameActive = true;
+            pwrScore = 0;
+            pwrTimeLeft = 45;
+            document.getElementById('startPwrBtn').style.display = 'none';
+            document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
+            document.getElementById('pwrActionText').innerText = `MAKE YOUR MOVE!`;
+            document.getElementById('pwrResultMsg').innerText = "Battle started! Choose Rock, Paper or Scissors.";
 
-            document.getElementById('startRpsMatchBtn').style.display = 'none';
-            document.getElementById('rpsActionButtons').style.display = 'flex';
-            document.getElementById('rpsRoundIndicator').innerText = `Round 1 / 3 (Best of 3)`;
-            document.getElementById('rpsScoreBoardText').innerText = `You (0) - Opponent (0)`;
+            if (pwrTimerInterval) clearInterval(pwrTimerInterval);
+            pwrTimerInterval = setInterval(() => {
+                pwrTimeLeft--;
+                document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimeLeft} sec`;
+                if (pwrTimeLeft <= 0) {
+                    clearInterval(pwrTimerInterval);
+                    endPwrGame();
+                }
+            }, 1000);
         }
 
-        function playRpsRound(userChoice) {
-            if (!rpsActiveMatch) return;
+        function playPwrChoice(userChoice) {
+            if (!pwrGameActive) return;
 
             const choices = ['rock', 'paper', 'scissors'];
-            const choiceEmojis = { rock: '🪨 Rock', paper: '📄 Paper', scissors: '✂️ Scissors' };
             let opponentChoice = choices[Math.floor(Math.random() * choices.length)];
 
-            let roundResultText = "";
+            document.getElementById('pwrLeftHand').innerText = handSigns[userChoice];
+            document.getElementById('pwrRightHand').innerText = handSigns[opponentChoice];
+
+            let resultTitle = "";
             if (userChoice === opponentChoice) {
-                roundResultText = `Round ${rpsCurrentRound}: Tie! Both chose ${choiceEmojis[userChoice]}`;
+                resultTitle = "TIE! No points.";
+                document.getElementById('pwrActionText').innerText = "IT'S A TIE!";
             } else if (
                 (userChoice === 'rock' && opponentChoice === 'scissors') ||
                 (userChoice === 'paper' && opponentChoice === 'rock') ||
                 (userChoice === 'scissors' && opponentChoice === 'paper')
             ) {
-                rpsUserScore++;
-                roundResultText = `Round ${rpsCurrentRound}: You Won! (${choiceEmojis[userChoice]} vs ${choiceEmojis[opponentChoice]})`;
+                pwrScore += 1;
+                resultTitle = "YOU WIN THIS ROUND! +1 pt";
+                document.getElementById('pwrActionText').innerText = "WINNER! 🎉";
             } else {
-                rpsOpponentScore++;
-                roundResultText = `Round ${rpsCurrentRound}: Opponent Won! (${choiceEmojis[userChoice]} vs ${choiceEmojis[opponentChoice]})`;
+                resultTitle = "OPPONENT WINS ROUND!";
+                document.getElementById('pwrActionText').innerText = "LOST ROUND! 😢";
             }
 
-            document.getElementById('rpsScoreBoardText').innerText = `You (${rpsUserScore}) - Opponent (${rpsOpponentScore})`;
-            document.getElementById('rpsRoundIndicator').innerText = roundResultText;
+            document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
+            document.getElementById('pwrResultMsg').innerText = resultTitle;
+        }
 
-            if (rpsUserScore === 2 || rpsOpponentScore === 2 || rpsCurrentRound === 3) {
-                rpsActiveMatch = false;
-                document.getElementById('rpsActionButtons').style.display = 'none';
-                document.getElementById('startRpsMatchBtn').style.display = 'block';
-                document.getElementById('startRpsMatchBtn').innerText = `Play Again ⚔️`;
-
-                if (rpsUserScore > rpsOpponentScore) {
-                    let prize = rpsCurrentBet * 2;
-                    score += prize;
-                    updateUI();
-                    saveState();
-                    alert(`🎉 Match Won! You won ${prize.toLocaleString()} Coins!`);
-                    document.getElementById('rpsRoundIndicator').innerText = `Victory! Won ${prize.toLocaleString()} Coins! 🎉`;
-                } else if (rpsUserScore < rpsOpponentScore) {
-                    alert(`😢 Match Lost! Better luck next time.`);
-                    document.getElementById('rpsRoundIndicator').innerText = `Defeat! Match Lost.`;
-                } else {
-                    score += rpsCurrentBet;
-                    updateUI();
-                    saveState();
-                    alert(`🤝 Match Drawn! Your bet has been refunded.`);
-                    document.getElementById('rpsRoundIndicator').innerText = `Match Drawn. Bet Refunded.`;
-                }
+        function endPwrGame() {
+            pwrGameActive = false;
+            let rewardCoins = pwrScore * 150; // ყოველ ქულაზე 150 მონეტა ჯილდო
+            if (rewardCoins > 0) {
+                score += rewardCoins;
+                updateUI();
+                saveState();
+                alert(`⏰ Time's up! Your final score: ${pwrScore}. You won ${rewardCoins.toLocaleString()} coins! 🎉`);
+                document.getElementById('pwrActionText').innerText = `WON ${rewardCoins} COINS!`;
             } else {
-                rpsCurrentRound++;
-                setTimeout(() => {
-                    if (rpsActiveMatch) {
-                        document.getElementById('rpsRoundIndicator').innerText = `Round ${rpsCurrentRound} / 3 (Make your move!)`;
-                    }
-                }, 1500);
+                alert(`⏰ Time's up! Final score: 0. Better luck next time!`);
+                document.getElementById('pwrActionText').innerText = `GAME OVER`;
             }
+
+            document.getElementById('startPwrBtn').style.display = 'block';
+            document.getElementById('startPwrBtn').innerText = `Play Again 🚀 (Cost: 200 🪙)`;
         }
 
         function switchTab(tabId, btnElement) {
             flappyRunning = false;
-            rpsActiveMatch = false;
+            pwrGameActive = false;
+            if (pwrTimerInterval) clearInterval(pwrTimerInterval);
+
             document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             document.getElementById(`tab-${tabId}`).classList.add('active');
