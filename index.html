@@ -16,6 +16,7 @@
             --success: #22c55e;
             --warning: #eab308;
             --danger: #ef4444;
+            --border-color: #334155;
         }
 
         * {
@@ -330,7 +331,7 @@
             transform-style: preserve-3d;
         }
 
-        .shop-card, .ad-card, .friend-card, .game-card-option, .game-header-banner, .leaderboard-item {
+        .shop-card, .ad-card, .friend-card, .game-card-option, .game-header-banner {
             background: linear-gradient(135deg, #1e293b 0%, #111827 100%);
             padding: 16px;
             border-radius: 16px;
@@ -345,41 +346,65 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .shop-card:hover, .ad-card:hover, .friend-card:hover, .game-card-option:hover, .leaderboard-item:hover {
+        .shop-card:hover, .ad-card:hover, .friend-card:hover, .game-card-option:hover {
             transform: translateZ(25px) scale(1.02);
             box-shadow: 0 15px 30px rgba(0,0,0,0.7), 0 0 15px rgba(56, 189, 248, 0.2);
             border-color: var(--accent);
         }
 
-        /* Leaderboard Specific Styles */
+        /* 3D ლიდერბორდის სტილები */
+        .leaderboard-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 100%;
+            padding: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transform: translateZ(15px);
+        }
+
+        .leaderboard-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 420px;
+            overflow-y: auto;
+            width: 100%;
+        }
+
         .leaderboard-item {
-            flex-direction: row;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
             padding: 12px 16px;
+            border-radius: 10px;
+            transition: transform 0.2s;
         }
 
-        .leaderboard-item.top-one {
-            border-color: #facc15;
-            box-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
+        .leaderboard-item:hover {
+            transform: scale(1.02);
+            border-color: var(--accent);
         }
 
-        .leaderboard-item.top-two {
-            border-color: #94a3b8;
-        }
-
-        .leaderboard-item.top-three {
-            border-color: #b45309;
+        .my-profile {
+            background: rgba(56, 189, 248, 0.15) !important;
+            border-color: var(--accent) !important;
         }
 
         .rank-number {
             font-weight: bold;
-            font-size: 15px;
+            color: #94a3b8;
             width: 35px;
-            color: var(--text-secondary);
+            font-size: 14px;
         }
 
-        .top-one .rank-number { color: #facc15; }
-        .top-two .rank-number { color: #94a3b8; }
-        .top-three .rank-number { color: #d97706; }
+        .score {
+            font-weight: bold;
+            color: var(--accent);
+            font-size: 14px;
+        }
 
         .btn {
             background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
@@ -760,9 +785,14 @@
                 </div>
             </div>
 
+            <!-- ლიდერბორდის ჩანართი სუფთა HTML/CSS სტრუქტურით -->
             <div class="tab-pane" id="tab-leaderboard">
-                <h3 style="margin-bottom: 12px; align-self: flex-start; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">🏆 Top 50 Leaderboard</h3>
-                <div class="leaderboard-list" id="leaderboardContainer"></div>
+                <div class="leaderboard-card">
+                    <h3 style="margin-bottom: 15px; text-align: center; color: var(--accent);">🏆 ლიდერბორდი</h3>
+                    <div class="leaderboard-container" id="leaderboardContainer">
+                        <!-- აქ ჯავასკრიპტი დინამიკურად ჩასვამს ადგილებს და შენს პროფილს -->
+                    </div>
+                </div>
             </div>
 
             <div class="tab-pane" id="tab-minigame">
@@ -1104,41 +1134,40 @@
             }
         }
 
+        // ლიდერბორდის აგების ფუნქცია (ინტეგრირებული შენს ძირითად თამაშთან)
         function renderLeaderboard() {
             const container = document.getElementById('leaderboardContainer');
             container.innerHTML = "";
 
             let mockLeaderboard = [];
-            mockLeaderboard.push({ name: currentUserName, score: score });
+            mockLeaderboard.push({ name: currentUserName, score: score, isMe: true });
 
-            for (let i = 2; i <= 50; i++) {
-                let randomScore = Math.max(100, 2000000 - (i * 35000) + Math.floor(Math.random() * 5000));
-                mockLeaderboard.push({ name: `Player_${i}`, score: randomScore });
+            for (let i = 2; i <= 30; i++) {
+                let randomScore = Math.max(100, 2000000 - (i * 45000) + Math.floor(Math.random() * 5000));
+                mockLeaderboard.push({ name: `Player_${i}`, score: randomScore, isMe: false });
             }
 
             mockLeaderboard.sort((a, b) => b.score - a.score);
 
             mockLeaderboard.forEach((player, index) => {
                 let rank = index + 1;
-                let rankClass = "";
-                if (rank === 1) rankClass = "top-one";
-                else if (rank === 2) rankClass = "top-two";
-                else if (rank === 3) rankClass = "top-three";
+                let rankDisplay = `#${rank}`;
+                let medalEmoji = "";
+                
+                if (rank === 1) medalEmoji = "👑 ";
+                else if (rank === 2) medalEmoji = "🥈 ";
+                else if (rank === 3) medalEmoji = "🥉 ";
 
-                let medalIcon = "";
-                if (rank === 1) medalIcon = "👑 ";
-                else if (rank === 2) medalIcon = "🥈 ";
-                else if (rank === 3) medalIcon = "🥉 ";
+                let profileClass = player.isMe ? "leaderboard-item my-profile" : "leaderboard-item";
+                let displayName = player.isMe ? `${player.name} (You)` : player.name;
 
                 let itemHTML = `
-                    <div class="leaderboard-item ${rankClass}">
+                    <div class="${profileClass}">
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="rank-number">#${rank}</span>
-                            <span style="font-weight: 600; font-size: 14px;">${medalIcon}${player.name}</span>
+                            <span class="rank-number">${rankDisplay}</span>
+                            <span style="font-weight: 600;">${medalEmoji}${displayName}</span>
                         </div>
-                        <div style="font-weight: bold; color: var(--accent); font-size: 14px;">
-                            ${player.score.toLocaleString()} 🪙
-                        </div>
+                        <div class="score">${player.score.toLocaleString()} 🪙</div>
                     </div>
                 `;
                 container.innerHTML += itemHTML;
