@@ -352,7 +352,6 @@
             border-color: var(--accent);
         }
 
-        /* 3D ლიდერბორდის სტილები */
         .leaderboard-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -785,12 +784,10 @@
                 </div>
             </div>
 
-            <!-- ლიდერბორდის ჩანართი სუფთა HTML/CSS სტრუქტურით -->
             <div class="tab-pane" id="tab-leaderboard">
                 <div class="leaderboard-card">
                     <h3 style="margin-bottom: 15px; text-align: center; color: var(--accent);">🏆 ლიდერბორდი</h3>
                     <div class="leaderboard-container" id="leaderboardContainer">
-                        <!-- აქ ჯავასკრიპტი დინამიკურად ჩასვამს ადგილებს და შენს პროფილს -->
                     </div>
                 </div>
             </div>
@@ -1134,7 +1131,6 @@
             }
         }
 
-        // ლიდერბორდის აგების ფუნქცია (ინტეგრირებული შენს ძირითად თამაშთან)
         function renderLeaderboard() {
             const container = document.getElementById('leaderboardContainer');
             container.innerHTML = "";
