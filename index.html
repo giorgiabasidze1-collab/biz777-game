@@ -7,16 +7,17 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --card-bg: #162032;
+            --bg-color: #070913;
+            --card-bg: #111827;
             --accent: #38bdf8;
-            --accent-glow: rgba(56, 189, 248, 0.4);
+            --accent-glow: rgba(56, 189, 248, 0.6);
+            --gold-glow: rgba(250, 204, 21, 0.5);
             --text-color: #f8fafc;
             --text-secondary: #94a3b8;
             --success: #22c55e;
-            --warning: #eab308;
+            --warning: #facc15;
             --danger: #ef4444;
-            --border-color: #334155;
+            --border-color: rgba(56, 189, 248, 0.25);
         }
 
         * {
@@ -30,7 +31,7 @@
         }
 
         body {
-            background-color: var(--bg-color);
+            background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #070913 70%);
             color: var(--text-color);
             overflow: hidden;
             height: 100vh;
@@ -47,19 +48,22 @@
             margin: 0 auto;
             width: 100%;
             position: relative;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
         }
 
+        /* --- დიზაინერული მთავარი ჰედერი --- */
         header {
-            padding: 15px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             z-index: 10;
-            gap: 10px;
+            gap: 12px;
             border-bottom: 2px solid var(--accent);
+            backdrop-filter: blur(10px);
         }
 
         .header-top {
@@ -71,48 +75,60 @@
         .user-info {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .avatar {
-            width: 42px;
-            height: 42px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #2563eb);
+            background: linear-gradient(135deg, #38bdf8, #2563eb);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            color: #000;
-            box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
+            font-size: 18px;
+            color: #fff;
+            box-shadow: 0 0 15px var(--accent-glow);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .username {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .level-badge {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-secondary);
+            font-weight: 500;
         }
 
         .score-board {
             text-align: right;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 6px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
         }
 
         .score-value {
-            font-size: 22px;
-            font-weight: bold;
-            color: var(--accent);
-            text-shadow: 0 0 10px var(--accent-glow);
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--warning);
+            text-shadow: 0 0 12px var(--gold-glow);
         }
 
         .level-progress-container {
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 5px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px 10px;
+            border-radius: 10px;
         }
 
         .level-progress-info {
@@ -120,6 +136,7 @@
             justify-content: space-between;
             font-size: 11px;
             color: var(--text-secondary);
+            font-weight: 600;
         }
 
         .level-bar-bg {
@@ -133,9 +150,10 @@
 
         .level-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, #22c55e, #38bdf8);
+            background: linear-gradient(90deg, #22c55e, #38bdf8, #facc15);
             width: 0%;
-            transition: width 0.3s ease;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px var(--accent-glow);
         }
 
         .content {
@@ -149,6 +167,7 @@
             overflow: hidden;
         }
 
+        /* --- ცოცხალი და ლამაზი ფონური ნაწილები მთავარი მენიუსთვის --- */
         .coin-background-pattern {
             position: absolute;
             width: 100%;
@@ -162,10 +181,16 @@
 
         .bg-coin {
             position: absolute;
-            font-size: 28px;
-            opacity: 0.1;
+            font-size: 26px;
+            opacity: 0.12;
             font-weight: bold;
             color: #38bdf8;
+            animation: floatBgCoin 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatBgCoin {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-15px) rotate(10deg); }
         }
 
         .interactive-clicker-area {
@@ -179,41 +204,56 @@
         }
 
         .clicker-circle {
-            width: 220px;
-            height: 220px;
+            width: 230px;
+            height: 230px;
             border-radius: 50%;
-            background: radial-gradient(circle, #22304c 0%, #0f172a 100%);
-            border: 6px solid var(--accent);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 25px var(--accent-glow);
+            background: radial-gradient(circle, #1e293b 0%, #090d16 100%);
+            border: 8px solid;
+            border-image: linear-gradient(135deg, #38bdf8, #818cf8, #facc15) 1;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 35px var(--accent-glow);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             position: relative;
-            transition: transform 0.1s ease;
+            transition: transform 0.1s ease, box-shadow 0.2s ease;
         }
 
         .clicker-circle:active {
-            transform: scale(0.95);
+            transform: scale(0.93);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.8), 0 0 15px var(--accent);
         }
 
         .clicker-icon {
-            font-size: 75px;
+            font-size: 85px;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
+            animation: pulseIcon 3s ease-in-out infinite;
+        }
+
+        @keyframes pulseIcon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .energy-container {
-            width: 260px;
-            margin-top: 25px;
+            width: 270px;
+            margin-top: 30px;
             position: relative;
             z-index: 5;
+            background: rgba(15, 23, 42, 0.7);
+            padding: 12px 15px;
+            border-radius: 16px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
         .energy-info {
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
-            margin-bottom: 6px;
+            font-size: 13px;
+            margin-bottom: 8px;
             color: var(--text-secondary);
+            font-weight: 600;
         }
 
         .energy-bar-bg {
@@ -230,56 +270,67 @@
             background: linear-gradient(90deg, #38bdf8, #818cf8);
             width: 100%;
             transition: width 0.2s linear;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
         }
 
         .floating-number {
             position: absolute;
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 26px;
+            font-weight: 900;
             color: var(--warning);
             pointer-events: none;
             z-index: 100;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
-            animation: floatUp 0.7s ease-out forwards;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 10px var(--gold-glow);
+            animation: floatUp 0.7s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
         }
 
         @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-70px) scale(1.2); }
+            0% { opacity: 1; transform: translateY(0) scale(0.8); }
+            50% { transform: translateY(-35px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-75px) scale(1); }
         }
 
+        /* --- პრემიუმ ქვედა ნავიგაცია (ნავი) --- */
         nav {
             display: flex;
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            padding: 12px;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+            padding: 10px 12px;
             justify-content: space-around;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            box-shadow: 0 -15px 35px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             z-index: 10;
             border-top: 2px solid var(--accent);
+            backdrop-filter: blur(10px);
         }
 
         .nav-item {
             background: none;
             border: none;
             color: var(--text-secondary);
-            font-size: 13px;
+            font-size: 11px;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 4px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-weight: 600;
         }
 
         .nav-item.active {
             color: var(--accent);
-            transform: scale(1.08);
+            background: rgba(56, 189, 248, 0.12);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(56, 189, 248, 0.25);
+            border: 1px solid rgba(56, 189, 248, 0.3);
         }
 
         .nav-item span {
-            font-size: 22px;
+            font-size: 20px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
 
         .tab-pane {
@@ -308,25 +359,26 @@
         }
 
         .shop-card, .ad-card, .friend-card, .game-card-option, .game-header-banner {
-            background: linear-gradient(135deg, #1e293b 0%, #111827 100%);
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(17, 24, 39, 0.9) 100%);
             padding: 16px;
-            border-radius: 16px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border: 1px solid rgba(56, 189, 248, 0.15);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
             flex-direction: column;
             align-items: stretch;
+            backdrop-filter: blur(5px);
         }
 
         .leaderboard-card {
-            background-color: var(--card-bg);
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(17, 24, 39, 0.95));
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 18px;
             width: 100%;
-            padding: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
         }
 
         .leaderboard-container {
@@ -343,14 +395,16 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 12px 16px;
-            border-radius: 10px;
+            border-radius: 12px;
+            transition: background 0.2s;
         }
 
         .my-profile {
-            background: rgba(56, 189, 248, 0.15) !important;
+            background: rgba(56, 189, 248, 0.18) !important;
             border-color: var(--accent) !important;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
         }
 
         .rank-number {
@@ -362,7 +416,7 @@
 
         .score {
             font-weight: bold;
-            color: var(--accent);
+            color: var(--warning);
             font-size: 14px;
         }
 
@@ -370,28 +424,36 @@
             background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
             color: #000;
             border: none;
-            padding: 10px 16px;
-            font-weight: bold;
-            border-radius: 10px;
+            padding: 10px 18px;
+            font-weight: 800;
+            border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
-            transition: transform 0.1s ease;
+            box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
+            transition: transform 0.1s ease, filter 0.2s ease;
         }
 
         .btn:active {
-            transform: scale(0.96);
+            transform: scale(0.95);
+            filter: brightness(0.9);
         }
 
         .game-header-banner {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(15, 23, 42, 0.9));
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(15, 23, 42, 0.95));
             border: 1px solid var(--accent);
             text-align: center;
             margin-bottom: 5px;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
         }
 
         .game-card-option {
             flex-direction: row;
             cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .game-card-option:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
         }
 
         .sub-game-container {
@@ -416,7 +478,6 @@
             touch-action: none;
         }
 
-        /* Catch Game Styles */
         .catch-game-wrapper {
             display: flex;
             flex-direction: column;
@@ -457,14 +518,14 @@
             background: radial-gradient(circle, #ffd700, #ffa500);
             color: #000;
             border: 2px solid #ffcc00;
-            box-shadow: 0 0 8px #ffd700;
+            box-shadow: 0 0 10px #ffd700;
         }
 
         .catch-bomb {
             background: radial-gradient(circle, #ff4d4d, #b30000);
             color: #fff;
             border: 2px solid #ff1a1a;
-            box-shadow: 0 0 8px #ff4d4d;
+            box-shadow: 0 0 10px #ff4d4d;
         }
 
         @keyframes fallItem {
@@ -494,7 +555,7 @@
             justify-content: center;
             position: relative;
             margin: 5px 0;
-            box-shadow: inset 0 5px 15px rgba(0,0,0,0.8);
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.8), 0 0 20px rgba(56, 189, 248, 0.2);
         }
 
         .slots-row {
@@ -509,7 +570,7 @@
             height: 100px;
             background: #1e293b;
             border: 2px solid var(--accent);
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -518,6 +579,7 @@
             font-weight: bold;
             color: #facc15;
             gap: 4px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
         }
         
         .slot-reel span {
@@ -549,12 +611,14 @@
             font-size: 11px;
             font-weight: bold;
             cursor: pointer;
+            transition: all 0.2s;
         }
 
         .level-btn.active-level {
             background: var(--accent);
             color: #000;
             border-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
         }
 
         .level-btn.completed-level {
@@ -603,11 +667,12 @@
             color: #000;
             font-weight: bold;
             font-size: 10px;
-            padding: 3px 4px;
+            padding: 3px 6px;
             border-radius: 10px;
             opacity: 0;
             transition: opacity 0.2s ease;
             z-index: 1;
+            box-shadow: 0 0 8px #facc15;
         }
 
         .cup-2d {
@@ -641,7 +706,7 @@
             justify-content: center;
             z-index: 9999;
             padding: 20px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
 
         .ad-video-box {
@@ -649,17 +714,17 @@
             max-width: 340px;
             background: linear-gradient(135deg, #1e293b, #0f172a);
             border: 2px solid var(--accent);
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 25px var(--accent-glow);
         }
 
         .ad-screen {
             width: 100%;
             height: 160px;
             background: #090d16;
-            border-radius: 10px;
+            border-radius: 14px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -682,7 +747,7 @@
                 </div>
                 <div class="score-board">
                     <div class="score-value" id="scoreDisplay">0</div>
-                    <div class="level-badge">BIZ777 Coins</div>
+                    <div class="level-badge" style="color: var(--warning);">BIZ777 COINS</div>
                 </div>
             </div>
 
@@ -700,10 +765,10 @@
         <div class="content">
             <div class="tab-pane active" id="tab-clicker">
                 <div class="coin-background-pattern">
-                    <span class="bg-coin" style="top: 2%; left: 5%;">🪙 BIZ777</span>
-                    <span class="bg-coin" style="top: 10%; right: 8%;">💵 BIZ777</span>
-                    <span class="bg-coin" style="bottom: 22%; left: 8%;">🪙 BIZ777</span>
-                    <span class="bg-coin" style="bottom: 10%; right: 12%;">💰 BIZ777</span>
+                    <span class="bg-coin" style="top: 5%; left: 8%;">🪙 BIZ777</span>
+                    <span class="bg-coin" style="top: 15%; right: 10%;">💵 BIZ777</span>
+                    <span class="bg-coin" style="bottom: 25%; left: 12%;">🪙 BIZ777</span>
+                    <span class="bg-coin" style="bottom: 12%; right: 15%;">💰 BIZ777</span>
                 </div>
 
                 <div class="interactive-clicker-area" id="clickerBtn">
@@ -724,7 +789,7 @@
             </div>
 
             <div class="tab-pane" id="tab-shop">
-                <h3 style="margin-bottom: 12px; align-self: flex-start;">🛒 Upgrades Shop</h3>
+                <h3 style="margin-bottom: 12px; align-self: flex-start; color: var(--accent);">🛒 Upgrades Shop</h3>
                 <div class="shop-list">
                     <div class="shop-card">
                         <div class="shop-info"><h4>Tap Power Upgrades</h4></div>
@@ -793,10 +858,9 @@
                     </div>
                 </div>
 
-                <!-- New Catch Mini Game Sub-container -->
                 <div class="sub-game-container" id="subgame-catch">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 6px 12px; font-size: 11px;">⬅️ Menu</button>
                         <h3 style="font-size: 13px; color: var(--accent);">🕹️ Biiz777 Catch Game</h3>
                         <div style="width: 50px;"></div>
                     </div>
@@ -816,7 +880,7 @@
 
                 <div class="sub-game-container" id="subgame-flappy">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 6px 12px; font-size: 11px;">⬅️ Menu</button>
                         <h3 style="font-size: 13px; color: var(--accent);">🕹️ Flappy BIZ777</h3>
                         <div style="width: 50px;"></div>
                     </div>
@@ -828,7 +892,7 @@
 
                 <div class="sub-game-container" id="subgame-cups">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 6px 12px; font-size: 11px;">⬅️ Menu</button>
                         <h3 style="font-size: 13px; color: var(--accent);">🕹️ Find BIZ777 Ball</h3>
                         <div style="width: 50px;"></div>
                     </div>
@@ -870,7 +934,7 @@
 
                 <div class="sub-game-container" id="subgame-slot">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 6px 12px; font-size: 11px;">⬅️ Menu</button>
                         <h3 style="font-size: 13px; color: var(--accent);">🕹️ Slot Machine Spin</h3>
                         <div style="width: 50px;"></div>
                     </div>
@@ -897,7 +961,7 @@
 
                 <div class="sub-game-container" id="subgame-paperwrapsrock">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 6px 12px; font-size: 11px;">⬅️ Menu</button>
                         <h3 style="font-size: 13px; color: var(--accent);">✌️ Paper Wraps Rock</h3>
                         <div style="width: 50px;"></div>
                     </div>
@@ -941,7 +1005,7 @@
             </div>
 
             <div class="tab-pane" id="tab-friends">
-                <h3 style="margin-bottom: 12px; align-self: flex-start;">👥 Invite Friends</h3>
+                <h3 style="margin-bottom: 12px; align-self: flex-start; color: var(--accent);">👥 Invite Friends</h3>
                 <div class="friends-list">
                     <div class="friend-card" style="align-items: stretch; gap: 8px;">
                         <h4 style="font-size: 14px;">Invite 3 Friends to get Free Tap Power 20!</h4>
@@ -952,7 +1016,7 @@
             </div>
 
             <div class="tab-pane" id="tab-ads">
-                <h3 style="margin-bottom: 12px; align-self: flex-start;">⚡ Boost Energy</h3>
+                <h3 style="margin-bottom: 12px; align-self: flex-start; color: var(--accent);">⚡ Boost Energy</h3>
                 <div class="ads-list">
                     <div class="ad-card" style="flex-direction: row;">
                         <div class="ad-info">
@@ -1273,7 +1337,6 @@
             document.getElementById('gamesMenu').style.display = 'flex';
         }
 
-        // --- Catch Mini Game Logic ---
         let catchGameActive = false;
         let catchScore = 0;
         let catchTimeLeft = 60;
@@ -1324,7 +1387,7 @@
         function spawnCatchObject() {
             const container = document.getElementById('catchGameContainer');
             const item = document.createElement('div');
-            const isBomb = Math.random() < 0.3; // 30% chance for a bomb
+            const isBomb = Math.random() < 0.3;
 
             item.classList.add('catch-falling-item');
             if (isBomb) {
@@ -1350,7 +1413,7 @@
                     document.getElementById('catchMsg').innerText = "Oops! Hit a bomb (-5 pts)";
                 } else {
                     catchScore += 1;
-                    score += 1; // Add 1 coin to user balance per click
+                    score += 1;
                     updateUI();
                     saveState();
                     document.getElementById('catchMsg').innerText = "+1 Coin collected!";
@@ -1950,7 +2013,7 @@
             }
 
             document.getElementById('startPwrBtn').style.display = 'block';
-            document.getElementById('startPwrBtn').innerText = `Play Again 🚀 (Cost: 200 🪙)`;
+            document.getElementById('startScaleBtn'] = `Play Again 🚀 (Cost: 200 🪙)`;
         }
 
         function switchTab(tabId, btnElement) {
