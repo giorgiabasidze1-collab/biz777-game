@@ -823,7 +823,6 @@
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
-                    <!-- შეიცვალა მეოთხე თამაში ვიდეოს მიხედვით -->
                     <div class="game-card-option" onclick="openSubGame('paperwrapsrock')">
                         <div class="game-card-info">
                             <h4 style="color: var(--accent); font-size: 15px;">✌️ Paper Wraps Rock</h4>
@@ -915,7 +914,6 @@
                     </div>
                 </div>
 
-                <!-- ზუსტად ვიდეოდან აღებული Paper Wraps Rock თამაში ხელების ვიზუალით, ტაიმერით და ქულებით -->
                 <div class="sub-game-container" id="subgame-paperwrapsrock">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
                         <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
@@ -929,7 +927,6 @@
                             <span id="pwrScore">Score: 0</span>
                         </div>
 
-                        <!-- ვიდეოს დიზაინის მსგავსი ვიზუალური სათამაშო არე ხელებით -->
                         <div style="position: relative; width: 100%; height: 180px; background: radial-gradient(circle, #2a1b4e 0%, #0d0918 90%); border: 3px solid var(--accent); border-radius: 16px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);">
                             <div style="text-align: left; z-index: 2;">
                                 <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold;">PLAYER 1</div>
@@ -946,7 +943,6 @@
                             </div>
                         </div>
 
-                        <!-- PLAYER 1 კონტროლის ღილაკები ვიდეოს მიხედვით -->
                         <div style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
                             <div style="font-size: 11px; color: var(--text-secondary); text-align: center; font-weight: bold;">PLAYER 1 CONTROLS: Choose your sign!</div>
                             <div style="display: flex; gap: 8px; justify-content: center;">
@@ -1010,7 +1006,14 @@
     </div>
 
     <script>
-        const tg = window.Telegram.WebApp;
+        const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : {
+            expand: () => {},
+            close: () => {},
+            ready: () => {},
+            HapticFeedback: { impactOccurred: () => {}, notificationOccurred: () => {} },
+            MainButton: { show: () => {}, hide: () => {}, setText: () => {}, onClick: () => {} },
+            initDataUnsafe: {}
+        };
         tg.expand();
 
         let score = parseInt(localStorage.getItem('biz_score')) || 0;
@@ -1301,6 +1304,185 @@
             }
         });
 
+        function drawHand(x, w, y0, y1, knuckleAtY1, thumbSide) {
+            const dir = knuckleAtY1 ? 1 : -1;
+            const totalLen = Math.abs(y1 - y0);
+            const fingerZone = Math.min(46, Math.max(26, totalLen * 0.4));
+            const palmEnd = knuckleAtY1 ? (y1 - fingerZone) : (y0 + fingerZone);
+            const armTop = knuckleAtY1 ? y0 : palmEnd;
+            const armBottom = knuckleAtY1 ? palmEnd : y1;
+            const midX = x + w / 2;
+            const baseAngle = dir === 1 ? 0 : Math.PI;
+
+            ctx.save();
+
+            ctx.shadowColor = 'rgba(0,0,0,0.45)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetX = 3;
+            ctx.shadowOffsetY = 3;
+
+            let armGrad = ctx.createLinearGradient(x, 0, x + w, 0);
+            armGrad.addColorStop(0, '#b87c52');
+            armGrad.addColorStop(0.18, '#dba576');
+            armGrad.addColorStop(0.5, '#f3caa0');
+            armGrad.addColorStop(0.82, '#dba576');
+            armGrad.addColorStop(1, '#b87c52');
+            ctx.fillStyle = armGrad;
+            ctx.strokeStyle = '#8f5f3d';
+            ctx.lineWidth = 1.5;
+
+            ctx.beginPath();
+            if (knuckleAtY1) {
+                ctx.roundRect(x, armTop, w, Math.max(0, armBottom - armTop), [12, 12, 0, 0]);
+            } else {
+                ctx.roundRect(x, armTop, w, Math.max(0, armBottom - armTop), [0, 0, 12, 12]);
+            }
+            ctx.fill();
+            ctx.stroke();
+            ctx.shadowColor = 'transparent';
+
+            const cuffH = Math.min(14, totalLen * 0.16);
+            const cuffY = knuckleAtY1 ? y0 : (y1 - cuffH);
+            let cuffGrad = ctx.createLinearGradient(x, 0, x + w, 0);
+            cuffGrad.addColorStop(0, '#25314a');
+            cuffGrad.addColorStop(0.5, '#3d5077');
+            cuffGrad.addColorStop(1, '#25314a');
+            ctx.fillStyle = cuffGrad;
+            ctx.beginPath();
+            if (knuckleAtY1) {
+                ctx.roundRect(x, cuffY, w, cuffH, [12, 12, 0, 0]);
+            } else {
+                ctx.roundRect(x, cuffY, w, cuffH, [0, 0, 12, 12]);
+            }
+            ctx.fill();
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+            ctx.lineWidth = 1.5;
+            const seamY = knuckleAtY1 ? cuffY + cuffH : cuffY;
+            ctx.moveTo(x, seamY);
+            ctx.lineTo(x + w, seamY);
+            ctx.stroke();
+
+            ctx.fillStyle = 'rgba(255,255,255,0.14)';
+            ctx.beginPath();
+            ctx.roundRect(midX - w * 0.13, armTop, w * 0.26, Math.max(0, armBottom - armTop), 8);
+            ctx.fill();
+
+            let palmGrad = ctx.createRadialGradient(midX, palmEnd, 4, midX, palmEnd, w * 0.75);
+            palmGrad.addColorStop(0, '#f6d3ab');
+            palmGrad.addColorStop(0.6, '#e5ac7c');
+            palmGrad.addColorStop(1, '#b87c52');
+            ctx.fillStyle = palmGrad;
+            ctx.beginPath();
+            ctx.ellipse(midX, palmEnd, w * 0.62, fingerZone * 0.34, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            let aoTop = palmEnd - dir * 5;
+            let aoBottom = palmEnd + dir * 9;
+            let aoGrad = ctx.createLinearGradient(x, Math.min(aoTop, aoBottom), x, Math.max(aoTop, aoBottom));
+            const aoNear = dir === 1 ? 0 : 1, aoFar = dir === 1 ? 1 : 0;
+            aoGrad.addColorStop(aoNear, 'rgba(70,40,20,0)');
+            aoGrad.addColorStop(aoFar, 'rgba(70,40,20,0.35)');
+            ctx.fillStyle = aoGrad;
+            ctx.beginPath();
+            ctx.roundRect(x, Math.min(aoTop, aoBottom), w, Math.abs(aoBottom - aoTop), 6);
+            ctx.fill();
+
+            const fingerCount = 4;
+            const spreadDeg = [-16, -5, 5, 16];
+            const lenMul = [0.74, 0.97, 0.97, 0.74];
+            const fingerSpacing = w * 0.205;
+            const fingerBaseLen = fingerZone * 1.05;
+
+            for (let f = 0; f < fingerCount; f++) {
+                const angle = baseAngle + (spreadDeg[f] * Math.PI / 180);
+                const length = fingerBaseLen * lenMul[f];
+                const fw = w * 0.185;
+
+                ctx.save();
+                ctx.translate(midX + (f - 1.5) * fingerSpacing, palmEnd);
+                ctx.rotate(angle);
+
+                ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                ctx.shadowBlur = 3;
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = 1;
+
+                let fGrad = ctx.createLinearGradient(-fw / 2, 0, fw / 2, 0);
+                fGrad.addColorStop(0, '#b8794f');
+                fGrad.addColorStop(0.3, '#e2a877');
+                fGrad.addColorStop(0.55, '#f6d3a9');
+                fGrad.addColorStop(0.8, '#e2a877');
+                fGrad.addColorStop(1, '#b8794f');
+                ctx.fillStyle = fGrad;
+                ctx.strokeStyle = '#8f5f3d';
+                ctx.lineWidth = 1;
+
+                ctx.beginPath();
+                ctx.roundRect(-fw / 2, 0, fw, length, fw / 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.shadowColor = 'transparent';
+
+                ctx.strokeStyle = 'rgba(120,75,45,0.4)';
+                ctx.lineWidth = 1;
+                [0.38, 0.7].forEach(t => {
+                    ctx.beginPath();
+                    ctx.moveTo(-fw / 2 + 1, length * t);
+                    ctx.lineTo(fw / 2 - 1, length * t);
+                    ctx.stroke();
+                });
+
+                ctx.fillStyle = 'rgba(255,255,255,0.35)';
+                ctx.beginPath();
+                ctx.ellipse(0, length * 0.14, fw * 0.28, length * 0.1, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            const thumbLen = fingerZone * 0.85;
+            const thumbW = w * 0.3;
+            const thumbAngle = baseAngle + thumbSide * (55 * Math.PI / 180);
+
+            ctx.save();
+            ctx.translate(midX + thumbSide * w * 0.42, palmEnd - dir * fingerZone * 0.12);
+            ctx.rotate(thumbAngle);
+
+            ctx.shadowColor = 'rgba(0,0,0,0.3)';
+            ctx.shadowBlur = 3;
+            ctx.shadowOffsetX = 1;
+            ctx.shadowOffsetY = 1;
+
+            let tGrad = ctx.createLinearGradient(-thumbW / 2, 0, thumbW / 2, 0);
+            tGrad.addColorStop(0, '#b8794f');
+            tGrad.addColorStop(0.35, '#e2a877');
+            tGrad.addColorStop(0.6, '#f6d3a9');
+            tGrad.addColorStop(1, '#b8794f');
+            ctx.fillStyle = tGrad;
+            ctx.strokeStyle = '#8f5f3d';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.roundRect(-thumbW / 2, 0, thumbW, thumbLen, thumbW / 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.shadowColor = 'transparent';
+
+            ctx.strokeStyle = 'rgba(120,75,45,0.4)';
+            ctx.beginPath();
+            ctx.moveTo(-thumbW / 2 + 1, thumbLen * 0.55);
+            ctx.lineTo(thumbW / 2 - 1, thumbLen * 0.55);
+            ctx.stroke();
+
+            ctx.fillStyle = 'rgba(255,255,255,0.32)';
+            ctx.beginPath();
+            ctx.ellipse(0, thumbLen * 0.16, thumbW * 0.28, thumbLen * 0.12, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+            ctx.restore();
+        }
+
         function startFlappyGame() {
             bird.y = 150;
             bird.velocity = 0;
@@ -1361,41 +1543,12 @@
 
                 let currentTop = pipes[i].top + pipes[i].vOffset;
                 let currentBottom = pipes[i].bottom - pipes[i].vOffset;
-
-                let handColor = '#ffdbac';
-                let outlineColor = '#e0ac69';
-
-                ctx.fillStyle = handColor;
-                ctx.strokeStyle = outlineColor;
-                ctx.lineWidth = 2;
-
-                ctx.beginPath();
-                ctx.roundRect(pipes[i].x, 0, pipes[i].width, currentTop, [0, 0, 18, 18]);
-                ctx.fill();
-                ctx.stroke();
-
-                let fingerWidth = pipes[i].width / 5;
-                for (let f = 0; f < 5; f++) {
-                    let fx = pipes[i].x + (f * fingerWidth);
-                    ctx.beginPath();
-                    ctx.roundRect(fx, currentTop - 8, fingerWidth - 1, 14, [6, 6, 0, 0]);
-                    ctx.fill();
-                    ctx.stroke();
-                }
-
                 let bottomY = canvas.height - currentBottom;
-                ctx.beginPath();
-                ctx.roundRect(pipes[i].x, bottomY, pipes[i].width, currentBottom, [18, 18, 0, 0]);
-                ctx.fill();
-                ctx.stroke();
 
-                for (let f = 0; f < 5; f++) {
-                    let fx = pipes[i].x + (f * fingerWidth);
-                    ctx.beginPath();
-                    ctx.roundRect(fx, bottomY, fingerWidth - 1, 14, [0, 0, 6, 6]);
-                    ctx.fill();
-                    ctx.stroke();
-                }
+                const thumbSide = (i % 2 === 0) ? 1 : -1;
+
+                drawHand(pipes[i].x, pipes[i].width, 0, currentTop, true, thumbSide);
+                drawHand(pipes[i].x, pipes[i].width, bottomY, canvas.height, false, -thumbSide);
 
                 if (
                     bird.x + bird.radius > pipes[i].x - 4 &&
@@ -1717,7 +1870,7 @@
                 document.getElementById(`cup${i}`).classList.add('lifted');
             }
 
-            let chosenCupId = cupPositions[slotIdx];
+            let chosenCupId = slotIdx;
             let winningCupId = winningIndex;
 
             document.getElementById(`coin${winningCupId}`).style.opacity = "1";
@@ -1756,7 +1909,6 @@
             saveState();
         }
 
-        // --- Paper Wraps Rock (ვიდეოში ნაჩვენები მინი-თამაშის სრული ლოგიკა) ---
         let pwrGameActive = false;
         let pwrScore = 0;
         let pwrTimeLeft = 45;
@@ -1845,7 +1997,7 @@
 
         function endPwrGame() {
             pwrGameActive = false;
-            let rewardCoins = pwrScore * 150; // ყოველ ქულაზე 150 მონეტა ჯილდო
+            let rewardCoins = pwrScore * 150;
             if (rewardCoins > 0) {
                 score += rewardCoins;
                 updateUI();
@@ -1893,3 +2045,4 @@
     </script>
 </body>
 </html>
+```[cite: 5]
