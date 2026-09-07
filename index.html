@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Biz777 Mini App - Full 3D</title>
+    <title>Biz777 Mini App - Classic 2D</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -37,7 +37,6 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            perspective: 1200px;
         }
 
         .app-container {
@@ -48,7 +47,6 @@
             margin: 0 auto;
             width: 100%;
             position: relative;
-            transform-style: preserve-3d;
         }
 
         header {
@@ -56,12 +54,11 @@
             display: flex;
             flex-direction: column;
             background: linear-gradient(145deg, #1e293b, #0f172a);
-            border-bottom-left-radius: 24px;
-            border-bottom-right-radius: 24px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.1);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             z-index: 10;
             gap: 10px;
-            transform: translateZ(20px);
             border-bottom: 2px solid var(--accent);
         }
 
@@ -93,7 +90,6 @@
         .username {
             font-size: 16px;
             font-weight: 600;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .level-badge {
@@ -109,7 +105,7 @@
             font-size: 22px;
             font-weight: bold;
             color: var(--accent);
-            text-shadow: 0 0 12px var(--accent-glow);
+            text-shadow: 0 0 10px var(--accent-glow);
         }
 
         .level-progress-container {
@@ -132,7 +128,6 @@
             background: #090d16;
             border-radius: 4px;
             overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
             border: 1px solid rgba(255,255,255,0.05);
         }
 
@@ -152,7 +147,6 @@
             position: relative;
             padding: 15px;
             overflow: hidden;
-            transform-style: preserve-3d;
         }
 
         .coin-background-pattern {
@@ -169,15 +163,9 @@
         .bg-coin {
             position: absolute;
             font-size: 28px;
-            opacity: 0.15;
+            opacity: 0.1;
             font-weight: bold;
             color: #38bdf8;
-            animation: floatSlow 7s ease-in-out infinite alternate;
-        }
-
-        @keyframes floatSlow {
-            0% { transform: translateY(0px) rotate(0deg) translateZ(-50px); }
-            100% { transform: translateY(-30px) rotate(45deg) translateZ(50px); }
         }
 
         .interactive-clicker-area {
@@ -188,42 +176,36 @@
             align-items: center;
             justify-content: center;
             pointer-events: auto;
-            transform-style: preserve-3d;
         }
 
         .clicker-circle {
-            width: 230px;
-            height: 230px;
+            width: 220px;
+            height: 220px;
             border-radius: 50%;
             background: radial-gradient(circle, #22304c 0%, #0f172a 100%);
             border: 6px solid var(--accent);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 35px var(--accent-glow), inset 0 10px 20px rgba(255,255,255,0.2);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 25px var(--accent-glow);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             position: relative;
-            transform: translateZ(40px) rotateX(10deg);
-            transition: transform 0.1s cubic-bezier(0.3, 1.5, 0.5, 1);
+            transition: transform 0.1s ease;
         }
 
         .clicker-circle:active {
-            transform: translateZ(10px) rotateX(0deg) scale(0.93);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.9), 0 0 15px var(--accent-glow);
+            transform: scale(0.95);
         }
 
         .clicker-icon {
             font-size: 75px;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
         }
 
         .energy-container {
             width: 260px;
-            margin-top: 30px;
+            margin-top: 25px;
             position: relative;
             z-index: 5;
-            pointer-events: auto;
-            transform: translateZ(20px);
         }
 
         .energy-info {
@@ -240,7 +222,6 @@
             background: #090d16;
             border-radius: 6px;
             overflow: hidden;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
             border: 1px solid rgba(255,255,255,0.05);
         }
 
@@ -253,18 +234,18 @@
 
         .floating-number {
             position: absolute;
-            font-size: 26px;
+            font-size: 24px;
             font-weight: bold;
             color: var(--warning);
             pointer-events: none;
             z-index: 100;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-            animation: floatUp 0.8s cubic-bezier(0.2, 1.5, 0.4, 1) forwards;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            animation: floatUp 0.7s ease-out forwards;
         }
 
         @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0) scale(1) translateZ(80px); }
-            100% { opacity: 0; transform: translateY(-90px) scale(1.3) translateZ(120px); }
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-70px) scale(1.2); }
         }
 
         nav {
@@ -272,11 +253,10 @@
             background: linear-gradient(145deg, #1e293b, #0f172a);
             padding: 12px;
             justify-content: space-around;
-            border-top-left-radius: 24px;
-            border-top-right-radius: 24px;
-            box-shadow: 0 -15px 35px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.1);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
             z-index: 10;
-            transform: translateZ(20px);
             border-top: 2px solid var(--accent);
         }
 
@@ -291,13 +271,11 @@
             gap: 4px;
             cursor: pointer;
             transition: all 0.2s;
-            transform: translateZ(10px);
         }
 
         .nav-item.active {
             color: var(--accent);
-            transform: translateZ(25px) scale(1.1);
-            text-shadow: 0 0 10px var(--accent-glow);
+            transform: scale(1.08);
         }
 
         .nav-item span {
@@ -315,20 +293,18 @@
             padding-bottom: 20px;
             z-index: 5;
             position: relative;
-            transform-style: preserve-3d;
         }
 
         .tab-pane.active {
             display: flex;
         }
 
-        .shop-list, .ads-list, .friends-list, .games-menu, .leaderboard-list {
+        .shop-list, .ads-list, .friends-list, .games-menu {
             width: 100%;
             display: flex;
             flex-direction: column;
             gap: 14px;
             margin-top: 10px;
-            transform-style: preserve-3d;
         }
 
         .shop-card, .ad-card, .friend-card, .game-card-option, .game-header-banner {
@@ -338,18 +314,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border: 2px solid rgba(56, 189, 248, 0.15);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 1px 3px rgba(255,255,255,0.1);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
             flex-direction: column;
             align-items: stretch;
-            transform: translateZ(15px);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .shop-card:hover, .ad-card:hover, .friend-card:hover, .game-card-option:hover {
-            transform: translateZ(25px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.7), 0 0 15px rgba(56, 189, 248, 0.2);
-            border-color: var(--accent);
         }
 
         .leaderboard-card {
@@ -358,8 +326,7 @@
             border-radius: 16px;
             width: 100%;
             padding: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            transform: translateZ(15px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .leaderboard-container {
@@ -379,12 +346,6 @@
             border: 1px solid var(--border-color);
             padding: 12px 16px;
             border-radius: 10px;
-            transition: transform 0.2s;
-        }
-
-        .leaderboard-item:hover {
-            transform: scale(1.02);
-            border-color: var(--accent);
         }
 
         .my-profile {
@@ -413,19 +374,17 @@
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 6px 15px rgba(56, 189, 248, 0.4), inset 0 2px 4px rgba(255,255,255,0.4);
-            transition: transform 0.1s ease, box-shadow 0.1s ease;
-            transform: translateZ(5px);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+            transition: transform 0.1s ease;
         }
 
         .btn:active {
-            transform: translateZ(0px) scale(0.96);
-            box-shadow: 0 2px 5px rgba(56, 189, 248, 0.4);
+            transform: scale(0.96);
         }
 
         .game-header-banner {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(15, 23, 42, 0.9));
-            border: 2px solid var(--accent);
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(15, 23, 42, 0.9));
+            border: 1px solid var(--accent);
             text-align: center;
             margin-bottom: 5px;
         }
@@ -441,7 +400,6 @@
             flex-direction: column;
             align-items: center;
             height: 100%;
-            transform-style: preserve-3d;
         }
 
         .sub-game-container.active-subgame {
@@ -451,12 +409,11 @@
         #flappyCanvas {
             background: linear-gradient(to bottom, #1e293b, #0f172a);
             border-radius: 16px;
-            border: 3px solid var(--accent);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 20px var(--accent-glow);
+            border: 2px solid var(--accent);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             cursor: pointer;
             margin: 10px 0;
             touch-action: none;
-            transform: translateZ(20px);
         }
 
         .slot-machine-wrapper, .jeiran-game-wrapper, .paperwrapsrock-wrapper {
@@ -466,26 +423,22 @@
             width: 100%;
             padding: 5px;
             gap: 12px;
-            transform-style: preserve-3d;
         }
 
-        .slot-board-3d {
-            perspective: 1000px;
+        .slot-board-2d {
             width: 100%;
             max-width: 320px;
-            height: 210px;
-            background: radial-gradient(circle, #1e293b 0%, #080c14 90%);
-            border-radius: 20px;
-            border: 4px solid var(--accent);
+            height: 180px;
+            background: #080c14;
+            border-radius: 16px;
+            border: 3px solid var(--accent);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
             margin: 5px 0;
-            overflow: hidden;
-            box-shadow: inset 0 10px 25px rgba(0,0,0,0.9), 0 15px 35px rgba(0,0,0,0.7);
-            transform: translateZ(25px);
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.8);
         }
 
         .slots-row {
@@ -493,40 +446,26 @@
             gap: 10px;
             justify-content: center;
             align-items: center;
-            z-index: 5;
-            transform: translateZ(20px);
         }
 
         .slot-reel {
-            width: 88px;
-            height: 110px;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
+            width: 85px;
+            height: 100px;
+            background: #1e293b;
             border: 2px solid var(--accent);
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             color: #facc15;
-            box-shadow: inset 0 5px 15px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.5);
-            position: relative;
-            overflow: hidden;
             gap: 4px;
         }
         
         .slot-reel span {
             font-size: 26px;
-        }
-
-        .slot-lever-area {
-            margin-top: 8px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            align-items: center;
         }
 
         .cup-game-wrapper {
@@ -536,7 +475,6 @@
             width: 100%;
             padding: 5px;
             gap: 12px;
-            transform-style: preserve-3d;
         }
 
         .levels-container {
@@ -544,7 +482,6 @@
             gap: 6px;
             width: 100%;
             justify-content: center;
-            transform: translateZ(10px);
         }
 
         .level-btn {
@@ -556,120 +493,83 @@
             font-size: 11px;
             font-weight: bold;
             cursor: pointer;
-            position: relative;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            transition: all 0.2s;
         }
 
         .level-btn.active-level {
             background: var(--accent);
             color: #000;
             border-color: var(--accent);
-            box-shadow: 0 0 15px var(--accent-glow);
-            transform: translateZ(10px) scale(1.08);
         }
 
         .level-btn.completed-level {
             background: #22c55e;
             color: #000;
             border-color: #22c55e;
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
         }
 
-        .cups-board-3d {
-            perspective: 1000px;
+        .cups-board-2d {
             width: 100%;
-            height: 200px;
-            background: radial-gradient(circle, #273548 0%, #0a0f1d 85%);
-            border-radius: 20px;
-            border: 3px solid var(--accent);
+            height: 170px;
+            background: #0a0f1d;
+            border-radius: 16px;
+            border: 2px solid var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             margin: 10px 0;
-            overflow: hidden;
-            box-shadow: inset 0 15px 30px rgba(0,0,0,0.8), 0 15px 30px rgba(0,0,0,0.6);
-            transform: translateZ(25px);
-        }
-
-        .table-surface {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.5) 100%);
-            transform: rotateX(30deg);
-            transform-origin: bottom center;
-            pointer-events: none;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.8);
         }
 
         .cups-scene {
             position: relative;
-            width: 320px;
-            height: 130px;
-            transform-style: preserve-3d;
+            width: 300px;
+            height: 110px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .cup-slot-3d {
+        .cup-slot-2d {
             position: absolute;
             width: 80px;
-            height: 110px;
-            transform-style: preserve-3d;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 95px;
+            transition: transform 0.3s ease;
             cursor: pointer;
         }
 
-        .coin-item-3d {
+        .coin-item-2d {
             position: absolute;
-            bottom: 15px;
+            bottom: 10px;
             left: 50%;
-            transform: translateX(-50%) translateZ(-15px);
-            background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
+            transform: translateX(-50%);
+            background: #facc15;
             color: #000;
             font-weight: bold;
             font-size: 11px;
-            padding: 4px 8px;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.8);
-            border: 2px solid #fef08a;
-            white-space: nowrap;
-            z-index: 1;
+            padding: 3px 6px;
+            border-radius: 10px;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s ease;
+            z-index: 1;
         }
 
-        .cup-3d {
+        .cup-2d {
             position: absolute;
             width: 80px;
-            height: 105px;
-            background: linear-gradient(135deg, #f87171 0%, #dc2626 50%, #991b1b 100%);
-            border-radius: 8px 8px 24px 24px;
-            border-bottom: 6px solid #fef2f2;
-            box-shadow: 0 20px 30px rgba(0,0,0,0.8), inset 0 8px 15px rgba(255,255,255,0.35);
-            transform-style: preserve-3d;
-            transform-origin: bottom center;
-            transition: transform 0.4s cubic-bezier(0.3, 1.6, 0.5, 1);
+            height: 90px;
+            background: linear-gradient(135deg, #ef4444, #991b1b);
+            border-radius: 6px 6px 20px 20px;
+            border-bottom: 4px solid #fef2f2;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .cup-3d::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            width: 100%;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .cup-3d.lifted {
-            transform: translateY(-60px) rotateX(-20deg) translateZ(30px) scale(1.08);
-            background: linear-gradient(135deg, #fca5a5 0%, #ef4444 50%, #b91c1c 100%);
-            box-shadow: 0 30px 45px rgba(0,0,0,0.9), 0 0 25px rgba(239, 68, 68, 0.5);
+        .cup-2d.lifted {
+            transform: translateY(-45px);
         }
 
         #adModal {
@@ -685,7 +585,7 @@
             justify-content: center;
             z-index: 9999;
             padding: 20px;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(5px);
         }
 
         .ad-video-box {
@@ -693,26 +593,23 @@
             max-width: 340px;
             background: linear-gradient(135deg, #1e293b, #0f172a);
             border: 2px solid var(--accent);
-            border-radius: 20px;
+            border-radius: 16px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 30px var(--accent-glow);
-            transform: translateZ(40px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
         }
 
         .ad-screen {
             width: 100%;
-            height: 180px;
+            height: 160px;
             background: #090d16;
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            position: relative;
             margin-bottom: 15px;
             border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: inset 0 5px 15px rgba(0,0,0,0.8);
         }
     </style>
 </head>
@@ -771,7 +668,7 @@
             </div>
 
             <div class="tab-pane" id="tab-shop">
-                <h3 style="margin-bottom: 12px; align-self: flex-start; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">🛒 3D Upgrades Shop</h3>
+                <h3 style="margin-bottom: 12px; align-self: flex-start;">🛒 Upgrades Shop</h3>
                 <div class="shop-list">
                     <div class="shop-card">
                         <div class="shop-info"><h4>Tap Power Upgrades</h4></div>
@@ -795,38 +692,38 @@
             <div class="tab-pane" id="tab-minigame">
                 <div class="games-menu" id="gamesMenu">
                     <div class="game-header-banner">
-                        <h3 style="font-size: 15px; color: var(--accent); margin-bottom: 3px;">🎮 3D Arcade Games Hub</h3>
-                        <p style="font-size: 11px; color: var(--text-secondary);">Select a game below to play and boost your Biz777 earnings!</p>
+                        <h3 style="font-size: 15px; color: var(--accent); margin-bottom: 3px;">🎮 Classic Arcade Games Hub</h3>
+                        <p style="font-size: 11px; color: var(--text-secondary);">Select a game below to play and boost your earnings!</p>
                     </div>
                     
                     <div class="game-card-option" onclick="openSubGame('flappy')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🪙 Flappy Biz777 (Hard Mode)</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Avoid rounded moving hands! Score 10 for +500 Energy!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🪙 Flappy Biz777</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Avoid classic pipes! Score 10 for +500 Energy!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('cups')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Biz777 Find Ball (3D Levels)</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Find the biz777 ball to win coins AND bonus energy!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Find Biz777 Ball</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Find the ball under cups to win coins and energy!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('slot')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🎰 Biz777 3D Slot Spin</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Cost: 500 Coins | 3x biz777 = 5,000,000 Coins Jackpot!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🎰 Slot Machine Spin</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Cost: 500 Coins | 3x biz777 = 5,000,000 Jackpot!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('paperwrapsrock')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">✌️ Paper Wraps Rock</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Classic Battle with Hands UI, Timer & Score! Win coins!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">✌️ Paper Wraps Rock (Classic)</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Classic Rock, Paper, Scissors battle with emoji icons!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
@@ -835,12 +732,12 @@
                 <div class="sub-game-container" id="subgame-flappy">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
                         <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Flappy Biz777 (3D)</h3>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Flappy Biz777</h3>
                         <div style="width: 50px;"></div>
                     </div>
                     <canvas id="flappyCanvas" width="300" height="340"></canvas>
                     <div style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 3px;">
-                        Tap canvas to jump smoothly. Avoid rounded obstacles & distance!
+                        Tap canvas to jump. Avoid classic obstacles!
                     </div>
                 </div>
 
@@ -856,28 +753,27 @@
                             <button class="level-btn active-level" id="lvlBtn1" onclick="setCupLevel(1)">Lvl 1</button>
                             <button class="level-btn" id="lvlBtn2" onclick="setCupLevel(2)">Lvl 2</button>
                             <button class="level-btn" id="lvlBtn3" onclick="setCupLevel(3)">Lvl 3</button>
-                            <button class="level-btn" id="lvlBtn4" onclick="setCupLevel(4)">Lvl 4 (Hard)</button>
-                            <button class="level-btn" id="lvlBtn5" onclick="setCupLevel(5)">Lvl 5 (Extreme)</button>
+                            <button class="level-btn" id="lvlBtn4" onclick="setCupLevel(4)">Lvl 4</button>
+                            <button class="level-btn" id="lvlBtn5" onclick="setCupLevel(5)">Lvl 5</button>
                         </div>
 
                         <div id="cupGameInfo" style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
                             Cost: 500 Biz777 | Win: 1,000 Coins + 200 Energy
                         </div>
 
-                        <div class="cups-board-3d">
-                            <div class="table-surface"></div>
+                        <div class="cups-board-2d">
                             <div class="cups-scene">
-                                <div class="cup-slot-3d" id="slot0" onclick="chooseCup(0)" style="transform: translateX(-105px);">
-                                    <div class="coin-item-3d" id="coin0">biz777</div>
-                                    <div class="cup-3d" id="cup0"></div>
+                                <div class="cup-slot-2d" id="slot0" onclick="chooseCup(0)" style="transform: translateX(-100px);">
+                                    <div class="coin-item-2d" id="coin0">biz777</div>
+                                    <div class="cup-2d" id="cup0"></div>
                                 </div>
-                                <div class="cup-slot-3d" id="slot1" onclick="chooseCup(1)" style="transform: translateX(0px);">
-                                    <div class="coin-item-3d" id="coin1">biz777</div>
-                                    <div class="cup-3d" id="cup1"></div>
+                                <div class="cup-slot-2d" id="slot1" onclick="chooseCup(1)" style="transform: translateX(0px);">
+                                    <div class="coin-item-2d" id="coin1">biz777</div>
+                                    <div class="cup-2d" id="cup1"></div>
                                 </div>
-                                <div class="cup-slot-3d" id="slot2" onclick="chooseCup(2)" style="transform: translateX(105px);">
-                                    <div class="coin-item-3d" id="coin2">biz777</div>
-                                    <div class="cup-3d" id="cup2"></div>
+                                <div class="cup-slot-2d" id="slot2" onclick="chooseCup(2)" style="transform: translateX(100px);">
+                                    <div class="coin-item-2d" id="coin2">biz777</div>
+                                    <div class="cup-2d" id="cup2"></div>
                                 </div>
                             </div>
                         </div>
@@ -890,16 +786,16 @@
                 <div class="sub-game-container" id="subgame-slot">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
                         <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Biz777 3D Slot Spin</h3>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Slot Machine Spin</h3>
                         <div style="width: 50px;"></div>
                     </div>
 
                     <div class="slot-machine-wrapper">
                         <div style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
-                            Cost: 500 Coins | 3x biz777 = 5,000,000 Coins Jackpot!
+                            Cost: 500 Coins | 3x biz777 = 5,000,000 Jackpot!
                         </div>
 
-                        <div class="slot-board-3d">
+                        <div class="slot-board-2d">
                             <div class="slots-row">
                                 <div class="slot-reel" id="reel0"><span>🪙</span>biz777</div>
                                 <div class="slot-reel" id="reel1"><span>🪙</span>biz777</div>
@@ -907,7 +803,7 @@
                             </div>
                         </div>
 
-                        <div class="slot-lever-area">
+                        <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
                             <button class="btn" id="spinSlotBtn" onclick="spinSlotMachine()" style="width: 100%;">SPIN SLOT (500 🪙) 🎰</button>
                             <div id="slotResultText" style="font-size: 11px; color: var(--text-secondary); text-align: center; height: 16px;"></div>
                         </div>
@@ -927,24 +823,24 @@
                             <span id="pwrScore">Score: 0</span>
                         </div>
 
-                        <div style="position: relative; width: 100%; height: 180px; background: radial-gradient(circle, #2a1b4e 0%, #0d0918 90%); border: 3px solid var(--accent); border-radius: 16px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);">
-                            <div style="text-align: left; z-index: 2;">
-                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold;">PLAYER 1</div>
-                                <div id="pwrLeftHand" style="font-size: 48px; filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));">✊</div>
+                        <div style="position: relative; width: 100%; height: 160px; background: #0d0918; border: 2px solid var(--accent); border-radius: 14px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; overflow: hidden;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold; margin-bottom: 5px;">YOU</div>
+                                <div id="pwrLeftHand" style="font-size: 44px;">✊</div>
                             </div>
 
-                            <div style="position: absolute; width: 100%; text-align: center; pointer-events: none; z-index: 1;">
-                                <div id="pwrActionText" style="font-size: 18px; font-weight: 900; color: #facc15; text-shadow: 0 2px 5px rgba(0,0,0,0.9); transform: rotate(-5deg);">PAPER WRAPS ROCK</div>
+                            <div style="text-align: center;">
+                                <div id="pwrActionText" style="font-size: 14px; font-weight: bold; color: #facc15;">BATTLE READY</div>
                             </div>
 
-                            <div style="text-align: right; z-index: 2;">
-                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold;">OPPONENT</div>
-                                <div id="pwrRightHand" style="font-size: 48px; transform: scaleX(-1); filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));">✊</div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold; margin-bottom: 5px;">BOT</div>
+                                <div id="pwrRightHand" style="font-size: 44px;">✊</div>
                             </div>
                         </div>
 
                         <div style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
-                            <div style="font-size: 11px; color: var(--text-secondary); text-align: center; font-weight: bold;">PLAYER 1 CONTROLS: Choose your sign!</div>
+                            <div style="font-size: 11px; color: var(--text-secondary); text-align: center; font-weight: bold;">Choose your sign:</div>
                             <div style="display: flex; gap: 8px; justify-content: center;">
                                 <button class="btn" onclick="playPwrChoice('scissors')" style="flex: 1; font-size: 12px;">✌️ Scissors</button>
                                 <button class="btn" onclick="playPwrChoice('paper')" style="flex: 1; font-size: 12px;">✋ Paper</button>
@@ -960,7 +856,7 @@
             </div>
 
             <div class="tab-pane" id="tab-friends">
-                <h3 style="margin-bottom: 12px; align-self: flex-start; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">👥 Invite Friends</h3>
+                <h3 style="margin-bottom: 12px; align-self: flex-start;">👥 Invite Friends</h3>
                 <div class="friends-list">
                     <div class="friend-card" style="align-items: stretch; gap: 8px;">
                         <h4 style="font-size: 14px;">Invite 3 Friends to get Free Tap Power 20!</h4>
@@ -971,7 +867,7 @@
             </div>
 
             <div class="tab-pane" id="tab-ads">
-                <h3 style="margin-bottom: 12px; align-self: flex-start; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">⚡ Boost Energy</h3>
+                <h3 style="margin-bottom: 12px; align-self: flex-start;">⚡ Boost Energy</h3>
                 <div class="ads-list">
                     <div class="ad-card" style="flex-direction: row;">
                         <div class="ad-info">
@@ -1083,7 +979,7 @@
             el.style.left = `${x - 20}px`;
             el.style.top = `${y - 40}px`;
             document.body.appendChild(el);
-            setTimeout(() => el.remove(), 800);
+            setTimeout(() => el.remove(), 700);
         }
 
         setInterval(() => {
@@ -1292,7 +1188,7 @@
         const canvas = document.getElementById('flappyCanvas');
         const ctx = canvas.getContext('2d');
         let flappyRunning = false;
-        let bird = { x: 50, y: 150, radius: 15, gravity: 0.42, lift: -6.2, velocity: 0 };
+        let bird = { x: 50, y: 150, radius: 14, gravity: 0.4, lift: -6, velocity: 0 };
         let pipes = [];
         let frameCount = 0;
         let flappyScore = 0;
@@ -1303,185 +1199,6 @@
                 bird.velocity = bird.lift;
             }
         });
-
-        function drawHand(x, w, y0, y1, knuckleAtY1, thumbSide) {
-            const dir = knuckleAtY1 ? 1 : -1;
-            const totalLen = Math.abs(y1 - y0);
-            const fingerZone = Math.min(46, Math.max(26, totalLen * 0.4));
-            const palmEnd = knuckleAtY1 ? (y1 - fingerZone) : (y0 + fingerZone);
-            const armTop = knuckleAtY1 ? y0 : palmEnd;
-            const armBottom = knuckleAtY1 ? palmEnd : y1;
-            const midX = x + w / 2;
-            const baseAngle = dir === 1 ? 0 : Math.PI;
-
-            ctx.save();
-
-            ctx.shadowColor = 'rgba(0,0,0,0.45)';
-            ctx.shadowBlur = 8;
-            ctx.shadowOffsetX = 3;
-            ctx.shadowOffsetY = 3;
-
-            let armGrad = ctx.createLinearGradient(x, 0, x + w, 0);
-            armGrad.addColorStop(0, '#b87c52');
-            armGrad.addColorStop(0.18, '#dba576');
-            armGrad.addColorStop(0.5, '#f3caa0');
-            armGrad.addColorStop(0.82, '#dba576');
-            armGrad.addColorStop(1, '#b87c52');
-            ctx.fillStyle = armGrad;
-            ctx.strokeStyle = '#8f5f3d';
-            ctx.lineWidth = 1.5;
-
-            ctx.beginPath();
-            if (knuckleAtY1) {
-                ctx.roundRect(x, armTop, w, Math.max(0, armBottom - armTop), [12, 12, 0, 0]);
-            } else {
-                ctx.roundRect(x, armTop, w, Math.max(0, armBottom - armTop), [0, 0, 12, 12]);
-            }
-            ctx.fill();
-            ctx.stroke();
-            ctx.shadowColor = 'transparent';
-
-            const cuffH = Math.min(14, totalLen * 0.16);
-            const cuffY = knuckleAtY1 ? y0 : (y1 - cuffH);
-            let cuffGrad = ctx.createLinearGradient(x, 0, x + w, 0);
-            cuffGrad.addColorStop(0, '#25314a');
-            cuffGrad.addColorStop(0.5, '#3d5077');
-            cuffGrad.addColorStop(1, '#25314a');
-            ctx.fillStyle = cuffGrad;
-            ctx.beginPath();
-            if (knuckleAtY1) {
-                ctx.roundRect(x, cuffY, w, cuffH, [12, 12, 0, 0]);
-            } else {
-                ctx.roundRect(x, cuffY, w, cuffH, [0, 0, 12, 12]);
-            }
-            ctx.fill();
-            ctx.beginPath();
-            ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-            ctx.lineWidth = 1.5;
-            const seamY = knuckleAtY1 ? cuffY + cuffH : cuffY;
-            ctx.moveTo(x, seamY);
-            ctx.lineTo(x + w, seamY);
-            ctx.stroke();
-
-            ctx.fillStyle = 'rgba(255,255,255,0.14)';
-            ctx.beginPath();
-            ctx.roundRect(midX - w * 0.13, armTop, w * 0.26, Math.max(0, armBottom - armTop), 8);
-            ctx.fill();
-
-            let palmGrad = ctx.createRadialGradient(midX, palmEnd, 4, midX, palmEnd, w * 0.75);
-            palmGrad.addColorStop(0, '#f6d3ab');
-            palmGrad.addColorStop(0.6, '#e5ac7c');
-            palmGrad.addColorStop(1, '#b87c52');
-            ctx.fillStyle = palmGrad;
-            ctx.beginPath();
-            ctx.ellipse(midX, palmEnd, w * 0.62, fingerZone * 0.34, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            let aoTop = palmEnd - dir * 5;
-            let aoBottom = palmEnd + dir * 9;
-            let aoGrad = ctx.createLinearGradient(x, Math.min(aoTop, aoBottom), x, Math.max(aoTop, aoBottom));
-            const aoNear = dir === 1 ? 0 : 1, aoFar = dir === 1 ? 1 : 0;
-            aoGrad.addColorStop(aoNear, 'rgba(70,40,20,0)');
-            aoGrad.addColorStop(aoFar, 'rgba(70,40,20,0.35)');
-            ctx.fillStyle = aoGrad;
-            ctx.beginPath();
-            ctx.roundRect(x, Math.min(aoTop, aoBottom), w, Math.abs(aoBottom - aoTop), 6);
-            ctx.fill();
-
-            const fingerCount = 4;
-            const spreadDeg = [-16, -5, 5, 16];
-            const lenMul = [0.74, 0.97, 0.97, 0.74];
-            const fingerSpacing = w * 0.205;
-            const fingerBaseLen = fingerZone * 1.05;
-
-            for (let f = 0; f < fingerCount; f++) {
-                const angle = baseAngle + (spreadDeg[f] * Math.PI / 180);
-                const length = fingerBaseLen * lenMul[f];
-                const fw = w * 0.185;
-
-                ctx.save();
-                ctx.translate(midX + (f - 1.5) * fingerSpacing, palmEnd);
-                ctx.rotate(angle);
-
-                ctx.shadowColor = 'rgba(0,0,0,0.3)';
-                ctx.shadowBlur = 3;
-                ctx.shadowOffsetX = 1;
-                ctx.shadowOffsetY = 1;
-
-                let fGrad = ctx.createLinearGradient(-fw / 2, 0, fw / 2, 0);
-                fGrad.addColorStop(0, '#b8794f');
-                fGrad.addColorStop(0.3, '#e2a877');
-                fGrad.addColorStop(0.55, '#f6d3a9');
-                fGrad.addColorStop(0.8, '#e2a877');
-                fGrad.addColorStop(1, '#b8794f');
-                ctx.fillStyle = fGrad;
-                ctx.strokeStyle = '#8f5f3d';
-                ctx.lineWidth = 1;
-
-                ctx.beginPath();
-                ctx.roundRect(-fw / 2, 0, fw, length, fw / 2);
-                ctx.fill();
-                ctx.stroke();
-                ctx.shadowColor = 'transparent';
-
-                ctx.strokeStyle = 'rgba(120,75,45,0.4)';
-                ctx.lineWidth = 1;
-                [0.38, 0.7].forEach(t => {
-                    ctx.beginPath();
-                    ctx.moveTo(-fw / 2 + 1, length * t);
-                    ctx.lineTo(fw / 2 - 1, length * t);
-                    ctx.stroke();
-                });
-
-                ctx.fillStyle = 'rgba(255,255,255,0.35)';
-                ctx.beginPath();
-                ctx.ellipse(0, length * 0.14, fw * 0.28, length * 0.1, 0, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.restore();
-            }
-
-            const thumbLen = fingerZone * 0.85;
-            const thumbW = w * 0.3;
-            const thumbAngle = baseAngle + thumbSide * (55 * Math.PI / 180);
-
-            ctx.save();
-            ctx.translate(midX + thumbSide * w * 0.42, palmEnd - dir * fingerZone * 0.12);
-            ctx.rotate(thumbAngle);
-
-            ctx.shadowColor = 'rgba(0,0,0,0.3)';
-            ctx.shadowBlur = 3;
-            ctx.shadowOffsetX = 1;
-            ctx.shadowOffsetY = 1;
-
-            let tGrad = ctx.createLinearGradient(-thumbW / 2, 0, thumbW / 2, 0);
-            tGrad.addColorStop(0, '#b8794f');
-            tGrad.addColorStop(0.35, '#e2a877');
-            tGrad.addColorStop(0.6, '#f6d3a9');
-            tGrad.addColorStop(1, '#b8794f');
-            ctx.fillStyle = tGrad;
-            ctx.strokeStyle = '#8f5f3d';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.roundRect(-thumbW / 2, 0, thumbW, thumbLen, thumbW / 2);
-            ctx.fill();
-            ctx.stroke();
-            ctx.shadowColor = 'transparent';
-
-            ctx.strokeStyle = 'rgba(120,75,45,0.4)';
-            ctx.beginPath();
-            ctx.moveTo(-thumbW / 2 + 1, thumbLen * 0.55);
-            ctx.lineTo(thumbW / 2 - 1, thumbLen * 0.55);
-            ctx.stroke();
-
-            ctx.fillStyle = 'rgba(255,255,255,0.32)';
-            ctx.beginPath();
-            ctx.ellipse(0, thumbLen * 0.16, thumbW * 0.28, thumbLen * 0.12, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.restore();
-            ctx.restore();
-        }
 
         function startFlappyGame() {
             bird.y = 150;
@@ -1517,43 +1234,26 @@
             ctx.font = 'bold 9px sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('biz777', bird.x, bird.y);
+            ctx.fillText('biz', bird.x, bird.y);
 
             if (frameCount % 100 === 0) {
-                let pipeWidth = 65;
-                let gapHeight = 150;
-                let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 80)) + 40;
-                pipes.push({ 
-                    x: canvas.width, 
-                    top: topHeight, 
-                    bottom: canvas.height - topHeight - gapHeight, 
-                    width: pipeWidth, 
-                    passed: false,
-                    vOffset: 0,
-                    vSpeed: (Math.random() > 0.5 ? 1 : -1) * 0.8
-                });
+                let pipeWidth = 50;
+                let gapHeight = 130;
+                let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 60)) + 30;
+                pipes.push({ x: canvas.width, top: topHeight, bottom: canvas.height - topHeight - gapHeight, width: pipeWidth, passed: false });
             }
 
             for (let i = pipes.length - 1; i >= 0; i--) {
-                pipes[i].x -= 2.4;
-                pipes[i].vOffset += pipes[i].vSpeed;
-                if (pipes[i].vOffset > 15 || pipes[i].vOffset < -15) {
-                    pipes[i].vSpeed *= -1;
-                }
+                pipes[i].x -= 2.5;
 
-                let currentTop = pipes[i].top + pipes[i].vOffset;
-                let currentBottom = pipes[i].bottom - pipes[i].vOffset;
-                let bottomY = canvas.height - currentBottom;
-
-                const thumbSide = (i % 2 === 0) ? 1 : -1;
-
-                drawHand(pipes[i].x, pipes[i].width, 0, currentTop, true, thumbSide);
-                drawHand(pipes[i].x, pipes[i].width, bottomY, canvas.height, false, -thumbSide);
+                ctx.fillStyle = '#22c55e';
+                ctx.fillRect(pipes[i].x, 0, pipes[i].width, pipes[i].top);
+                ctx.fillRect(pipes[i].x, canvas.height - pipes[i].bottom, pipes[i].width, pipes[i].bottom);
 
                 if (
-                    bird.x + bird.radius > pipes[i].x - 4 &&
-                    bird.x - bird.radius < pipes[i].x + pipes[i].width + 4 &&
-                    (bird.y - bird.radius < currentTop || bird.y + bird.radius > bottomY)
+                    bird.x + bird.radius > pipes[i].x &&
+                    bird.x - bird.radius < pipes[i].x + pipes[i].width &&
+                    (bird.y - bird.radius < pipes[i].top || bird.y + bird.radius > canvas.height - pipes[i].bottom)
                 ) {
                     endFlappyGame();
                     return;
@@ -1573,9 +1273,9 @@
             }
 
             ctx.fillStyle = '#fff';
-            ctx.font = 'bold 15px sans-serif';
+            ctx.font = 'bold 14px sans-serif';
             ctx.textAlign = 'left';
-            ctx.fillText(`Distance Score: ${flappyScore} / 10`, 15, 25);
+            ctx.fillText(`Score: ${flappyScore} / 10`, 15, 25);
 
             frameCount++;
             requestAnimationFrame(loopFlappy);
@@ -1635,7 +1335,7 @@
             let resText = document.getElementById('slotResultText');
             btn.disabled = true;
             btn.style.opacity = "0.5";
-            resText.innerText = "Slot spinning... 🎰";
+            resText.innerText = "Spinning slot... 🎰";
 
             const slotWeights = [
                 { symbols: [{icon:'🪙', label:'biz777'}, {icon:'🪙', label:'biz777'}, {icon:'🪙', label:'biz777'}], weight: 1, reward: 5000000, type: 'mega' },
@@ -1667,7 +1367,7 @@
                 document.getElementById('reel2').innerHTML = `<span>${slotItemsList[Math.floor(Math.random() * slotItemsList.length)].icon}</span>biz777`;
                 counter++;
 
-                if (counter > 20) {
+                if (counter > 18) {
                     clearInterval(spinInterval);
                     document.getElementById('reel0').innerHTML = `<span>${selectedOutcome.symbols[0].icon}</span>${selectedOutcome.symbols[0].label}`;
                     document.getElementById('reel1').innerHTML = `<span>${selectedOutcome.symbols[1].icon}</span>${selectedOutcome.symbols[1].label}`;
@@ -1694,7 +1394,7 @@
                     btn.disabled = false;
                     btn.style.opacity = "1";
                 }
-            }, 90);
+            }, 80);
         }
 
         let currentCupLevel = 1;
@@ -1704,14 +1404,14 @@
         let isShuffling = false;
 
         const cupLevelsData = {
-            1: { cost: 500, win: 1000, energyReward: 200, shuffles: 4, speed: 350 },
-            2: { cost: 2500, win: 5000, energyReward: 1000, shuffles: 7, speed: 250 },
-            3: { cost: 10000, win: 25000, energyReward: 3500, shuffles: 11, speed: 180 },
-            4: { cost: 50000, win: 150000, energyReward: 10000, shuffles: 16, speed: 120 },
-            5: { cost: 200000, win: 800000, energyReward: 30000, shuffles: 24, speed: 80 }
+            1: { cost: 500, win: 1000, energyReward: 200, shuffles: 4, speed: 300 },
+            2: { cost: 2500, win: 5000, energyReward: 1000, shuffles: 7, speed: 220 },
+            3: { cost: 10000, win: 25000, energyReward: 3500, shuffles: 11, speed: 160 },
+            4: { cost: 50000, win: 150000, energyReward: 10000, shuffles: 16, speed: 110 },
+            5: { cost: 200000, win: 800000, energyReward: 30000, shuffles: 22, speed: 80 }
         };
 
-        const SLOT_DISTANCE = 105;
+        const SLOT_DISTANCE = 100;
 
         function checkGlobalCooldown() {
             let now = new Date().getTime();
@@ -1727,7 +1427,7 @@
                     let mins = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                     btn.disabled = true;
                     btn.style.opacity = "0.5";
-                    cooldownText.innerText = `⏳ All 5 3D levels completed! Next restart in ${hours}h ${mins}m`;
+                    cooldownText.innerText = `⏳ All levels completed! Next restart in ${hours}h ${mins}m`;
                     return true;
                 } else {
                     globalCupCooldownTimestamp = "";
@@ -1783,7 +1483,7 @@
             for (let cupId = 0; cupId < 3; cupId++) {
                 let slotIndex = cupPositions.indexOf(cupId);
                 let slotEl = document.getElementById(`slot${cupId}`);
-                slotEl.style.transitionDuration = animate ? `${cupLevelsData[currentCupLevel].speed}ms` : '0.3s';
+                slotEl.style.transitionDuration = animate ? `${cupLevelsData[currentCupLevel].speed}ms` : '0.2s';
                 let xOffset = (slotIndex - 1) * SLOT_DISTANCE;
                 slotEl.style.transform = `translateX(${xOffset}px)`;
             }
@@ -1819,7 +1519,7 @@
             saveState();
 
             isShuffling = true;
-            document.getElementById('startCupGameBtn').innerText = "3D Shuffling... 🌪️";
+            document.getElementById('startCupGameBtn').innerText = "Shuffling... 🌪️";
             document.getElementById('startCupGameBtn').disabled = true;
 
             for (let i = 0; i < 3; i++) {
@@ -1854,11 +1554,11 @@
                             clearInterval(shuffleInterval);
                             isShuffling = false;
                             gameActive = true;
-                            document.getElementById('startCupGameBtn').innerText = "Choose 3D Cup! 🤔";
+                            document.getElementById('startCupGameBtn').innerText = "Choose a Cup! 🤔";
                         }
-                    }, data.speed + 40);
-                }, 400);
-            }, 1200);
+                    }, data.speed + 20);
+                }, 350);
+            }, 1000);
         }
 
         function chooseCup(slotIdx) {
@@ -1886,7 +1586,7 @@
                 } else {
                     globalCupCooldownTimestamp = new Date().getTime().toString();
                     localStorage.setItem('biz_cup_global_cooldown', globalCupCooldownTimestamp);
-                    alert(`🏆 Incredible! You completed all 5 3D levels! All levels reset and will restart in 24 hours.`);
+                    alert(`🏆 Incredible! You completed all levels! Levels reset in 24 hours.`);
                 }
 
                 setTimeout(() => {
@@ -1927,7 +1627,7 @@
             if (pwrTimerInterval) clearInterval(pwrTimerInterval);
             document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimeLeft} sec`;
             document.getElementById('pwrScore').innerText = `Score: 0`;
-            document.getElementById('pwrActionText').innerText = `PAPER WRAPS ROCK`;
+            document.getElementById('pwrActionText').innerText = `BATTLE READY`;
             document.getElementById('pwrLeftHand').innerText = '✊';
             document.getElementById('pwrRightHand').innerText = '✊';
             document.getElementById('startPwrBtn').style.display = 'block';
