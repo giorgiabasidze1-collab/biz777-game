@@ -416,6 +416,62 @@
             touch-action: none;
         }
 
+        /* Catch Game Styles */
+        .catch-game-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        #catchGameContainer {
+            width: 100%;
+            max-width: 320px;
+            height: 340px;
+            background: #080c14;
+            border-radius: 16px;
+            border: 2px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.8);
+            cursor: pointer;
+        }
+
+        .catch-falling-item {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            user-select: none;
+            cursor: pointer;
+            animation: fallItem linear forwards;
+        }
+
+        .catch-coin {
+            background: radial-gradient(circle, #ffd700, #ffa500);
+            color: #000;
+            border: 2px solid #ffcc00;
+            box-shadow: 0 0 8px #ffd700;
+        }
+
+        .catch-bomb {
+            background: radial-gradient(circle, #ff4d4d, #b30000);
+            color: #fff;
+            border: 2px solid #ff1a1a;
+            box-shadow: 0 0 8px #ff4d4d;
+        }
+
+        @keyframes fallItem {
+            0% { top: -45px; }
+            100% { top: 355px; }
+        }
+
         .slot-machine-wrapper, .jeiran-game-wrapper, .paperwrapsrock-wrapper {
             display: flex;
             flex-direction: column;
@@ -696,6 +752,14 @@
                         <p style="font-size: 11px; color: var(--text-secondary);">Select a game below to play and boost your earnings!</p>
                     </div>
                     
+                    <div class="game-card-option" onclick="openSubGame('catch')">
+                        <div class="game-card-info">
+                            <h4 style="color: var(--accent); font-size: 15px;">🪙 Biiz777 Catch Game</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Cost: 50 Coins | Catch BIZ777 coins, avoid bombs for 1 min!</p>
+                        </div>
+                        <span style="font-size: 22px; color: var(--accent);">👉</span>
+                    </div>
+
                     <div class="game-card-option" onclick="openSubGame('flappy')">
                         <div class="game-card-info">
                             <h4 style="color: var(--accent); font-size: 15px;">🪙 Flappy BIZ777</h4>
@@ -726,6 +790,27 @@
                             <p style="font-size: 11px; color: var(--text-secondary);">Classic Rock, Paper, Scissors battle with emoji icons!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
+                    </div>
+                </div>
+
+                <!-- New Catch Mini Game Sub-container -->
+                <div class="sub-game-container" id="subgame-catch">
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Biiz777 Catch Game</h3>
+                        <div style="width: 50px;"></div>
+                    </div>
+
+                    <div class="catch-game-wrapper">
+                        <div style="display: flex; justify-content: space-between; width: 100%; max-width: 320px; font-weight: bold; font-size: 12px; color: var(--warning);">
+                            <span id="catchTimer">⏱️ Time: 60s</span>
+                            <span id="catchScore">Score: 0</span>
+                        </div>
+
+                        <div id="catchGameContainer"></div>
+
+                        <button class="btn" id="startCatchBtn" onclick="startCatchGame()" style="width: 100%; max-width: 320px; background: #22c55e; color: #000;">Start Game 🚀 (Cost: 50 🪙)</button>
+                        <div id="catchMsg" style="font-size: 11px; color: var(--text-secondary); text-align: center; height: 16px;"></div>
                     </div>
                 </div>
 
@@ -1181,8 +1266,118 @@
         function backToGamesMenu() {
             flappyRunning = false;
             pwrGameActive = false;
+            catchGameActive = false;
+            if (catchTimerInterval) clearInterval(catchTimerInterval);
+            if (catchSpawnInterval) clearInterval(catchSpawnInterval);
             document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
             document.getElementById('gamesMenu').style.display = 'flex';
+        }
+
+        // --- Catch Mini Game Logic ---
+        let catchGameActive = false;
+        let catchScore = 0;
+        let catchTimeLeft = 60;
+        let catchTimerInterval = null;
+        let catchSpawnInterval = null;
+        const catchGameCost = 50;
+
+        function startCatchGame() {
+            if (score < catchGameCost) {
+                alert("Not enough coins! Required: 50 coins.");
+                return;
+            }
+
+            score -= catchGameCost;
+            updateUI();
+            saveState();
+
+            catchScore = 0;
+            catchTimeLeft = 60;
+            catchGameActive = true;
+
+            document.getElementById('startCatchBtn').style.display = 'none';
+            document.getElementById('catchScore').innerText = `Score: ${catchScore}`;
+            document.getElementById('catchTimer').innerText = `⏱️ Time: ${catchTimeLeft}s`;
+            document.getElementById('catchMsg').innerText = "Game started! Catch coins, avoid bombs!";
+
+            const container = document.getElementById('catchGameContainer');
+            container.innerHTML = '';
+
+            if (catchTimerInterval) clearInterval(catchTimerInterval);
+            if (catchSpawnInterval) clearInterval(catchSpawnInterval);
+
+            catchTimerInterval = setInterval(() => {
+                catchTimeLeft--;
+                document.getElementById('catchTimer').innerText = `⏱️ Time: ${catchTimeLeft}s`;
+                if (catchTimeLeft <= 0) {
+                    endCatchGame();
+                }
+            }, 1000);
+
+            catchSpawnInterval = setInterval(() => {
+                if (catchGameActive) {
+                    spawnCatchObject();
+                }
+            }, 450);
+        }
+
+        function spawnCatchObject() {
+            const container = document.getElementById('catchGameContainer');
+            const item = document.createElement('div');
+            const isBomb = Math.random() < 0.3; // 30% chance for a bomb
+
+            item.classList.add('catch-falling-item');
+            if (isBomb) {
+                item.classList.add('catch-bomb');
+                item.innerText = '💣';
+            } else {
+                item.classList.add('catch-coin');
+                item.innerText = 'B777';
+            }
+
+            const randomX = Math.random() * (container.clientWidth - 45);
+            item.style.left = randomX + 'px';
+
+            const fallDuration = Math.random() * 1.2 + 1.8;
+            item.style.animationDuration = fallDuration + 's';
+
+            item.addEventListener('pointerdown', (e) => {
+                e.stopPropagation();
+                if (!catchGameActive) return;
+
+                if (isBomb) {
+                    catchScore = Math.max(0, catchScore - 5);
+                    document.getElementById('catchMsg').innerText = "Oops! Hit a bomb (-5 pts)";
+                } else {
+                    catchScore += 1;
+                    score += 1; // Add 1 coin to user balance per click
+                    updateUI();
+                    saveState();
+                    document.getElementById('catchMsg').innerText = "+1 Coin collected!";
+                }
+                document.getElementById('catchScore').innerText = `Score: ${catchScore}`;
+                item.remove();
+            });
+
+            setTimeout(() => {
+                if (item && item.parentElement) {
+                    item.remove();
+                }
+            }, fallDuration * 1000);
+
+            container.appendChild(item);
+        }
+
+        function endCatchGame() {
+            catchGameActive = false;
+            clearInterval(catchTimerInterval);
+            clearInterval(catchSpawnInterval);
+
+            document.getElementById('catchGameContainer').innerHTML = '';
+            document.getElementById('startCatchBtn').style.display = 'block';
+            document.getElementById('startCatchBtn').innerText = `Play Again 🚀 (Cost: 50 🪙)`;
+            document.getElementById('catchMsg').innerText = `Time's up! Total Score: ${catchScore}`;
+            alert(`Game Over! You collected ${catchScore} coins in this session.`);
         }
 
         const canvas = document.getElementById('flappyCanvas');
@@ -1210,12 +1405,10 @@
             requestAnimationFrame(loopFlappy);
         }
 
-        // --- ხელების (მუშტების) მხატვარი ფუნქცია მოძრაობის ლოგიკით ---
         function drawHandObstacle(x, topHeight, bottomY, pipeWidth) {
             const handSkin = "#f5d0b1"; 
             const cuffColor = "#e6d7c3"; 
 
-            // --- ზედა ხელი ---
             ctx.fillStyle = cuffColor;
             ctx.fillRect(x, 0, pipeWidth, topHeight - 40);
             
@@ -1229,7 +1422,6 @@
             }
             ctx.fillRect(x - 12, topHeight - 25, 10, 20);
 
-            // --- ქვედა ხელი ---
             ctx.fillStyle = handSkin;
             ctx.fillRect(x - 5, bottomY, pipeWidth + 10, 40);
 
@@ -1272,7 +1464,6 @@
                 let pipeWidth = 50;
                 let gapHeight = 130;
                 let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 60)) + 30;
-                // ვამატებთ მოძრაობის დინამიკურ პარამეტრებს (speedY და direction)
                 pipes.push({ 
                     x: canvas.width, 
                     top: topHeight, 
@@ -1287,17 +1478,15 @@
             for (let i = pipes.length - 1; i >= 0; i--) {
                 pipes[i].x -= 2.5;
 
-                // --- ხელების (მუშტების) ვერტიკალური მოძრაობის ლოგიკა ---
                 pipes[i].dirTimer++;
                 pipes[i].top += pipes[i].speedY;
                 
-                // ზღვრები, რომ ეკრანიდან ზედმეტად არ გავიდეს და ხვრელი შენარჩუნდეს
                 if (pipes[i].top < 20 || pipes[i].top > canvas.height - 180) {
                     pipes[i].speedY *= -1;
                 }
 
                 let currentTopHeight = pipes[i].top;
-                let bottomYCoord = currentTopHeight + 130; // 130 არის ხვრელის ზომა
+                let bottomYCoord = currentTopHeight + 130;
 
                 drawHandObstacle(pipes[i].x, currentTopHeight, bottomYCoord, pipes[i].width);
 
@@ -1767,7 +1956,10 @@
         function switchTab(tabId, btnElement) {
             flappyRunning = false;
             pwrGameActive = false;
+            catchGameActive = false;
             if (pwrTimerInterval) clearInterval(pwrTimerInterval);
+            if (catchTimerInterval) clearInterval(catchTimerInterval);
+            if (catchSpawnInterval) clearInterval(catchSpawnInterval);
 
             document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
