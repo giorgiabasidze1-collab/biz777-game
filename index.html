@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Biz777 Mini App - 3D Cups</title>
+    <title>Biz777 Mini App - Classic 2D</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Three.js Library for 3D Graphics -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -170,6 +168,7 @@
             color: #38bdf8;
         }
 
+        /* Enhanced Background Effects */
         .ambient-glow {
             position: absolute;
             width: 320px;
@@ -560,7 +559,6 @@
             font-size: 26px;
         }
 
-        /* --- 3D CUP GAME STYLES --- */
         .cup-game-wrapper {
             display: flex;
             flex-direction: column;
@@ -600,10 +598,9 @@
             border-color: #22c55e;
         }
 
-        .cups-board-3d {
+        .cups-board-2d {
             width: 100%;
-            max-width: 320px;
-            height: 200px;
+            height: 170px;
             background: #0a0f1d;
             border-radius: 16px;
             border: 2px solid var(--accent);
@@ -611,19 +608,60 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            margin: 5px 0;
+            margin: 10px 0;
             box-shadow: inset 0 5px 15px rgba(0,0,0,0.8);
-            overflow: hidden;
-            touch-action: none;
         }
 
-        #cupsCanvas3D {
-            width: 100%;
-            height: 100%;
-            display: block;
+        .cups-scene {
+            position: relative;
+            width: 300px;
+            height: 110px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cup-slot-2d {
+            position: absolute;
+            width: 80px;
+            height: 95px;
+            transition: transform 0.3s ease;
             cursor: pointer;
         }
-        /* -------------------------- */
+
+        .coin-item-2d {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #facc15;
+            color: #000;
+            font-weight: bold;
+            font-size: 10px;
+            padding: 3px 4px;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 1;
+        }
+
+        .cup-2d {
+            position: absolute;
+            width: 80px;
+            height: 90px;
+            background: linear-gradient(135deg, #ef4444, #991b1b);
+            border-radius: 6px 6px 20px 20px;
+            border-bottom: 4px solid #fef2f2;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cup-2d.lifted {
+            transform: translateY(-45px);
+        }
 
         #adModal {
             position: fixed;
@@ -717,7 +755,7 @@
 
                     <div class="energy-container">
                         <div class="energy-info">
-                            <span>⚡ ენერგია</span>
+                            <span>⚡ Energy</span>
                             <span id="energyText">1000 / 1000</span>
                         </div>
                         <div class="energy-bar-bg">
@@ -728,14 +766,14 @@
             </div>
 
             <div class="tab-pane" id="tab-shop">
-                <h3 style="margin-bottom: 12px; align-self: flex-start;">🛒 მაღაზია</h3>
+                <h3 style="margin-bottom: 12px; align-self: flex-start;">🛒 Upgrades Shop</h3>
                 <div class="shop-list">
                     <div class="shop-card">
-                        <div class="shop-info"><h4>ტაპის გაძლიერება</h4></div>
+                        <div class="shop-info"><h4>Tap Power Upgrades</h4></div>
                         <div id="tapShopContainer" style="margin-top: 8px; width: 100%;"></div>
                     </div>
                     <div class="shop-card">
-                        <div class="shop-info"><h4>ენერგიის გაძლიერება</h4></div>
+                        <div class="shop-info"><h4>Energy Upgrades</h4></div>
                         <div id="energyShopContainer" style="margin-top: 8px; width: 100%;"></div>
                     </div>
                 </div>
@@ -743,7 +781,7 @@
 
             <div class="tab-pane" id="tab-leaderboard">
                 <div class="leaderboard-card">
-                    <h3 style="margin-bottom: 15px; text-align: center; color: var(--accent);">🏆 ლიდერბორდი</h3>
+                    <h3 style="margin-bottom: 15px; text-align: center; color: var(--accent);">🏆 Leaderboard</h3>
                     <div class="leaderboard-container" id="leaderboardContainer">
                     </div>
                 </div>
@@ -752,46 +790,46 @@
             <div class="tab-pane" id="tab-minigame">
                 <div class="games-menu" id="gamesMenu">
                     <div class="game-header-banner">
-                        <h3 style="font-size: 15px; color: var(--accent); margin-bottom: 3px;">🎮 არკადული თამაშების ჰაბი</h3>
-                        <p style="font-size: 11px; color: var(--text-secondary);">აირჩიეთ თამაში და იშოვეთ მეტი მონეტა!</p>
+                        <h3 style="font-size: 15px; color: var(--accent); margin-bottom: 3px;">🎮 Classic Arcade Games Hub</h3>
+                        <p style="font-size: 11px; color: var(--text-secondary);">Select a game below to play and boost your earnings!</p>
                     </div>
                     
                     <div class="game-card-option" onclick="openSubGame('catch')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🪙 მონეტების დაჭერა</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">ღირებულება: 50 მონეტა | დაიჭირე BIZ777 მონეტები, მოერიდე ბომბებს 1 წთ-ის განმავლობაში!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🪙 Biiz777 Catch Game</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Cost: 50 Coins | Catch BIZ777 coins, avoid bombs for 1 min!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('flappy')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🪙 ფლაპი BIZ777</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">მოერიდე მოძრავ დაბრკოლებებს! მიიღე 10 ქულა +500 ენერგიისთვის!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🪙 Flappy BIZ777</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Avoid moving hand obstacles! Score 10 for +500 Energy!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('cups')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🏆 იპოვე BIZ777 ბურთი (3D)</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">იპოვე ბურთი 3D ჭიქების ქვეშ და მოიგე მონეტები და ენერგია!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Find BIZ777 Ball</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Find the BIZ777 ball under cups to win coins and energy!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('slot')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🎰 სლოტ აპარატი</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">ღირებულება: 500 მონეტა | 3x BIZ777 = 5,000,000 ჯეკპოტი!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🎰 Slot Machine Spin</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Cost: 500 Coins | 3x BIZ777 = 5,000,000 Jackpot!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('paperwrapsrock')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">✌️ ქაღალდი, ქვა, მაკრატელი</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">კლასიკური თამაში ემოჯი იკონებით!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">✌️ Paper Wraps Rock (Classic)</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Classic Rock, Paper, Scissors battle with emoji icons!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
@@ -799,76 +837,88 @@
 
                 <div class="sub-game-container" id="subgame-catch">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ მენიუ</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ მონეტების დაჭერა</h3>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Biiz777 Catch Game</h3>
                         <div style="width: 50px;"></div>
                     </div>
 
                     <div class="catch-game-wrapper">
                         <div style="display: flex; justify-content: space-between; width: 100%; max-width: 320px; font-weight: bold; font-size: 12px; color: var(--warning);">
-                            <span id="catchTimer">⏱️ დრო: 60წმ</span>
-                            <span id="catchScore">ქულა: 0</span>
+                            <span id="catchTimer">⏱️ Time: 60s</span>
+                            <span id="catchScore">Score: 0</span>
                         </div>
 
                         <div id="catchGameContainer"></div>
 
-                        <button class="btn" id="startCatchBtn" onclick="startCatchGame()" style="width: 100%; max-width: 320px; background: #22c55e; color: #000;">თამაშის დაწყება 🚀 (ღირებულება: 50 🪙)</button>
+                        <button class="btn" id="startCatchBtn" onclick="startCatchGame()" style="width: 100%; max-width: 320px; background: #22c55e; color: #000;">Start Game 🚀 (Cost: 50 🪙)</button>
                         <div id="catchMsg" style="font-size: 11px; color: var(--text-secondary); text-align: center; height: 16px;"></div>
                     </div>
                 </div>
 
                 <div class="sub-game-container" id="subgame-flappy">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ მენიუ</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ ფლაპი BIZ777</h3>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Flappy BIZ777</h3>
                         <div style="width: 50px;"></div>
                     </div>
                     <canvas id="flappyCanvas" width="300" height="340"></canvas>
                     <div style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 3px;">
-                        დააკლიკე ეკრანს ასახტომად. მოერიდე მოძრავ დაბრკოლებებს!
+                        Tap canvas to jump. Avoid moving hand obstacles!
                     </div>
                 </div>
 
-                <!-- 3D CUPS SUB-GAME CONTAINER -->
                 <div class="sub-game-container" id="subgame-cups">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ მენიუ</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ იპოვე BIZ777 ბურთი (3D)</h3>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Find BIZ777 Ball</h3>
                         <div style="width: 50px;"></div>
                     </div>
 
                     <div class="cup-game-wrapper">
                         <div class="levels-container">
-                            <button class="level-btn active-level" id="lvlBtn1" onclick="setCupLevel(1)">დონე 1</button>
-                            <button class="level-btn" id="lvlBtn2" onclick="setCupLevel(2)">დონე 2</button>
-                            <button class="level-btn" id="lvlBtn3" onclick="setCupLevel(3)">დონე 3</button>
-                            <button class="level-btn" id="lvlBtn4" onclick="setCupLevel(4)">დონე 4</button>
-                            <button class="level-btn" id="lvlBtn5" onclick="setCupLevel(5)">დონე 5</button>
+                            <button class="level-btn active-level" id="lvlBtn1" onclick="setCupLevel(1)">Lvl 1</button>
+                            <button class="level-btn" id="lvlBtn2" onclick="setCupLevel(2)">Lvl 2</button>
+                            <button class="level-btn" id="lvlBtn3" onclick="setCupLevel(3)">Lvl 3</button>
+                            <button class="level-btn" id="lvlBtn4" onclick="setCupLevel(4)">Lvl 4</button>
+                            <button class="level-btn" id="lvlBtn5" onclick="setCupLevel(5)">Lvl 5</button>
                         </div>
 
                         <div id="cupGameInfo" style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
-                            ღირებულება: 500 BIZ777 | მოგება: 1,000 მონეტა + 200 ენერგია
+                            Cost: 500 BIZ777 | Win: 1,000 Coins + 200 Energy
                         </div>
 
-                        <div class="cups-board-3d">
-                            <canvas id="cupsCanvas3D"></canvas>
+                        <div class="cups-board-2d">
+                            <div class="cups-scene">
+                                <div class="cup-slot-2d" id="slot0" onclick="chooseCup(0)" style="transform: translateX(-100px);">
+                                    <div class="coin-item-2d" id="coin0">BIZ777</div>
+                                    <div class="cup-2d" id="cup0"></div>
+                                </div>
+                                <div class="cup-slot-2d" id="slot1" onclick="chooseCup(1)" style="transform: translateX(0px);">
+                                    <div class="coin-item-2d" id="coin1">BIZ777</div>
+                                    <div class="cup-2d" id="cup1"></div>
+                                </div>
+                                <div class="cup-slot-2d" id="slot2" onclick="chooseCup(2)" style="transform: translateX(100px);">
+                                    <div class="coin-item-2d" id="coin2">BIZ777</div>
+                                    <div class="cup-2d" id="cup2"></div>
+                                </div>
+                            </div>
                         </div>
 
-                        <button class="btn" id="startCupGameBtn" onclick="startCupRound()" style="width: 100%;">რაუნდის დაწყება 🎮</button>
+                        <button class="btn" id="startCupGameBtn" onclick="startCupRound()" style="width: 100%;">Start Round 🎮</button>
                         <div id="cupCooldownText" style="font-size: 11px; color: var(--text-secondary); text-align: center;"></div>
                     </div>
                 </div>
 
                 <div class="sub-game-container" id="subgame-slot">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ მენიუ</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ სლოტ აპარატი</h3>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Slot Machine Spin</h3>
                         <div style="width: 50px;"></div>
                     </div>
 
                     <div class="slot-machine-wrapper">
                         <div style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
-                            ღირებულება: 500 მონეტა | 3x BIZ777 = 5,000,000 ჯეკპოტი!
+                            Cost: 500 Coins | 3x BIZ777 = 5,000,000 Jackpot!
                         </div>
 
                         <div class="slot-board-2d">
@@ -880,7 +930,7 @@
                         </div>
 
                         <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
-                            <button class="btn" id="spinSlotBtn" onclick="spinSlotMachine()" style="width: 100%;">დატრიალება (500 🪙) 🎰</button>
+                            <button class="btn" id="spinSlotBtn" onclick="spinSlotMachine()" style="width: 100%;">SPIN SLOT (500 🪙) 🎰</button>
                             <div id="slotResultText" style="font-size: 11px; color: var(--text-secondary); text-align: center; height: 16px;"></div>
                         </div>
                     </div>
@@ -888,43 +938,43 @@
 
                 <div class="sub-game-container" id="subgame-paperwrapsrock">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ მენიუ</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">✌️ ქაღალდი, ქვა, მაკრატელი</h3>
+                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <h3 style="font-size: 13px; color: var(--accent);">✌️ Paper Wraps Rock</h3>
                         <div style="width: 50px;"></div>
                     </div>
 
                     <div class="paperwrapsrock-wrapper">
                         <div style="display: flex; justify-content: space-between; width: 100%; padding: 0 10px; font-weight: bold; font-size: 13px; color: var(--warning);">
-                            <span id="pwrTimer">⏱️ 45 წმ</span>
-                            <span id="pwrScore">ქულა: 0</span>
+                            <span id="pwrTimer">⏱️ 45 sec</span>
+                            <span id="pwrScore">Score: 0</span>
                         </div>
 
                         <div style="position: relative; width: 100%; height: 160px; background: #0d0918; border: 2px solid var(--accent); border-radius: 14px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; overflow: hidden;">
                             <div style="text-align: center;">
-                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold; margin-bottom: 5px;">თქვენ</div>
+                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold; margin-bottom: 5px;">YOU</div>
                                 <div id="pwrLeftHand" style="font-size: 44px;">✊</div>
                             </div>
 
                             <div style="text-align: center;">
-                                <div id="pwrActionText" style="font-size: 14px; font-weight: bold; color: #facc15;">მზად არის</div>
+                                <div id="pwrActionText" style="font-size: 14px; font-weight: bold; color: #facc15;">BATTLE READY</div>
                             </div>
 
                             <div style="text-align: center;">
-                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold; margin-bottom: 5px;">ბოტი</div>
+                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold; margin-bottom: 5px;">BOT</div>
                                 <div id="pwrRightHand" style="font-size: 44px;">✊</div>
                             </div>
                         </div>
 
                         <div style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
-                            <div style="font-size: 11px; color: var(--text-secondary); text-align: center; font-weight: bold;">აირჩიე ფიგურა:</div>
+                            <div style="font-size: 11px; color: var(--text-secondary); text-align: center; font-weight: bold;">Choose your sign:</div>
                             <div style="display: flex; gap: 8px; justify-content: center;">
-                                <button class="btn" onclick="playPwrChoice('scissors')" style="flex: 1; font-size: 12px;">✌️ მაკრატელი</button>
-                                <button class="btn" onclick="playPwrChoice('paper')" style="flex: 1; font-size: 12px;">✋ ქაღალდი</button>
-                                <button class="btn" onclick="playPwrChoice('rock')" style="flex: 1; font-size: 12px;">✊ ქვა</button>
+                                <button class="btn" onclick="playPwrChoice('scissors')" style="flex: 1; font-size: 12px;">✌️ Scissors</button>
+                                <button class="btn" onclick="playPwrChoice('paper')" style="flex: 1; font-size: 12px;">✋ Paper</button>
+                                <button class="btn" onclick="playPwrChoice('rock')" style="flex: 1; font-size: 12px;">✊ Rock</button>
                             </div>
                         </div>
 
-                        <button class="btn" id="startPwrBtn" onclick="startPwrGame()" style="width: 100%; background: #22c55e; color: #000;">ბრძოლის დაწყება 🚀 (ღირებულება: 200 🪙)</button>
+                        <button class="btn" id="startPwrBtn" onclick="startPwrGame()" style="width: 100%; background: #22c55e; color: #000;">Start Battle 🚀 (Cost: 200 🪙)</button>
                         <div id="pwrResultMsg" style="font-size: 11px; color: var(--text-secondary); text-align: center; height: 16px;"></div>
                     </div>
                 </div>
@@ -932,47 +982,47 @@
             </div>
 
             <div class="tab-pane" id="tab-friends">
-                <h3 style="margin-bottom: 12px; align-self: flex-start;">👥 მეგობრების მოწვევა</h3>
+                <h3 style="margin-bottom: 12px; align-self: flex-start;">👥 Invite Friends</h3>
                 <div class="friends-list">
                     <div class="friend-card" style="align-items: stretch; gap: 8px;">
-                        <h4 style="font-size: 14px;">მოიწვიე 3 მეგობარი და მიიღე უფასო ტაპის ძალა 20!</h4>
-                        <p style="font-size: 11px; color: var(--text-secondary);">მოწვეული მეგობრები: <span id="friendCountDisplay" style="color: var(--accent); font-weight: bold;">0</span> / 3</p>
-                        <button class="btn" onclick="inviteFriendLink()">რეფერალური ბმულის გაზიარება 🔗</button>
+                        <h4 style="font-size: 14px;">Invite 3 Friends to get Free Tap Power 20!</h4>
+                        <p style="font-size: 11px; color: var(--text-secondary);">Invited friends: <span id="friendCountDisplay" style="color: var(--accent); font-weight: bold;">0</span> / 3</p>
+                        <button class="btn" onclick="inviteFriendLink()">Share Referral Link 🔗</button>
                     </div>
                 </div>
             </div>
 
             <div class="tab-pane" id="tab-ads">
-                <h3 style="margin-bottom: 12px; align-self: flex-start;">⚡ ენერგიის გაზრდა</h3>
+                <h3 style="margin-bottom: 12px; align-self: flex-start;">⚡ Boost Energy</h3>
                 <div class="ads-list">
                     <div class="ad-card" style="flex-direction: row;">
                         <div class="ad-info">
-                            <h4>რეკლამის ყურება</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">უყურე რეკლამას ენერგიის სრულად შესავსებად</p>
+                            <h4>Refill Energy Ad</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Watch simulated ad to instantly refill energy to max</p>
                         </div>
-                        <button class="btn" onclick="watchSimulatedAd()">ყურება 📺</button>
+                        <button class="btn" onclick="watchSimulatedAd()">Watch 📺</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <nav>
-            <button class="nav-item active" onclick="switchTab('clicker', this)"><span>⚡</span> ტაპი</button>
-            <button class="nav-item" onclick="switchTab('shop', this)"><span>🛒</span> მაღაზია</button>
-            <button class="nav-item" onclick="switchTab('leaderboard', this)"><span>🏆</span> რეიტინგი</button>
-            <button class="nav-item" onclick="switchTab('minigame', this)"><span>🎮</span> თამაშები</button>
-            <button class="nav-item" onclick="switchTab('friends', this)"><span>👥</span> მეგობრები</button>
-            <button class="nav-item" onclick="switchTab('ads', this)"><span>📺</span> ბუსტი</button>
+            <button class="nav-item active" onclick="switchTab('clicker', this)"><span>⚡</span> Tap</button>
+            <button class="nav-item" onclick="switchTab('shop', this)"><span>🛒</span> Shop</button>
+            <button class="nav-item" onclick="switchTab('leaderboard', this)"><span>🏆</span> Rank</button>
+            <button class="nav-item" onclick="switchTab('minigame', this)"><span>🎮</span> Game</button>
+            <button class="nav-item" onclick="switchTab('friends', this)"><span>👥</span> Friends</button>
+            <button class="nav-item" onclick="switchTab('ads', this)"><span>📺</span> Boost</button>
         </nav>
     </div>
 
     <div id="adModal">
         <div class="ad-video-box">
-            <h3 style="margin-bottom: 10px; font-size: 15px; color: var(--accent);">📺 ენერგია ივსება...</h3>
+            <h3 style="margin-bottom: 10px; font-size: 15px; color: var(--accent);">📺 Refilling Energy...</h3>
             <div class="ad-screen">
                 <div style="font-size: 36px; margin-bottom: 5px;">⚡</div>
-                <div style="font-size: 13px; color: var(--text-secondary);">BIZ777 ენერგიის ბუსტი</div>
-                <div id="adTimer" style="font-size: 18px; font-weight: bold; color: var(--warning); margin-top: 8px;">3წმ</div>
+                <div style="font-size: 13px; color: var(--text-secondary);">BIZ777 Energy Boost</div>
+                <div id="adTimer" style="font-size: 18px; font-weight: bold; color: var(--warning); margin-top: 8px;">3s</div>
             </div>
         </div>
     </div>
@@ -1089,7 +1139,7 @@
 
             if (currentLevelIndex === levels.length - 1) {
                 levelBarFill.style.width = "100%";
-                nextLevelText.innerText = "მაქსიმალური დონე!";
+                nextLevelText.innerText = "Max Level Reached!";
                 levelPercentage.innerText = "100%";
             } else {
                 let progressRange = nextMin - currentMin;
@@ -1097,7 +1147,7 @@
                 let percentage = Math.min(100, Math.max(0, (currentProgress / progressRange) * 100));
 
                 levelBarFill.style.width = `${percentage}%`;
-                nextLevelText.innerText = `შემდეგი მიზანი: ${(nextMin - score).toLocaleString()} ქულა`;
+                nextLevelText.innerText = `Next Target: ${(nextMin - score).toLocaleString()} pts`;
                 levelPercentage.innerText = `${Math.floor(percentage)}%`;
             }
 
@@ -1118,26 +1168,26 @@
                 tapContainer.innerHTML = `
                     <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <div style="font-weight: bold; font-size: 12px;">👆 ტაპის გაძლიერება (${tapPower} ➔ ${nextPower})</div>
-                            <div style="font-size: 10px; color: #ffd700;">ფასი: ${price.toLocaleString()} BIZ777</div>
+                            <div style="font-weight: bold; font-size: 12px;">👆 Upgrade Tap Power (${tapPower} ➔ ${nextPower})</div>
+                            <div style="font-size: 10px; color: #ffd700;">Price: ${price.toLocaleString()} BIZ777</div>
                         </div>
-                        <button onclick="buyTapUpgrade(${nextPower}, ${price})" class="btn" style="padding: 6px 12px; font-size: 11px;">ყიდვა</button>
+                        <button onclick="buyTapUpgrade(${nextPower}, ${price})" class="btn" style="padding: 6px 12px; font-size: 11px;">Buy</button>
                     </div>`;
             } else if (tapPower === 10 && !freeTap20Claimed) {
                 if (invitedFriendsCount < 3) {
-                    tapContainer.innerHTML = `<div style="font-size: 11px; color: var(--warning); text-align: center; padding: 6px; font-weight: bold;">🔒 მოიწვიე კიდევ ${3 - invitedFriendsCount} მეგობარი უფასო ტაპ 20-ისთვის!</div>`;
+                    tapContainer.innerHTML = `<div style="font-size: 11px; color: var(--warning); text-align: center; padding: 6px; font-weight: bold;">🔒 Invite ${3 - invitedFriendsCount} more friends for FREE Tap Power 20!</div>`;
                 } else {
                     tapContainer.innerHTML = `
                         <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                             <div>
-                                <div style="font-weight: bold; font-size: 12px;">🎁 მიიღე უფასო ტაპი 20!</div>
-                                <div style="font-size: 10px; color: #22c55e;">3/3 მეგობარი მოწვეულია</div>
+                                <div style="font-weight: bold; font-size: 12px;">🎁 Get FREE Tap Power 20!</div>
+                                <div style="font-size: 10px; color: #22c55e;">3/3 Friends Invited</div>
                             </div>
-                            <button onclick="claimFreeTap20()" class="btn" style="padding: 6px 12px; font-size: 11px; background: #22c55e;">აღება 🚀</button>
+                            <button onclick="claimFreeTap20()" class="btn" style="padding: 6px 12px; font-size: 11px; background: #22c55e;">Claim 🚀</button>
                         </div>`;
                 }
             } else {
-                tapContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ მაქსიმალური ტაპი (20) განბლოკილია!</div>`;
+                tapContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Tap Power (20) Unlocked!</div>`;
             }
 
             const energyTiers = [
@@ -1152,13 +1202,13 @@
                 energyContainer.innerHTML = `
                     <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <div style="font-weight: bold; font-size: 12px;">⚡ მაქსიმალური ენერგია (${maxEnergy} ➔ ${nextTier.target})</div>
-                            <div style="font-size: 10px; color: #ffd700;">ფასი: ${nextTier.price.toLocaleString()} BIZ777</div>
+                            <div style="font-weight: bold; font-size: 12px;">⚡ Max Energy (${maxEnergy} ➔ ${nextTier.target})</div>
+                            <div style="font-size: 10px; color: #ffd700;">Price: ${nextTier.price.toLocaleString()} BIZ777</div>
                         </div>
-                        <button onclick="buyEnergyUpgrade(${nextTier.target}, ${nextTier.price})" class="btn" style="padding: 6px 12px; font-size: 11px;">ყიდვა</button>
+                        <button onclick="buyEnergyUpgrade(${nextTier.target}, ${nextTier.price})" class="btn" style="padding: 6px 12px; font-size: 11px;">Buy</button>
                     </div>`;
             } else {
-                energyContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ მაქსიმალური ენერგია (5,000) შეძენილია!</div>`;
+                energyContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Energy (5,000) Purchased!</div>`;
             }
         }
 
@@ -1186,7 +1236,7 @@
                 else if (rank === 3) medalEmoji = "🥉 ";
 
                 let profileClass = player.isMe ? "leaderboard-item my-profile" : "leaderboard-item";
-                let displayName = player.isMe ? `${player.name} (თქვენ)` : player.name;
+                let displayName = player.isMe ? `${player.name} (You)` : player.name;
 
                 let itemHTML = `
                     <div class="${profileClass}">
@@ -1203,25 +1253,25 @@
 
         function buyTapUpgrade(newPower, price) {
             if (score >= price) { score -= price; tapPower = newPower; updateUI(); saveState(); }
-            else { alert("არ არის საკმარისი BIZ777 მონეტა!"); }
+            else { alert("Not enough BIZ777 coins!"); }
         }
 
         function claimFreeTap20() {
             if (invitedFriendsCount >= 3 && !freeTap20Claimed) {
                 tapPower = 20; freeTap20Claimed = true; updateUI(); saveState();
-                alert("ტაპის ძალა 20 განბლოკილია!");
+                alert("Tap Power 20 unlocked!");
             }
         }
 
         function buyEnergyUpgrade(newMaxEnergy, price) {
             if (score >= price) { score -= price; maxEnergy = newMaxEnergy; energy = maxEnergy; updateUI(); saveState(); }
-            else { alert("არ არის საკმარისი BIZ777 მონეტა!"); }
+            else { alert("Not enough BIZ777 coins!"); }
         }
 
         function inviteFriendLink() {
             let refLink = `https://t.me/Biz777Bot?start=ref_${userId}`;
-            let shareText = `შემოუერთდი BIZ777 მინი აპლიკაციას და იშოვე მონეტები! 🚀`;
-            tg.openTelegramLink ? tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent(shareText)}`) : prompt("ბმულის კოპირება:", refLink);
+            let shareText = `Join BIZ777 Mini App and earn coins! 🚀`;
+            tg.openTelegramLink ? tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent(shareText)}`) : prompt("Copy link:", refLink);
         }
 
         function watchSimulatedAd() {
@@ -1229,18 +1279,18 @@
             const timerEl = document.getElementById('adTimer');
             modal.style.display = 'flex';
             let timeLeft = 3;
-            timerEl.innerText = `${timeLeft}წმ`;
+            timerEl.innerText = `${timeLeft}s`;
 
             let countdown = setInterval(() => {
                 timeLeft--;
-                if (timeLeft > 0) { timerEl.innerText = `${timeLeft}წმ`; }
+                if (timeLeft > 0) { timerEl.innerText = `${timeLeft}s`; }
                 else {
                     clearInterval(countdown);
                     modal.style.display = 'none';
                     energy = maxEnergy;
                     updateUI();
                     saveState();
-                    alert("ენერგია სრულად შეივსო!");
+                    alert("Energy fully refilled!");
                 }
             }, 1000);
         }
@@ -1250,10 +1300,7 @@
             document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
             document.getElementById(`subgame-${gameName}`).classList.add('active-subgame');
             if (gameName === 'flappy' && !flappyRunning) { startFlappyGame(); }
-            if (gameName === 'cups') { 
-                init3DScene();
-                setCupLevel(currentCupLevel); 
-            }
+            if (gameName === 'cups') { initCupStageUI(); }
             if (gameName === 'paperwrapsrock') { resetPwrLobby(); }
         }
 
@@ -1276,7 +1323,7 @@
 
         function startCatchGame() {
             if (score < catchGameCost) {
-                alert("არ არის საკმარისი მონეტა! საჭიროა: 50 მონეტა.");
+                alert("Not enough coins! Required: 50 coins.");
                 return;
             }
 
@@ -1289,9 +1336,9 @@
             catchGameActive = true;
 
             document.getElementById('startCatchBtn').style.display = 'none';
-            document.getElementById('catchScore').innerText = `ქულა: ${catchScore}`;
-            document.getElementById('catchTimer').innerText = `⏱️ დრო: ${catchTimeLeft}წმ`;
-            document.getElementById('catchMsg').innerText = "თამაში დაიწყო! დაიჭირე მონეტები, მოერიდე ბომბებს!";
+            document.getElementById('catchScore').innerText = `Score: ${catchScore}`;
+            document.getElementById('catchTimer').innerText = `⏱️ Time: ${catchTimeLeft}s`;
+            document.getElementById('catchMsg').innerText = "Game started! Catch coins, avoid bombs!";
 
             const container = document.getElementById('catchGameContainer');
             container.innerHTML = '';
@@ -1301,7 +1348,7 @@
 
             catchTimerInterval = setInterval(() => {
                 catchTimeLeft--;
-                document.getElementById('catchTimer').innerText = `⏱️ დრო: ${catchTimeLeft}წმ`;
+                document.getElementById('catchTimer').innerText = `⏱️ Time: ${catchTimeLeft}s`;
                 if (catchTimeLeft <= 0) {
                     endCatchGame();
                 }
@@ -1340,15 +1387,15 @@
 
                 if (isBomb) {
                     catchScore = Math.max(0, catchScore - 5);
-                    document.getElementById('catchMsg').innerText = "უი! ბომბს შეეხე (-5 ქულა)";
+                    document.getElementById('catchMsg').innerText = "Oops! Hit a bomb (-5 pts)";
                 } else {
                     catchScore += 1;
                     score += 1;
                     updateUI();
                     saveState();
-                    document.getElementById('catchMsg').innerText = "+1 მონეტა შეგროვდა!";
+                    document.getElementById('catchMsg').innerText = "+1 Coin collected!";
                 }
-                document.getElementById('catchScore').innerText = `ქულა: ${catchScore}`;
+                document.getElementById('catchScore').innerText = `Score: ${catchScore}`;
                 item.remove();
             });
 
@@ -1368,9 +1415,9 @@
 
             document.getElementById('catchGameContainer').innerHTML = '';
             document.getElementById('startCatchBtn').style.display = 'block';
-            document.getElementById('startCatchBtn').innerText = `თავიდან თამაში 🚀 (ღირებულება: 50 🪙)`;
-            document.getElementById('catchMsg').innerText = `დრო ამოიწურა! ჯამური ქულა: ${catchScore}`;
-            alert(`თამაში დასრულდა! შენ მოაგროვე ${catchScore} მონეტა ამ სესიაზე.`);
+            document.getElementById('startCatchBtn').innerText = `Play Again 🚀 (Cost: 50 🪙)`;
+            document.getElementById('catchMsg').innerText = `Time's up! Total Score: ${catchScore}`;
+            alert(`Game Over! You collected ${catchScore} coins in this session.`);
         }
 
         const canvas = document.getElementById('flappyCanvas');
@@ -1508,7 +1555,7 @@
             ctx.fillStyle = '#fff';
             ctx.font = 'bold 14px sans-serif';
             ctx.textAlign = 'left';
-            ctx.fillText(`ქულა: ${flappyScore} / 10`, 15, 25);
+            ctx.fillText(`Score: ${flappyScore} / 10`, 15, 25);
 
             frameCount++;
             requestAnimationFrame(loopFlappy);
@@ -1522,7 +1569,7 @@
                 energy = Math.min(maxEnergy, energy + 500);
                 updateUI();
                 saveState();
-                alert("🎉 შესანიშნავია! +500 ენერგია ჯილდოდ!");
+                alert("🎉 Amazing! +500 Energy Reward!");
             }
         }
 
@@ -1533,10 +1580,10 @@
             ctx.fillStyle = '#ef4444';
             ctx.font = 'bold 20px sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('თამაში დასრულდა!', canvas.width / 2, canvas.height / 2 - 15);
+            ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 15);
             ctx.fillStyle = '#fff';
             ctx.font = '13px sans-serif';
-            ctx.fillText('თავიდან სცადეთ', canvas.width / 2, canvas.height / 2 + 15);
+            ctx.fillText('Tap to Try Again', canvas.width / 2, canvas.height / 2 + 15);
             
             canvas.onclick = () => {
                 canvas.onclick = null;
@@ -1556,7 +1603,7 @@
         function spinSlotMachine() {
             const cost = 500;
             if (score < cost) {
-                alert("არ არის საკმარისი BIZ777 მონეტა! საჭიროა: 500 მონეტა.");
+                alert("Not enough BIZ777 coins! Required: 500 coins.");
                 return;
             }
 
@@ -1568,7 +1615,7 @@
             let resText = document.getElementById('slotResultText');
             btn.disabled = true;
             btn.style.opacity = "0.5";
-            resText.innerText = "სლოტი ტრიალებს... 🎰";
+            resText.innerText = "Spinning slot... 🎰";
 
             const slotWeights = [
                 { symbols: [{icon:'🪙', label:'BIZ777'}, {icon:'🪙', label:'BIZ777'}, {icon:'🪙', label:'BIZ777'}], weight: 1, reward: 5000000, type: 'mega' },
@@ -1608,18 +1655,18 @@
 
                     if (selectedOutcome.type === 'mega') {
                         score += selectedOutcome.reward;
-                        resText.innerText = "მეგა ჯეკპოტი! +5,000,000 მონეტა! 🎉";
-                        alert("🎉 წარმოუდგენელია! სამივე BIZ777 მონეტა დაეცა და მოიგე 5,000,000 მონეტის ჯეკპოტი!");
+                        resText.innerText = "Mega Jackpot! +5,000,000 coins! 🎉";
+                        alert("🎉 Incredible! All 3 BIZ777 coins landed and you won 5,000,000 coins Jackpot!");
                     } else if (selectedOutcome.type === 'triple') {
                         score += selectedOutcome.reward;
-                        resText.innerText = `სამივე დამთხვევა! +${selectedOutcome.reward.toLocaleString()} მონეტა!`;
-                        alert(`🌟 სამივე სიმბოლო დაემთხვა! მოიგე ${selectedOutcome.reward.toLocaleString()} მონეტა!`);
+                        resText.innerText = `Three of a kind! +${selectedOutcome.reward.toLocaleString()} coins!`;
+                        alert(`🌟 All 3 symbols matched! You won ${selectedOutcome.reward.toLocaleString()} coins!`);
                     } else if (selectedOutcome.type === 'double') {
                         score += selectedOutcome.reward;
-                        resText.innerText = `ნაწილობრივი დამთხვევა! +${selectedOutcome.reward.toLocaleString()} მონეტა!`;
-                        alert(`✨ დამთხვევა მოიძებნა! გადმოგეცა ${selectedOutcome.reward.toLocaleString()} მონეტა!`);
+                        resText.innerText = `Partial match! +${selectedOutcome.reward.toLocaleString()} coins!`;
+                        alert(`✨ Matching symbols found! ${selectedOutcome.reward.toLocaleString()} coins awarded!`);
                     } else {
-                        resText.innerText = "არ არის დამთხვევა, სცადე თავიდან!";
+                        resText.innerText = "No match, try again!";
                     }
 
                     updateUI();
@@ -1630,7 +1677,6 @@
             }, 80);
         }
 
-        /* --- 3D CUP GAME LOGIC (THREE.JS) --- */
         let currentCupLevel = 1;
         let winningIndex = 1;
         let cupPositions = [0, 1, 2];
@@ -1638,91 +1684,14 @@
         let isShuffling = false;
 
         const cupLevelsData = {
-            1: { cost: 500, win: 1000, energyReward: 200, shuffles: 4, speed: 400 },
-            2: { cost: 2500, win: 5000, energyReward: 1000, shuffles: 7, speed: 300 },
-            3: { cost: 10000, win: 25000, energyReward: 3500, shuffles: 11, speed: 220 },
-            4: { cost: 50000, win: 150000, energyReward: 10000, shuffles: 16, speed: 160 },
-            5: { cost: 200000, win: 800000, energyReward: 30000, shuffles: 22, speed: 110 }
+            1: { cost: 500, win: 1000, energyReward: 200, shuffles: 4, speed: 300 },
+            2: { cost: 2500, win: 5000, energyReward: 1000, shuffles: 7, speed: 220 },
+            3: { cost: 10000, win: 25000, energyReward: 3500, shuffles: 11, speed: 160 },
+            4: { cost: 50000, win: 150000, energyReward: 10000, shuffles: 16, speed: 110 },
+            5: { cost: 200000, win: 800000, energyReward: 30000, shuffles: 22, speed: 80 }
         };
 
-        let scene3d, camera3d, renderer3d;
-        let cupsMeshes = [];
-        let ballMesh;
-        let isSceneInitialized = false;
-
-        function init3DScene() {
-            if (isSceneInitialized) return;
-            const container = document.querySelector('.cups-board-3d');
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-
-            scene3d = new THREE.Scene();
-            camera3d = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-            camera3d.position.set(0, 4.5, 6.5);
-            camera3d.lookAt(0, 0, 0);
-
-            renderer3d = new THREE.WebGLRenderer({ canvas: document.getElementById('cupsCanvas3D'), antialias: true, alpha: true });
-            renderer3d.setSize(width, height);
-            renderer3d.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-            scene3d.add(ambientLight);
-
-            const dirLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
-            dirLight.position.set(5, 10, 7);
-            scene3d.add(dirLight);
-
-            const pointLight = new THREE.PointLight(0xffd700, 1, 10);
-            pointLight.position.set(0, 1, 0);
-            scene3d.add(pointLight);
-
-            // Create Ball (BIZ777 Ball)
-            const ballGeo = new THREE.SphereGeometry(0.35, 32, 32);
-            const ballMat = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.4, roughness: 0.2, emissive: 0x332200 });
-            ballMesh = new THREE.Mesh(ballGeo, ballMat);
-            ballMesh.position.set(0, -0.65, 0);
-            scene3d.add(ballMesh);
-
-            // Create 3 Cups (Cone/Cylinder)
-            cupsMeshes = [];
-            const cupGeo = new THREE.ConeGeometry(0.7, 1.6, 32, 1, true);
-            const cupMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.3, metalness: 0.2, side: THREE.DoubleSide });
-
-            const slotXPositions = [-1.8, 0, 1.8];
-            for (let i = 0; i < 3; i++) {
-                const group = new THREE.Group();
-                const outerGeom = new THREE.CylinderGeometry(0.55, 0.75, 1.5, 32);
-                const cupMesh = new THREE.Mesh(outerGeom, cupMat);
-                cupMesh.position.y = 0.75;
-                group.add(cupMesh);
-
-                group.position.set(slotXPositions[i], 0, 0);
-                scene3d.add(group);
-                cupsMeshes.push(group);
-            }
-
-            const canvasEl = document.getElementById('cupsCanvas3D');
-            canvasEl.addEventListener('pointerdown', onCanvas3DClick);
-
-            isSceneInitialized = true;
-            animate3D();
-        }
-
-        function animate3D() {
-            if (!isSceneInitialized) return;
-            requestAnimationFrame(animate3D);
-            renderer3d.render(scene3d, camera3d);
-        }
-
-        function updateCupPositions3D(animate = false) {
-            const slotXPositions = [-1.8, 0, 1.8];
-            for (let cupId = 0; cupId < 3; cupId++) {
-                let slotIndex = cupPositions.indexOf(cupId);
-                let targetX = slotXPositions[slotIndex];
-                cupsMeshes[cupId].position.x = targetX;
-            }
-        }
+        const SLOT_DISTANCE = 100;
 
         function checkGlobalCooldown() {
             let now = new Date().getTime();
@@ -1738,7 +1707,7 @@
                     let mins = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                     btn.disabled = true;
                     btn.style.opacity = "0.5";
-                    cooldownText.innerText = `⏳ ყველა დონე დასრულებულია! შემდეგი განახლება: ${hours}სთ ${mins}წთ`;
+                    cooldownText.innerText = `⏳ All levels completed! Next restart in ${hours}h ${mins}m`;
                     return true;
                 } else {
                     globalCupCooldownTimestamp = "";
@@ -1763,7 +1732,7 @@
             if (gameActive || isShuffling) return;
             
             if (!cupLevelDataState[lvl].unlocked) {
-                alert("ჯერ წინა დონე დაასრულეთ!");
+                alert("Complete the previous level first!");
                 return;
             }
 
@@ -1784,28 +1753,35 @@
             document.getElementById(`lvlBtn${lvl}`).classList.add('active-level');
 
             let data = cupLevelsData[lvl];
-            document.getElementById('cupGameInfo').innerText = `ღირებულება: ${data.cost.toLocaleString()} BIZ777 | მოგება: ${data.win.toLocaleString()} მონეტა + ${data.energyReward.toLocaleString()} ენერგია`;
+            document.getElementById('cupGameInfo').innerText = `Cost: ${data.cost.toLocaleString()} BIZ777 | Win: ${data.win.toLocaleString()} Coins + ${data.energyReward.toLocaleString()} Energy`;
             
             checkGlobalCooldown();
             initCupStageUI();
+        }
+
+        function renderCupPositions(animate = false) {
+            for (let cupId = 0; cupId < 3; cupId++) {
+                let slotIndex = cupPositions.indexOf(cupId);
+                let slotEl = document.getElementById(`slot${cupId}`);
+                slotEl.style.transitionDuration = animate ? `${cupLevelsData[currentCupLevel].speed}ms` : '0.2s';
+                let xOffset = (slotIndex - 1) * SLOT_DISTANCE;
+                slotEl.style.transform = `translateX(${xOffset}px)`;
+            }
         }
 
         function initCupStageUI() {
             winningIndex = Math.floor(Math.random() * 3);
             cupPositions = [0, 1, 2];
             
-            if (isSceneInitialized) {
-                updateCupPositions3D();
-                for (let i = 0; i < 3; i++) {
-                    cupsMeshes[i].position.y = 0;
-                }
-                ballMesh.position.x = cupsMeshes[winningIndex].position.x;
-                ballMesh.position.y = -0.65;
-                ballMesh.visible = false;
+            renderCupPositions(false);
+
+            for (let i = 0; i < 3; i++) {
+                document.getElementById(`cup${i}`).classList.remove('lifted');
+                document.getElementById(`coin${i}`).style.opacity = "0";
             }
 
             if (!checkGlobalCooldown()) {
-                document.getElementById(`startCupGameBtn`).innerText = "რაუნდის დაწყება 🎮";
+                document.getElementById(`startCupGameBtn`).innerText = "Start Round 🎮";
             }
             gameActive = false;
             isShuffling = false;
@@ -1816,27 +1792,27 @@
             if (checkGlobalCooldown()) return;
 
             let data = cupLevelsData[currentCupLevel];
-            if (score < data.cost) { alert("არ არის საკმარისი BIZ777 მონეტა!"); return; }
+            if (score < data.cost) { alert("Not enough BIZ777 coins!"); return; }
 
             score -= data.cost;
             updateUI();
             saveState();
 
             isShuffling = true;
-            document.getElementById('startCupGameBtn').innerText = "ჭიქები ირევა... 🌪️";
+            document.getElementById('startCupGameBtn').innerText = "Shuffling... 🌪️";
             document.getElementById('startCupGameBtn').disabled = true;
 
             for (let i = 0; i < 3; i++) {
-                cupsMeshes[i].position.y = 1.2;
+                document.getElementById(`cup${i}`).classList.add('lifted');
             }
-            ballMesh.position.x = cupsMeshes[winningIndex].position.x;
-            ballMesh.visible = true;
+            let winningCupId = winningIndex;
+            document.getElementById(`coin${winningCupId}`).style.opacity = "1";
 
             setTimeout(() => {
                 for (let i = 0; i < 3; i++) {
-                    cupsMeshes[i].position.y = 0;
+                    document.getElementById(`cup${i}`).classList.remove('lifted');
+                    document.getElementById(`coin${i}`).style.opacity = "0";
                 }
-                ballMesh.visible = false;
 
                 setTimeout(() => {
                     let shuffleCount = 0;
@@ -1851,57 +1827,35 @@
                         cupPositions[slotA] = cupPositions[slotB];
                         cupPositions[slotB] = temp;
 
-                        updateCupPositions3D(true);
+                        renderCupPositions(true);
 
                         shuffleCount++;
                         if (shuffleCount >= data.shuffles) {
                             clearInterval(shuffleInterval);
                             isShuffling = false;
                             gameActive = true;
-                            document.getElementById('startCupGameBtn').innerText = "აირჩიე ჭიქა! 🤔";
+                            document.getElementById('startCupGameBtn').innerText = "Choose a Cup! 🤔";
                         }
                     }, data.speed + 20);
-                }, 400);
-            }, 1200);
+                }, 350);
+            }, 1000);
         }
 
-        function onCanvas3DClick(event) {
+        function chooseCup(slotIdx) {
             if (isShuffling || !gameActive) return;
-
-            const canvasEl = document.getElementById('cupsCanvas3D');
-            const rect = canvasEl.getBoundingClientRect();
-            const x = ((event.clientX - rect.left) / canvasEl.clientWidth) * 2 - 1;
-            const y = -((event.clientY - rect.top) / canvasEl.clientHeight) * 2 + 1;
-
-            const raycaster = new THREE.Raycaster();
-            raycaster.setFromCamera(new THREE.Vector2(x, y), camera3d);
-
-            let allSubMeshes = [];
-            cupsMeshes.forEach((group, idx) => {
-                group.children.forEach(mesh => {
-                    mesh.userData = { cupId: idx };
-                    allSubMeshes.push(mesh);
-                });
-            });
-
-            const intersects = raycaster.intersectObjects(allSubMeshes);
-            if (intersects.length > 0) {
-                let chosenCupId = intersects[0].object.userData.cupId;
-                resolveCupChoice(chosenCupId);
-            }
-        }
-
-        function resolveCupChoice(chosenCupId) {
             gameActive = false;
             let data = cupLevelsData[currentCupLevel];
 
             for (let i = 0; i < 3; i++) {
-                cupsMeshes[i].position.y = 1.2;
+                document.getElementById(`cup${i}`).classList.add('lifted');
             }
-            ballMesh.position.x = cupsMeshes[winningIndex].position.x;
-            ballMesh.visible = true;
 
-            if (chosenCupId === winningIndex) {
+            let chosenCupId = slotIdx;
+            let winningCupId = winningIndex;
+
+            document.getElementById(`coin${winningCupId}`).style.opacity = "1";
+
+            if (chosenCupId === winningCupId) {
                 score += data.win;
                 energy = Math.min(maxEnergy, energy + data.energyReward);
                 cupLevelDataState[currentCupLevel].completed = true;
@@ -1912,21 +1866,21 @@
                 } else {
                     globalCupCooldownTimestamp = new Date().getTime().toString();
                     localStorage.setItem('biz_cup_global_cooldown', globalCupCooldownTimestamp);
-                    alert(`🏆 შესანიშნავია! შენ დაასრულე ყველა დონე! დონეები განახლდება 24 საათში.`);
+                    alert(`🏆 Incredible! You completed all levels! Levels reset in 24 hours.`);
                 }
 
                 setTimeout(() => {
                     if (nextLvl <= 5) {
-                        alert(`🎉 სწორია! შენ მოიგე ${data.win.toLocaleString()} მონეტა და +${data.energyReward.toLocaleString()} ენერგია! დონე ${nextLvl} განბლოკილია!`);
+                        alert(`🎉 Correct! You won ${data.win.toLocaleString()} coins AND +${data.energyReward.toLocaleString()} Energy! Level ${nextLvl} unlocked!`);
                         setCupLevel(nextLvl);
                     } else {
-                        alert(`🎉 სწორია! შენ მოიგე ${data.win.toLocaleString()} მონეტა და +${data.energyReward.toLocaleString()} ენერგია!`);
+                        alert(`🎉 Correct! You won ${data.win.toLocaleString()} coins AND +${data.energyReward.toLocaleString()} Energy!`);
                         initCupStageUI();
                     }
                 }, 300);
             } else {
-                setTimeout(() => alert(`😢 არასწორი ჭიქაა! სცადე თავიდან.`), 300);
-                document.getElementById('startCupGameBtn').innerText = "რაუნდის დაწყება 🎮";
+                setTimeout(() => alert(`😢 Wrong cup! Try again.`), 300);
+                document.getElementById('startCupGameBtn').innerText = "Start Round 🎮";
                 document.getElementById('startCupGameBtn').disabled = false;
             }
 
@@ -1951,20 +1905,20 @@
             pwrScore = 0;
             pwrTimeLeft = 45;
             if (pwrTimerInterval) clearInterval(pwrTimerInterval);
-            document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimeLeft} წმ`;
-            document.getElementById('pwrScore').innerText = `ქულა: 0`;
-            document.getElementById('pwrActionText').innerText = `მზად არის`;
+            document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimeLeft} sec`;
+            document.getElementById('pwrScore').innerText = `Score: 0`;
+            document.getElementById('pwrActionText').innerText = `BATTLE READY`;
             document.getElementById('pwrLeftHand').innerText = '✊';
             document.getElementById('pwrRightHand').innerText = '✊';
             document.getElementById('startPwrBtn').style.display = 'block';
-            document.getElementById('startPwrBtn').innerText = `ბრძოლის დაწყება 🚀 (ღირებულება: 200 🪙)`;
+            document.getElementById('startPwrBtn').innerText = `Start Battle 🚀 (Cost: 200 🪙)`;
             document.getElementById('pwrResultMsg').innerText = "";
         }
 
         function startPwrGame() {
             const cost = 200;
             if (score < cost) {
-                alert("არ არის საკმარისი მონეტა! ღირებულებაა 200 მონეტა.");
+                alert("Not enough coins! Cost is 200 coins.");
                 return;
             }
 
@@ -1976,14 +1930,14 @@
             pwrScore = 0;
             pwrTimeLeft = 45;
             document.getElementById('startPwrBtn').style.display = 'none';
-            document.getElementById('pwrScore').innerText = `ქულა: ${pwrScore}`;
-            document.getElementById('pwrActionText').innerText = `გააკეთე არჩევანი!`;
-            document.getElementById('pwrResultMsg').innerText = "ბრძოლა დაიწყო! აირჩიე ქვა, ქაღალდი ან მაკრატელი.";
+            document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
+            document.getElementById('pwrActionText').innerText = `MAKE YOUR MOVE!`;
+            document.getElementById('pwrResultMsg').innerText = "Battle started! Choose Rock, Paper or Scissors.";
 
             if (pwrTimerInterval) clearInterval(pwrTimerInterval);
             pwrTimerInterval = setInterval(() => {
                 pwrTimeLeft--;
-                document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimeLeft} წმ`;
+                document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimeLeft} sec`;
                 if (pwrTimeLeft <= 0) {
                     clearInterval(pwrTimerInterval);
                     endPwrGame();
@@ -2002,22 +1956,22 @@
 
             let resultTitle = "";
             if (userChoice === opponentChoice) {
-                resultTitle = "ფრეა! ქულა არ იწერება.";
-                document.getElementById('pwrActionText').innerText = "ფრეა!";
+                resultTitle = "TIE! No points.";
+                document.getElementById('pwrActionText').innerText = "IT'S A TIE!";
             } else if (
                 (userChoice === 'rock' && opponentChoice === 'scissors') ||
                 (userChoice === 'paper' && opponentChoice === 'rock') ||
                 (userChoice === 'scissors' && opponentChoice === 'paper')
             ) {
                 pwrScore += 1;
-                resultTitle = "შენ მოიგე ეს რაუნდი! +1 ქულა";
-                document.getElementById('pwrActionText').innerText = "გამარჯვებული! 🎉";
+                resultTitle = "YOU WIN THIS ROUND! +1 pt";
+                document.getElementById('pwrActionText').innerText = "WINNER! 🎉";
             } else {
-                resultTitle = "მოწინააღმდეგემ მოიგო რაუნდი!";
-                document.getElementById('pwrActionText').innerText = "წაგებული რაუნდი! 😢";
+                resultTitle = "OPPONENT WINS ROUND!";
+                document.getElementById('pwrActionText').innerText = "LOST ROUND! 😢";
             }
 
-            document.getElementById('pwrScore').innerText = `ქულა: ${pwrScore}`;
+            document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
             document.getElementById('pwrResultMsg').innerText = resultTitle;
         }
 
@@ -2028,15 +1982,15 @@
                 score += rewardCoins;
                 updateUI();
                 saveState();
-                alert(`⏰ დრო ამოიწურა! შენი საბოლოო ქულა: ${pwrScore}. შენ მოიგე ${rewardCoins.toLocaleString()} მონეტა! 🎉`);
-                document.getElementById('pwrActionText').innerText = `მოიგე ${rewardCoins} მონეტა!`;
+                alert(`⏰ Time's up! Your final score: ${pwrScore}. You won ${rewardCoins.toLocaleString()} coins! 🎉`);
+                document.getElementById('pwrActionText').innerText = `WON ${rewardCoins} COINS!`;
             } else {
-                alert(`⏰ დრო ამოიწურა! საბოლოო ქულა: 0. შემდეგ ჯერზე გაგიმართლებს!`);
-                document.getElementById('pwrActionText').innerText = `თამაში დასრულდა`;
+                alert(`⏰ Time's up! Final score: 0. Better luck next time!`);
+                document.getElementById('pwrActionText').innerText = `GAME OVER`;
             }
 
             document.getElementById('startPwrBtn').style.display = 'block';
-            document.getElementById('startPwrBtn').innerText = `თავიდან თამაში 🚀 (ღირებულება: 200 🪙)`;
+            document.getElementById('startPwrBtn').innerText = `Play Again 🚀 (Cost: 200 🪙)`;
         }
 
         function switchTab(tabId, btnElement) {
@@ -2053,7 +2007,6 @@
             btnElement.classList.add('active');
             
             if(tabId === 'minigame') {
-                init3DScene();
                 setCupLevel(currentCupLevel);
             }
             if(tabId === 'leaderboard') {
@@ -2071,6 +2024,7 @@
         }
 
         updateUI();
+        setCupLevel(1);
     </script>
 </body>
 </html>
