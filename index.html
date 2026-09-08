@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Biz777 Mini App - Classic 2D</title>
+    <title>Biz777 Mini App - 3D Cups</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Three.js Library for 3D Graphics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -168,40 +170,22 @@
             color: #38bdf8;
         }
 
-        /* Enhanced Background Effects & Multi-Glow Styling */
         .ambient-glow {
             position: absolute;
-            width: 380px;
-            height: 380px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, rgba(236, 72, 153, 0.08) 40%, rgba(15, 23, 42, 0) 75%);
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0) 70%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: 0;
-            animation: pulseGlow 5s ease-in-out infinite alternate;
-        }
-
-        .ambient-glow-secondary {
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(56, 189, 248, 0) 70%);
-            top: 20%;
-            left: 20%;
-            pointer-events: none;
-            z-index: 0;
-            animation: floatGlow 7s ease-in-out infinite alternate;
+            animation: pulseGlow 4s ease-in-out infinite alternate;
         }
 
         @keyframes pulseGlow {
-            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.5; }
-            100% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
-        }
-
-        @keyframes floatGlow {
-            0% { transform: translate(0, 0) scale(1); opacity: 0.4; }
-            100% { transform: translate(30px, 40px) scale(1.2); opacity: 0.8; }
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+            100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
         }
 
         .floating-particle {
@@ -210,60 +194,15 @@
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.35;
-            box-shadow: 0 0 8px var(--accent);
+            opacity: 0.25;
             animation: floatParticle linear infinite;
         }
 
         @keyframes floatParticle {
             0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-            20% { opacity: 0.4; }
-            80% { opacity: 0.4; }
-            100% { transform: translateY(-50px) scale(1.3); opacity: 0; }
-        }
-
-        /* 9-Grid Custom Menu Styling */
-        .menu-grid-9 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            width: 100%;
-            max-width: 360px;
-            z-index: 5;
-            position: relative;
-            margin-bottom: 15px;
-        }
-
-        .menu-grid-item {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(17, 24, 39, 0.95) 100%);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 14px;
-            padding: 12px 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.1);
-            transition: all 0.2s ease;
-        }
-
-        .menu-grid-item:active {
-            transform: scale(0.94);
-            border-color: var(--accent);
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-
-        .menu-grid-icon {
-            font-size: 26px;
-        }
-
-        .menu-grid-title {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-color);
-            text-align: center;
+            20% { opacity: 0.3; }
+            80% { opacity: 0.3; }
+            100% { transform: translateY(-50px) scale(1.2); opacity: 0; }
         }
 
         .interactive-clicker-area {
@@ -277,11 +216,11 @@
         }
 
         .clicker-circle {
-            width: 150px;
-            height: 150px;
+            width: 220px;
+            height: 220px;
             border-radius: 50%;
             background: radial-gradient(circle, #22304c 0%, #0f172a 100%);
-            border: 5px solid var(--accent);
+            border: 6px solid var(--accent);
             box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 25px var(--accent-glow);
             display: flex;
             align-items: center;
@@ -296,12 +235,12 @@
         }
 
         .clicker-icon {
-            font-size: 55px;
+            font-size: 75px;
         }
 
         .energy-container {
             width: 260px;
-            margin-top: 15px;
+            margin-top: 25px;
             position: relative;
             z-index: 5;
         }
@@ -309,16 +248,16 @@
         .energy-info {
             display: flex;
             justify-content: space-between;
-            font-size: 13px;
-            margin-bottom: 4px;
+            font-size: 14px;
+            margin-bottom: 6px;
             color: var(--text-secondary);
         }
 
         .energy-bar-bg {
             width: 100%;
-            height: 10px;
+            height: 12px;
             background: #090d16;
-            border-radius: 5px;
+            border-radius: 6px;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.05);
         }
@@ -621,6 +560,7 @@
             font-size: 26px;
         }
 
+        /* --- 3D CUP GAME STYLES --- */
         .cup-game-wrapper {
             display: flex;
             flex-direction: column;
@@ -660,9 +600,10 @@
             border-color: #22c55e;
         }
 
-        .cups-board-2d {
+        .cups-board-3d {
             width: 100%;
-            height: 170px;
+            max-width: 320px;
+            height: 200px;
             background: #0a0f1d;
             border-radius: 16px;
             border: 2px solid var(--accent);
@@ -670,60 +611,19 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            margin: 10px 0;
+            margin: 5px 0;
             box-shadow: inset 0 5px 15px rgba(0,0,0,0.8);
+            overflow: hidden;
+            touch-action: none;
         }
 
-        .cups-scene {
-            position: relative;
-            width: 300px;
-            height: 110px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .cup-slot-2d {
-            position: absolute;
-            width: 80px;
-            height: 95px;
-            transition: transform 0.3s ease;
+        #cupsCanvas3D {
+            width: 100%;
+            height: 100%;
+            display: block;
             cursor: pointer;
         }
-
-        .coin-item-2d {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #facc15;
-            color: #000;
-            font-weight: bold;
-            font-size: 10px;
-            padding: 3px 4px;
-            border-radius: 10px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            z-index: 1;
-        }
-
-        .cup-2d {
-            position: absolute;
-            width: 80px;
-            height: 90px;
-            background: linear-gradient(135deg, #ef4444, #991b1b);
-            border-radius: 6px 6px 20px 20px;
-            border-bottom: 4px solid #fef2f2;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .cup-2d.lifted {
-            transform: translateY(-45px);
-        }
+        /* -------------------------- */
 
         #adModal {
             position: fixed;
@@ -795,9 +695,8 @@
         </header>
 
         <div class="content">
-            <!-- Enhanced Background Details & Glowing Lighting Effects -->
+            <!-- Enhanced Background Details -->
             <div class="ambient-glow"></div>
-            <div class="ambient-glow-secondary"></div>
             <div class="floating-particle" style="left: 15%; width: 4px; height: 4px; animation-duration: 7s; animation-delay: 0s;"></div>
             <div class="floating-particle" style="left: 35%; width: 6px; height: 6px; animation-duration: 9s; animation-delay: 2s;"></div>
             <div class="floating-particle" style="left: 65%; width: 5px; height: 5px; animation-duration: 6s; animation-delay: 1s;"></div>
@@ -809,46 +708,6 @@
                     <span class="bg-coin" style="top: 10%; right: 8%;">💵 BIZ777</span>
                     <span class="bg-coin" style="bottom: 22%; left: 8%;">🪙 BIZ777</span>
                     <span class="bg-coin" style="bottom: 10%; right: 12%;">💰 BIZ777</span>
-                </div>
-
-                <!-- 9 Grid Styling Menu Instead of 4 -->
-                <div class="menu-grid-9">
-                    <div class="menu-grid-item" onclick="switchTab('shop', document.querySelectorAll('.nav-item')[1])">
-                        <div class="menu-grid-icon">🛒</div>
-                        <div class="menu-grid-title">Shop</div>
-                    </div>
-                    <div class="menu-grid-item" onclick="switchTab('minigame', document.querySelectorAll('.nav-item')[3])">
-                        <div class="menu-grid-icon">🎮</div>
-                        <div class="menu-grid-title">Arcade</div>
-                    </div>
-                    <div class="menu-grid-item" onclick="switchTab('leaderboard', document.querySelectorAll('.nav-item')[2])">
-                        <div class="menu-grid-icon">🏆</div>
-                        <div class="menu-grid-title">Rankings</div>
-                    </div>
-                    <div class="menu-grid-item" onclick="switchTab('friends', document.querySelectorAll('.nav-item')[4])">
-                        <div class="menu-grid-icon">👥</div>
-                        <div class="menu-grid-title">Friends</div>
-                    </div>
-                    <div class="menu-grid-item" onclick="switchTab('ads', document.querySelectorAll('.nav-item')[5])">
-                        <div class="menu-grid-icon">⚡</div>
-                        <div class="menu-grid-title">Energy Boost</div>
-                    </div>
-                    <div class="menu-grid-item" onclick="openSubGame('slot')">
-                        <div class="menu-grid-icon">🎰</div>
-                        <div class="menu-grid-title">Slot Spin</div>
-                    </div>
-                    <div class="menu-grid-item" onclick="openSubGame('catch')">
-                        <div class="menu-grid-icon">🪙</div>
-                        <div class="menu-grid-title">Catch Game</div>
-                    </div>
-                    <div class="menu-grid-item" onclick="openSubGame('flappy')">
-                        <div class="menu-grid-icon">🦅</div>
-                        <div class="menu-grid-title">Flappy Bird</div>
-                    </div>
-                    <div class="menu-grid-item" onclick="openSubGame('cups')">
-                        <div class="menu-grid-icon">🎯</div>
-                        <div class="menu-grid-title">Cup Guess</div>
-                    </div>
                 </div>
 
                 <div class="interactive-clicker-area" id="clickerBtn">
@@ -915,8 +774,8 @@
 
                     <div class="game-card-option" onclick="openSubGame('cups')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Find BIZ777 Ball</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Find the BIZ777 ball under cups to win coins and energy!</p>
+                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Find BIZ777 Ball (3D)</h4>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Find the BIZ777 ball under 3D cups to win coins and energy!</p>
                         </div>
                         <span style="font-size: 22px; color: var(--accent);">👉</span>
                     </div>
@@ -970,10 +829,11 @@
                     </div>
                 </div>
 
+                <!-- 3D CUPS SUB-GAME CONTAINER -->
                 <div class="sub-game-container" id="subgame-cups">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
                         <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Find BIZ777 Ball</h3>
+                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Find BIZ777 Ball (3D)</h3>
                         <div style="width: 50px;"></div>
                     </div>
 
@@ -990,21 +850,8 @@
                             Cost: 500 BIZ777 | Win: 1,000 Coins + 200 Energy
                         </div>
 
-                        <div class="cups-board-2d">
-                            <div class="cups-scene">
-                                <div class="cup-slot-2d" id="slot0" onclick="chooseCup(0)" style="transform: translateX(-100px);">
-                                    <div class="coin-item-2d" id="coin0">BIZ777</div>
-                                    <div class="cup-2d" id="cup0"></div>
-                                </div>
-                                <div class="cup-slot-2d" id="slot1" onclick="chooseCup(1)" style="transform: translateX(0px);">
-                                    <div class="coin-item-2d" id="coin1">BIZ777</div>
-                                    <div class="cup-2d" id="cup1"></div>
-                                </div>
-                                <div class="cup-slot-2d" id="slot2" onclick="chooseCup(2)" style="transform: translateX(100px);">
-                                    <div class="coin-item-2d" id="coin2">BIZ777</div>
-                                    <div class="cup-2d" id="cup2"></div>
-                                </div>
-                            </div>
+                        <div class="cups-board-3d">
+                            <canvas id="cupsCanvas3D"></canvas>
                         </div>
 
                         <button class="btn" id="startCupGameBtn" onclick="startCupRound()" style="width: 100%;">Start Round 🎮</button>
@@ -1403,7 +1250,10 @@
             document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
             document.getElementById(`subgame-${gameName}`).classList.add('active-subgame');
             if (gameName === 'flappy' && !flappyRunning) { startFlappyGame(); }
-            if (gameName === 'cups') { initCupStageUI(); }
+            if (gameName === 'cups') { 
+                init3DScene();
+                setCupLevel(currentCupLevel); 
+            }
             if (gameName === 'paperwrapsrock') { resetPwrLobby(); }
         }
 
@@ -1780,6 +1630,7 @@
             }, 80);
         }
 
+        /* --- 3D CUP GAME LOGIC (THREE.JS) --- */
         let currentCupLevel = 1;
         let winningIndex = 1;
         let cupPositions = [0, 1, 2];
@@ -1787,14 +1638,94 @@
         let isShuffling = false;
 
         const cupLevelsData = {
-            1: { cost: 500, win: 1000, energyReward: 200, shuffles: 4, speed: 300 },
-            2: { cost: 2500, win: 5000, energyReward: 1000, shuffles: 7, speed: 220 },
-            3: { cost: 10000, win: 25000, energyReward: 3500, shuffles: 11, speed: 160 },
-            4: { cost: 50000, win: 150000, energyReward: 10000, shuffles: 16, speed: 110 },
-            5: { cost: 200000, win: 800000, energyReward: 30000, shuffles: 22, speed: 80 }
+            1: { cost: 500, win: 1000, energyReward: 200, shuffles: 4, speed: 400 },
+            2: { cost: 2500, win: 5000, energyReward: 1000, shuffles: 7, speed: 300 },
+            3: { cost: 10000, win: 25000, energyReward: 3500, shuffles: 11, speed: 220 },
+            4: { cost: 50000, win: 150000, energyReward: 10000, shuffles: 16, speed: 160 },
+            5: { cost: 200000, win: 800000, energyReward: 30000, shuffles: 22, speed: 110 }
         };
 
-        const SLOT_DISTANCE = 100;
+        let scene3d, camera3d, renderer3d;
+        let cupsMeshes = [];
+        let ballMesh;
+        let isSceneInitialized = false;
+
+        function init3DScene() {
+            if (isSceneInitialized) return;
+            const container = document.querySelector('.cups-board-3d');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            scene3d = new THREE.Scene();
+            camera3d = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+            camera3d.position.set(0, 4.5, 6.5);
+            camera3d.lookAt(0, 0, 0);
+
+            renderer3d = new THREE.WebGLRenderer({ canvas: document.getElementById('cupsCanvas3D'), antialias: true, alpha: true });
+            renderer3d.setSize(width, height);
+            renderer3d.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene3d.add(ambientLight);
+
+            const dirLight = new THREE.DirectionalLight(0x38bdf8, 1.2);
+            dirLight.position.set(5, 10, 7);
+            scene3d.add(dirLight);
+
+            const pointLight = new THREE.PointLight(0xffd700, 1, 10);
+            pointLight.position.set(0, 1, 0);
+            scene3d.add(pointLight);
+
+            // Create Ball (BIZ777 Ball)
+            const ballGeo = new THREE.SphereGeometry(0.35, 32, 32);
+            const ballMat = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.4, roughness: 0.2, emissive: 0x332200 });
+            ballMesh = new THREE.Mesh(ballGeo, ballMat);
+            ballMesh.position.set(0, -0.65, 0);
+            scene3d.add(ballMesh);
+
+            // Create 3 Cups (Cone/Cylinder)
+            cupsMeshes = [];
+            const cupGeo = new THREE.ConeGeometry(0.7, 1.6, 32, 1, true);
+            // Invert normals or double side for open cups if needed, or use cylinder geometry
+            const cupMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.3, metalness: 0.2, side: THREE.DoubleSide });
+
+            const slotXPositions = [-1.8, 0, 1.8];
+            for (let i = 0; i < 3; i++) {
+                // Using a customized shape or cylinder for a better cup look
+                const group = new THREE.Group();
+                const outerGeom = new THREE.CylinderGeometry(0.55, 0.75, 1.5, 32);
+                const cupMesh = new THREE.Mesh(outerGeom, cupMat);
+                cupMesh.position.y = 0.75;
+                group.add(cupMesh);
+
+                group.position.set(slotXPositions[i], 0, 0);
+                scene3d.add(group);
+                cupsMeshes.push(group);
+            }
+
+            // Click listener for choosing cups in 3D
+            const canvasEl = document.getElementById('cupsCanvas3D');
+            canvasEl.addEventListener('pointerdown', onCanvas3DClick);
+
+            isSceneInitialized = true;
+            animate3D();
+        }
+
+        function animate3D() {
+            if (!isSceneInitialized) return;
+            requestAnimationFrame(animate3D);
+            renderer3d.render(scene3d, camera3d);
+        }
+
+        function updateCupPositions3D(animate = false) {
+            const slotXPositions = [-1.8, 0, 1.8];
+            for (let cupId = 0; cupId < 3; cupId++) {
+                let slotIndex = cupPositions.indexOf(cupId);
+                let targetX = slotXPositions[slotIndex];
+                cupsMeshes[cupId].position.x = targetX;
+            }
+        }
 
         function checkGlobalCooldown() {
             let now = new Date().getTime();
@@ -1862,25 +1793,18 @@
             initCupStageUI();
         }
 
-        function renderCupPositions(animate = false) {
-            for (let cupId = 0; cupId < 3; cupId++) {
-                let slotIndex = cupPositions.indexOf(cupId);
-                let slotEl = document.getElementById(`slot${cupId}`);
-                slotEl.style.transitionDuration = animate ? `${cupLevelsData[currentCupLevel].speed}ms` : '0.2s';
-                let xOffset = (slotIndex - 1) * SLOT_DISTANCE;
-                slotEl.style.transform = `translateX(${xOffset}px)`;
-            }
-        }
-
         function initCupStageUI() {
             winningIndex = Math.floor(Math.random() * 3);
             cupPositions = [0, 1, 2];
             
-            renderCupPositions(false);
-
-            for (let i = 0; i < 3; i++) {
-                document.getElementById(`cup${i}`).classList.remove('lifted');
-                document.getElementById(`coin${i}`).style.opacity = "0";
+            if (isSceneInitialized) {
+                updateCupPositions3D();
+                for (let i = 0; i < 3; i++) {
+                    cupsMeshes[i].position.y = 0;
+                }
+                ballMesh.position.x = cupsMeshes[winningIndex].position.x;
+                ballMesh.position.y = -0.65;
+                ballMesh.visible = false;
             }
 
             if (!checkGlobalCooldown()) {
@@ -1905,17 +1829,18 @@
             document.getElementById('startCupGameBtn').innerText = "Shuffling... 🌪️";
             document.getElementById('startCupGameBtn').disabled = true;
 
+            // Lift cups briefly to show winning ball position
             for (let i = 0; i < 3; i++) {
-                document.getElementById(`cup${i}`).classList.add('lifted');
+                cupsMeshes[i].position.y = 1.2;
             }
-            let winningCupId = winningIndex;
-            document.getElementById(`coin${winningCupId}`).style.opacity = "1";
+            ballMesh.position.x = cupsMeshes[winningIndex].position.x;
+            ballMesh.visible = true;
 
             setTimeout(() => {
                 for (let i = 0; i < 3; i++) {
-                    document.getElementById(`cup${i}`).classList.remove('lifted');
-                    document.getElementById(`coin${i}`).style.opacity = "0";
+                    cupsMeshes[i].position.y = 0;
                 }
+                ballMesh.visible = false;
 
                 setTimeout(() => {
                     let shuffleCount = 0;
@@ -1930,7 +1855,7 @@
                         cupPositions[slotA] = cupPositions[slotB];
                         cupPositions[slotB] = temp;
 
-                        renderCupPositions(true);
+                        updateCupPositions3D(true);
 
                         shuffleCount++;
                         if (shuffleCount >= data.shuffles) {
@@ -1940,25 +1865,49 @@
                             document.getElementById('startCupGameBtn').innerText = "Choose a Cup! 🤔";
                         }
                     }, data.speed + 20);
-                }, 350);
-            }, 1000);
+                }, 400);
+            }, 1200);
         }
 
-        function chooseCup(slotIdx) {
+        function onCanvas3DClick(event) {
             if (isShuffling || !gameActive) return;
+
+            const canvasEl = document.getElementById('cupsCanvas3D');
+            const rect = canvasEl.getBoundingClientRect();
+            const x = ((event.clientX - rect.left) / canvasEl.clientWidth) * 2 - 1;
+            const y = -((event.clientY - rect.top) / canvasEl.clientHeight) * 2 + 1;
+
+            const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(new THREE.Vector2(x, y), camera3d);
+
+            // Collect all cup meshes for raycasting intersection
+            let allSubMeshes = [];
+            cupsMeshes.forEach((group, idx) => {
+                group.children.forEach(mesh => {
+                    mesh.userData = { cupId: idx };
+                    allSubMeshes.push(mesh);
+                });
+            });
+
+            const intersects = raycaster.intersectObjects(allSubMeshes);
+            if (intersects.length > 0) {
+                let chosenCupId = intersects[0].object.userData.cupId;
+                resolveCupChoice(chosenCupId);
+            }
+        }
+
+        function resolveCupChoice(chosenCupId) {
             gameActive = false;
             let data = cupLevelsData[currentCupLevel];
 
+            // Lift all cups and reveal ball
             for (let i = 0; i < 3; i++) {
-                document.getElementById(`cup${i}`).classList.add('lifted');
+                cupsMeshes[i].position.y = 1.2;
             }
+            ballMesh.position.x = cupsMeshes[winningIndex].position.x;
+            ballMesh.visible = true;
 
-            let chosenCupId = slotIdx;
-            let winningCupId = winningIndex;
-
-            document.getElementById(`coin${winningCupId}`).style.opacity = "1";
-
-            if (chosenCupId === winningCupId) {
+            if (chosenCupId === winningIndex) {
                 score += data.win;
                 energy = Math.min(maxEnergy, energy + data.energyReward);
                 cupLevelDataState[currentCupLevel].completed = true;
@@ -2110,6 +2059,7 @@
             btnElement.classList.add('active');
             
             if(tabId === 'minigame') {
+                init3DScene();
                 setCupLevel(currentCupLevel);
             }
             if(tabId === 'leaderboard') {
@@ -2127,7 +2077,6 @@
         }
 
         updateUI();
-        setCupLevel(1);
     </script>
 </body>
 </html>
