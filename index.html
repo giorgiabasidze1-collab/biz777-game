@@ -168,6 +168,42 @@
             color: #38bdf8;
         }
 
+        /* Enhanced Background Effects */
+        .ambient-glow {
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulseGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+            100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+        }
+
+        .floating-particle {
+            position: absolute;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.25;
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            20% { opacity: 0.3; }
+            80% { opacity: 0.3; }
+            100% { transform: translateY(-50px) scale(1.2); opacity: 0; }
+        }
+
         .interactive-clicker-area {
             position: relative;
             z-index: 5;
@@ -416,7 +452,6 @@
             touch-action: none;
         }
 
-        /* Catch Game Styles */
         .catch-game-wrapper {
             display: flex;
             flex-direction: column;
@@ -698,6 +733,13 @@
         </header>
 
         <div class="content">
+            <!-- Enhanced Background Details -->
+            <div class="ambient-glow"></div>
+            <div class="floating-particle" style="left: 15%; width: 4px; height: 4px; animation-duration: 7s; animation-delay: 0s;"></div>
+            <div class="floating-particle" style="left: 35%; width: 6px; height: 6px; animation-duration: 9s; animation-delay: 2s;"></div>
+            <div class="floating-particle" style="left: 65%; width: 5px; height: 5px; animation-duration: 6s; animation-delay: 1s;"></div>
+            <div class="floating-particle" style="left: 85%; width: 7px; height: 7px; animation-duration: 10s; animation-delay: 3s;"></div>
+
             <div class="tab-pane active" id="tab-clicker">
                 <div class="coin-background-pattern">
                     <span class="bg-coin" style="top: 2%; left: 5%;">🪙 BIZ777</span>
@@ -793,7 +835,6 @@
                     </div>
                 </div>
 
-                <!-- New Catch Mini Game Sub-container -->
                 <div class="sub-game-container" id="subgame-catch">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
                         <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
@@ -1273,7 +1314,6 @@
             document.getElementById('gamesMenu').style.display = 'flex';
         }
 
-        // --- Catch Mini Game Logic ---
         let catchGameActive = false;
         let catchScore = 0;
         let catchTimeLeft = 60;
@@ -1324,7 +1364,7 @@
         function spawnCatchObject() {
             const container = document.getElementById('catchGameContainer');
             const item = document.createElement('div');
-            const isBomb = Math.random() < 0.3; // 30% chance for a bomb
+            const isBomb = Math.random() < 0.3;
 
             item.classList.add('catch-falling-item');
             if (isBomb) {
@@ -1350,7 +1390,7 @@
                     document.getElementById('catchMsg').innerText = "Oops! Hit a bomb (-5 pts)";
                 } else {
                     catchScore += 1;
-                    score += 1; // Add 1 coin to user balance per click
+                    score += 1;
                     updateUI();
                     saveState();
                     document.getElementById('catchMsg').innerText = "+1 Coin collected!";
