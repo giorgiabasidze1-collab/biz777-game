@@ -1216,25 +1216,17 @@
             const container = document.getElementById('leaderboardContainer');
             container.innerHTML = "";
 
+            // ლიდერბორდზე მხოლოდ რეალური მოთამაშე (მომხმარებელი) რჩება ბოტების გარეშე
             let mockLeaderboard = [];
             mockLeaderboard.push({ name: currentUserName, score: score, isMe: true });
-
-            for (let i = 2; i <= 30; i++) {
-                let randomScore = Math.max(100, 2000000 - (i * 45000) + Math.floor(Math.random() * 5000));
-                mockLeaderboard.push({ name: `Player_${i}`, score: randomScore, isMe: false });
-            }
 
             mockLeaderboard.sort((a, b) => b.score - a.score);
 
             mockLeaderboard.forEach((player, index) => {
                 let rank = index + 1;
                 let rankDisplay = `#${rank}`;
-                let medalEmoji = "";
+                let medalEmoji = "👑 ";
                 
-                if (rank === 1) medalEmoji = "👑 ";
-                else if (rank === 2) medalEmoji = "🥈 ";
-                else if (rank === 3) medalEmoji = "🥉 ";
-
                 let profileClass = player.isMe ? "leaderboard-item my-profile" : "leaderboard-item";
                 let displayName = player.isMe ? `${player.name} (You)` : player.name;
 
@@ -1338,7 +1330,7 @@
             document.getElementById('startCatchBtn').style.display = 'none';
             document.getElementById('catchScore').innerText = `Score: ${catchScore}`;
             document.getElementById('catchTimer').innerText = `⏱️ Time: ${catchTimeLeft}s`;
-            document.getElementById('catchMsg').innerText = "Game started! Catch coins, avoid bombs!";
+            document.getElementById('catchMsg').innerText = "Game started! Catch coins (+5), avoid bombs!";
 
             const container = document.getElementById('catchGameContainer');
             container.innerHTML = '';
@@ -1387,13 +1379,15 @@
 
                 if (isBomb) {
                     catchScore = Math.max(0, catchScore - 5);
+                    score = Math.max(0, score - 5);
                     document.getElementById('catchMsg').innerText = "Oops! Hit a bomb (-5 pts)";
                 } else {
-                    catchScore += 1;
-                    score += 1;
+                    // მონეტა ახლა იძლევა 1-ის ნაცვლად 5 ქულას/მონეტას
+                    catchScore += 5;
+                    score += 5;
                     updateUI();
                     saveState();
-                    document.getElementById('catchMsg').innerText = "+1 Coin collected!";
+                    document.getElementById('catchMsg').innerText = "+5 Coins collected!";
                 }
                 document.getElementById('catchScore').innerText = `Score: ${catchScore}`;
                 item.remove();
