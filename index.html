@@ -226,6 +226,7 @@
             cursor: pointer;
             position: relative;
             transition: transform 0.1s ease;
+            overflow: hidden;
         }
 
         .clicker-circle:active {
@@ -234,6 +235,11 @@
 
         .clicker-icon {
             font-size: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
         }
 
         .energy-container {
@@ -711,7 +717,7 @@
                     <div class="avatar" id="userAvatar">B</div>
                     <div>
                         <div class="username" id="userName">Biz777 User</div>
-                        <div class="level-badge" id="levelName">1. Bronze Foundation</div>
+                        <div class="level-badge" id="levelName">1. Complete Beginner</div>
                     </div>
                 </div>
                 <div class="score-board">
@@ -722,7 +728,7 @@
 
             <div class="level-progress-container">
                 <div class="level-progress-info">
-                    <span id="nextLevelText">Next Level: 1,000</span>
+                    <span id="nextLevelText">Next Level: 500</span>
                     <span id="levelPercentage">0%</span>
                 </div>
                 <div class="level-bar-bg">
@@ -1143,14 +1149,36 @@
         };
 
         const levels = [
-            { name: "1. Bronze Foundation", icon: "🏗️", min: 0, max: 1000 },
-            { name: "2. Bronze Hut", icon: "🛖", min: 1000, max: 5000 },
-            { name: "3. Silver House", icon: "🏡", min: 5000, max: 25000 },
-            { name: "4. Silver Villa", icon: "🏠", min: 25000, max: 100000 },
-            { name: "5. Gold Office", icon: "🏢", min: 100000, max: 500000 },
-            { name: "6. Gold Skyscraper", icon: "🌆", min: 500000, max: 2000000 },
-            { name: "7. Diamond Tower", icon: "🏙️", min: 2000000, max: 5000000 },
-            { name: "8. BIZ777 Legend HQ", icon: "👑", min: 5000000, max: Infinity }
+            { name: "1. Complete Beginner", icon: "blob:https://www.facebook.com/4a4448df-f20a-4026-8961-c06ef1500bb0", min: 0, max: 500 },
+            { name: "2. Skinny Weakling", icon: "blob:https://www.facebook.com/f5fad984-6b34-4ade-8009-06482ffb2ba8", min: 500, max: 1200 },
+            { name: "3. Soft & Out of Shape", icon: "blob:https://www.facebook.com/26323515-75b0-483c-9ccb-5934ca1682ef", min: 1200, max: 2500 },
+            { name: "4. Couch Potato", icon: "blob:https://www.facebook.com/1ffc3e8c-f8fa-4b23-a7f5-e430eb4a2199", min: 2500, max: 4500 },
+            { name: "5. Starting to Move", icon: "blob:https://www.facebook.com/a84be590-11f3-4ca4-ac04-92b5719438f3", min: 4500, max: 7500 },
+            { name: "6. Light Jogger", icon: "blob:https://www.facebook.com/ad6e9728-d36c-4248-85ee-5f20d50ea693", min: 7500, max: 11000 },
+            { name: "7. First Dumbbells", icon: "blob:https://www.facebook.com/98fd0257-8aed-4b3e-b56f-1d5586be0974", min: 11000, max: 16000 },
+            { name: "8. Light Flexer", icon: "blob:https://www.facebook.com/102bd4d3-ca97-454e-aef9-feda26eaec29", min: 16000, max: 23000 },
+            { name: "9. Gym Novice", icon: "blob:https://www.facebook.com/47136468-db53-486e-94fe-692e4f60a4aa", min: 23000, max: 32000 },
+            { name: "10. Noticeable Biceps", icon: "blob:https://www.facebook.com/0d7e1c05-badd-4853-8bfa-231d6c891873", min: 32000, max: 44000 },
+            { name: "11. Fitness Enthusiast", icon: "images/hero3.jpg", min: 44000, max: 60000 },
+            { name: "12. Toned Physique", icon: "images/hero3.jpg", min: 60000, max: 80000 },
+            { name: "13. Shredded Abs", icon: "images/hero3.jpg", min: 80000, max: 105000 },
+            { name: "14. Muscle Builder", icon: "images/hero3.jpg", min: 105000, max: 135000 },
+            { name: "15. Heavy Lifter", icon: "images/hero3.jpg", min: 135000, max: 175000 },
+            { name: "16. Iron Pumped", icon: "images/hero3.jpg", min: 175000, max: 225000 },
+            { name: "17. Local Gym Beast", icon: "images/hero1.jpg", min: 225000, max: 285000 },
+            { name: "18. Aesthetic Model Face", icon: "images/hero1.jpg", min: 285000, max: 360000 },
+            { name: "19. Sharp Jawline King", icon: "images/hero1.jpg", min: 360000, max: 450000 },
+            { name: "20. Pro Bodybuilder", icon: "images/hero1.jpg", min: 450000, max: 560000 },
+            { name: "21. Massive Mass", icon: "images/hero1.jpg", min: 560000, max: 700000 },
+            { name: "22. Titan Physique", icon: "images/hero1.jpg", min: 700000, max: 880000 },
+            { name: "23. Greek God Proportions", icon: "images/hero1.jpg", min: 880000, max: 1100000 },
+            { name: "24. Perfect Facial Symmetry", icon: "images/hero1.jpg", min: 1100000, max: 1400000 },
+            { name: "25. Superhuman Strength", icon: "images/hero2.jpg", min: 1400000, max: 1800000 },
+            { name: "26. Cosmic Energy Receiver", icon: "images/hero2.jpg", min: 1800000, max: 2300000 },
+            { name: "27. Silver Glow Awakening", icon: "images/hero2.jpg", min: 2300000, max: 3000000 },
+            { name: "28. Liquid Metal Form", icon: "images/hero2.jpg", min: 3000000, max: 4000000 },
+            { name: "29. Perfect Cosmic Being", icon: "images/hero3.jpg", min: 4000000, max: 5500000 },
+            { name: "30. SILVER SURFER LEGEND", icon: "images/hero2.jpg", min: 5500000, max: Infinity }
         ];
 
         const scoreDisplay = document.getElementById('scoreDisplay');
@@ -1210,7 +1238,12 @@
 
             let currentLevelObj = levels[currentLevelIndex];
             levelName.innerText = currentLevelObj.name;
-            buildingIcon.innerText = currentLevelObj.icon;
+            
+            if (currentLevelObj.icon.startsWith('images/')) {
+                buildingIcon.innerHTML = `<img src="${currentLevelObj.icon}" alt="${currentLevelObj.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+            } else {
+                buildingIcon.innerText = currentLevelObj.icon;
+            }
 
             let currentMin = currentLevelObj.min;
             let nextMin = currentLevelObj.max;
