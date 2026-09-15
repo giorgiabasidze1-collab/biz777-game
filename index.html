@@ -1004,7 +1004,7 @@
                             <h4>Refill Energy Ad</h4>
                             <p style="font-size: 11px; color: var(--text-secondary);">Watch simulated ad to instantly refill energy to max</p>
                         </div>
-                        <button class="btn" onclick="watchSimulatedAd()">Watch 📺</button>
+                        <button class="btn" onclick="watchAdsGramAd()">Watch 📺</button>
                     </div>
                 </div>
             </div>
@@ -1019,6 +1019,53 @@
             <button class="nav-item" onclick="switchTab('ads', this)"><span>📺</span> Boost</button>
         </nav>
     </div>
+
+    <!-- AdsGram SDK Integration -->
+    <script src="https://sad.adsgram.ai/js/sad.js"></script>
+    <script>
+        // Initialize AdsGram Controller with blockId from image context
+        const AdsgramController = window.Adsgram ? window.Adsgram.init({ blockId: "43667" }) : null;
+
+        window.watchAdsGramAd = async function() {
+            if (AdsgramController) {
+                try {
+                    const result = await AdsgramController.show();
+                    // User watched the ad completely
+                    energy = maxEnergy;
+                    updateUI();
+                    saveState();
+                    alert("Energy fully refilled via AdsGram!");
+                } catch (e) {
+                    console.error("AdsGram error or skipped:", e);
+                    alert("Ad was skipped or failed to load. Try again later.");
+                }
+            } else {
+                // Fallback simulation if SDK fails to load
+                fallbackSimulatedAd();
+            }
+        };
+
+        function fallbackSimulatedAd() {
+            const modal = document.getElementById('adModal');
+            const timerEl = document.getElementById('adTimer');
+            modal.style.display = 'flex';
+            let timeLeft = 3;
+            timerEl.innerText = `${timeLeft}s`;
+
+            let countdown = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) { timerEl.innerText = `${timeLeft}s`; }
+                else {
+                    clearInterval(countdown);
+                    modal.style.display = 'none';
+                    energy = maxEnergy;
+                    updateUI();
+                    saveState();
+                    alert("Energy fully refilled!");
+                }
+            }, 1000);
+        }
+    </script>
 
     <div id="adModal">
         <div class="ad-video-box">
@@ -1344,27 +1391,6 @@
             let refLink = `https://t.me/Biz777Bot?start=ref_${userId}`;
             let shareText = `Join BIZ777 Mini App and earn coins! 🚀`;
             tg.openTelegramLink ? tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent(shareText)}`) : prompt("Copy link:", refLink);
-        }
-
-        window.watchSimulatedAd = function() {
-            const modal = document.getElementById('adModal');
-            const timerEl = document.getElementById('adTimer');
-            modal.style.display = 'flex';
-            let timeLeft = 3;
-            timerEl.innerText = `${timeLeft}s`;
-
-            let countdown = setInterval(() => {
-                timeLeft--;
-                if (timeLeft > 0) { timerEl.innerText = `${timeLeft}s`; }
-                else {
-                    clearInterval(countdown);
-                    modal.style.display = 'none';
-                    energy = maxEnergy;
-                    updateUI();
-                    saveState();
-                    alert("Energy fully refilled!");
-                }
-            }, 1000);
         }
 
         window.openSubGame = function(gameName) {
@@ -2035,7 +2061,7 @@
             document.getElementById('pwrRightHand').innerText = handSigns[opponentChoice];
 
             let resultTitle = "";
-            if (userChoice === opponentChoice) {
+            if (userCode === opponentChoice) {
                 resultTitle = "TIE! No points.";
                 document.getElementById('pwrActionText').innerText = "IT'S A TIE!";
             } else if (
