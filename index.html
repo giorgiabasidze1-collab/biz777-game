@@ -168,7 +168,6 @@
             color: #38bdf8;
         }
 
-        /* Enhanced Background Effects */
         .ambient-glow {
             position: absolute;
             width: 320px;
@@ -733,7 +732,6 @@
         </header>
 
         <div class="content">
-            <!-- Enhanced Background Details -->
             <div class="ambient-glow"></div>
             <div class="floating-particle" style="left: 15%; width: 4px; height: 4px; animation-duration: 7s; animation-delay: 0s;"></div>
             <div class="floating-particle" style="left: 35%; width: 6px; height: 6px; animation-duration: 9s; animation-delay: 2s;"></div>
@@ -1027,7 +1025,22 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, setDoc, doc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyEqK1A5rTAyM86GXMjRO-e8ODJ2aDnB8",
+            authDomain: "biz777game.firebaseapp.com",
+            projectId: "biz777game",
+            storageBucket: "biz777game.firebasestorage.app",
+            messagingSenderId: "135327416140",
+            appId: "1:135327416140:web:ae00cb84b92a2927d759e9"
+        };
+
+        const firebaseApp = initializeApp(firebaseConfig);
+        const db = getFirestore(firebaseApp);
+
         const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : {
             expand: () => {},
             close: () => {},
@@ -1055,15 +1068,79 @@
         };
         let globalCupCooldownTimestamp = localStorage.getItem('biz_cup_global_cooldown') || "";
 
-        let userId = "user";
+        let userId = "user_" + Math.floor(Math.random() * 100000);
         let currentUserName = "BIZ777 User";
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const user = tg.initDataUnsafe.user;
-            userId = user.id;
+            userId = String(user.id);
             currentUserName = user.first_name || "BIZ777 User";
             document.getElementById('userName').innerText = currentUserName;
             document.getElementById('userAvatar').innerText = (user.first_name || "B")[0].toUpperCase();
         }
+
+        async function syncScoreToFirebase() {
+            try {
+                await setDoc(doc(db, "leaderboard", userId), {
+                    name: currentUserName,
+                    score: Number(score),
+                    timestamp: new Date()
+                }, { merge: true });
+            } catch (e) {
+                console.error("Error saving score to database: ", e);
+            }
+        }
+
+        window.renderLeaderboard = async function() {
+            const container = document.getElementById('leaderboardContainer');
+            container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Loading leaderboard...</div>`;
+
+            try {
+                const q = query(collection(db, "leaderboard"), orderBy("score", "desc"), limit(20));
+                const querySnapshot = await getDocs(q);
+                
+                container.innerHTML = "";
+                let rank = 1;
+                let foundUserInList = false;
+
+                querySnapshot.forEach((documentSnap) => {
+                    let data = documentSnap.data();
+                    let isMe = (documentSnap.id === userId);
+                    if (isMe) foundUserInList = true;
+
+                    let profileClass = isMe ? "leaderboard-item my-profile" : "leaderboard-item";
+                    let displayName = isMe ? `${data.name} (You)` : data.name;
+                    let rankDisplay = `#${rank}`;
+
+                    let itemHTML = `
+                        <div class="${profileClass}">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="rank-number">${rankDisplay}</span>
+                                <span style="font-weight: 600;">👑 ${displayName}</span>
+                            </div>
+                            <div class="score">${Number(data.score).toLocaleString()} 🪙</div>
+                        </div>
+                    `;
+                    container.innerHTML += itemHTML;
+                    rank++;
+                });
+
+                if (!foundUserInList) {
+                    let itemHTML = `
+                        <div class="leaderboard-item my-profile">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="rank-number">#...</span>
+                                <span style="font-weight: 600;">👑 ${currentUserName} (You)</span>
+                            </div>
+                            <div class="score">${score.toLocaleString()} 🪙</div>
+                        </div>
+                    `;
+                    container.innerHTML += itemHTML;
+                }
+            } catch (e) {
+                console.error("Error loading leaderboard: ", e);
+                container.innerHTML = `<div style="text-align: center; color: var(--danger); padding: 20px;">Failed to load leaderboard.</div>`;
+            }
+        };
 
         const levels = [
             { name: "1. Bronze Foundation", icon: "🏗️", min: 0, max: 1000 },
@@ -1095,6 +1172,7 @@
                 showFloatingText(e.clientX, e.clientY, `+${tapPower}`);
                 updateUI();
                 saveState();
+                syncScoreToFirebase();
             }
         });
 
@@ -1212,61 +1290,30 @@
             }
         }
 
-        function renderLeaderboard() {
-            const container = document.getElementById('leaderboardContainer');
-            container.innerHTML = "";
-
-            // ლიდერბორდზე მხოლოდ რეალური მოთამაშე (მომხმარებელი) რჩება ბოტების გარეშე
-            let mockLeaderboard = [];
-            mockLeaderboard.push({ name: currentUserName, score: score, isMe: true });
-
-            mockLeaderboard.sort((a, b) => b.score - a.score);
-
-            mockLeaderboard.forEach((player, index) => {
-                let rank = index + 1;
-                let rankDisplay = `#${rank}`;
-                let medalEmoji = "👑 ";
-                
-                let profileClass = player.isMe ? "leaderboard-item my-profile" : "leaderboard-item";
-                let displayName = player.isMe ? `${player.name} (You)` : player.name;
-
-                let itemHTML = `
-                    <div class="${profileClass}">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="rank-number">${rankDisplay}</span>
-                            <span style="font-weight: 600;">${medalEmoji}${displayName}</span>
-                        </div>
-                        <div class="score">${player.score.toLocaleString()} 🪙</div>
-                    </div>
-                `;
-                container.innerHTML += itemHTML;
-            });
-        }
-
-        function buyTapUpgrade(newPower, price) {
-            if (score >= price) { score -= price; tapPower = newPower; updateUI(); saveState(); }
+        window.buyTapUpgrade = function(newPower, price) {
+            if (score >= price) { score -= price; tapPower = newPower; updateUI(); saveState(); syncScoreToFirebase(); }
             else { alert("Not enough BIZ777 coins!"); }
         }
 
-        function claimFreeTap20() {
+        window.claimFreeTap20 = function() {
             if (invitedFriendsCount >= 3 && !freeTap20Claimed) {
-                tapPower = 20; freeTap20Claimed = true; updateUI(); saveState();
+                tapPower = 20; freeTap20Claimed = true; updateUI(); saveState(); syncScoreToFirebase();
                 alert("Tap Power 20 unlocked!");
             }
         }
 
-        function buyEnergyUpgrade(newMaxEnergy, price) {
-            if (score >= price) { score -= price; maxEnergy = newMaxEnergy; energy = maxEnergy; updateUI(); saveState(); }
+        window.buyEnergyUpgrade = function(newMaxEnergy, price) {
+            if (score >= price) { score -= price; maxEnergy = newMaxEnergy; energy = maxEnergy; updateUI(); saveState(); syncScoreToFirebase(); }
             else { alert("Not enough BIZ777 coins!"); }
         }
 
-        function inviteFriendLink() {
+        window.inviteFriendLink = function() {
             let refLink = `https://t.me/Biz777Bot?start=ref_${userId}`;
             let shareText = `Join BIZ777 Mini App and earn coins! 🚀`;
             tg.openTelegramLink ? tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent(shareText)}`) : prompt("Copy link:", refLink);
         }
 
-        function watchSimulatedAd() {
+        window.watchSimulatedAd = function() {
             const modal = document.getElementById('adModal');
             const timerEl = document.getElementById('adTimer');
             modal.style.display = 'flex';
@@ -1287,7 +1334,7 @@
             }, 1000);
         }
 
-        function openSubGame(gameName) {
+        window.openSubGame = function(gameName) {
             document.getElementById('gamesMenu').style.display = 'none';
             document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
             document.getElementById(`subgame-${gameName}`).classList.add('active-subgame');
@@ -1296,7 +1343,7 @@
             if (gameName === 'paperwrapsrock') { resetPwrLobby(); }
         }
 
-        function backToGamesMenu() {
+        window.backToGamesMenu = function() {
             flappyRunning = false;
             pwrGameActive = false;
             catchGameActive = false;
@@ -1313,7 +1360,7 @@
         let catchSpawnInterval = null;
         const catchGameCost = 50;
 
-        function startCatchGame() {
+        window.startCatchGame = function() {
             if (score < catchGameCost) {
                 alert("Not enough coins! Required: 50 coins.");
                 return;
@@ -1322,6 +1369,7 @@
             score -= catchGameCost;
             updateUI();
             saveState();
+            syncScoreToFirebase();
 
             catchScore = 0;
             catchTimeLeft = 60;
@@ -1382,11 +1430,11 @@
                     score = Math.max(0, score - 5);
                     document.getElementById('catchMsg').innerText = "Oops! Hit a bomb (-5 pts)";
                 } else {
-                    // მონეტა ახლა იძლევა 1-ის ნაცვლად 5 ქულას/მონეტას
                     catchScore += 5;
                     score += 5;
                     updateUI();
                     saveState();
+                    syncScoreToFirebase();
                     document.getElementById('catchMsg').innerText = "+5 Coins collected!";
                 }
                 document.getElementById('catchScore').innerText = `Score: ${catchScore}`;
@@ -1594,7 +1642,7 @@
             { icon: '🎁', label: 'BIZ777' }
         ];
 
-        function spinSlotMachine() {
+        window.spinSlotMachine = function() {
             const cost = 500;
             if (score < cost) {
                 alert("Not enough BIZ777 coins! Required: 500 coins.");
@@ -1604,6 +1652,7 @@
             score -= cost;
             updateUI();
             saveState();
+            syncScoreToFirebase();
 
             let btn = document.getElementById('spinSlotBtn');
             let resText = document.getElementById('slotResultText');
@@ -1665,6 +1714,7 @@
 
                     updateUI();
                     saveState();
+                    syncScoreToFirebase();
                     btn.disabled = false;
                     btn.style.opacity = "1";
                 }
@@ -1722,7 +1772,7 @@
             return false;
         }
 
-        function setCupLevel(lvl) {
+        window.setCupLevel = function(lvl) {
             if (gameActive || isShuffling) return;
             
             if (!cupLevelDataState[lvl].unlocked) {
@@ -1781,7 +1831,7 @@
             isShuffling = false;
         }
 
-        function startCupRound() {
+        window.startCupRound = function() {
             if (isShuffling || gameActive) return;
             if (checkGlobalCooldown()) return;
 
@@ -1791,6 +1841,7 @@
             score -= data.cost;
             updateUI();
             saveState();
+            syncScoreToFirebase();
 
             isShuffling = true;
             document.getElementById('startCupGameBtn').innerText = "Shuffling... 🌪️";
@@ -1835,7 +1886,7 @@
             }, 1000);
         }
 
-        function chooseCup(slotIdx) {
+        window.chooseCup = function(slotIdx) {
             if (isShuffling || !gameActive) return;
             gameActive = false;
             let data = cupLevelsData[currentCupLevel];
@@ -1881,6 +1932,7 @@
             localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
             updateUI();
             saveState();
+            syncScoreToFirebase();
         }
 
         let pwrGameActive = false;
@@ -1909,7 +1961,7 @@
             document.getElementById('pwrResultMsg').innerText = "";
         }
 
-        function startPwrGame() {
+        window.startPwrGame = function() {
             const cost = 200;
             if (score < cost) {
                 alert("Not enough coins! Cost is 200 coins.");
@@ -1919,6 +1971,7 @@
             score -= cost;
             updateUI();
             saveState();
+            syncScoreToFirebase();
 
             pwrGameActive = true;
             pwrScore = 0;
@@ -1939,7 +1992,7 @@
             }, 1000);
         }
 
-        function playPwrChoice(userChoice) {
+        window.playPwrChoice = function(userChoice) {
             if (!pwrGameActive) return;
 
             const choices = ['rock', 'paper', 'scissors'];
@@ -1976,6 +2029,7 @@
                 score += rewardCoins;
                 updateUI();
                 saveState();
+                syncScoreToFirebase();
                 alert(`⏰ Time's up! Your final score: ${pwrScore}. You won ${rewardCoins.toLocaleString()} coins! 🎉`);
                 document.getElementById('pwrActionText').innerText = `WON ${rewardCoins} COINS!`;
             } else {
@@ -1987,7 +2041,7 @@
             document.getElementById('startPwrBtn').innerText = `Play Again 🚀 (Cost: 200 🪙)`;
         }
 
-        function switchTab(tabId, btnElement) {
+        window.switchTab = function(tabId, btnElement) {
             flappyRunning = false;
             pwrGameActive = false;
             catchGameActive = false;
@@ -2019,6 +2073,7 @@
 
         updateUI();
         setCupLevel(1);
+        syncScoreToFirebase();
     </script>
 </body>
 </html>
