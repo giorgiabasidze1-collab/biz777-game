@@ -1023,7 +1023,7 @@
     <!-- AdsGram SDK Integration -->
     <script src="https://sad.adsgram.ai/js/sad.js"></script>
     <script>
-        const AdsgramController = window.Adsgram ? window.Adsgram.init({ blockId: "43667" }) : null;
+        const AdsgramController = window.Adsgram ? window.Adsgram.init({ blockId: "46267" }) : null;
         let isAdPlaying = false;
 
         window.watchAdsGramAd = async function() {
@@ -1392,7 +1392,7 @@
         }
 
         window.inviteFriendLink = function() {
-            let refLink = `https://t.me/Biz777Bot?start=ref_${userId}`;
+            let refLink = `https://t.me/biz_777_bot/app`;
             let shareText = `Join BIZ777 Mini App and earn coins! 🚀`;
             tg.openTelegramLink ? tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent(shareText)}`) : prompt("Copy link:", refLink);
         }
