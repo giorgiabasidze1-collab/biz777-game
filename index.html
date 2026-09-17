@@ -50,7 +50,7 @@
         }
 
         header {
-            padding: 15px;
+            padding: 12px 15px;
             display: flex;
             flex-direction: column;
             background: linear-gradient(145deg, #1e293b, #0f172a);
@@ -58,7 +58,7 @@
             border-bottom-right-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             z-index: 10;
-            gap: 10px;
+            gap: 8px;
             border-bottom: 2px solid var(--accent);
         }
 
@@ -106,6 +106,25 @@
             font-weight: bold;
             color: var(--accent);
             text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .header-bottom-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-selector-container select {
+            background: #0b0f19;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            outline: none;
         }
 
         .level-progress-container {
@@ -726,6 +745,21 @@
                 </div>
             </div>
 
+            <div class="header-bottom-bar">
+                <div class="language-selector-container">
+                    <select id="gameLangSelect" onchange="changeGameLanguage(this.value)">
+                        <option value="en">English</option>
+                        <option value="ru">Русский</option>
+                        <option value="zh">中文</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="ar">العربية</option>
+                        <option value="fr">Français</option>
+                        <option value="es">Español</option>
+                    </select>
+                </div>
+                <div class="level-badge" id="coinsLabelText">BIZ777 Coins</div>
+            </div>
+
             <div class="level-progress-container">
                 <div class="level-progress-info">
                     <span id="nextLevelText">Next Level: 500</span>
@@ -759,7 +793,7 @@
 
                     <div class="energy-container">
                         <div class="energy-info">
-                            <span>⚡ Energy</span>
+                            <span id="energyLabelText">⚡ Energy</span>
                             <span id="energyText">1000 / 1000</span>
                         </div>
                         <div class="energy-bar-bg">
@@ -770,14 +804,14 @@
             </div>
 
             <div class="tab-pane" id="tab-shop">
-                <h3 style="margin-bottom: 12px; align-self: flex-start;">🛒 Upgrades Shop</h3>
+                <h3 id="shopTitleText" style="margin-bottom: 12px; align-self: flex-start;">🛒 Upgrades Shop</h3>
                 <div class="shop-list">
                     <div class="shop-card">
-                        <div class="shop-info"><h4>Tap Power Upgrades</h4></div>
+                        <div class="shop-info"><h4 id="tapPowerTitleText">Tap Power Upgrades</h4></div>
                         <div id="tapShopContainer" style="margin-top: 8px; width: 100%;"></div>
                     </div>
                     <div class="shop-card">
-                        <div class="shop-info"><h4>Energy Upgrades</h4></div>
+                        <div class="shop-info"><h4 id="energyUpgradesTitleText">Energy Upgrades</h4></div>
                         <div id="energyShopContainer" style="margin-top: 8px; width: 100%;"></div>
                     </div>
                 </div>
@@ -785,7 +819,7 @@
 
             <div class="tab-pane" id="tab-leaderboard">
                 <div class="leaderboard-card">
-                    <h3 style="margin-bottom: 15px; text-align: center; color: var(--accent);">🏆 Leaderboard</h3>
+                    <h3 id="leaderboardTitleText" style="margin-bottom: 15px; text-align: center; color: var(--accent);">🏆 Leaderboard</h3>
                     <div class="leaderboard-container" id="leaderboardContainer">
                     </div>
                 </div>
@@ -794,8 +828,8 @@
             <div class="tab-pane" id="tab-minigame">
                 <div class="games-menu" id="gamesMenu">
                     <div class="game-header-banner">
-                        <h3 style="font-size: 15px; color: var(--accent); margin-bottom: 3px;">🎮 Classic Arcade Games Hub</h3>
-                        <p style="font-size: 11px; color: var(--text-secondary);">Select a game below to play and boost your earnings!</p>
+                        <h3 id="gamesHubTitle" style="font-size: 15px; color: var(--accent); margin-bottom: 3px;">🎮 Classic Arcade Games Hub</h3>
+                        <p id="gamesHubDesc" style="font-size: 11px; color: var(--text-secondary);">Select a game below to play and boost your earnings!</p>
                     </div>
                     
                     <div class="game-card-option" onclick="openSubGame('catch')">
@@ -841,7 +875,7 @@
 
                 <div class="sub-game-container" id="subgame-catch">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
                         <h3 style="font-size: 13px; color: var(--accent);">🕹️ Biiz777 Catch Game</h3>
                         <div style="width: 50px;"></div>
                     </div>
@@ -861,7 +895,7 @@
 
                 <div class="sub-game-container" id="subgame-flappy">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
                         <h3 style="font-size: 13px; color: var(--accent);">🕹️ Flappy BIZ777</h3>
                         <div style="width: 50px;"></div>
                     </div>
@@ -873,7 +907,7 @@
 
                 <div class="sub-game-container" id="subgame-cups">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
                         <h3 style="font-size: 13px; color: var(--accent);">🕹️ Find BIZ777 Ball</h3>
                         <div style="width: 50px;"></div>
                     </div>
@@ -915,7 +949,7 @@
 
                 <div class="sub-game-container" id="subgame-slot">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
                         <h3 style="font-size: 13px; color: var(--accent);">🕹️ Slot Machine Spin</h3>
                         <div style="width: 50px;"></div>
                     </div>
@@ -942,7 +976,7 @@
 
                 <div class="sub-game-container" id="subgame-paperwrapsrock">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
+                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
                         <h3 style="font-size: 13px; color: var(--accent);">✌️ Paper Wraps Rock</h3>
                         <div style="width: 50px;"></div>
                     </div>
@@ -986,43 +1020,279 @@
             </div>
 
             <div class="tab-pane" id="tab-friends">
-                <h3 style="margin-bottom: 12px; align-self: flex-start;">👥 Invite Friends</h3>
+                <h3 id="friendsTitleText" style="margin-bottom: 12px; align-self: flex-start;">👥 Invite Friends</h3>
                 <div class="friends-list">
                     <div class="friend-card" style="align-items: stretch; gap: 8px;">
-                        <h4 style="font-size: 14px;">Invite 3 Friends to get Free Tap Power 20!</h4>
-                        <p style="font-size: 11px; color: var(--text-secondary);">Invited friends: <span id="friendCountDisplay" style="color: var(--accent); font-weight: bold;">0</span> / 3</p>
-                        <button class="btn" onclick="inviteFriendLink()">Share Referral Link 🔗</button>
+                        <h4 id="friendsSubTitleText" style="font-size: 14px;">Invite 3 Friends to get Free Tap Power 20!</h4>
+                        <p style="font-size: 11px; color: var(--text-secondary);"><span id="friendsInvitedText">Invited friends:</span> <span id="friendCountDisplay" style="color: var(--accent); font-weight: bold;">0</span> / 3</p>
+                        <button class="btn" id="shareRefBtnText" onclick="inviteFriendLink()">Share Referral Link 🔗</button>
                     </div>
                 </div>
             </div>
 
             <div class="tab-pane" id="tab-ads">
-                <h3 style="margin-bottom: 12px; align-self: flex-start;">⚡ Boost Energy</h3>
+                <h3 id="boostEnergyTitleText" style="margin-bottom: 12px; align-self: flex-start;">⚡ Boost Energy</h3>
                 <div class="ads-list">
                     <div class="ad-card" style="flex-direction: row;">
                         <div class="ad-info">
-                            <h4>Refill Energy Ad</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Watch AdsGram ad to instantly refill energy to max</p>
+                            <h4 id="refillAdTitleText">Refill Energy Ad</h4>
+                            <p id="refillAdDescText" style="font-size: 11px; color: var(--text-secondary);">Watch AdsGram ad to instantly refill energy to max</p>
                         </div>
-                        <button class="btn" onclick="watchAdsGramAd()">Watch 📺</button>
+                        <button class="btn" id="watchAdBtnText" onclick="watchAdsGramAd()">Watch 📺</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <nav>
-            <button class="nav-item active" onclick="switchTab('clicker', this)"><span>⚡</span> Tap</button>
-            <button class="nav-item" onclick="switchTab('shop', this)"><span>🛒</span> Shop</button>
-            <button class="nav-item" onclick="switchTab('leaderboard', this)"><span>🏆</span> Rank</button>
-            <button class="nav-item" onclick="switchTab('minigame', this)"><span>🎮</span> Game</button>
-            <button class="nav-item" onclick="switchTab('friends', this)"><span>👥</span> Friends</button>
-            <button class="nav-item" onclick="switchTab('ads', this)"><span>📺</span> Boost</button>
+            <button class="nav-item active" onclick="switchTab('clicker', this)"><span>⚡</span> <span id="navTapText">Tap</span></button>
+            <button class="nav-item" onclick="switchTab('shop', this)"><span>🛒</span> <span id="navShopText">Shop</span></button>
+            <button class="nav-item" onclick="switchTab('leaderboard', this)"><span>🏆</span> <span id="navRankText">Rank</span></button>
+            <button class="nav-item" onclick="switchTab('minigame', this)"><span>🎮</span> <span id="navGameText">Game</span></button>
+            <button class="nav-item" onclick="switchTab('friends', this)"><span>👥</span> <span id="navFriendsText">Friends</span></button>
+            <button class="nav-item" onclick="switchTab('ads', this)"><span>📺</span> <span id="navBoostText">Boost</span></button>
         </nav>
     </div>
 
     <!-- AdsGram SDK Integration -->
     <script src="https://sad.adsgram.ai/js/sad.js"></script>
     <script>
+        // Multi-language dictionary support
+        const translations = {
+            en: {
+                coinsLabel: "BIZ777 Coins",
+                energyLabel: "⚡ Energy",
+                shopTitle: "🛒 Upgrades Shop",
+                tapPowerTitle: "Tap Power Upgrades",
+                energyUpgradesTitle: "Energy Upgrades",
+                leaderboardTitle: "🏆 Leaderboard",
+                gamesHubTitle: "🎮 Classic Arcade Games Hub",
+                gamesHubDesc: "Select a game below to play and boost your earnings!",
+                friendsTitle: "👥 Invite Friends",
+                friendsSubTitle: "Invite 3 Friends to get Free Tap Power 20!",
+                friendsInvited: "Invited friends:",
+                shareRefBtn: "Share Referral Link 🔗",
+                boostEnergyTitle: "⚡ Boost Energy",
+                refillAdTitle: "Refill Energy Ad",
+                refillAdDesc: "Watch AdsGram ad to instantly refill energy to max",
+                watchAdBtn: "Watch 📺",
+                navTap: "Tap",
+                navShop: "Shop",
+                navRank: "Rank",
+                navGame: "Game",
+                navFriends: "Friends",
+                navBoost: "Boost",
+                menuBack: "⬅️ Menu",
+                maxLevel: "Max Level Reached!",
+                nextTarget: "Next Target:"
+            },
+            ru: {
+                coinsLabel: "Монеты BIZ777",
+                energyLabel: "⚡ Энергия",
+                shopTitle: "🛒 Магазин улучшений",
+                tapPowerTitle: "Улучшение силы клика",
+                energyUpgradesTitle: "Улучшение энергии",
+                leaderboardTitle: "🏆 Таблица лидеров",
+                gamesHubTitle: "🎮 Центр классических игр",
+                gamesHubDesc: "Выберите игру ниже, чтобы играть и увеличить заработок!",
+                friendsTitle: "👥 Пригласить друзей",
+                friendsSubTitle: "Пригласите 3 друзей для бесплатной силы клика 20!",
+                friendsInvited: "Приглашенные друзья:",
+                shareRefBtn: "Поделиться реферальной ссылкой 🔗",
+                boostEnergyTitle: "⚡ Увеличение энергии",
+                refillAdTitle: "Реклама для пополнения энергии",
+                refillAdDesc: "Посмотрите рекламу AdsGram, чтобы мгновенно восстановить энергию",
+                watchAdBtn: "Смотреть 📺",
+                navTap: "Клик",
+                navShop: "Магазин",
+                navRank: "Рейтинг",
+                navGame: "Игры",
+                navFriends: "Друзья",
+                navBoost: "Буст",
+                menuBack: "⬅️ Меню",
+                maxLevel: "Достигнут максимальный уровень!",
+                nextTarget: "Следующая цель:"
+            },
+            zh: {
+                coinsLabel: "BIZ777代币",
+                energyLabel: "⚡ 能量",
+                shopTitle: "🛒 升级商店",
+                tapPowerTitle: "点击威力升级",
+                energyUpgradesTitle: "能量升级",
+                leaderboardTitle: "🏆 排行榜",
+                gamesHubTitle: "🎮 经典街机游戏中心",
+                gamesHubDesc: "在下方选择一款游戏并提升收益！",
+                friendsTitle: "👥 邀请好友",
+                friendsSubTitle: "邀请3位好友即可获得免费的20级点击威力！",
+                friendsInvited: "已邀请好友：",
+                shareRefBtn: "分享推荐链接 🔗",
+                boostEnergyTitle: "⚡ 能量补充",
+                refillAdTitle: "补充能量广告",
+                refillAdDesc: "观看广告以立即恢复满能量",
+                watchAdBtn: "观看 📺",
+                navTap: "点击",
+                navShop: "商店",
+                navRank: "排行",
+                navGame: "游戏",
+                navFriends: "好友",
+                navBoost: "助力",
+                menuBack: "⬅️ 菜单",
+                maxLevel: "已达到最高等级！",
+                nextTarget: "下一个目标："
+            },
+            hi: {
+                coinsLabel: "BIZ777 सिक्के",
+                energyLabel: "⚡ ऊर्जा",
+                shopTitle: "🛒 अपग्रेड शॉप",
+                tapPowerTitle: "टैप पावर अपग्रेड",
+                energyUpgradesTitle: "ऊर्जा अपग्रेड",
+                leaderboardTitle: "🏆 लीडरबोर्ड",
+                gamesHubTitle: "🎮 क्लासिक आर्केड गेम्स हब",
+                gamesHubDesc: "खेलने और अपनी कमाई बढ़ाने के लिए नीचे एक गेम चुनें!",
+                friendsTitle: "👥 दोस्तों को आमंत्रित करें",
+                friendsSubTitle: "मुफ्त टैप पावर 20 पाने के लिए 3 दोस्तों को आमंत्रित करें!",
+                friendsInvited: "आमंत्रित मित्र:",
+                shareRefBtn: "रेफरल लिंक शेयर करें 🔗",
+                boostEnergyTitle: "⚡ ऊर्जा बढ़ाएं",
+                refillAdTitle: "ऊर्जा रिफिल विज्ञापन",
+                refillAdDesc: "ऊर्जा को तुरंत अधिकतम करने के लिए विज्ञापन देखें",
+                watchAdBtn: "देखें 📺",
+                navTap: "टैप",
+                navShop: "शॉप",
+                navRank: "रैंक",
+                navGame: "गेम",
+                navFriends: "मित्र",
+                navBoost: "बूस्ट",
+                menuBack: "⬅️ मेनू",
+                maxLevel: "अधिकतम स्तर पहुंच गया!",
+                nextTarget: "अगला लक्ष्य:"
+            },
+            ar: {
+                coinsLabel: "عملات BIZ777",
+                energyLabel: "⚡ الطاقة",
+                shopTitle: "🛒 متجر الترقيات",
+                tapPowerTitle: "ترقيات قوة النقر",
+                energyUpgradesTitle: "ترقيات الطاقة",
+                leaderboardTitle: "🏆 لوحة المتصدرين",
+                gamesHubTitle: "🎮 مركز الألعاب الكلاسيكية",
+                gamesHubDesc: "اختر لعبة أدناه للعب وزيادة أرباحك!",
+                friendsTitle: "👥 دعوة الأصدقاء",
+                friendsSubTitle: "ادعُ 3 أصدقاء للحصول على قوة نقر مجانية 20!",
+                friendsInvited: "الأصدقاء المدعوون:",
+                shareRefBtn: "مشاركة رابط الإحالة 🔗",
+                boostEnergyTitle: "⚡ تعزيز الطاقة",
+                refillAdTitle: "إعلان تعبئة الطاقة",
+                refillAdDesc: "شاهد الإعلان لاستعادة الطاقة بالكامل فوراً",
+                watchAdBtn: "مشاهدة 📺",
+                navTap: "نقر",
+                navShop: "متجر",
+                navRank: "ترتيب",
+                navGame: "لعبة",
+                navFriends: "أصدقاء",
+                navBoost: "تعزيز",
+                menuBack: "⬅️ القائمة",
+                maxLevel: "تم الوصول إلى المستوى الأقصى!",
+                nextTarget: "الهدف التالي:"
+            },
+            fr: {
+                coinsLabel: "Pièces BIZ777",
+                energyLabel: "⚡ Énergie",
+                shopTitle: "🛒 Boutique d'améliorations",
+                tapPowerTitle: "Améliorations de puissance de clic",
+                energyUpgradesTitle: "Améliorations d'énergie",
+                leaderboardTitle: "🏆 Classement",
+                gamesHubTitle: "🎮 Hub de jeux d'arcade classiques",
+                gamesHubDesc: "Sélectionnez un jeu ci-dessous pour jouer et augmenter vos gains !",
+                friendsTitle: "👥 Inviter des amis",
+                friendsSubTitle: "Invitez 3 amis pour obtenir la puissance de clic 20 gratuite !",
+                friendsInvited: "Amis invités :",
+                shareRefBtn: "Partager le lien de parrainage 🔗",
+                boostEnergyTitle: "⚡ Booster l'énergie",
+                refillAdTitle: "Publicité de recharge d'énergie",
+                refillAdDesc: "Regardez la publicité pour recharger instantanément l'énergie au maximum",
+                watchAdBtn: "Regarder 📺",
+                navTap: "Clic",
+                navShop: "Boutique",
+                navRank: "Rang",
+                navGame: "Jeu",
+                navFriends: "Amis",
+                navBoost: "Boost",
+                menuBack: "⬅️ Menu",
+                maxLevel: "Niveau maximum atteint !",
+                nextTarget: "Prochaine cible :"
+            },
+            es: {
+                coinsLabel: "Monedas BIZ777",
+                energyLabel: "⚡ Energía",
+                shopTitle: "🛒 Tienda de mejoras",
+                tapPowerTitle: "Mejoras de poder de toque",
+                energyUpgradesTitle: "Mejoras de energía",
+                leaderboardTitle: "🏆 Tabla de clasificación",
+                gamesHubTitle: "🎮 Centro de juegos arcade clásicos",
+                gamesHubDesc: "¡Selecciona un juego a continuación para jugar y aumentar tus ganancias!",
+                friendsTitle: "👥 Invitar amigos",
+                friendsSubTitle: "¡Invita a 3 amigos para obtener el Poder de Toque 20 gratis!",
+                friendsInvited: "Amigos invitados:",
+                shareRefBtn: "Compartir enlace de referencia 🔗",
+                boostEnergyTitle: "⚡ Aumentar energía",
+                refillAdTitle: "Anuncio de recarga de energía",
+                refillAdDesc: "Mira el anuncio para rellenar instantáneamente la energía al máximo",
+                watchAdBtn: "Ver 📺",
+                navTap: "Toque",
+                navShop: "Tienda",
+                navRank: "Rango",
+                navGame: "Juego",
+                navFriends: "Amigos",
+                navBoost: "Impulso",
+                menuBack: "⬅️ Menú",
+                maxLevel: "¡Nivel máximo alcanzado!",
+                nextTarget: "Siguiente objetivo:"
+            }
+        };
+
+        function changeGameLanguage(lang) {
+            if (!translations[lang]) return;
+            localStorage.setItem('biz_selected_lang', lang);
+            let t = translations[lang];
+
+            document.getElementById('coinsLabelText').innerText = t.coinsLabel;
+            document.getElementById('energyLabelText').innerText = t.energyLabel;
+            document.getElementById('shopTitleText').innerText = t.shopTitle;
+            document.getElementById('tapPowerTitleText').innerText = t.tapPowerTitle;
+            document.getElementById('energyUpgradesTitleText').innerText = t.energyUpgradesTitle;
+            document.getElementById('leaderboardTitleText').innerText = t.leaderboardTitle;
+            document.getElementById('gamesHubTitle').innerText = t.gamesHubTitle;
+            document.getElementById('gamesHubDesc').innerText = t.gamesHubDesc;
+            document.getElementById('friendsTitleText').innerText = t.friendsTitle;
+            document.getElementById('friendsSubTitleText').innerText = t.friendsSubTitle;
+            document.getElementById('friendsInvitedText').innerText = t.friendsInvited;
+            document.getElementById('shareRefBtnText').innerText = t.shareRefBtn;
+            document.getElementById('boostEnergyTitleText').innerText = t.boostEnergyTitle;
+            document.getElementById('refillAdTitleText').innerText = t.refillAdTitle;
+            document.getElementById('refillAdDescText').innerText = t.refillAdDesc;
+            document.getElementById('watchAdBtnText').innerText = t.watchAdBtn;
+
+            document.getElementById('navTapText').innerText = t.navTap;
+            document.getElementById('navShopText').innerText = t.navShop;
+            document.getElementById('navRankText').innerText = t.navRank;
+            document.getElementById('navGameText').innerText = t.navGame;
+            document.getElementById('navFriendsText').innerText = t.navFriends;
+            document.getElementById('navBoostText').innerText = t.navBoost;
+
+            document.querySelectorAll('.menu-back-btn').forEach(btn => btn.innerText = t.menuBack);
+            
+            updateUI();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            let savedLang = localStorage.getItem('biz_selected_lang') || 'en';
+            let selectEl = document.getElementById('gameLangSelect');
+            if (selectEl) {
+                selectEl.value = savedLang;
+            }
+            changeGameLanguage(savedLang);
+        });
+
         const AdsgramController = window.Adsgram ? window.Adsgram.init({ blockId: "48395" }) : null;
         let isAdPlaying = false;
 
@@ -1272,7 +1542,7 @@
             }
         }, 1000);
 
-        function updateUI() {
+        window.updateUI = function() {
             scoreDisplay.innerText = score.toLocaleString();
             energyText.innerText = `${energy} / ${maxEnergy}`;
             energyFill.style.width = `${(energy / maxEnergy) * 100}%`;
@@ -1297,10 +1567,12 @@
 
             let currentMin = currentLevelObj.min;
             let nextMin = currentLevelObj.max;
+            let currentLang = localStorage.getItem('biz_selected_lang') || 'en';
+            let t = translations[currentLang] || translations.en;
 
             if (currentLevelIndex === levels.length - 1) {
                 levelBarFill.style.width = "100%";
-                nextLevelText.innerText = "Max Level Reached!";
+                nextLevelText.innerText = t.maxLevel;
                 levelPercentage.innerText = "100%";
             } else {
                 let progressRange = nextMin - currentMin;
@@ -1308,7 +1580,7 @@
                 let percentage = Math.min(100, Math.max(0, (currentProgress / progressRange) * 100));
 
                 levelBarFill.style.width = `${percentage}%`;
-                nextLevelText.innerText = `Next Target: ${(nextMin - score).toLocaleString()} pts`;
+                nextLevelText.innerText = `${t.nextTarget} ${(nextMin - score).toLocaleString()} pts`;
                 levelPercentage.innerText = `${Math.floor(percentage)}%`;
             }
 
@@ -1875,7 +2147,7 @@
             }
         }
 
-        function initCupStageUI() {
+        window.initCupStageUI = function() {
             winningIndex = Math.floor(Math.random() * 3);
             cupPositions = [0, 1, 2];
             
