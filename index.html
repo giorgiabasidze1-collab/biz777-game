@@ -781,7 +781,6 @@
                 </div>
             </div>
 
-            <!-- New Ads Boost & Energy Refill Menu Tab -->
             <div class="tab-pane" id="tab-ads">
                 <h3 id="adsTitleText" style="margin-bottom: 10px; align-self: flex-start; font-size: 15px;">📺 Ads & Energy Boost</h3>
                 <div class="ads-list">
@@ -1025,7 +1024,6 @@
     <!-- AdsGram SDK Integration -->
     <script src="https://sad.adsgram.ai/js/sad.js"></script>
     <script>
-        // Multi-language dictionary support
         const translations = {
             en: {
                 coinsLabel: "BIZ777 Coins",
@@ -1342,26 +1340,18 @@
             document.getElementById('userAvatar').innerText = (user.first_name || "B")[0].toUpperCase();
         }
 
-        // AdsGram Rewarded Video Integration (PlatformID: 45807)
-        let adController = null;
-        if (window.Adsgram) {
-            adController = window.Adsgram.init({ blockId: "int-45807" }); // Or platform block id
-        }
-
+        // AdsGram Rewarded Video Integration (Block ID: 45807)
         window.showRewardedAd = function() {
             if (window.Adsgram) {
                 window.Adsgram.init({ blockId: "45807" }).show().then((result) => {
-                    // Rewarded successfully watched
                     energy = maxEnergy;
                     updateUI();
                     saveState();
                     alert("🎉 Reward received! Your energy is fully refilled back to max!");
                 }).catch((result) => {
-                    // Ad skipped or error
                     alert("Ad was skipped or failed to load. Please try again.");
                 });
             } else {
-                // Fallback simulation for local testing or if SDK is blocked
                 energy = maxEnergy;
                 updateUI();
                 saveState();
