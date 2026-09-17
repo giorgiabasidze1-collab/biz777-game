@@ -37,6 +37,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            font-size: 13px;
         }
 
         .app-container {
@@ -50,15 +51,15 @@
         }
 
         header {
-            padding: 12px 15px;
+            padding: 10px 12px;
             display: flex;
             flex-direction: column;
             background: linear-gradient(145deg, #1e293b, #0f172a);
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
             z-index: 10;
-            gap: 8px;
+            gap: 6px;
             border-bottom: 2px solid var(--accent);
         }
 
@@ -71,12 +72,12 @@
         .user-info {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .avatar {
-            width: 42px;
-            height: 42px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent), #2563eb);
             display: flex;
@@ -84,16 +85,17 @@
             justify-content: center;
             font-weight: bold;
             color: #000;
-            box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
+            font-size: 13px;
         }
 
         .username {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
         }
 
         .level-badge {
-            font-size: 12px;
+            font-size: 10px;
             color: var(--text-secondary);
         }
 
@@ -102,17 +104,17 @@
         }
 
         .score-value {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: bold;
             color: var(--accent);
-            text-shadow: 0 0 10px var(--accent-glow);
+            text-shadow: 0 0 8px var(--accent-glow);
         }
 
         .header-bottom-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .language-selector-container select {
@@ -120,8 +122,8 @@
             color: var(--accent);
             border: 1px solid var(--accent);
             border-radius: 6px;
-            padding: 3px 8px;
-            font-size: 11px;
+            padding: 2px 6px;
+            font-size: 10px;
             font-weight: bold;
             cursor: pointer;
             outline: none;
@@ -131,21 +133,21 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
 
         .level-progress-info {
             display: flex;
             justify-content: space-between;
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-secondary);
         }
 
         .level-bar-bg {
             width: 100%;
-            height: 8px;
+            height: 6px;
             background: #090d16;
-            border-radius: 4px;
+            border-radius: 3px;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.05);
         }
@@ -164,7 +166,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            padding: 15px;
+            padding: 12px;
             overflow: hidden;
         }
 
@@ -181,7 +183,7 @@
 
         .bg-coin {
             position: absolute;
-            font-size: 28px;
+            font-size: 24px;
             opacity: 0.1;
             font-weight: bold;
             color: #38bdf8;
@@ -189,8 +191,8 @@
 
         .ambient-glow {
             position: absolute;
-            width: 320px;
-            height: 320px;
+            width: 280px;
+            height: 280px;
             background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0) 70%);
             top: 50%;
             left: 50%;
@@ -219,7 +221,7 @@
             0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
             20% { opacity: 0.3; }
             80% { opacity: 0.3; }
-            100% { transform: translateY(-50px) scale(1.2); opacity: 0; }
+            100% { transform: translateY(-40px) scale(1.2); opacity: 0; }
         }
 
         .interactive-clicker-area {
@@ -233,12 +235,12 @@
         }
 
         .clicker-circle {
-            width: 220px;
-            height: 220px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
             background: radial-gradient(circle, #22304c 0%, #0f172a 100%);
-            border: 6px solid var(--accent);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 25px var(--accent-glow);
+            border: 5px solid var(--accent);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.5), 0 0 20px var(--accent-glow);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -253,7 +255,7 @@
         }
 
         .clicker-icon {
-            font-size: 75px;
+            font-size: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -262,8 +264,8 @@
         }
 
         .energy-container {
-            width: 260px;
-            margin-top: 25px;
+            width: 220px;
+            margin-top: 20px;
             position: relative;
             z-index: 5;
         }
@@ -271,16 +273,16 @@
         .energy-info {
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
-            margin-bottom: 6px;
+            font-size: 11px;
+            margin-bottom: 4px;
             color: var(--text-secondary);
         }
 
         .energy-bar-bg {
             width: 100%;
-            height: 12px;
+            height: 10px;
             background: #090d16;
-            border-radius: 6px;
+            border-radius: 5px;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.05);
         }
@@ -294,28 +296,28 @@
 
         .floating-number {
             position: absolute;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             color: var(--warning);
             pointer-events: none;
             z-index: 100;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
             animation: floatUp 0.7s ease-out forwards;
         }
 
         @keyframes floatUp {
             0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-70px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-60px) scale(1.2); }
         }
 
         nav {
             display: flex;
             background: linear-gradient(145deg, #1e293b, #0f172a);
-            padding: 12px;
+            padding: 10px;
             justify-content: space-around;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            box-shadow: 0 -8px 20px rgba(0,0,0,0.5);
             z-index: 10;
             border-top: 2px solid var(--accent);
         }
@@ -324,22 +326,22 @@
             background: none;
             border: none;
             color: var(--text-secondary);
-            font-size: 13px;
+            font-size: 11px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .nav-item.active {
             color: var(--accent);
-            transform: scale(1.08);
+            transform: scale(1.05);
         }
 
-        .nav-item span {
-            font-size: 22px;
+        .nav-item span:first-child {
+            font-size: 18px;
         }
 
         .tab-pane {
@@ -350,7 +352,7 @@
             align-items: center;
             justify-content: flex-start;
             overflow-y: auto;
-            padding-bottom: 20px;
+            padding-bottom: 15px;
             z-index: 5;
             position: relative;
         }
@@ -363,19 +365,19 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            margin-top: 10px;
+            gap: 12px;
+            margin-top: 8px;
         }
 
         .shop-card, .ad-card, .friend-card, .game-card-option, .game-header-banner {
             background: linear-gradient(135deg, #1e293b 0%, #111827 100%);
-            padding: 16px;
-            border-radius: 16px;
+            padding: 14px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             border: 1px solid rgba(56, 189, 248, 0.15);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
             flex-direction: column;
             align-items: stretch;
         }
@@ -383,17 +385,17 @@
         .leaderboard-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 14px;
             width: 100%;
-            padding: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            padding: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
         }
 
         .leaderboard-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            max-height: 420px;
+            gap: 8px;
+            max-height: 380px;
             overflow-y: auto;
             width: 100%;
         }
@@ -404,8 +406,8 @@
             align-items: center;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border-color);
-            padding: 12px 16px;
-            border-radius: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
         }
 
         .my-profile {
@@ -416,26 +418,27 @@
         .rank-number {
             font-weight: bold;
             color: #94a3b8;
-            width: 35px;
-            font-size: 14px;
+            width: 30px;
+            font-size: 12px;
         }
 
         .score {
             font-weight: bold;
             color: var(--accent);
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .btn {
             background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
             color: #000;
             border: none;
-            padding: 10px 16px;
+            padding: 8px 14px;
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+            box-shadow: 0 3px 10px rgba(56, 189, 248, 0.3);
             transition: transform 0.1s ease;
+            font-size: 11px;
         }
 
         .btn:active {
@@ -446,7 +449,7 @@
             background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(15, 23, 42, 0.9));
             border: 1px solid var(--accent);
             text-align: center;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .game-card-option {
@@ -468,11 +471,11 @@
 
         #flappyCanvas {
             background: linear-gradient(to bottom, #1e293b, #0f172a);
-            border-radius: 16px;
+            border-radius: 14px;
             border: 2px solid var(--accent);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
             cursor: pointer;
-            margin: 10px 0;
+            margin: 8px 0;
             touch-action: none;
         }
 
@@ -481,31 +484,31 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            gap: 10px;
+            gap: 8px;
         }
 
         #catchGameContainer {
             width: 100%;
-            max-width: 320px;
-            height: 340px;
+            max-width: 300px;
+            height: 300px;
             background: #080c14;
-            border-radius: 16px;
+            border-radius: 14px;
             border: 2px solid var(--accent);
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 5px 15px rgba(0,0,0,0.8);
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.8);
             cursor: pointer;
         }
 
         .catch-falling-item {
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
             user-select: none;
             cursor: pointer;
@@ -516,19 +519,19 @@
             background: radial-gradient(circle, #ffd700, #ffa500);
             color: #000;
             border: 2px solid #ffcc00;
-            box-shadow: 0 0 8px #ffd700;
+            box-shadow: 0 0 6px #ffd700;
         }
 
         .catch-bomb {
             background: radial-gradient(circle, #ff4d4d, #b30000);
             color: #fff;
             border: 2px solid #ff1a1a;
-            box-shadow: 0 0 8px #ff4d4d;
+            box-shadow: 0 0 6px #ff4d4d;
         }
 
         @keyframes fallItem {
-            0% { top: -45px; }
-            100% { top: 355px; }
+            0% { top: -40px; }
+            100% { top: 310px; }
         }
 
         .slot-machine-wrapper, .jeiran-game-wrapper, .paperwrapsrock-wrapper {
@@ -536,51 +539,51 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            padding: 5px;
-            gap: 12px;
+            padding: 4px;
+            gap: 10px;
         }
 
         .slot-board-2d {
             width: 100%;
-            max-width: 320px;
-            height: 180px;
+            max-width: 300px;
+            height: 160px;
             background: #080c14;
-            border-radius: 16px;
-            border: 3px solid var(--accent);
+            border-radius: 14px;
+            border: 2px solid var(--accent);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
-            margin: 5px 0;
-            box-shadow: inset 0 5px 15px rgba(0,0,0,0.8);
+            margin: 4px 0;
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.8);
         }
 
         .slots-row {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
             align-items: center;
         }
 
         .slot-reel {
-            width: 85px;
-            height: 100px;
+            width: 75px;
+            height: 90px;
             background: #1e293b;
             border: 2px solid var(--accent);
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             color: #facc15;
-            gap: 4px;
+            gap: 3px;
         }
         
         .slot-reel span {
-            font-size: 26px;
+            font-size: 22px;
         }
 
         .cup-game-wrapper {
@@ -588,13 +591,13 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            padding: 5px;
-            gap: 12px;
+            padding: 4px;
+            gap: 10px;
         }
 
         .levels-container {
             display: flex;
-            gap: 6px;
+            gap: 5px;
             width: 100%;
             justify-content: center;
         }
@@ -603,9 +606,9 @@
             background: #1e293b;
             border: 1px solid rgba(255,255,255,0.15);
             color: var(--text-secondary);
-            padding: 6px 10px;
-            border-radius: 8px;
-            font-size: 11px;
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 10px;
             font-weight: bold;
             cursor: pointer;
         }
@@ -624,22 +627,22 @@
 
         .cups-board-2d {
             width: 100%;
-            height: 170px;
+            height: 150px;
             background: #0a0f1d;
-            border-radius: 16px;
+            border-radius: 14px;
             border: 2px solid var(--accent);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            margin: 10px 0;
-            box-shadow: inset 0 5px 15px rgba(0,0,0,0.8);
+            margin: 8px 0;
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.8);
         }
 
         .cups-scene {
             position: relative;
-            width: 300px;
-            height: 110px;
+            width: 260px;
+            height: 95px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -647,23 +650,23 @@
 
         .cup-slot-2d {
             position: absolute;
-            width: 80px;
-            height: 95px;
+            width: 70px;
+            height: 85px;
             transition: transform 0.3s ease;
             cursor: pointer;
         }
 
         .coin-item-2d {
             position: absolute;
-            bottom: 10px;
+            bottom: 8px;
             left: 50%;
             transform: translateX(-50%);
             background: #facc15;
             color: #000;
             font-weight: bold;
-            font-size: 10px;
-            padding: 3px 4px;
-            border-radius: 10px;
+            font-size: 9px;
+            padding: 2px 4px;
+            border-radius: 8px;
             opacity: 0;
             transition: opacity 0.2s ease;
             z-index: 1;
@@ -671,12 +674,12 @@
 
         .cup-2d {
             position: absolute;
-            width: 80px;
-            height: 90px;
+            width: 70px;
+            height: 80px;
             background: linear-gradient(135deg, #ef4444, #991b1b);
-            border-radius: 6px 6px 20px 20px;
-            border-bottom: 4px solid #fef2f2;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            border-radius: 6px 6px 16px 16px;
+            border-bottom: 3px solid #fef2f2;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
             transition: transform 0.3s ease;
             display: flex;
             align-items: center;
@@ -684,7 +687,7 @@
         }
 
         .cup-2d.lifted {
-            transform: translateY(-45px);
+            transform: translateY(-40px);
         }
 
         #adModal {
@@ -699,31 +702,31 @@
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            padding: 20px;
+            padding: 16px;
             backdrop-filter: blur(5px);
         }
 
         .ad-video-box {
             width: 100%;
-            max-width: 340px;
+            max-width: 320px;
             background: linear-gradient(135deg, #1e293b, #0f172a);
             border: 2px solid var(--accent);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 14px;
+            padding: 16px;
             text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.8);
         }
 
         .ad-screen {
             width: 100%;
-            height: 160px;
+            height: 140px;
             background: #090d16;
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             border: 1px solid rgba(255,255,255,0.1);
         }
     </style>
@@ -755,6 +758,7 @@
                         <option value="ar">العربية</option>
                         <option value="fr">Français</option>
                         <option value="es">Español</option>
+                        <option value="de">Deutsch</option>
                     </select>
                 </div>
                 <div class="level-badge" id="coinsLabelText">BIZ777 Coins</div>
@@ -774,9 +778,9 @@
         <div class="content">
             <div class="ambient-glow"></div>
             <div class="floating-particle" style="left: 15%; width: 4px; height: 4px; animation-duration: 7s; animation-delay: 0s;"></div>
-            <div class="floating-particle" style="left: 35%; width: 6px; height: 6px; animation-duration: 9s; animation-delay: 2s;"></div>
-            <div class="floating-particle" style="left: 65%; width: 5px; height: 5px; animation-duration: 6s; animation-delay: 1s;"></div>
-            <div class="floating-particle" style="left: 85%; width: 7px; height: 7px; animation-duration: 10s; animation-delay: 3s;"></div>
+            <div class="floating-particle" style="left: 35%; width: 5px; height: 5px; animation-duration: 9s; animation-delay: 2s;"></div>
+            <div class="floating-particle" style="left: 65%; width: 4px; height: 4px; animation-duration: 6s; animation-delay: 1s;"></div>
+            <div class="floating-particle" style="left: 85%; width: 6px; height: 6px; animation-duration: 10s; animation-delay: 3s;"></div>
 
             <div class="tab-pane active" id="tab-clicker">
                 <div class="coin-background-pattern">
@@ -804,22 +808,22 @@
             </div>
 
             <div class="tab-pane" id="tab-shop">
-                <h3 id="shopTitleText" style="margin-bottom: 12px; align-self: flex-start;">🛒 Upgrades Shop</h3>
+                <h3 id="shopTitleText" style="margin-bottom: 10px; align-self: flex-start; font-size: 14px;">🛒 Upgrades Shop</h3>
                 <div class="shop-list">
                     <div class="shop-card">
-                        <div class="shop-info"><h4 id="tapPowerTitleText">Tap Power Upgrades</h4></div>
-                        <div id="tapShopContainer" style="margin-top: 8px; width: 100%;"></div>
+                        <div class="shop-info"><h4 id="tapPowerTitleText" style="font-size: 12px;">Tap Power Upgrades</h4></div>
+                        <div id="tapShopContainer" style="margin-top: 6px; width: 100%;"></div>
                     </div>
                     <div class="shop-card">
-                        <div class="shop-info"><h4 id="energyUpgradesTitleText">Energy Upgrades</h4></div>
-                        <div id="energyShopContainer" style="margin-top: 8px; width: 100%;"></div>
+                        <div class="shop-info"><h4 id="energyUpgradesTitleText" style="font-size: 12px;">Energy Upgrades</h4></div>
+                        <div id="energyShopContainer" style="margin-top: 6px; width: 100%;"></div>
                     </div>
                 </div>
             </div>
 
             <div class="tab-pane" id="tab-leaderboard">
                 <div class="leaderboard-card">
-                    <h3 id="leaderboardTitleText" style="margin-bottom: 15px; text-align: center; color: var(--accent);">🏆 Leaderboard</h3>
+                    <h3 id="leaderboardTitleText" style="margin-bottom: 12px; text-align: center; color: var(--accent); font-size: 14px;">🏆 Leaderboard</h3>
                     <div class="leaderboard-container" id="leaderboardContainer">
                     </div>
                 </div>
@@ -828,88 +832,88 @@
             <div class="tab-pane" id="tab-minigame">
                 <div class="games-menu" id="gamesMenu">
                     <div class="game-header-banner">
-                        <h3 id="gamesHubTitle" style="font-size: 15px; color: var(--accent); margin-bottom: 3px;">🎮 Classic Arcade Games Hub</h3>
-                        <p id="gamesHubDesc" style="font-size: 11px; color: var(--text-secondary);">Select a game below to play and boost your earnings!</p>
+                        <h3 id="gamesHubTitle" style="font-size: 13px; color: var(--accent); margin-bottom: 2px;">🎮 Classic Arcade Games Hub</h3>
+                        <p id="gamesHubDesc" style="font-size: 10px; color: var(--text-secondary);">Select a game below to play and boost your earnings!</p>
                     </div>
                     
                     <div class="game-card-option" onclick="openSubGame('catch')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🪙 Biiz777 Catch Game</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Cost: 50 Coins | Catch BIZ777 coins, avoid bombs for 1 min!</p>
+                            <h4 style="color: var(--accent); font-size: 13px;">🪙 Biiz777 Catch Game</h4>
+                            <p style="font-size: 10px; color: var(--text-secondary);">Cost: 50 Coins | Catch BIZ777 coins, avoid bombs for 1 min!</p>
                         </div>
-                        <span style="font-size: 22px; color: var(--accent);">👉</span>
+                        <span style="font-size: 18px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('flappy')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🪙 Flappy BIZ777</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Avoid moving hand obstacles! Score 10 for +500 Energy!</p>
+                            <h4 style="color: var(--accent); font-size: 13px;">🪙 Flappy BIZ777</h4>
+                            <p style="font-size: 10px; color: var(--text-secondary);">Avoid moving hand obstacles! Score 10 for +500 Energy!</p>
                         </div>
-                        <span style="font-size: 22px; color: var(--accent);">👉</span>
+                        <span style="font-size: 18px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('cups')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🏆 Find BIZ777 Ball</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Find the BIZ777 ball under cups to win coins and energy!</p>
+                            <h4 style="color: var(--accent); font-size: 13px;">🏆 Find BIZ777 Ball</h4>
+                            <p style="font-size: 10px; color: var(--text-secondary);">Find the BIZ777 ball under cups to win coins and energy!</p>
                         </div>
-                        <span style="font-size: 22px; color: var(--accent);">👉</span>
+                        <span style="font-size: 18px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('slot')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">🎰 Slot Machine Spin</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Cost: 500 Coins | 3x BIZ777 = 5,000,000 Jackpot!</p>
+                            <h4 style="color: var(--accent); font-size: 13px;">🎰 Slot Machine Spin</h4>
+                            <p style="font-size: 10px; color: var(--text-secondary);">Cost: 500 Coins | 3x BIZ777 = 5,000,000 Jackpot!</p>
                         </div>
-                        <span style="font-size: 22px; color: var(--accent);">👉</span>
+                        <span style="font-size: 18px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('paperwrapsrock')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 15px;">✌️ Paper Wraps Rock (Classic)</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Classic Rock, Paper, Scissors battle with emoji icons!</p>
+                            <h4 style="color: var(--accent); font-size: 13px;">✌️ Paper Wraps Rock (Classic)</h4>
+                            <p style="font-size: 10px; color: var(--text-secondary);">Classic Rock, Paper, Scissors battle with emoji icons!</p>
                         </div>
-                        <span style="font-size: 22px; color: var(--accent);">👉</span>
+                        <span style="font-size: 18px; color: var(--accent);">👉</span>
                     </div>
                 </div>
 
                 <div class="sub-game-container" id="subgame-catch">
-                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Biiz777 Catch Game</h3>
-                        <div style="width: 50px;"></div>
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 4px;">
+                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 3px 8px; font-size: 10px;">⬅️ Menu</button>
+                        <h3 style="font-size: 12px; color: var(--accent);">🕹️ Biiz777 Catch Game</h3>
+                        <div style="width: 40px;"></div>
                     </div>
 
                     <div class="catch-game-wrapper">
-                        <div style="display: flex; justify-content: space-between; width: 100%; max-width: 320px; font-weight: bold; font-size: 12px; color: var(--warning);">
+                        <div style="display: flex; justify-content: space-between; width: 100%; max-width: 300px; font-weight: bold; font-size: 11px; color: var(--warning);">
                             <span id="catchTimer">⏱️ Time: 60s</span>
                             <span id="catchScore">Score: 0</span>
                         </div>
 
                         <div id="catchGameContainer"></div>
 
-                        <button class="btn" id="startCatchBtn" onclick="startCatchGame()" style="width: 100%; max-width: 320px; background: #22c55e; color: #000;">Start Game 🚀 (Cost: 50 🪙)</button>
-                        <div id="catchMsg" style="font-size: 11px; color: var(--text-secondary); text-align: center; height: 16px;"></div>
+                        <button class="btn" id="startCatchBtn" onclick="startCatchGame()" style="width: 100%; max-width: 300px; background: #22c55e; color: #000;">Start Game 🚀 (Cost: 50 🪙)</button>
+                        <div id="catchMsg" style="font-size: 10px; color: var(--text-secondary); text-align: center; height: 14px;"></div>
                     </div>
                 </div>
 
                 <div class="sub-game-container" id="subgame-flappy">
-                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Flappy BIZ777</h3>
-                        <div style="width: 50px;"></div>
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 4px;">
+                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 3px 8px; font-size: 10px;">⬅️ Menu</button>
+                        <h3 style="font-size: 12px; color: var(--accent);">🕹️ Flappy BIZ777</h3>
+                        <div style="width: 40px;"></div>
                     </div>
-                    <canvas id="flappyCanvas" width="300" height="340"></canvas>
-                    <div style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 3px;">
+                    <canvas id="flappyCanvas" width="280" height="300"></canvas>
+                    <div style="font-size: 10px; color: var(--text-secondary); text-align: center; margin-top: 2px;">
                         Tap canvas to jump. Avoid moving hand obstacles!
                     </div>
                 </div>
 
                 <div class="sub-game-container" id="subgame-cups">
-                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Find BIZ777 Ball</h3>
-                        <div style="width: 50px;"></div>
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 4px;">
+                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 3px 8px; font-size: 10px;">⬅️ Menu</button>
+                        <h3 style="font-size: 12px; color: var(--accent);">🕹️ Find BIZ777 Ball</h3>
+                        <div style="width: 40px;"></div>
                     </div>
 
                     <div class="cup-game-wrapper">
@@ -921,13 +925,13 @@
                             <button class="level-btn" id="lvlBtn5" onclick="setCupLevel(5)">Lvl 5</button>
                         </div>
 
-                        <div id="cupGameInfo" style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
+                        <div id="cupGameInfo" style="font-size: 10px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
                             Cost: 500 BIZ777 | Win: 1,000 Coins + 200 Energy
                         </div>
 
                         <div class="cups-board-2d">
                             <div class="cups-scene">
-                                <div class="cup-slot-2d" id="slot0" onclick="chooseCup(0)" style="transform: translateX(-100px);">
+                                <div class="cup-slot-2d" id="slot0" onclick="chooseCup(0)" style="transform: translateX(-85px);">
                                     <div class="coin-item-2d" id="coin0">BIZ777</div>
                                     <div class="cup-2d" id="cup0"></div>
                                 </div>
@@ -935,7 +939,7 @@
                                     <div class="coin-item-2d" id="coin1">BIZ777</div>
                                     <div class="cup-2d" id="cup1"></div>
                                 </div>
-                                <div class="cup-slot-2d" id="slot2" onclick="chooseCup(2)" style="transform: translateX(100px);">
+                                <div class="cup-slot-2d" id="slot2" onclick="chooseCup(2)" style="transform: translateX(85px);">
                                     <div class="coin-item-2d" id="coin2">BIZ777</div>
                                     <div class="cup-2d" id="cup2"></div>
                                 </div>
@@ -943,19 +947,19 @@
                         </div>
 
                         <button class="btn" id="startCupGameBtn" onclick="startCupRound()" style="width: 100%;">Start Round 🎮</button>
-                        <div id="cupCooldownText" style="font-size: 11px; color: var(--text-secondary); text-align: center;"></div>
+                        <div id="cupCooldownText" style="font-size: 10px; color: var(--text-secondary); text-align: center;"></div>
                     </div>
                 </div>
 
                 <div class="sub-game-container" id="subgame-slot">
-                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Slot Machine Spin</h3>
-                        <div style="width: 50px;"></div>
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 4px;">
+                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 3px 8px; font-size: 10px;">⬅️ Menu</button>
+                        <h3 style="font-size: 12px; color: var(--accent);">🕹️ Slot Machine Spin</h3>
+                        <div style="width: 40px;"></div>
                     </div>
 
                     <div class="slot-machine-wrapper">
-                        <div style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
+                        <div style="font-size: 10px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
                             Cost: 500 Coins | 3x BIZ777 = 5,000,000 Jackpot!
                         </div>
 
@@ -967,78 +971,65 @@
                             </div>
                         </div>
 
-                        <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
+                        <div style="width: 100%; display: flex; flex-direction: column; gap: 6px;">
                             <button class="btn" id="spinSlotBtn" onclick="spinSlotMachine()" style="width: 100%;">SPIN SLOT (500 🪙) 🎰</button>
-                            <div id="slotResultText" style="font-size: 11px; color: var(--text-secondary); text-align: center; height: 16px;"></div>
+                            <div id="slotResultText" style="font-size: 10px; color: var(--text-secondary); text-align: center; height: 14px;"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="sub-game-container" id="subgame-paperwrapsrock">
-                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 10px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">✌️ Paper Wraps Rock</h3>
-                        <div style="width: 50px;"></div>
+                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 4px;">
+                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 3px 8px; font-size: 10px;">⬅️ Menu</button>
+                        <h3 style="font-size: 12px; color: var(--accent);">✌️ Paper Wraps Rock</h3>
+                        <div style="width: 40px;"></div>
                     </div>
 
                     <div class="paperwrapsrock-wrapper">
-                        <div style="display: flex; justify-content: space-between; width: 100%; padding: 0 10px; font-weight: bold; font-size: 13px; color: var(--warning);">
+                        <div style="display: flex; justify-content: space-between; width: 100%; padding: 0 8px; font-weight: bold; font-size: 11px; color: var(--warning);">
                             <span id="pwrTimer">⏱️ 45 sec</span>
                             <span id="pwrScore">Score: 0</span>
                         </div>
 
-                        <div style="position: relative; width: 100%; height: 160px; background: #0d0918; border: 2px solid var(--accent); border-radius: 14px; display: flex; align-items: center; justify-content: space-between; padding: 0 25px; overflow: hidden;">
+                        <div style="position: relative; width: 100%; height: 140px; background: #0d0918; border: 2px solid var(--accent); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; overflow: hidden;">
                             <div style="text-align: center;">
-                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold; margin-bottom: 5px;">YOU</div>
-                                <div id="pwrLeftHand" style="font-size: 44px;">✊</div>
+                                <div style="font-size: 9px; color: var(--text-secondary); font-weight: bold; margin-bottom: 4px;">YOU</div>
+                                <div id="pwrLeftHand" style="font-size: 38px;">✊</div>
                             </div>
 
                             <div style="text-align: center;">
-                                <div id="pwrActionText" style="font-size: 14px; font-weight: bold; color: #facc15;">BATTLE READY</div>
+                                <div id="pwrActionText" style="font-size: 12px; font-weight: bold; color: #facc15;">BATTLE READY</div>
                             </div>
 
                             <div style="text-align: center;">
-                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold; margin-bottom: 5px;">BOT</div>
-                                <div id="pwrRightHand" style="font-size: 44px;">✊</div>
+                                <div style="font-size: 9px; color: var(--text-secondary); font-weight: bold; margin-bottom: 4px;">BOT</div>
+                                <div id="pwrRightHand" style="font-size: 38px;">✊</div>
                             </div>
                         </div>
 
-                        <div style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
-                            <div style="font-size: 11px; color: var(--text-secondary); text-align: center; font-weight: bold;">Choose your sign:</div>
-                            <div style="display: flex; gap: 8px; justify-content: center;">
-                                <button class="btn" onclick="playPwrChoice('scissors')" style="flex: 1; font-size: 12px;">✌️ Scissors</button>
-                                <button class="btn" onclick="playPwrChoice('paper')" style="flex: 1; font-size: 12px;">✋ Paper</button>
-                                <button class="btn" onclick="playPwrChoice('rock')" style="flex: 1; font-size: 12px;">✊ Rock</button>
+                        <div style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 8px; display: flex; flex-direction: column; gap: 6px;">
+                            <div style="font-size: 10px; color: var(--text-secondary); text-align: center; font-weight: bold;">Choose your sign:</div>
+                            <div style="display: flex; gap: 6px; justify-content: center;">
+                                <button class="btn" onclick="playPwrChoice('scissors')" style="flex: 1; font-size: 11px;">✌️ Scissors</button>
+                                <button class="btn" onclick="playPwrChoice('paper')" style="flex: 1; font-size: 11px;">✋ Paper</button>
+                                <button class="btn" onclick="playPwrChoice('rock')" style="flex: 1; font-size: 11px;">✊ Rock</button>
                             </div>
                         </div>
 
                         <button class="btn" id="startPwrBtn" onclick="startPwrGame()" style="width: 100%; background: #22c55e; color: #000;">Start Battle 🚀 (Cost: 200 🪙)</button>
-                        <div id="pwrResultMsg" style="font-size: 11px; color: var(--text-secondary); text-align: center; height: 16px;"></div>
+                        <div id="pwrResultMsg" style="font-size: 10px; color: var(--text-secondary); text-align: center; height: 14px;"></div>
                     </div>
                 </div>
 
             </div>
 
             <div class="tab-pane" id="tab-friends">
-                <h3 id="friendsTitleText" style="margin-bottom: 12px; align-self: flex-start;">👥 Invite Friends</h3>
+                <h3 id="friendsTitleText" style="margin-bottom: 10px; align-self: flex-start; font-size: 14px;">👥 Invite Friends</h3>
                 <div class="friends-list">
-                    <div class="friend-card" style="align-items: stretch; gap: 8px;">
-                        <h4 id="friendsSubTitleText" style="font-size: 14px;">Invite 3 Friends to get Free Tap Power 20!</h4>
-                        <p style="font-size: 11px; color: var(--text-secondary);"><span id="friendsInvitedText">Invited friends:</span> <span id="friendCountDisplay" style="color: var(--accent); font-weight: bold;">0</span> / 3</p>
+                    <div class="friend-card" style="align-items: stretch; gap: 6px;">
+                        <h4 id="friendsSubTitleText" style="font-size: 12px;">Invite 3 Friends to get Free Tap Power 20!</h4>
+                        <p style="font-size: 10px; color: var(--text-secondary);"><span id="friendsInvitedText">Invited friends:</span> <span id="friendCountDisplay" style="color: var(--accent); font-weight: bold;">0</span> / 3</p>
                         <button class="btn" id="shareRefBtnText" onclick="inviteFriendLink()">Share Referral Link 🔗</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-pane" id="tab-ads">
-                <h3 id="boostEnergyTitleText" style="margin-bottom: 12px; align-self: flex-start;">⚡ Boost Energy</h3>
-                <div class="ads-list">
-                    <div class="ad-card" style="flex-direction: row;">
-                        <div class="ad-info">
-                            <h4 id="refillAdTitleText">Refill Energy Ad</h4>
-                            <p id="refillAdDescText" style="font-size: 11px; color: var(--text-secondary);">Watch AdsGram ad to instantly refill energy to max</p>
-                        </div>
-                        <button class="btn" id="watchAdBtnText" onclick="watchAdsGramAd()">Watch 📺</button>
                     </div>
                 </div>
             </div>
@@ -1050,7 +1041,6 @@
             <button class="nav-item" onclick="switchTab('leaderboard', this)"><span>🏆</span> <span id="navRankText">Rank</span></button>
             <button class="nav-item" onclick="switchTab('minigame', this)"><span>🎮</span> <span id="navGameText">Game</span></button>
             <button class="nav-item" onclick="switchTab('friends', this)"><span>👥</span> <span id="navFriendsText">Friends</span></button>
-            <button class="nav-item" onclick="switchTab('ads', this)"><span>📺</span> <span id="navBoostText">Boost</span></button>
         </nav>
     </div>
 
@@ -1072,16 +1062,11 @@
                 friendsSubTitle: "Invite 3 Friends to get Free Tap Power 20!",
                 friendsInvited: "Invited friends:",
                 shareRefBtn: "Share Referral Link 🔗",
-                boostEnergyTitle: "⚡ Boost Energy",
-                refillAdTitle: "Refill Energy Ad",
-                refillAdDesc: "Watch AdsGram ad to instantly refill energy to max",
-                watchAdBtn: "Watch 📺",
                 navTap: "Tap",
                 navShop: "Shop",
                 navRank: "Rank",
                 navGame: "Game",
                 navFriends: "Friends",
-                navBoost: "Boost",
                 menuBack: "⬅️ Menu",
                 maxLevel: "Max Level Reached!",
                 nextTarget: "Next Target:"
@@ -1099,16 +1084,11 @@
                 friendsSubTitle: "Пригласите 3 друзей для бесплатной силы клика 20!",
                 friendsInvited: "Приглашенные друзья:",
                 shareRefBtn: "Поделиться реферальной ссылкой 🔗",
-                boostEnergyTitle: "⚡ Увеличение энергии",
-                refillAdTitle: "Реклама для пополнения энергии",
-                refillAdDesc: "Посмотрите рекламу AdsGram, чтобы мгновенно восстановить энергию",
-                watchAdBtn: "Смотреть 📺",
                 navTap: "Клик",
                 navShop: "Магазин",
                 navRank: "Рейтинг",
                 navGame: "Игры",
                 navFriends: "Друзья",
-                navBoost: "Буст",
                 menuBack: "⬅️ Меню",
                 maxLevel: "Достигнут максимальный уровень!",
                 nextTarget: "Следующая цель:"
@@ -1126,16 +1106,11 @@
                 friendsSubTitle: "邀请3位好友即可获得免费的20级点击威力！",
                 friendsInvited: "已邀请好友：",
                 shareRefBtn: "分享推荐链接 🔗",
-                boostEnergyTitle: "⚡ 能量补充",
-                refillAdTitle: "补充能量广告",
-                refillAdDesc: "观看广告以立即恢复满能量",
-                watchAdBtn: "观看 📺",
                 navTap: "点击",
                 navShop: "商店",
                 navRank: "排行",
                 navGame: "游戏",
                 navFriends: "好友",
-                navBoost: "助力",
                 menuBack: "⬅️ 菜单",
                 maxLevel: "已达到最高等级！",
                 nextTarget: "下一个目标："
@@ -1153,16 +1128,11 @@
                 friendsSubTitle: "मुफ्त टैप पावर 20 पाने के लिए 3 दोस्तों को आमंत्रित करें!",
                 friendsInvited: "आमंत्रित मित्र:",
                 shareRefBtn: "रेफरल लिंक शेयर करें 🔗",
-                boostEnergyTitle: "⚡ ऊर्जा बढ़ाएं",
-                refillAdTitle: "ऊर्जा रिफिल विज्ञापन",
-                refillAdDesc: "ऊर्जा को तुरंत अधिकतम करने के लिए विज्ञापन देखें",
-                watchAdBtn: "देखें 📺",
                 navTap: "टैप",
                 navShop: "शॉप",
                 navRank: "रैंक",
                 navGame: "गेम",
                 navFriends: "मित्र",
-                navBoost: "बूस्ट",
                 menuBack: "⬅️ मेनू",
                 maxLevel: "अधिकतम स्तर पहुंच गया!",
                 nextTarget: "अगला लक्ष्य:"
@@ -1180,16 +1150,11 @@
                 friendsSubTitle: "ادعُ 3 أصدقاء للحصول على قوة نقر مجانية 20!",
                 friendsInvited: "الأصدقاء المدعوون:",
                 shareRefBtn: "مشاركة رابط الإحالة 🔗",
-                boostEnergyTitle: "⚡ تعزيز الطاقة",
-                refillAdTitle: "إعلان تعبئة الطاقة",
-                refillAdDesc: "شاهد الإعلان لاستعادة الطاقة بالكامل فوراً",
-                watchAdBtn: "مشاهدة 📺",
                 navTap: "نقر",
                 navShop: "متجر",
                 navRank: "ترتيب",
                 navGame: "لعبة",
                 navFriends: "أصدقاء",
-                navBoost: "تعزيز",
                 menuBack: "⬅️ القائمة",
                 maxLevel: "تم الوصول إلى المستوى الأقصى!",
                 nextTarget: "الهدف التالي:"
@@ -1207,16 +1172,11 @@
                 friendsSubTitle: "Invitez 3 amis pour obtenir la puissance de clic 20 gratuite !",
                 friendsInvited: "Amis invités :",
                 shareRefBtn: "Partager le lien de parrainage 🔗",
-                boostEnergyTitle: "⚡ Booster l'énergie",
-                refillAdTitle: "Publicité de recharge d'énergie",
-                refillAdDesc: "Regardez la publicité pour recharger instantanément l'énergie au maximum",
-                watchAdBtn: "Regarder 📺",
                 navTap: "Clic",
                 navShop: "Boutique",
                 navRank: "Rang",
                 navGame: "Jeu",
                 navFriends: "Amis",
-                navBoost: "Boost",
                 menuBack: "⬅️ Menu",
                 maxLevel: "Niveau maximum atteint !",
                 nextTarget: "Prochaine cible :"
@@ -1234,19 +1194,36 @@
                 friendsSubTitle: "¡Invita a 3 amigos para obtener el Poder de Toque 20 gratis!",
                 friendsInvited: "Amigos invitados:",
                 shareRefBtn: "Compartir enlace de referencia 🔗",
-                boostEnergyTitle: "⚡ Aumentar energía",
-                refillAdTitle: "Anuncio de recarga de energía",
-                refillAdDesc: "Mira el anuncio para rellenar instantáneamente la energía al máximo",
-                watchAdBtn: "Ver 📺",
                 navTap: "Toque",
                 navShop: "Tienda",
                 navRank: "Rango",
                 navGame: "Juego",
                 navFriends: "Amigos",
-                navBoost: "Impulso",
                 menuBack: "⬅️ Menú",
                 maxLevel: "¡Nivel máximo alcanzado!",
                 nextTarget: "Siguiente objetivo:"
+            },
+            de: {
+                coinsLabel: "BIZ777 Münzen",
+                energyLabel: "⚡ Energie",
+                shopTitle: "🛒 Upgrade-Shop",
+                tapPowerTitle: "Tipp-Power Upgrades",
+                energyUpgradesTitle: "Energie Upgrades",
+                leaderboardTitle: "🏆 Bestenliste",
+                gamesHubTitle: "🎮 Klassisches Arcade-Spiele-Hub",
+                gamesHubDesc: "Wähle unten ein Spiel aus, um zu spielen und deine Einnahmen zu steigern!",
+                friendsTitle: "👥 Freunde einladen",
+                friendsSubTitle: "Lade 3 Freunde ein, um kostenlose Tipp-Power 20 zu erhalten!",
+                friendsInvited: "Eingeladene Freunde:",
+                shareRefBtn: "Empfehlungslink teilen 🔗",
+                navTap: "Tippen",
+                navShop: "Shop",
+                navRank: "Rang",
+                navGame: "Spiel",
+                navFriends: "Freunde",
+                menuBack: "⬅️ Menü",
+                maxLevel: "Maximales Level erreicht!",
+                nextTarget: "Nächstes Ziel:"
             }
         };
 
@@ -1267,17 +1244,12 @@
             document.getElementById('friendsSubTitleText').innerText = t.friendsSubTitle;
             document.getElementById('friendsInvitedText').innerText = t.friendsInvited;
             document.getElementById('shareRefBtnText').innerText = t.shareRefBtn;
-            document.getElementById('boostEnergyTitleText').innerText = t.boostEnergyTitle;
-            document.getElementById('refillAdTitleText').innerText = t.refillAdTitle;
-            document.getElementById('refillAdDescText').innerText = t.refillAdDesc;
-            document.getElementById('watchAdBtnText').innerText = t.watchAdBtn;
 
             document.getElementById('navTapText').innerText = t.navTap;
             document.getElementById('navShopText').innerText = t.navShop;
             document.getElementById('navRankText').innerText = t.navRank;
             document.getElementById('navGameText').innerText = t.navGame;
             document.getElementById('navFriendsText').innerText = t.navFriends;
-            document.getElementById('navBoostText').innerText = t.navBoost;
 
             document.querySelectorAll('.menu-back-btn').forEach(btn => btn.innerText = t.menuBack);
             
@@ -1292,61 +1264,15 @@
             }
             changeGameLanguage(savedLang);
         });
-
-        const AdsgramController = window.Adsgram ? window.Adsgram.init({ blockId: "48395" }) : null;
-        let isAdPlaying = false;
-
-        window.watchAdsGramAd = async function() {
-            if (isAdPlaying) return;
-            isAdPlaying = true;
-
-            if (AdsgramController) {
-                try {
-                    await AdsgramController.show();
-                    isAdPlaying = false;
-                    energy = maxEnergy;
-                    updateUI();
-                    saveState();
-                } catch (e) {
-                    isAdPlaying = false;
-                    console.error("Adsgram error:", e);
-                    fallbackSimulatedAd();
-                }
-            } else {
-                fallbackSimulatedAd();
-            }
-        };
-
-        function fallbackSimulatedAd() {
-            const modal = document.getElementById('adModal');
-            const timerEl = document.getElementById('adTimer');
-            modal.style.display = 'flex';
-            let timeLeft = 3;
-            timerEl.innerText = `${timeLeft}s`;
-
-            let countdown = setInterval(() => {
-                timeLeft--;
-                if (timeLeft > 0) { 
-                    timerEl.innerText = `${timeLeft}s`; 
-                } else {
-                    clearInterval(countdown);
-                    modal.style.display = 'none';
-                    isAdPlaying = false;
-                    energy = maxEnergy;
-                    updateUI();
-                    saveState();
-                }
-            }, 1000);
-        }
     </script>
 
     <div id="adModal">
         <div class="ad-video-box">
-            <h3 style="margin-bottom: 10px; font-size: 15px; color: var(--accent);">📺 Refilling Energy...</h3>
+            <h3 style="margin-bottom: 8px; font-size: 13px; color: var(--accent);">📺 Refilling Energy...</h3>
             <div class="ad-screen">
-                <div style="font-size: 36px; margin-bottom: 5px;">⚡</div>
-                <div style="font-size: 13px; color: var(--text-secondary);">BIZ777 Energy Boost</div>
-                <div id="adTimer" style="font-size: 18px; font-weight: bold; color: var(--warning); margin-top: 8px;">3s</div>
+                <div style="font-size: 32px; margin-bottom: 4px;">⚡</div>
+                <div style="font-size: 11px; color: var(--text-secondary);">BIZ777 Energy Boost</div>
+                <div id="adTimer" style="font-size: 16px; font-weight: bold; color: var(--warning); margin-top: 6px;">3s</div>
             </div>
         </div>
     </div>
@@ -1418,7 +1344,7 @@
 
         window.renderLeaderboard = async function() {
             const container = document.getElementById('leaderboardContainer');
-            container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Loading leaderboard...</div>`;
+            container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 16px;">Loading leaderboard...</div>`;
 
             try {
                 const q = query(collection(db, "leaderboard"), orderBy("score", "desc"), limit(20));
@@ -1439,7 +1365,7 @@
 
                     let itemHTML = `
                         <div class="${profileClass}">
-                            <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
                                 <span class="rank-number">${rankDisplay}</span>
                                 <span style="font-weight: 600;">👑 ${displayName}</span>
                             </div>
@@ -1453,7 +1379,7 @@
                 if (!foundUserInList) {
                     let itemHTML = `
                         <div class="leaderboard-item my-profile">
-                            <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
                                 <span class="rank-number">#...</span>
                                 <span style="font-weight: 600;">👑 ${currentUserName} (You)</span>
                             </div>
@@ -1464,7 +1390,7 @@
                 }
             } catch (e) {
                 console.error("Error loading leaderboard: ", e);
-                container.innerHTML = `<div style="text-align: center; color: var(--danger); padding: 20px;">Failed to load leaderboard.</div>`;
+                container.innerHTML = `<div style="text-align: center; color: var(--danger); padding: 16px;">Failed to load leaderboard.</div>`;
             }
         };
 
@@ -1599,28 +1525,28 @@
                 let nextPower = tapPower + 1;
                 let price = tapPrices[nextPower];
                 tapContainer.innerHTML = `
-                    <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <div style="font-weight: bold; font-size: 12px;">👆 Upgrade Tap Power (${tapPower} ➔ ${nextPower})</div>
-                            <div style="font-size: 10px; color: #ffd700;">Price: ${price.toLocaleString()} BIZ777</div>
+                            <div style="font-weight: bold; font-size: 11px;">👆 Upgrade Tap Power (${tapPower} ➔ ${nextPower})</div>
+                            <div style="font-size: 9px; color: #ffd700;">Price: ${price.toLocaleString()} BIZ777</div>
                         </div>
-                        <button onclick="buyTapUpgrade(${nextPower}, ${price})" class="btn" style="padding: 6px 12px; font-size: 11px;">Buy</button>
+                        <button onclick="buyTapUpgrade(${nextPower}, ${price})" class="btn" style="padding: 5px 10px; font-size: 10px;">Buy</button>
                     </div>`;
             } else if (tapPower === 10 && !freeTap20Claimed) {
                 if (invitedFriendsCount < 3) {
-                    tapContainer.innerHTML = `<div style="font-size: 11px; color: var(--warning); text-align: center; padding: 6px; font-weight: bold;">🔒 Invite ${3 - invitedFriendsCount} more friends for FREE Tap Power 20!</div>`;
+                    tapContainer.innerHTML = `<div style="font-size: 10px; color: var(--warning); text-align: center; padding: 4px; font-weight: bold;">🔒 Invite ${3 - invitedFriendsCount} more friends for FREE Tap Power 20!</div>`;
                 } else {
                     tapContainer.innerHTML = `
-                        <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                             <div>
-                                <div style="font-weight: bold; font-size: 12px;">🎁 Get FREE Tap Power 20!</div>
-                                <div style="font-size: 10px; color: #22c55e;">3/3 Friends Invited</div>
+                                <div style="font-weight: bold; font-size: 11px;">🎁 Get FREE Tap Power 20!</div>
+                                <div style="font-size: 9px; color: #22c55e;">3/3 Friends Invited</div>
                             </div>
-                            <button onclick="claimFreeTap20()" class="btn" style="padding: 6px 12px; font-size: 11px; background: #22c55e;">Claim 🚀</button>
+                            <button onclick="claimFreeTap20()" class="btn" style="padding: 5px 10px; font-size: 10px; background: #22c55e;">Claim 🚀</button>
                         </div>`;
                 }
             } else {
-                tapContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Tap Power (20) Unlocked!</div>`;
+                tapContainer.innerHTML = `<div style="font-size: 10px; color: #22c55e; text-align: center; padding: 3px; font-weight: bold;">✅ Max Tap Power (20) Unlocked!</div>`;
             }
 
             const energyTiers = [
@@ -1633,15 +1559,15 @@
             let nextTier = energyTiers.find(t => t.target > maxEnergy);
             if (nextTier) {
                 energyContainer.innerHTML = `
-                    <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <div style="font-weight: bold; font-size: 12px;">⚡ Max Energy (${maxEnergy} ➔ ${nextTier.target})</div>
-                            <div style="font-size: 10px; color: #ffd700;">Price: ${nextTier.price.toLocaleString()} BIZ777</div>
+                            <div style="font-weight: bold; font-size: 11px;">⚡ Max Energy (${maxEnergy} ➔ ${nextTier.target})</div>
+                            <div style="font-size: 9px; color: #ffd700;">Price: ${nextTier.price.toLocaleString()} BIZ777</div>
                         </div>
-                        <button onclick="buyEnergyUpgrade(${nextTier.target}, ${nextTier.price})" class="btn" style="padding: 6px 12px; font-size: 11px;">Buy</button>
+                        <button onclick="buyEnergyUpgrade(${nextTier.target}, ${nextTier.price})" class="btn" style="padding: 5px 10px; font-size: 10px;">Buy</button>
                     </div>`;
             } else {
-                energyContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Energy (5,000) Purchased!</div>`;
+                energyContainer.innerHTML = `<div style="font-size: 10px; color: #22c55e; text-align: center; padding: 3px; font-weight: bold;">✅ Max Energy (5,000) Purchased!</div>`;
             }
         }
 
@@ -1749,7 +1675,7 @@
                 item.innerText = 'B777';
             }
 
-            const randomX = Math.random() * (container.clientWidth - 45);
+            const randomX = Math.random() * (container.clientWidth - 40);
             item.style.left = randomX + 'px';
 
             const fallDuration = Math.random() * 1.2 + 1.8;
@@ -1799,7 +1725,7 @@
         const canvas = document.getElementById('flappyCanvas');
         const ctx = canvas.getContext('2d');
         let flappyRunning = false;
-        let bird = { x: 50, y: 150, radius: 14, gravity: 0.4, lift: -6, velocity: 0 };
+        let bird = { x: 50, y: 140, radius: 12, gravity: 0.4, lift: -5.5, velocity: 0 };
         let pipes = [];
         let frameCount = 0;
         let flappyScore = 0;
@@ -1812,7 +1738,7 @@
         });
 
         function startFlappyGame() {
-            bird.y = 150;
+            bird.y = 140;
             bird.velocity = 0;
             pipes = [];
             flappyScore = 0;
@@ -1826,28 +1752,28 @@
             const cuffColor = "#e6d7c3"; 
 
             ctx.fillStyle = cuffColor;
-            ctx.fillRect(x, 0, pipeWidth, topHeight - 40);
+            ctx.fillRect(x, 0, pipeWidth, topHeight - 35);
             
             ctx.fillStyle = handSkin;
-            ctx.fillRect(x - 5, topHeight - 40, pipeWidth + 10, 40);
+            ctx.fillRect(x - 4, topHeight - 35, pipeWidth + 8, 35);
 
             ctx.fillStyle = handSkin;
-            let fingerWidth = (pipeWidth + 10) / 4;
+            let fingerWidth = (pipeWidth + 8) / 4;
             for (let i = 0; i < 4; i++) {
-                ctx.fillRect(x - 5 + (i * fingerWidth), topHeight, fingerWidth - 3, 15);
+                ctx.fillRect(x - 4 + (i * fingerWidth), topHeight, fingerWidth - 2, 12);
             }
-            ctx.fillRect(x - 12, topHeight - 25, 10, 20);
+            ctx.fillRect(x - 10, topHeight - 20, 8, 16);
 
             ctx.fillStyle = handSkin;
-            ctx.fillRect(x - 5, bottomY, pipeWidth + 10, 40);
+            ctx.fillRect(x - 4, bottomY, pipeWidth + 8, 35);
 
             for (let i = 0; i < 4; i++) {
-                ctx.fillRect(x - 5 + (i * fingerWidth), bottomY - 15, fingerWidth - 3, 15);
+                ctx.fillRect(x - 4 + (i * fingerWidth), bottomY - 12, fingerWidth - 2, 12);
             }
-            ctx.fillRect(x - 12, bottomY + 10, 10, 20);
+            ctx.fillRect(x - 10, bottomY + 8, 8, 16);
 
             ctx.fillStyle = cuffColor;
-            ctx.fillRect(x, bottomY + 40, pipeWidth, canvas.height - (bottomY + 40));
+            ctx.fillRect(x, bottomY + 35, pipeWidth, canvas.height - (bottomY + 35));
         }
 
         function loopFlappy() {
@@ -1871,38 +1797,38 @@
             ctx.strokeStyle = '#fef08a';
             ctx.stroke();
             ctx.fillStyle = '#000';
-            ctx.font = 'bold 8px sans-serif';
+            ctx.font = 'bold 7px sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText('BIZ777', bird.x, bird.y);
 
             if (frameCount % 100 === 0) {
-                let pipeWidth = 50;
-                let gapHeight = 130;
-                let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 60)) + 30;
+                let pipeWidth = 45;
+                let gapHeight = 120;
+                let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 50)) + 25;
                 pipes.push({ 
                     x: canvas.width, 
                     top: topHeight, 
                     bottom: canvas.height - topHeight, 
                     width: pipeWidth, 
                     passed: false,
-                    speedY: (Math.random() > 0.5 ? 1 : -1) * 0.8,
+                    speedY: (Math.random() > 0.5 ? 1 : -1) * 0.7,
                     dirTimer: 0
                 });
             }
 
             for (let i = pipes.length - 1; i >= 0; i--) {
-                pipes[i].x -= 2.5;
+                pipes[i].x -= 2.2;
 
                 pipes[i].dirTimer++;
                 pipes[i].top += pipes[i].speedY;
                 
-                if (pipes[i].top < 20 || pipes[i].top > canvas.height - 180) {
+                if (pipes[i].top < 15 || pipes[i].top > canvas.height - 150) {
                     pipes[i].speedY *= -1;
                 }
 
                 let currentTopHeight = pipes[i].top;
-                let bottomYCoord = currentTopHeight + 130;
+                let bottomYCoord = currentTopHeight + 120;
 
                 drawHandObstacle(pipes[i].x, currentTopHeight, bottomYCoord, pipes[i].width);
 
@@ -1929,9 +1855,9 @@
             }
 
             ctx.fillStyle = '#fff';
-            ctx.font = 'bold 14px sans-serif';
+            ctx.font = 'bold 12px sans-serif';
             ctx.textAlign = 'left';
-            ctx.fillText(`Score: ${flappyScore} / 10`, 15, 25);
+            ctx.fillText(`Score: ${flappyScore} / 10`, 12, 20);
 
             frameCount++;
             requestAnimationFrame(loopFlappy);
@@ -1954,12 +1880,12 @@
             ctx.fillStyle = 'rgba(0,0,0,0.75)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#ef4444';
-            ctx.font = 'bold 20px sans-serif';
+            ctx.font = 'bold 18px sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 15);
+            ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 12);
             ctx.fillStyle = '#fff';
-            ctx.font = '13px sans-serif';
-            ctx.fillText('Tap to Try Again', canvas.width / 2, canvas.height / 2 + 15);
+            ctx.font = '11px sans-serif';
+            ctx.fillText('Tap to Try Again', canvas.width / 2, canvas.height / 2 + 12);
             
             canvas.onclick = () => {
                 canvas.onclick = null;
@@ -2069,7 +1995,7 @@
             5: { cost: 200000, win: 800000, energyReward: 30000, shuffles: 22, speed: 80 }
         };
 
-        const SLOT_DISTANCE = 100;
+        const SLOT_DISTANCE = 85;
 
         function checkGlobalCooldown() {
             let now = new Date().getTime();
