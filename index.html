@@ -326,7 +326,7 @@
             background: none;
             border: none;
             color: var(--text-secondary);
-            font-size: 12px;
+            font-size: 11px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -341,7 +341,7 @@
         }
 
         .nav-item span:first-child {
-            font-size: 20px;
+            font-size: 18px;
         }
 
         .tab-pane {
@@ -689,46 +689,6 @@
         .cup-2d.lifted {
             transform: translateY(-45px);
         }
-
-        #adModal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            padding: 18px;
-            backdrop-filter: blur(5px);
-        }
-
-        .ad-video-box {
-            width: 100%;
-            max-width: 340px;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 2px solid var(--accent);
-            border-radius: 15px;
-            padding: 18px;
-            text-align: center;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.8);
-        }
-
-        .ad-screen {
-            width: 100%;
-            height: 150px;
-            background: #090d16;
-            border-radius: 9px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 14px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
     </style>
 </head>
 <body>
@@ -817,6 +777,23 @@
                     <div class="shop-card">
                         <div class="shop-info"><h4 id="energyUpgradesTitleText" style="font-size: 13px;">Energy Upgrades</h4></div>
                         <div id="energyShopContainer" style="margin-top: 8px; width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Ads Boost & Energy Refill Menu Tab -->
+            <div class="tab-pane" id="tab-ads">
+                <h3 id="adsTitleText" style="margin-bottom: 10px; align-self: flex-start; font-size: 15px;">📺 Ads & Energy Boost</h3>
+                <div class="ads-list">
+                    <div class="shop-card" style="align-items: stretch; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 32px;">⚡</span>
+                            <div>
+                                <h4 id="adsCardTitle" style="font-size: 13px; color: var(--accent);">Refill Energy Boost</h4>
+                                <p id="adsCardDesc" style="font-size: 11px; color: var(--text-secondary);">Watch a rewarded video ad to refill your energy completely back to max!</p>
+                            </div>
+                        </div>
+                        <button class="btn" id="watchAdBtn" onclick="showRewardedAd()" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff;">Watch Ad & Refill Energy 🚀</button>
                     </div>
                 </div>
             </div>
@@ -1038,6 +1015,7 @@
         <nav>
             <button class="nav-item active" onclick="switchTab('clicker', this)"><span>⚡</span> <span id="navTapText">Tap</span></button>
             <button class="nav-item" onclick="switchTab('shop', this)"><span>🛒</span> <span id="navShopText">Shop</span></button>
+            <button class="nav-item" onclick="switchTab('ads', this)"><span>📺</span> <span id="navAdsText">Boost</span></button>
             <button class="nav-item" onclick="switchTab('leaderboard', this)"><span>🏆</span> <span id="navRankText">Rank</span></button>
             <button class="nav-item" onclick="switchTab('minigame', this)"><span>🎮</span> <span id="navGameText">Game</span></button>
             <button class="nav-item" onclick="switchTab('friends', this)"><span>👥</span> <span id="navFriendsText">Friends</span></button>
@@ -1055,6 +1033,10 @@
                 shopTitle: "🛒 Upgrades Shop",
                 tapPowerTitle: "Tap Power Upgrades",
                 energyUpgradesTitle: "Energy Upgrades",
+                adsTitle: "📺 Ads & Energy Boost",
+                adsCardTitle: "Refill Energy Boost",
+                adsCardDesc: "Watch a rewarded video ad to refill your energy completely back to max!",
+                watchAdBtnText: "Watch Ad & Refill Energy 🚀",
                 leaderboardTitle: "🏆 Leaderboard",
                 gamesHubTitle: "🎮 Classic Arcade Games Hub",
                 gamesHubDesc: "Select a game below to play and boost your earnings!",
@@ -1064,6 +1046,7 @@
                 shareRefBtn: "Share Referral Link 🔗",
                 navTap: "Tap",
                 navShop: "Shop",
+                navAds: "Boost",
                 navRank: "Rank",
                 navGame: "Game",
                 navFriends: "Friends",
@@ -1077,6 +1060,10 @@
                 shopTitle: "🛒 Магазин улучшений",
                 tapPowerTitle: "Улучшение силы клика",
                 energyUpgradesTitle: "Улучшение энергии",
+                adsTitle: "📺 Реклама и буст энергии",
+                adsCardTitle: "Восстановление энергии",
+                adsCardDesc: "Посмотрите видеорекламу с вознаграждением, чтобы полностью восстановить энергию!",
+                watchAdBtnText: "Смотреть рекламу и пополнить 🚀",
                 leaderboardTitle: "🏆 Таблица лидеров",
                 gamesHubTitle: "🎮 Центр классических игр",
                 gamesHubDesc: "Выберите игру ниже, чтобы играть и увеличить заработок!",
@@ -1086,6 +1073,7 @@
                 shareRefBtn: "Поделиться реферальной ссылкой 🔗",
                 navTap: "Клик",
                 navShop: "Магазин",
+                navAds: "Буст",
                 navRank: "Рейтинг",
                 navGame: "Игры",
                 navFriends: "Друзья",
@@ -1099,6 +1087,10 @@
                 shopTitle: "🛒 升级商店",
                 tapPowerTitle: "点击威力升级",
                 energyUpgradesTitle: "能量升级",
+                adsTitle: "📺 广告与能量加速",
+                adsCardTitle: "充满能量加速",
+                adsCardDesc: "观看激励视频广告以将您的能量完全恢复到最大！",
+                watchAdBtnText: "观看广告并补充能量 🚀",
                 leaderboardTitle: "🏆 排行榜",
                 gamesHubTitle: "🎮 经典街机游戏中心",
                 gamesHubDesc: "在下方选择一款游戏并提升收益！",
@@ -1108,6 +1100,7 @@
                 shareRefBtn: "分享推荐链接 🔗",
                 navTap: "点击",
                 navShop: "商店",
+                navAds: "加速",
                 navRank: "排行",
                 navGame: "游戏",
                 navFriends: "好友",
@@ -1121,6 +1114,10 @@
                 shopTitle: "🛒 अपग्रेड शॉप",
                 tapPowerTitle: "टैप पावर अपग्रेड",
                 energyUpgradesTitle: "ऊर्जा अपग्रेड",
+                adsTitle: "📺 विज्ञापन और ऊर्जा बूस्ट",
+                adsCardTitle: "ऊर्जा पुनःपूर्ति बूस्ट",
+                adsCardDesc: "अपनी ऊर्जा को पूरी तरह से अधिकतम तक रिफिल करने के लिए एक rewarded वीडियो विज्ञापन देखें!",
+                watchAdBtnText: "विज्ञापन देखें और ऊर्जा भरें 🚀",
                 leaderboardTitle: "🏆 लीडरबोर्ड",
                 gamesHubTitle: "🎮 क्लासिक आर्केड गेम्स हब",
                 gamesHubDesc: "खेलने और अपनी कमाई बढ़ाने के लिए नीचे एक गेम चुनें!",
@@ -1130,6 +1127,7 @@
                 shareRefBtn: "रेफरल लिंक शेयर करें 🔗",
                 navTap: "टैप",
                 navShop: "शॉप",
+                navAds: "बूस्ट",
                 navRank: "रैंक",
                 navGame: "गेम",
                 navFriends: "मित्र",
@@ -1143,6 +1141,10 @@
                 shopTitle: "🛒 متجر الترقيات",
                 tapPowerTitle: "ترقيات قوة النقر",
                 energyUpgradesTitle: "ترقيات الطاقة",
+                adsTitle: "📺 الإعلانات وتعزيز الطاقة",
+                adsCardTitle: "إعادة تعزيز الطاقة",
+                adsCardDesc: "اهدف مشاهدة إعلان فيديو مكافأة لإعادة تعزيز طاقتك بالكامل إلى الحد الأقصى!",
+                watchAdBtnText: "شاهد الإعلان واملأ الطاقة 🚀",
                 leaderboardTitle: "🏆 لوحة المتصدرين",
                 gamesHubTitle: "🎮 مركز الألعاب الكلاسيكية",
                 gamesHubDesc: "اختر لعبة أدناه للعب وزيادة أرباحك!",
@@ -1152,6 +1154,7 @@
                 shareRefBtn: "مشاركة رابط الإحالة 🔗",
                 navTap: "نقر",
                 navShop: "متجر",
+                navAds: "تعزيز",
                 navRank: "ترتيب",
                 navGame: "لعبة",
                 navFriends: "أصدقاء",
@@ -1165,6 +1168,10 @@
                 shopTitle: "🛒 Boutique d'améliorations",
                 tapPowerTitle: "Améliorations de puissance de clic",
                 energyUpgradesTitle: "Améliorations d'énergie",
+                adsTitle: "📺 Publicités & Boost d'énergie",
+                adsCardTitle: "Recharge de Boost d'énergie",
+                adsCardDesc: "Regardez une publicité vidéo récompensée pour recharger complètement votre énergie au maximum !",
+                watchAdBtnText: "Voir la pub et recharger 🚀",
                 leaderboardTitle: "🏆 Classement",
                 gamesHubTitle: "🎮 Hub de jeux d'arcade classiques",
                 gamesHubDesc: "Sélectionnez un jeu ci-dessous pour jouer et augmenter vos gains !",
@@ -1174,6 +1181,7 @@
                 shareRefBtn: "Partager le lien de parrainage 🔗",
                 navTap: "Clic",
                 navShop: "Boutique",
+                navAds: "Boost",
                 navRank: "Rang",
                 navGame: "Jeu",
                 navFriends: "Amis",
@@ -1187,6 +1195,10 @@
                 shopTitle: "🛒 Tienda de mejoras",
                 tapPowerTitle: "Mejoras de poder de toque",
                 energyUpgradesTitle: "Mejoras de energía",
+                adsTitle: "📺 Anuncios y Aumento de Energía",
+                adsCardTitle: "Recarga de Energía Boost",
+                adsCardDesc: "¡Mira un anuncio de video recompensado para rellenar tu energía por completo al máximo!",
+                watchAdBtnText: "Ver anuncio y recargar 🚀",
                 leaderboardTitle: "🏆 Tabla de clasificación",
                 gamesHubTitle: "🎮 Centro de juegos arcade clásicos",
                 gamesHubDesc: "¡Selecciona un juego a continuación para jugar y aumentar tus ganancias!",
@@ -1196,6 +1208,7 @@
                 shareRefBtn: "Compartir enlace de referencia 🔗",
                 navTap: "Toque",
                 navShop: "Tienda",
+                navAds: "Boost",
                 navRank: "Rango",
                 navGame: "Juego",
                 navFriends: "Amigos",
@@ -1209,6 +1222,10 @@
                 shopTitle: "🛒 Upgrade-Shop",
                 tapPowerTitle: "Tipp-Power Upgrades",
                 energyUpgradesTitle: "Energie Upgrades",
+                adsTitle: "📺 Werbung & Energie-Boost",
+                adsCardTitle: "Energie-Boost auffüllen",
+                adsCardDesc: "Sieh dir ein belohntes Video an, um deine Energie vollständig auf das Maximum aufzufüllen!",
+                watchAdBtnText: "Werbung ansehen & Energie füllen 🚀",
                 leaderboardTitle: "🏆 Bestenliste",
                 gamesHubTitle: "🎮 Klassisches Arcade-Spiele-Hub",
                 gamesHubDesc: "Wähle unten ein Spiel aus, um zu spielen und deine Einnahmen zu steigern!",
@@ -1218,6 +1235,7 @@
                 shareRefBtn: "Empfehlungslink teilen 🔗",
                 navTap: "Tippen",
                 navShop: "Shop",
+                navAds: "Boost",
                 navRank: "Rang",
                 navGame: "Spiel",
                 navFriends: "Freunde",
@@ -1237,6 +1255,10 @@
             document.getElementById('shopTitleText').innerText = t.shopTitle;
             document.getElementById('tapPowerTitleText').innerText = t.tapPowerTitle;
             document.getElementById('energyUpgradesTitleText').innerText = t.energyUpgradesTitle;
+            document.getElementById('adsTitleText').innerText = t.adsTitle;
+            document.getElementById('adsCardTitle').innerText = t.adsCardTitle;
+            document.getElementById('adsCardDesc').innerText = t.adsCardDesc;
+            document.getElementById('watchAdBtn').innerText = t.watchAdBtnText;
             document.getElementById('leaderboardTitleText').innerText = t.leaderboardTitle;
             document.getElementById('gamesHubTitle').innerText = t.gamesHubTitle;
             document.getElementById('gamesHubDesc').innerText = t.gamesHubDesc;
@@ -1247,6 +1269,7 @@
 
             document.getElementById('navTapText').innerText = t.navTap;
             document.getElementById('navShopText').innerText = t.navShop;
+            document.getElementById('navAdsText').innerText = t.navAds;
             document.getElementById('navRankText').innerText = t.navRank;
             document.getElementById('navGameText').innerText = t.navGame;
             document.getElementById('navFriendsText').innerText = t.navFriends;
@@ -1265,17 +1288,6 @@
             changeGameLanguage(savedLang);
         });
     </script>
-
-    <div id="adModal">
-        <div class="ad-video-box">
-            <h3 style="margin-bottom: 8px; font-size: 13px; color: var(--accent);">📺 Refilling Energy...</h3>
-            <div class="ad-screen">
-                <div style="font-size: 32px; margin-bottom: 4px;">⚡</div>
-                <div style="font-size: 11px; color: var(--text-secondary);">BIZ777 Energy Boost</div>
-                <div id="adTimer" style="font-size: 16px; font-weight: bold; color: var(--warning); margin-top: 6px;">3s</div>
-            </div>
-        </div>
-    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -1329,6 +1341,33 @@
             document.getElementById('userName').innerText = currentUserName;
             document.getElementById('userAvatar').innerText = (user.first_name || "B")[0].toUpperCase();
         }
+
+        // AdsGram Rewarded Video Integration (PlatformID: 45807)
+        let adController = null;
+        if (window.Adsgram) {
+            adController = window.Adsgram.init({ blockId: "int-45807" }); // Or platform block id
+        }
+
+        window.showRewardedAd = function() {
+            if (window.Adsgram) {
+                window.Adsgram.init({ blockId: "45807" }).show().then((result) => {
+                    // Rewarded successfully watched
+                    energy = maxEnergy;
+                    updateUI();
+                    saveState();
+                    alert("🎉 Reward received! Your energy is fully refilled back to max!");
+                }).catch((result) => {
+                    // Ad skipped or error
+                    alert("Ad was skipped or failed to load. Please try again.");
+                });
+            } else {
+                // Fallback simulation for local testing or if SDK is blocked
+                energy = maxEnergy;
+                updateUI();
+                saveState();
+                alert("🎉 Energy successfully refilled back to max (Simulation mode)!");
+            }
+        };
 
         async function syncScoreToFirebase() {
             try {
