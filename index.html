@@ -1032,15 +1032,14 @@
 
             if (AdsgramController) {
                 try {
-                    const result = await AdsgramController.show();
+                    await AdsgramController.show();
                     isAdPlaying = false;
                     energy = maxEnergy;
                     updateUI();
                     saveState();
-                    alert("Energy fully refilled via AdsGram!");
                 } catch (e) {
                     isAdPlaying = false;
-                    console.error("AdsGram error or skipped:", e);
+                    console.error("Adsgram error:", e);
                     fallbackSimulatedAd();
                 }
             } else {
