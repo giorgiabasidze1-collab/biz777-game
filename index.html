@@ -1002,7 +1002,7 @@
                     <div class="ad-card" style="flex-direction: row;">
                         <div class="ad-info">
                             <h4>Refill Energy Ad</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Watch simulated ad to instantly refill energy to max</p>
+                            <p style="font-size: 11px; color: var(--text-secondary);">Watch AdsGram ad to instantly refill energy to max</p>
                         </div>
                         <button class="btn" onclick="watchAdsGramAd()">Watch 📺</button>
                     </div>
@@ -1982,14 +1982,15 @@
                         alert(`🎉 Correct! You won ${data.win.toLocaleString()} coins AND +${data.energyReward.toLocaleString()} Energy! Level ${nextLvl} unlocked!`);
                         setCupLevel(nextLvl);
                     } else {
-                        alert(`🎉 Correct! You won ${data.win.toLocaleString()} coins AND +${data.energyReward.toLocaleString()} Energy!`);
-                        initCupStageUI();
+                        alert(`🎉 Correct! You won ${data.win.toLocaleString()} coins AND +${data.energyReward.toLocaleString()} Energy! All stages cleared!`);
+                        setCupLevel(1);
                     }
-                }, 300);
+                }, 400);
             } else {
-                setTimeout(() => alert(`😢 Wrong cup! Try again.`), 300);
-                document.getElementById('startCupGameBtn').innerText = "Start Round 🎮";
-                document.getElementById('startCupGameBtn').disabled = false;
+                alert(`❌ Wrong cup! The BIZ777 ball was under cup #${winningCupId + 1}. Try again!`);
+                setTimeout(() => {
+                    setCupLevel(currentCupLevel);
+                }, 400);
             }
 
             localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
@@ -2000,129 +2001,100 @@
 
         let pwrGameActive = false;
         let pwrScore = 0;
-        let pwrTimeLeft = 45;
+        let pwrTimerLeft = 45;
         let pwrTimerInterval = null;
+        const pwrCost = 200;
+        const pwrSigns = ['rock', 'paper', 'scissors'];
+        const pwrEmojis = { rock: '✊', paper: '✋', scissors: '✌️' };
 
-        const handSigns = {
-            rock: '✊',
-            paper: '✋',
-            scissors: '✌️'
-        };
-
-        function resetPwrLobby() {
+        window.resetPwrLobby = function() {
             pwrGameActive = false;
-            pwrScore = 0;
-            pwrTimeLeft = 45;
             if (pwrTimerInterval) clearInterval(pwrTimerInterval);
-            document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimeLeft} sec`;
+            document.getElementById('startPwrBtn').style.display = 'block';
+            document.getElementById('pwrTimer').innerText = `⏱️ 45 sec`;
             document.getElementById('pwrScore').innerText = `Score: 0`;
             document.getElementById('pwrActionText').innerText = `BATTLE READY`;
             document.getElementById('pwrLeftHand').innerText = '✊';
             document.getElementById('pwrRightHand').innerText = '✊';
-            document.getElementById('startPwrBtn').style.display = 'block';
-            document.getElementById('startPwrBtn').innerText = `Start Battle 🚀 (Cost: 200 🪙)`;
-            document.getElementById('pwrResultMsg').innerText = "";
+            document.getElementById('pwrResultMsg').innerText = '';
         }
 
         window.startPwrGame = function() {
-            const cost = 200;
-            if (score < cost) {
-                alert("Not enough coins! Cost is 200 coins.");
+            if (score < pwrCost) {
+                alert("Not enough coins! Required: 200 coins.");
                 return;
             }
 
-            score -= cost;
+            score -= pwrCost;
             updateUI();
             saveState();
             syncScoreToFirebase();
 
-            pwrGameActive = true;
             pwrScore = 0;
-            pwrTimeLeft = 45;
+            pwrTimerLeft = 45;
+            pwrGameActive = true;
+
             document.getElementById('startPwrBtn').style.display = 'none';
             document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
-            document.getElementById('pwrActionText').innerText = `MAKE YOUR MOVE!`;
-            document.getElementById('pwrResultMsg').innerText = "Battle started! Choose Rock, Paper or Scissors.";
+            document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimerLeft}s`;
+            document.getElementById('pwrResultMsg').innerText = "Battle started! Make your choice!";
 
             if (pwrTimerInterval) clearInterval(pwrTimerInterval);
             pwrTimerInterval = setInterval(() => {
-                pwrTimeLeft--;
-                document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimeLeft} sec`;
-                if (pwrTimeLeft <= 0) {
-                    clearInterval(pwrTimerInterval);
+                pwrTimerLeft--;
+                document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimerLeft}s`;
+                if (pwrTimerLeft <= 0) {
                     endPwrGame();
                 }
             }, 1000);
         }
 
-        window.playPwrChoice = function(userChoice) {
-            if (!pwrGameActive) return;
+        window.playPwrChoice = function(userSign) {
+            if (!pwrGameActive) {
+                alert("Click 'Start Battle' first!");
+                return;
+            }
 
-            const choices = ['rock', 'paper', 'scissors'];
-            let opponentChoice = choices[Math.floor(Math.random() * choices.length)];
+            let botSign = pwrSigns[Math.floor(Math.random() * pwrSigns.length)];
+            
+            document.getElementById('pwrLeftHand').innerText = pwrEmojis[userSign];
+            document.getElementById('pwrRightHand').innerText = pwrEmojis[botSign];
 
-            document.getElementById('pwrLeftHand').innerText = handSigns[userChoice];
-            document.getElementById('pwrRightHand').innerText = handSigns[opponentChoice];
-
-            let resultTitle = "";
-            if (userChoice === opponentChoice) {
-                resultTitle = "TIE! No points.";
-                document.getElementById('pwrActionText').innerText = "IT'S A TIE!";
+            let outcomeText = "";
+            if (userSign === botSign) {
+                outcomeText = "Draw! (+0)";
             } else if (
-                (userChoice === 'rock' && opponentChoice === 'scissors') ||
-                (userChoice === 'paper' && opponentChoice === 'rock') ||
-                (userChoice === 'scissors' && opponentChoice === 'paper')
+                (userSign === 'rock' && botSign === 'scissors') ||
+                (userSign === 'paper' && botSign === 'rock') ||
+                (userSign === 'scissors' && botSign === 'paper')
             ) {
-                pwrScore += 1;
-                resultTitle = "YOU WIN THIS ROUND! +1 pt";
-                document.getElementById('pwrActionText').innerText = "WINNER! 🎉";
+                pwrScore += 15;
+                score += 15;
+                outcomeText = "You Win! (+15 pts)";
+                updateUI();
+                saveState();
+                syncScoreToFirebase();
             } else {
-                resultTitle = "OPPONENT WINS ROUND!";
-                document.getElementById('pwrActionText').innerText = "LOST ROUND! 😢";
+                pwrScore = Math.max(0, pwrScore - 10);
+                score = Math.max(0, score - 10);
+                outcomeText = "Bot Wins! (-10 pts)";
+                updateUI();
+                saveState();
+                syncScoreToFirebase();
             }
 
             document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
-            document.getElementById('pwrResultMsg').innerText = resultTitle;
+            document.getElementById('pwrActionText').innerText = outcomeText;
         }
 
         function endPwrGame() {
             pwrGameActive = false;
-            let rewardCoins = pwrScore * 150;
-            if (rewardCoins > 0) {
-                score += rewardCoins;
-                updateUI();
-                saveState();
-                syncScoreToFirebase();
-                alert(`⏰ Time's up! Your final score: ${pwrScore}. You won ${rewardCoins.toLocaleString()} coins! 🎉`);
-                document.getElementById('pwrActionText').innerText = `WON ${rewardCoins} COINS!`;
-            } else {
-                alert(`⏰ Time's up! Final score: 0. Better luck next time!`);
-                document.getElementById('pwrActionText').innerText = `GAME OVER`;
-            }
+            clearInterval(pwrTimerInterval);
 
             document.getElementById('startPwrBtn').style.display = 'block';
             document.getElementById('startPwrBtn').innerText = `Play Again 🚀 (Cost: 200 🪙)`;
-        }
-
-        window.switchTab = function(tabId, btnElement) {
-            flappyRunning = false;
-            pwrGameActive = false;
-            catchGameActive = false;
-            if (pwrTimerInterval) clearInterval(pwrTimerInterval);
-            if (catchTimerInterval) clearInterval(catchTimerInterval);
-            if (catchSpawnInterval) clearInterval(catchSpawnInterval);
-
-            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            btnElement.classList.add('active');
-            
-            if(tabId === 'minigame') {
-                setCupLevel(currentCupLevel);
-            }
-            if(tabId === 'leaderboard') {
-                renderLeaderboard();
-            }
+            document.getElementById('pwrResultMsg').innerText = `Battle over! Total Score: ${pwrScore}`;
+            alert(`Battle Finished! You earned ${pwrScore} points in this session.`);
         }
 
         function saveState() {
@@ -2134,9 +2106,21 @@
             localStorage.setItem('biz_freeTap20Claimed', freeTap20Claimed);
         }
 
+        window.switchTab = function(tabName, btnElement) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            btnElement.classList.add('active');
+
+            if (tabName === 'leaderboard') {
+                renderLeaderboard();
+            }
+        }
+
         updateUI();
-        setCupLevel(1);
-        syncScoreToFirebase();
+        renderLeaderboard();
     </script>
 </body>
 </html>
+```[cite: 1]
