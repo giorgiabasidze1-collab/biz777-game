@@ -2288,39 +2288,41 @@
 
             let outcomeText = "";
             if (userSign === botSign) {
-                outcomeText = "Draw! (+0)";
+                outcomeText = "Draw! 🤝 (+0)";
+                document.getElementById('pwrActionText').innerText = "DRAW!";
             } else if (
                 (userSign === 'rock' && botSign === 'scissors') ||
                 (userSign === 'paper' && botSign === 'rock') ||
                 (userSign === 'scissors' && botSign === 'paper')
             ) {
-                pwrScore += 15;
-                score += 15;
-                outcomeText = "You Win! (+15 pts)";
+                pwrScore += 25;
+                score += 25;
+                outcomeText = "You Win! 🎉 (+25 pts)";
+                document.getElementById('pwrActionText').innerText = "YOU WIN!";
                 updateUI();
                 saveState();
                 syncScoreToFirebase();
             } else {
                 pwrScore = Math.max(0, pwrScore - 10);
                 score = Math.max(0, score - 10);
-                outcomeText = "Bot Wins! (-10 pts)";
+                outcomeText = "Bot Wins! 😢 (-10 pts)";
+                document.getElementById('pwrActionText').innerText = "BOT WINS!";
                 updateUI();
                 saveState();
                 syncScoreToFirebase();
             }
-
             document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
-            document.getElementById('pwrActionText').innerText = outcomeText;
+            document.getElementById('pwrResultMsg').innerText = outcomeText;
         }
 
         function endPwrGame() {
             pwrGameActive = false;
             clearInterval(pwrTimerInterval);
-
             document.getElementById('startPwrBtn').style.display = 'block';
             document.getElementById('startPwrBtn').innerText = `Play Again 🚀 (Cost: 200 🪙)`;
-            document.getElementById('pwrResultMsg').innerText = `Battle over! Total Score: ${pwrScore}`;
-            alert(`Battle Finished! You earned ${pwrScore} points in this session.`);
+            document.getElementById('pwrActionText').innerText = `TIME'S UP!`;
+            document.getElementById('pwrResultMsg').innerText = `Battle ended! Total Score: ${pwrScore}`;
+            alert(`Battle Over! You earned ${pwrScore} points in this session.`);
         }
 
         function saveState() {
@@ -2330,18 +2332,6 @@
             localStorage.setItem('biz_tapPower', tapPower);
             localStorage.setItem('biz_invitedFriends', invitedFriendsCount);
             localStorage.setItem('biz_freeTap20Claimed', freeTap20Claimed);
-        }
-
-        window.switchTab = function(tabName, btnElement) {
-            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            btnElement.classList.add('active');
-
-            if (tabName === 'leaderboard') {
-                renderLeaderboard();
-            }
         }
 
         updateUI();
