@@ -1340,10 +1340,10 @@
             document.getElementById('userAvatar').innerText = (user.first_name || "B")[0].toUpperCase();
         }
 
-        // AdsGram Rewarded Video Integration (Block ID: 45807)
+        // AdsGram Rewarded Video Integration (Block ID: 48395)
         window.showRewardedAd = function() {
             if (window.Adsgram) {
-                window.Adsgram.init({ blockId: "45807" }).show().then((result) => {
+                window.Adsgram.init({ blockId: "48395" }).show().then((result) => {
                     energy = maxEnergy;
                     updateUI();
                     saveState();
@@ -2275,42 +2275,43 @@
             }, 1000);
         }
 
-        window.playPwrChoice = function(userSign) {
-            if (!pwrGameActive) {
-                alert("Click 'Start Battle' first!");
-                return;
-            }
+        window.playPwrChoice = function(playerChoice) {
+            if (!pwrGameActive) return;
 
-            let botSign = pwrSigns[Math.floor(Math.random() * pwrSigns.length)];
-            
-            document.getElementById('pwrLeftHand').innerText = pwrEmojis[userSign];
-            document.getElementById('pwrRightHand').innerText = pwrEmojis[botSign];
+            let botChoice = pwrSigns[Math.floor(Math.random() * pwrSigns.length)];
 
-            let outcomeText = "";
-            if (userSign === botSign) {
-                outcomeText = "Draw! (+0)";
+            document.getElementById('pwrLeftHand').innerText = pwrEmojis[playerChoice];
+            document.getElementById('pwrRightHand').innerText = pwrEmojis[botChoice];
+
+            let actionText = document.getElementById('pwrActionText');
+            let msgEl = document.getElementById('pwrResultMsg');
+
+            if (playerChoice === botChoice) {
+                actionText.innerText = "DRAW";
+                msgEl.innerText = "It's a draw! Try again.";
             } else if (
-                (userSign === 'rock' && botSign === 'scissors') ||
-                (userSign === 'paper' && botSign === 'rock') ||
-                (userSign === 'scissors' && botSign === 'paper')
+                (playerChoice === 'rock' && botChoice === 'scissors') ||
+                (playerChoice === 'paper' && botChoice === 'rock') ||
+                (playerChoice === 'scissors' && botChoice === 'paper')
             ) {
-                pwrScore += 15;
-                score += 15;
-                outcomeText = "You Win! (+15 pts)";
+                actionText.innerText = "WIN +50";
+                pwrScore += 50;
+                score += 50;
                 updateUI();
                 saveState();
                 syncScoreToFirebase();
+                msgEl.innerText = "You won this round! +50 coins.";
             } else {
-                pwrScore = Math.max(0, pwrScore - 10);
-                score = Math.max(0, score - 10);
-                outcomeText = "Bot Wins! (-10 pts)";
+                actionText.innerText = "LOSE -20";
+                pwrScore = Math.max(0, pwrScore - 20);
+                score = Math.max(0, score - 20);
                 updateUI();
                 saveState();
                 syncScoreToFirebase();
+                msgEl.innerText = "Bot won this round! -20 coins.";
             }
 
             document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
-            document.getElementById('pwrActionText').innerText = outcomeText;
         }
 
         function endPwrGame() {
@@ -2319,8 +2320,20 @@
 
             document.getElementById('startPwrBtn').style.display = 'block';
             document.getElementById('startPwrBtn').innerText = `Play Again 🚀 (Cost: 200 🪙)`;
-            document.getElementById('pwrResultMsg').innerText = `Battle over! Total Score: ${pwrScore}`;
-            alert(`Battle Finished! You earned ${pwrScore} points in this session.`);
+            document.getElementById('pwrResultMsg').innerText = `Time's up! Total Battle Score: ${pwrScore}`;
+            alert(`Battle Over! You earned ${pwrScore} coins.`);
+        }
+
+        window.switchTab = function(tabName, btnElement) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            if (btnElement) btnElement.classList.add('active');
+
+            if (tabName === 'leaderboard') {
+                renderLeaderboard();
+            }
         }
 
         function saveState() {
@@ -2332,20 +2345,10 @@
             localStorage.setItem('biz_freeTap20Claimed', freeTap20Claimed);
         }
 
-        window.switchTab = function(tabName, btnElement) {
-            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            btnElement.classList.add('active');
-
-            if (tabName === 'leaderboard') {
-                renderLeaderboard();
-            }
-        }
-
-        updateUI();
-        renderLeaderboard();
+        window.addEventListener('load', () => {
+            updateUI();
+            syncScoreToFirebase();
+        });
     </script>
 </body>
 </html>
