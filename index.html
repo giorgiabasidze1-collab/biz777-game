@@ -1514,7 +1514,7 @@
             let currentLevelObj = levels[currentLevelIndex];
             levelName.innerText = currentLevelObj.name;
             
-            if (currentLevelObj.icon.startsWith('images/')) {
+            if (currentLevelObj.icon.includes('/') || currentLevelObj.icon.includes('.')) {
                 buildingIcon.innerHTML = `<img src="${currentLevelObj.icon}" alt="${currentLevelObj.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
             } else {
                 buildingIcon.innerText = currentLevelObj.icon;
