@@ -704,7 +704,7 @@
                 </div>
                 <div class="score-board">
                     <div class="score-value" id="scoreDisplay">0</div>
-                    <div class="level-badge">BIZ777 Coins</div>
+                    <div class="level-badge" id="coinsLabelHeader">BIZ777 Coins</div>
                 </div>
             </div>
 
@@ -814,40 +814,40 @@
                     
                     <div class="game-card-option" onclick="openSubGame('catch')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 13px;">🪙 Biiz777 Catch Game</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Cost: 50 Coins | Catch BIZ777 coins, avoid bombs for 1 min!</p>
+                            <h4 id="gameCardCatchTitle" style="color: var(--accent); font-size: 13px;">🪙 Biiz777 Catch Game</h4>
+                            <p id="gameCardCatchDesc" style="font-size: 11px; color: var(--text-secondary);">Cost: 50 Coins | Catch BIZ777 coins, avoid bombs for 1 min!</p>
                         </div>
                         <span style="font-size: 18px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('flappy')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 13px;">🪙 Flappy BIZ777</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Avoid moving hand obstacles! Score 10 for +500 Energy!</p>
+                            <h4 id="gameCardFlappyTitle" style="color: var(--accent); font-size: 13px;">🪙 Flappy BIZ777</h4>
+                            <p id="gameCardFlappyDesc" style="font-size: 11px; color: var(--text-secondary);">Avoid moving hand obstacles! Score 10 for +500 Energy!</p>
                         </div>
                         <span style="font-size: 18px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('cups')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 13px;">🏆 Find BIZ777 Ball</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Find the BIZ777 ball under cups to win coins and energy!</p>
+                            <h4 id="gameCardCupsTitle" style="color: var(--accent); font-size: 13px;">🏆 Find BIZ777 Ball</h4>
+                            <p id="gameCardCupsDesc" style="font-size: 11px; color: var(--text-secondary);">Find the BIZ777 ball under cups to win coins and energy!</p>
                         </div>
                         <span style="font-size: 18px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('slot')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 13px;">🎰 Slot Machine Spin</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Cost: 500 Coins | 3x BIZ777 = 5,000,000 Jackpot!</p>
+                            <h4 id="gameCardSlotTitle" style="color: var(--accent); font-size: 13px;">🎰 Slot Machine Spin</h4>
+                            <p id="gameCardSlotDesc" style="font-size: 11px; color: var(--text-secondary);">Cost: 500 Coins | 3x BIZ777 = 5,000,000 Jackpot!</p>
                         </div>
                         <span style="font-size: 18px; color: var(--accent);">👉</span>
                     </div>
 
                     <div class="game-card-option" onclick="openSubGame('paperwrapsrock')">
                         <div class="game-card-info">
-                            <h4 style="color: var(--accent); font-size: 13px;">✌️ Paper Wraps Rock (Classic)</h4>
-                            <p style="font-size: 11px; color: var(--text-secondary);">Classic Rock, Paper, Scissors battle with emoji icons!</p>
+                            <h4 id="gameCardPwrTitle" style="color: var(--accent); font-size: 13px;">✌️ Paper Wraps Rock (Classic)</h4>
+                            <p id="gameCardPwrDesc" style="font-size: 11px; color: var(--text-secondary);">Classic Rock, Paper, Scissors battle with emoji icons!</p>
                         </div>
                         <span style="font-size: 18px; color: var(--accent);">👉</span>
                     </div>
@@ -856,7 +856,7 @@
                 <div class="sub-game-container" id="subgame-catch">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 6px;">
                         <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 9px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Biiz777 Catch Game</h3>
+                        <h3 id="catchSubHeaderTitle" style="font-size: 13px; color: var(--accent);">🕹️ Biiz777 Catch Game</h3>
                         <div style="width: 40px;"></div>
                     </div>
 
@@ -876,11 +876,11 @@
                 <div class="sub-game-container" id="subgame-flappy">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 6px;">
                         <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 9px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Flappy BIZ777</h3>
+                        <h3 id="flappySubHeaderTitle" style="font-size: 13px; color: var(--accent);">🕹️ Flappy BIZ777</h3>
                         <div style="width: 40px;"></div>
                     </div>
                     <canvas id="flappyCanvas" width="290" height="315"></canvas>
-                    <div style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 3px;">
+                    <div id="flappyInstructions" style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 3px;">
                         Tap canvas to jump. Avoid moving hand obstacles!
                     </div>
                 </div>
@@ -888,7 +888,7 @@
                 <div class="sub-game-container" id="subgame-cups">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 6px;">
                         <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 9px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Find BIZ777 Ball</h3>
+                        <h3 id="cupsSubHeaderTitle" style="font-size: 13px; color: var(--accent);">🕹️ Find BIZ777 Ball</h3>
                         <div style="width: 40px;"></div>
                     </div>
 
@@ -930,12 +930,12 @@
                 <div class="sub-game-container" id="subgame-slot">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 6px;">
                         <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 9px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">🕹️ Slot Machine Spin</h3>
+                        <h3 id="slotSubHeaderTitle" style="font-size: 13px; color: var(--accent);">🕹️ Slot Machine Spin</h3>
                         <div style="width: 40px;"></div>
                     </div>
 
                     <div class="slot-machine-wrapper">
-                        <div style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 7px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
+                        <div id="slotMachineBanner" style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 7px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
                             Cost: 500 Coins | 3x BIZ777 = 5,000,000 Jackpot!
                         </div>
 
@@ -957,7 +957,7 @@
                 <div class="sub-game-container" id="subgame-paperwrapsrock">
                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 6px;">
                         <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 9px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 style="font-size: 13px; color: var(--accent);">✌️ Paper Wraps Rock</h3>
+                        <h3 id="pwrSubHeaderTitle" style="font-size: 13px; color: var(--accent);">✌️ Paper Wraps Rock</h3>
                         <div style="width: 40px;"></div>
                     </div>
 
@@ -969,7 +969,7 @@
 
                         <div style="position: relative; width: 100%; height: 150px; background: #0d0918; border: 2px solid var(--accent); border-radius: 14px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; overflow: hidden;">
                             <div style="text-align: center;">
-                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold; margin-bottom: 5px;">YOU</div>
+                                <div id="pwrYouLabel" style="font-size: 10px; color: var(--text-secondary); font-weight: bold; margin-bottom: 5px;">YOU</div>
                                 <div id="pwrLeftHand" style="font-size: 42px;">✊</div>
                             </div>
 
@@ -978,17 +978,17 @@
                             </div>
 
                             <div style="text-align: center;">
-                                <div style="font-size: 10px; color: var(--text-secondary); font-weight: bold; margin-bottom: 5px;">BOT</div>
+                                <div id="pwrBotLabel" style="font-size: 10px; color: var(--text-secondary); font-weight: bold; margin-bottom: 5px;">BOT</div>
                                 <div id="pwrRightHand" style="font-size: 42px;">✊</div>
                             </div>
                         </div>
 
                         <div style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
-                            <div style="font-size: 11px; color: var(--text-secondary); text-align: center; font-weight: bold;">Choose your sign:</div>
+                            <div id="pwrChooseSignText" style="font-size: 11px; color: var(--text-secondary); text-align: center; font-weight: bold;">Choose your sign:</div>
                             <div style="display: flex; gap: 8px; justify-content: center;">
-                                <button class="btn" onclick="playPwrChoice('scissors')" style="flex: 1; font-size: 12px;">✌️ Scissors</button>
-                                <button class="btn" onclick="playPwrChoice('paper')" style="flex: 1; font-size: 12px;">✋ Paper</button>
-                                <button class="btn" onclick="playPwrChoice('rock')" style="flex: 1; font-size: 12px;">✊ Rock</button>
+                                <button class="btn" id="pwrBtnScissors" onclick="playPwrChoice('scissors')" style="flex: 1; font-size: 12px;">✌️ Scissors</button>
+                                <button class="btn" id="pwrBtnPaper" onclick="playPwrChoice('paper')" style="flex: 1; font-size: 12px;">✋ Paper</button>
+                                <button class="btn" id="pwrBtnRock" onclick="playPwrChoice('rock')" style="flex: 1; font-size: 12px;">✊ Rock</button>
                             </div>
                         </div>
 
@@ -1038,6 +1038,29 @@
                 leaderboardTitle: "🏆 Leaderboard",
                 gamesHubTitle: "🎮 Classic Arcade Games Hub",
                 gamesHubDesc: "Select a game below to play and boost your earnings!",
+                gameCardCatchTitle: "🪙 Biiz777 Catch Game",
+                gameCardCatchDesc: "Cost: 50 Coins | Catch BIZ777 coins, avoid bombs for 1 min!",
+                gameCardFlappyTitle: "🪙 Flappy BIZ777",
+                gameCardFlappyDesc: "Avoid moving hand obstacles! Score 10 for +500 Energy!",
+                gameCardCupsTitle: "🏆 Find BIZ777 Ball",
+                gameCardCupsDesc: "Find the BIZ777 ball under cups to win coins and energy!",
+                gameCardSlotTitle: "🎰 Slot Machine Spin",
+                gameCardSlotDesc: "Cost: 500 Coins | 3x BIZ777 = 5,000,000 Jackpot!",
+                gameCardPwrTitle: "✌️ Paper Wraps Rock (Classic)",
+                gameCardPwrDesc: "Classic Rock, Paper, Scissors battle with emoji icons!",
+                catchSubHeader: "🕹️ Biiz777 Catch Game",
+                flappySubHeader: "🕹️ Flappy BIZ777",
+                flappyInstructions: "Tap canvas to jump. Avoid moving hand obstacles!",
+                cupsSubHeader: "🕹️ Find BIZ777 Ball",
+                slotSubHeader: "🕹️ Slot Machine Spin",
+                slotMachineBanner: "Cost: 500 Coins | 3x BIZ777 = 5,000,000 Jackpot!",
+                pwrSubHeader: "✌️ Paper Wraps Rock",
+                pwrYou: "YOU",
+                pwrBot: "BOT",
+                pwrChooseSign: "Choose your sign:",
+                pwrBtnScissors: "✌️ Scissors",
+                pwrBtnPaper: "✋ Paper",
+                pwrBtnRock: "✊ Rock",
                 friendsTitle: "👥 Invite Friends",
                 friendsSubTitle: "Invite 3 Friends to get Free Tap Power 20!",
                 friendsInvited: "Invited friends:",
@@ -1065,6 +1088,29 @@
                 leaderboardTitle: "🏆 Таблица лидеров",
                 gamesHubTitle: "🎮 Центр классических игр",
                 gamesHubDesc: "Выберите игру ниже, чтобы играть и увеличить заработок!",
+                gameCardCatchTitle: "🪙 Игра Поймай BIZ777",
+                gameCardCatchDesc: "Стоимость: 50 монет | Ловите монеты, избегайте бомб 1 мин!",
+                gameCardFlappyTitle: "🪙 Flappy BIZ777",
+                gameCardFlappyDesc: "Избегайте движущихся препятствий! Наберите 10 для +500 энергии!",
+                gameCardCupsTitle: "🏆 Найти мяч BIZ777",
+                gameCardCupsDesc: "Найдите мяч под стаканчиками, чтобы выиграть монеты и энергию!",
+                gameCardSlotTitle: "🎰 Слот-автомат",
+                gameCardSlotDesc: "Стоимость: 500 монет | 3x BIZ777 = 5,000,000 Джекпот!",
+                gameCardPwrTitle: "✌️ Камень, ножницы, бумага",
+                gameCardPwrDesc: "Классическая битва с эмодзи-иконками!",
+                catchSubHeader: "🕹️ Игра Поймай BIZ777",
+                flappySubHeader: "🕹️ Flappy BIZ777",
+                flappyInstructions: "Нажимайте на экран для прыжка. Избегайте препятствий!",
+                cupsSubHeader: "🕹️ Найти мяч BIZ777",
+                slotSubHeader: "🕹️ Слот-автомат",
+                slotMachineBanner: "Стоимость: 500 монет | 3x BIZ777 = 5,000,000 Джекпот!",
+                pwrSubHeader: "✌️ Камень, ножницы, бумага",
+                pwrYou: "ВЫ",
+                pwrBot: "БОТ",
+                pwrChooseSign: "Выберите знак:",
+                pwrBtnScissors: "✌️ Ножницы",
+                pwrBtnPaper: "✋ Бумага",
+                pwrBtnRock: "✊ Камень",
                 friendsTitle: "👥 Пригласить друзей",
                 friendsSubTitle: "Пригласите 3 друзей для бесплатной силы клика 20!",
                 friendsInvited: "Приглашенные друзья:",
@@ -1092,6 +1138,29 @@
                 leaderboardTitle: "🏆 排行榜",
                 gamesHubTitle: "🎮 经典街机游戏中心",
                 gamesHubDesc: "在下方选择一款游戏并提升收益！",
+                gameCardCatchTitle: "🪙 BIZ777 抓金币",
+                gameCardCatchDesc: "消耗: 50 代币 | 抓取代币，避开炸弹 1 分钟！",
+                gameCardFlappyTitle: "🪙 Flappy BIZ777",
+                gameCardFlappyDesc: "避开移动手部障碍！达到10分获得+500能量！",
+                gameCardCupsTitle: "🏆 寻找 BIZ777 球",
+                gameCardCupsDesc: "在杯子下寻找球以赢得代币和能量！",
+                gameCardSlotTitle: "🎰 老虎机旋转",
+                gameCardSlotDesc: "消耗: 500 代币 | 3x BIZ777 = 5,000,000 大奖！",
+                gameCardPwrTitle: "✌️ 石头剪布经典对决",
+                gameCardPwrDesc: "经典的石头剪刀布表情符号战斗！",
+                catchSubHeader: "🕹️ BIZ777 抓金币",
+                flappySubHeader: "🕹️ Flappy BIZ777",
+                flappyInstructions: "点击画布跳跃，避开移动障碍！",
+                cupsSubHeader: "🕹️ 寻找 BIZ777 球",
+                slotSubHeader: "🕹️ 老虎机旋转",
+                slotMachineBanner: "消耗: 500 代币 | 3x BIZ777 = 5,000,000 大奖！",
+                pwrSubHeader: "✌️ 石头剪刀布",
+                pwrYou: "你",
+                pwrBot: "机器人",
+                pwrChooseSign: "选择手势：",
+                pwrBtnScissors: "✌️ 剪刀",
+                pwrBtnPaper: "✋ 布",
+                pwrBtnRock: "✊ 石头",
                 friendsTitle: "👥 邀请好友",
                 friendsSubTitle: "邀请3位好友即可获得免费的20级点击威力！",
                 friendsInvited: "已邀请好友：",
@@ -1119,6 +1188,29 @@
                 leaderboardTitle: "🏆 लीडरबोर्ड",
                 gamesHubTitle: "🎮 क्लासिक आर्केड गेम्स हब",
                 gamesHubDesc: "खेलने और अपनी कमाई बढ़ाने के लिए नीचे एक गेम चुनें!",
+                gameCardCatchTitle: "🪙 BIZ777 कैच गेम",
+                gameCardCatchDesc: "लागत: 50 सिक्के | BIZ777 सिक्के पकड़ें, बम से बचें!",
+                gameCardFlappyTitle: "🪙 Flappy BIZ777",
+                gameCardFlappyDesc: "बाधाओं से बचें! +500 ऊर्जा के लिए 10 स्कोर करें!",
+                gameCardCupsTitle: "🏆 BIZ777 बॉल खोजें",
+                gameCardCupsDesc: "सिक्के और ऊर्जा जीतने के लिए कप के नीचे गेंद खोजें!",
+                gameCardSlotTitle: "🎰 स्लॉट मशीन स्पिन",
+                gameCardSlotDesc: "लागत: 500 सिक्के | 3x BIZ777 = 5,000,000 जैकपॉट!",
+                gameCardPwrTitle: "✌️ पेपर रैप्स रॉक",
+                gameCardPwrDesc: "इमोजी के साथ क्लासिक रॉक, पेपर, सीज़र लड़ाई!",
+                catchSubHeader: "🕹️ BIZ777 कैच गेम",
+                flappySubHeader: "🕹️ Flappy BIZ777",
+                flappyInstructions: "कूदने के लिए टैप करें। बाधाओं से बचें!",
+                cupsSubHeader: "🕹️ BIZ777 बॉल खोजें",
+                slotSubHeader: "🕹️ स्लॉट मशीन स्पिन",
+                slotMachineBanner: "लागत: 500 सिक्के | 3x BIZ777 = 5,000,000 जैकपॉट!",
+                pwrSubHeader: "✌️ पेपर रैप्स रॉक",
+                pwrYou: "आप",
+                pwrBot: "बोट",
+                pwrChooseSign: "अपना संकेत चुनें:",
+                pwrBtnScissors: "✌️ कैंची",
+                pwrBtnPaper: "✋ कागज़",
+                pwrBtnRock: "✊ पत्थर",
                 friendsTitle: "👥 दोस्तों को आमंत्रित करें",
                 friendsSubTitle: "मुफ्त टैप पावर 20 पाने के लिए 3 दोस्तों को आमंत्रित करें!",
                 friendsInvited: "आमंत्रित मित्र:",
@@ -1146,6 +1238,29 @@
                 leaderboardTitle: "🏆 لوحة المتصدرين",
                 gamesHubTitle: "🎮 مركز الألعاب الكلاسيكية",
                 gamesHubDesc: "اختر لعبة أدناه للعب وزيادة أرباحك!",
+                gameCardCatchTitle: "🪙 لعبة الصيد BIZ777",
+                gameCardCatchDesc: "التكلفة: 50 عملة | الصطد العملات وتجنب القنابل!",
+                gameCardFlappyTitle: "🪙 Flappy BIZ777",
+                gameCardFlappyDesc: "تجنب العقبات المتحركة! سجل 10 للحصول على +500 طاقة!",
+                gameCardCupsTitle: "🏆 ابحث عن كرة BIZ777",
+                gameCardCupsDesc: "ابحث عن الكرة تحت الأكواب للفوز بالعملات والطاقة!",
+                gameCardSlotTitle: "🎰 دوران ماكينة القمار",
+                gameCardSlotDesc: "التكلفة: 500 عملة | 3x BIZ777 = 5,000,000 الجائزة الكبرى!",
+                gameCardPwrTitle: "✌️ ورقة تغلف صخرة",
+                gameCardPwrDesc: "معركة حجر ورقة مقص الكلاسيكية برمز الوجوه التعبيرية!",
+                catchSubHeader: "🕹️ لعبة الصيد BIZ777",
+                flappySubHeader: "🕹️ Flappy BIZ777",
+                flappyInstructions: "انقر للقفز وتجنب العقبات المتحركة!",
+                cupsSubHeader: "🕹️ ابحث عن كرة BIZ777",
+                slotSubHeader: "🕹️ دوران ماكينة القمار",
+                slotMachineBanner: "التكلفة: 500 عملة | 3x BIZ777 = 5,000,000 الجائزة الكبرى!",
+                pwrSubHeader: "✌️ حجر ورقة مقص",
+                pwrYou: "أنت",
+                pwrBot: "البوت",
+                pwrChooseSign: "اختر علامتك:",
+                pwrBtnScissors: "✌️ مقص",
+                pwrBtnPaper: "✋ ورقة",
+                pwrBtnRock: "✊ حجر",
                 friendsTitle: "👥 دعوة الأصدقاء",
                 friendsSubTitle: "ادعُ 3 أصدقاء للحصول على قوة نقر مجانية 20!",
                 friendsInvited: "الأصدقاء المدعوون:",
@@ -1173,6 +1288,29 @@
                 leaderboardTitle: "🏆 Classement",
                 gamesHubTitle: "🎮 Hub de jeux d'arcade classiques",
                 gamesHubDesc: "Sélectionnez un jeu ci-dessous pour jouer et augmenter vos gains !",
+                gameCardCatchTitle: "🪙 Jeu de capture BIZ777",
+                gameCardCatchDesc: "Coût : 50 pièces | Attrapez les pièces, évitez les bombes !",
+                gameCardFlappyTitle: "🪙 Flappy BIZ777",
+                gameCardFlappyDesc: "Évitez les obstacles ! Score 10 pour +500 Énergie !",
+                gameCardCupsTitle: "🏆 Trouver la balle BIZ777",
+                gameCardCupsDesc: "Trouvez la balle sous les tasses pour gagner des pièces !",
+                gameCardSlotTitle: "🎰 Machine à sous",
+                gameCardSlotDesc: "Coût : 500 pièces | 3x BIZ777 = 5 000 000 Jackpot !",
+                gameCardPwrTitle: "✌️ Pierre Papier Ciseaux",
+                gameCardPwrDesc: "Bataille classique avec des emojis !",
+                catchSubHeader: "🕹️ Jeu de capture BIZ777",
+                flappySubHeader: "🕹️ Flappy BIZ777",
+                flappyInstructions: "Touchez pour sauter et éviter les obstacles !",
+                cupsSubHeader: "🕹️ Trouver la balle BIZ777",
+                slotSubHeader: "🕹️ Machine à sous",
+                slotMachineBanner: "Coût : 500 pièces | 3x BIZ777 = 5 000 000 Jackpot !",
+                pwrSubHeader: "✌️ Pierre Papier Ciseaux",
+                pwrYou: "VOUS",
+                pwrBot: "BOT",
+                pwrChooseSign: "Choisissez votre signe :",
+                pwrBtnScissors: "✌️ Ciseaux",
+                pwrBtnPaper: "✋ Papier",
+                pwrBtnRock: "✊ Pierre",
                 friendsTitle: "👥 Inviter des amis",
                 friendsSubTitle: "Invitez 3 amis pour obtenir la puissance de clic 20 gratuite !",
                 friendsInvited: "Amis invités :",
@@ -1200,6 +1338,29 @@
                 leaderboardTitle: "🏆 Tabla de clasificación",
                 gamesHubTitle: "🎮 Centro de juegos arcade clásicos",
                 gamesHubDesc: "¡Selecciona un juego a continuación para jugar y aumentar tus ganancias!",
+                gameCardCatchTitle: "🪙 Juego de Atrapa BIZ777",
+                gameCardCatchDesc: "Costo: 50 monedas | Atrapa monedas, evita bombas!",
+                gameCardFlappyTitle: "🪙 Flappy BIZ777",
+                gameCardFlappyDesc: "¡Evita obstáculos! ¡Suma 10 para +500 de Energía!",
+                gameCardCupsTitle: "🏆 Encuentra la bola BIZ777",
+                gameCardCupsDesc: "¡Encuentra la bola bajo las tazas para ganar premios!",
+                gameCardSlotTitle: "🎰 Giros de Tragamonedas",
+                gameCardSlotDesc: "Costo: 500 monedas | 3x BIZ777 = 5,000,000 Jackpot!",
+                gameCardPwrTitle: "✌️ P> </< (Piedra, Papel, Tijera)",
+                gameCardPwrDesc: "¡Batalla clásica con iconos de emoji!",
+                catchSubHeader: "🕹️ Juego de Atrapa BIZ777",
+                flappySubHeader: "🕹️ Flappy BIZ777",
+                flappyInstructions: "Toca para saltar y esquivar obstáculos.",
+                cupsSubHeader: "🕹️ Encuentra la bola BIZ777",
+                slotSubHeader: "🕹️ Giros de Tragamonedas",
+                slotMachineBanner: "Costo: 500 monedas | 3x BIZ777 = 5,000,000 Jackpot!",
+                pwrSubHeader: "✌️ Piedra, Papel, Tijera",
+                pwrYou: "TÚ",
+                pwrBot: "BOT",
+                pwrChooseSign: "Elige tu seña:",
+                pwrBtnScissors: "✌️ Tijera",
+                pwrBtnPaper: "✋ Papel",
+                pwrBtnRock: "✊ Piedra",
                 friendsTitle: "👥 Invitar amigos",
                 friendsSubTitle: "¡Invita a 3 amigos para obtener el Poder de Toque 20 gratis!",
                 friendsInvited: "Amigos invitados:",
@@ -1227,6 +1388,29 @@
                 leaderboardTitle: "🏆 Bestenliste",
                 gamesHubTitle: "🎮 Klassisches Arcade-Spiele-Hub",
                 gamesHubDesc: "Wähle unten ein Spiel aus, um zu spielen und deine Einnahmen zu steigern!",
+                gameCardCatchTitle: "🪙 BIZ777 Fangspiel",
+                gameCardCatchDesc: "Kosten: 50 Münzen | Fange Münzen, vermeide Bomben!",
+                gameCardFlappyTitle: "🪙 Flappy BIZ777",
+                gameCardFlappyDesc: "Vermeide Hindernisse! Erreiche 10 für +500 Energie!",
+                gameCardCupsTitle: "🏆 Finde den BIZ777 Ball",
+                gameCardCupsDesc: "Finde den Ball unter Bechern, um Münzen zu gewinnen!",
+                gameCardSlotTitle: "🎰 Spielautomat Spin",
+                gameCardSlotDesc: "Kosten: 500 Münzen | 3x BIZ777 = 5.000.000 Jackpot!",
+                gameCardPwrTitle: "✌️ Schere, Stein, Papier",
+                gameCardPwrDesc: "Klassisches Duell mit Emoji-Symbolen!",
+                catchSubHeader: "🕹️ BIZ777 Fangspiel",
+                flappySubHeader: "🕹️ Flappy BIZ777",
+                flappyInstructions: "Tippen zum Springen. Hindernissen ausweichen!",
+                cupsSubHeader: "🕹️ Finde den BIZ777 Ball",
+                slotSubHeader: "🕹️ Spielautomat Spin",
+                slotMachineBanner: "Kosten: 500 Münzen | 3x BIZ777 = 5.000.000 Jackpot!",
+                pwrSubHeader: "✌️ Schere, Stein, Papier",
+                pwrYou: "DU",
+                pwrBot: "BOT",
+                pwrChooseSign: "Wähle dein Zeichen:",
+                pwrBtnScissors: "✌️ Schere",
+                pwrBtnPaper: "✋ Papier",
+                pwrBtnRock: "✊ Stein",
                 friendsTitle: "👥 Freunde einladen",
                 friendsSubTitle: "Lade 3 Freunde ein, um kostenlose Tipp-Power 20 zu erhalten!",
                 friendsInvited: "Eingeladene Freunde:",
@@ -1248,6 +1432,7 @@
             localStorage.setItem('biz_selected_lang', lang);
             let t = translations[lang];
 
+            document.getElementById('coinsLabelHeader').innerText = t.coinsLabel;
             document.getElementById('coinsLabelText').innerText = t.coinsLabel;
             document.getElementById('energyLabelText').innerText = t.energyLabel;
             document.getElementById('shopTitleText').innerText = t.shopTitle;
@@ -1260,6 +1445,32 @@
             document.getElementById('leaderboardTitleText').innerText = t.leaderboardTitle;
             document.getElementById('gamesHubTitle').innerText = t.gamesHubTitle;
             document.getElementById('gamesHubDesc').innerText = t.gamesHubDesc;
+            
+            document.getElementById('gameCardCatchTitle').innerText = t.gameCardCatchTitle;
+            document.getElementById('gameCardCatchDesc').innerText = t.gameCardCatchDesc;
+            document.getElementById('gameCardFlappyTitle').innerText = t.gameCardFlappyTitle;
+            document.getElementById('gameCardFlappyDesc').innerText = t.gameCardFlappyDesc;
+            document.getElementById('gameCardCupsTitle').innerText = t.gameCardCupsTitle;
+            document.getElementById('gameCardCupsDesc').innerText = t.gameCardCupsDesc;
+            document.getElementById('gameCardSlotTitle').innerText = t.gameCardSlotTitle;
+            document.getElementById('gameCardSlotDesc').innerText = t.gameCardSlotDesc;
+            document.getElementById('gameCardPwrTitle').innerText = t.gameCardPwrTitle;
+            document.getElementById('gameCardPwrDesc').innerText = t.gameCardPwrDesc;
+
+            document.getElementById('catchSubHeaderTitle').innerText = t.catchSubHeader;
+            document.getElementById('flappySubHeaderTitle').innerText = t.flappySubHeader;
+            document.getElementById('flappyInstructions').innerText = t.flappyInstructions;
+            document.getElementById('cupsSubHeaderTitle').innerText = t.cupsSubHeader;
+            document.getElementById('slotSubHeaderTitle').innerText = t.slotSubHeader;
+            document.getElementById('slotMachineBanner').innerText = t.slotMachineBanner;
+            document.getElementById('pwrSubHeaderTitle').innerText = t.pwrSubHeader;
+            document.getElementById('pwrYouLabel').innerText = t.pwrYou;
+            document.getElementById('pwrBotLabel').innerText = t.pwrBot;
+            document.getElementById('pwrChooseSignText').innerText = t.pwrChooseSign;
+            document.getElementById('pwrBtnScissors').innerText = t.pwrBtnScissors;
+            document.getElementById('pwrBtnPaper').innerText = t.pwrBtnPaper;
+            document.getElementById('pwrBtnRock').innerText = t.pwrBtnRock;
+
             document.getElementById('friendsTitleText').innerText = t.friendsTitle;
             document.getElementById('friendsSubTitleText').innerText = t.friendsSubTitle;
             document.getElementById('friendsInvitedText').innerText = t.friendsInvited;
@@ -1340,14 +1551,13 @@
             document.getElementById('userAvatar').innerText = (user.first_name || "B")[0].toUpperCase();
         }
 
-        // AdsGram Rewarded Video Integration (Block ID: 48395)
         window.showRewardedAd = function() {
             if (window.Adsgram) {
                 window.Adsgram.init({ blockId: "48395" }).show().then((result) => {
                     energy = maxEnergy;
                     updateUI();
                     saveState();
-                    alert("🎉 Reward received! Your energy is fully refilled back to max!");
+                    alert("Reward received! Your energy is fully refilled back to max!");
                 }).catch((result) => {
                     alert("Ad was skipped or failed to load. Please try again.");
                 });
@@ -1355,7 +1565,7 @@
                 energy = maxEnergy;
                 updateUI();
                 saveState();
-                alert("🎉 Energy successfully refilled back to max (Simulation mode)!");
+                alert("Energy successfully refilled back to max (Simulation mode)!");
             }
         };
 
