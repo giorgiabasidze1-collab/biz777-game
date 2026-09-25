@@ -1766,6 +1766,10 @@
             tapContainer.innerHTML = "";
             energyContainer.innerHTML = "";
 
+            let currentLang = localStorage.getItem('biz_selected_lang') || 'en';
+            let t = translations[currentLang] || translations.en;
+            
+            // Translations for shop action texts if needed or dynamic building
             const tapPrices = { 2: 50, 3: 120, 4: 250, 5: 500, 6: 900, 7: 1500, 8: 2500, 9: 4000, 10: 6000 };
 
             if (tapPower < 10) {
@@ -1803,7 +1807,7 @@
                 { target: 4500, price: 5000 }, { target: 5000, price: 7500 }
             ];
 
-            let nextTier = energyTiers.find(t => t.target > maxEnergy);
+            let nextTier = energyTiers.find(item => item.target > maxEnergy);
             if (nextTier) {
                 energyContainer.innerHTML = `
                     <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
@@ -2227,6 +2231,7 @@
             localStorage.setItem('biz_tapPower', tapPower);
             localStorage.setItem('biz_invitedFriends', invitedFriendsCount);
             localStorage.setItem('biz_freeTap20Claimed', freeTap20Claimed);
+            localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
         }
 
         window.switchTab = function(tabId, el) {
@@ -2237,7 +2242,16 @@
             if (tabId === 'leaderboard') {
                 renderLeaderboard();
             }
-        }
+        };
+
+        // Cups & PWR helper dummies or methods if needed
+        window.initCupStageUI = function() {};
+        window.setCupLevel = function(lvl) {};
+        window.chooseCup = function(slot) {};
+        window.startCupRound = function() {};
+        window.resetPwrLobby = function() {};
+        window.startPwrGame = function() {};
+        window.playPwrChoice = function(choice) {};
 
         updateUI();
     </script>
