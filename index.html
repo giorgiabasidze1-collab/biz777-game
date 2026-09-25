@@ -1557,14 +1557,17 @@
                     energy = maxEnergy;
                     updateUI();
                     saveState();
+                    syncScoreToFirebase();
                     alert("Reward received! Your energy is fully refilled back to max!");
                 }).catch((result) => {
-                    alert("Ad was skipped or failed to load. Please try again.");
+                    console.log("Ad skipped or failed");
+                    alert("Ad was skipped or failed to load. Please try again to get the reward.");
                 });
             } else {
                 energy = maxEnergy;
                 updateUI();
                 saveState();
+                syncScoreToFirebase();
                 alert("Energy successfully refilled back to max (Simulation mode)!");
             }
         };
@@ -1769,7 +1772,6 @@
             let currentLang = localStorage.getItem('biz_selected_lang') || 'en';
             let t = translations[currentLang] || translations.en;
             
-            // Translations for shop action texts if needed or dynamic building
             const tapPrices = { 2: 50, 3: 120, 4: 250, 5: 500, 6: 900, 7: 1500, 8: 2500, 9: 4000, 10: 6000 };
 
             if (tapPower < 10) {
@@ -2244,7 +2246,6 @@
             }
         };
 
-        // Cups & PWR helper dummies or methods if needed
         window.initCupStageUI = function() {};
         window.setCupLevel = function(lvl) {};
         window.chooseCup = function(slot) {};
