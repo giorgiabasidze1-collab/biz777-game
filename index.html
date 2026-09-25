@@ -1586,7 +1586,7 @@
             container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 16px;">Loading leaderboard...</div>`;
 
             try {
-                const q = query(collection(db, "leaderboard"), orderBy("score", "desc"), limit(20));
+                const q = query(collection(db, "leaderboard"), orderBy("score", "desc"), limit(30));
                 const querySnapshot = await getDocs(q);
                 
                 container.innerHTML = "";
@@ -1600,13 +1600,21 @@
 
                     let profileClass = isMe ? "leaderboard-item my-profile" : "leaderboard-item";
                     let displayName = isMe ? `${data.name} (You)` : data.name;
+                    
                     let rankDisplay = `#${rank}`;
+                    if (rank === 1) {
+                        rankDisplay = "👑";
+                    } else if (rank === 2) {
+                        rankDisplay = "🥈";
+                    } else if (rank === 3) {
+                        rankDisplay = "🥉";
+                    }
 
                     let itemHTML = `
                         <div class="${profileClass}">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <span class="rank-number">${rankDisplay}</span>
-                                <span style="font-weight: 600;">👑 ${displayName}</span>
+                                <span style="font-weight: 600;">${displayName}</span>
                             </div>
                             <div class="score">${Number(data.score).toLocaleString()} 🪙</div>
                         </div>
@@ -1620,7 +1628,7 @@
                         <div class="leaderboard-item my-profile">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <span class="rank-number">#...</span>
-                                <span style="font-weight: 600;">👑 ${currentUserName} (You)</span>
+                                <span style="font-weight: 600;">${currentUserName} (You)</span>
                             </div>
                             <div class="score">${score.toLocaleString()} 🪙</div>
                         </div>
@@ -2202,348 +2210,14 @@
                     } else if (selectedOutcome.type === 'triple') {
                         score += selectedOutcome.reward;
                         resText.innerText = `Three of a kind! +${selectedOutcome.reward.toLocaleString()} coins!`;
-                        alert(`🌟 All 3 symbols matched! You won ${selectedOutcome.reward.toLocaleString()} coins!`);
-                    } else if (selectedOutcome.type === 'double') {
-                        score += selectedOutcome.reward;
-                        resText.innerText = `Partial match! +${selectedOutcome.reward.toLocaleString()} coins!`;
-                        alert(`✨ Matching symbols found! ${selectedOutcome.reward.toLocaleString()} coins awarded!`);
-                    } else {
-                        resText.innerText = "No match, try again!";
                     }
-
+                    btn.disabled = false;
+                    btn.style.opacity = "1";
                     updateUI();
                     saveState();
                     syncScoreToFirebase();
-                    btn.disabled = false;
-                    btn.style.opacity = "1";
                 }
             }, 80);
-        }
-
-        let currentCupLevel = 1;
-        let winningIndex = 1;
-        let cupPositions = [0, 1, 2];
-        let gameActive = false;
-        let isShuffling = false;
-
-        const cupLevelsData = {
-            1: { cost: 500, win: 1000, energyReward: 200, shuffles: 4, speed: 300 },
-            2: { cost: 2500, win: 5000, energyReward: 1000, shuffles: 7, speed: 220 },
-            3: { cost: 10000, win: 25000, energyReward: 3500, shuffles: 11, speed: 160 },
-            4: { cost: 50000, win: 150000, energyReward: 10000, shuffles: 16, speed: 110 },
-            5: { cost: 200000, win: 800000, energyReward: 30000, shuffles: 22, speed: 80 }
-        };
-
-        const SLOT_DISTANCE = 90;
-
-        function checkGlobalCooldown() {
-            let now = new Date().getTime();
-            let btn = document.getElementById('startCupGameBtn');
-            let cooldownText = document.getElementById('cupCooldownText');
-
-            if (globalCupCooldownTimestamp) {
-                let diff = now - parseInt(globalCupCooldownTimestamp);
-                let dayMs = 24 * 60 * 60 * 1000;
-                if (diff < dayMs) {
-                    let timeLeft = dayMs - diff;
-                    let hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                    let mins = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    btn.disabled = true;
-                    btn.style.opacity = "0.5";
-                    cooldownText.innerText = `⏳ All levels completed! Next restart in ${hours}h ${mins}m`;
-                    return true;
-                } else {
-                    globalCupCooldownTimestamp = "";
-                    localStorage.removeItem('biz_cup_global_cooldown');
-                    cupLevelDataState = {
-                        1: { unlocked: true, completed: false },
-                        2: { unlocked: false, completed: false },
-                        3: { unlocked: false, completed: false },
-                        4: { unlocked: false, completed: false },
-                        5: { unlocked: false, completed: false }
-                    };
-                    localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
-                }
-            }
-            btn.disabled = false;
-            btn.style.opacity = "1";
-            cooldownText.innerText = "";
-            return false;
-        }
-
-        window.setCupLevel = function(lvl) {
-            if (gameActive || isShuffling) return;
-            
-            if (!cupLevelDataState[lvl].unlocked) {
-                alert("Complete the previous level first!");
-                return;
-            }
-
-            currentCupLevel = lvl;
-            
-            for(let i=1; i<=5; i++) {
-                let btn = document.getElementById(`lvlBtn${i}`);
-                btn.classList.remove('active-level', 'completed-level');
-                
-                if(cupLevelDataState[i].completed) {
-                    btn.classList.add('completed-level');
-                } else if(!cupLevelDataState[i].unlocked) {
-                    btn.style.opacity = "0.4";
-                } else {
-                    btn.style.opacity = "1";
-                }
-            }
-            document.getElementById(`lvlBtn${lvl}`).classList.add('active-level');
-
-            let data = cupLevelsData[lvl];
-            document.getElementById('cupGameInfo').innerText = `Cost: ${data.cost.toLocaleString()} BIZ777 | Win: ${data.win.toLocaleString()} Coins + ${data.energyReward.toLocaleString()} Energy`;
-            
-            checkGlobalCooldown();
-            initCupStageUI();
-        }
-
-        function renderCupPositions(animate = false) {
-            for (let cupId = 0; cupId < 3; cupId++) {
-                let slotIndex = cupPositions.indexOf(cupId);
-                let slotEl = document.getElementById(`slot${cupId}`);
-                slotEl.style.transitionDuration = animate ? `${cupLevelsData[currentCupLevel].speed}ms` : '0.2s';
-                let xOffset = (slotIndex - 1) * SLOT_DISTANCE;
-                slotEl.style.transform = `translateX(${xOffset}px)`;
-            }
-        }
-
-        window.initCupStageUI = function() {
-            winningIndex = Math.floor(Math.random() * 3);
-            cupPositions = [0, 1, 2];
-            
-            renderCupPositions(false);
-
-            for (let i = 0; i < 3; i++) {
-                document.getElementById(`cup${i}`).classList.remove('lifted');
-                document.getElementById(`coin${i}`).style.opacity = "0";
-            }
-
-            if (!checkGlobalCooldown()) {
-                document.getElementById(`startCupGameBtn`).innerText = "Start Round 🎮";
-            }
-            gameActive = false;
-            isShuffling = false;
-        }
-
-        window.startCupRound = function() {
-            if (isShuffling || gameActive) return;
-            if (checkGlobalCooldown()) return;
-
-            let data = cupLevelsData[currentCupLevel];
-            if (score < data.cost) { alert("Not enough BIZ777 coins!"); return; }
-
-            score -= data.cost;
-            updateUI();
-            saveState();
-            syncScoreToFirebase();
-
-            isShuffling = true;
-            document.getElementById('startCupGameBtn').innerText = "Shuffling... 🌪️";
-            document.getElementById('startCupGameBtn').disabled = true;
-
-            for (let i = 0; i < 3; i++) {
-                document.getElementById(`cup${i}`).classList.add('lifted');
-            }
-            let winningCupId = winningIndex;
-            document.getElementById(`coin${winningCupId}`).style.opacity = "1";
-
-            setTimeout(() => {
-                for (let i = 0; i < 3; i++) {
-                    document.getElementById(`cup${i}`).classList.remove('lifted');
-                    document.getElementById(`coin${i}`).style.opacity = "0";
-                }
-
-                setTimeout(() => {
-                    let shuffleCount = 0;
-                    let shuffleInterval = setInterval(() => {
-                        let slotA = Math.floor(Math.random() * 3);
-                        let slotB;
-                        do {
-                            slotB = Math.floor(Math.random() * 3);
-                        } while (slotB === slotA);
-
-                        let temp = cupPositions[slotA];
-                        cupPositions[slotA] = cupPositions[slotB];
-                        cupPositions[slotB] = temp;
-
-                        renderCupPositions(true);
-
-                        shuffleCount++;
-                        if (shuffleCount >= data.shuffles) {
-                            clearInterval(shuffleInterval);
-                            isShuffling = false;
-                            gameActive = true;
-                            document.getElementById('startCupGameBtn').innerText = "Choose a Cup! 🤔";
-                        }
-                    }, data.speed + 20);
-                }, 350);
-            }, 1000);
-        }
-
-        window.chooseCup = function(slotIdx) {
-            if (isShuffling || !gameActive) return;
-            gameActive = false;
-            let data = cupLevelsData[currentCupLevel];
-
-            for (let i = 0; i < 3; i++) {
-                document.getElementById(`cup${i}`).classList.add('lifted');
-            }
-
-            let chosenCupId = slotIdx;
-            let winningCupId = winningIndex;
-
-            document.getElementById(`coin${winningCupId}`).style.opacity = "1";
-
-            if (chosenCupId === winningCupId) {
-                score += data.win;
-                energy = Math.min(maxEnergy, energy + data.energyReward);
-                cupLevelDataState[currentCupLevel].completed = true;
-                
-                let nextLvl = currentCupLevel + 1;
-                if (nextLvl <= 5) {
-                    cupLevelDataState[nextLvl].unlocked = true;
-                } else {
-                    globalCupCooldownTimestamp = new Date().getTime().toString();
-                    localStorage.setItem('biz_cup_global_cooldown', globalCupCooldownTimestamp);
-                    alert(`🏆 Incredible! You completed all levels! Levels reset in 24 hours.`);
-                }
-
-                setTimeout(() => {
-                    if (nextLvl <= 5) {
-                        alert(`🎉 Correct! You won ${data.win.toLocaleString()} coins AND +${data.energyReward.toLocaleString()} Energy! Level ${nextLvl} unlocked!`);
-                        setCupLevel(nextLvl);
-                    } else {
-                        alert(`🎉 Correct! You won ${data.win.toLocaleString()} coins AND +${data.energyReward.toLocaleString()} Energy! All stages cleared!`);
-                        setCupLevel(1);
-                    }
-                }, 400);
-            } else {
-                alert(`❌ Wrong cup! The BIZ777 ball was under cup #${winningCupId + 1}. Try again!`);
-                setTimeout(() => {
-                    setCupLevel(currentCupLevel);
-                }, 400);
-            }
-
-            localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
-            updateUI();
-            saveState();
-            syncScoreToFirebase();
-        }
-
-        let pwrGameActive = false;
-        let pwrScore = 0;
-        let pwrTimerLeft = 45;
-        let pwrTimerInterval = null;
-        const pwrCost = 200;
-        const pwrSigns = ['rock', 'paper', 'scissors'];
-        const pwrEmojis = { rock: '✊', paper: '✋', scissors: '✌️' };
-
-        window.resetPwrLobby = function() {
-            pwrGameActive = false;
-            if (pwrTimerInterval) clearInterval(pwrTimerInterval);
-            document.getElementById('startPwrBtn').style.display = 'block';
-            document.getElementById('pwrTimer').innerText = `⏱️ 45 sec`;
-            document.getElementById('pwrScore').innerText = `Score: 0`;
-            document.getElementById('pwrActionText').innerText = `BATTLE READY`;
-            document.getElementById('pwrLeftHand').innerText = '✊';
-            document.getElementById('pwrRightHand').innerText = '✊';
-            document.getElementById('pwrResultMsg').innerText = '';
-        }
-
-        window.startPwrGame = function() {
-            if (score < pwrCost) {
-                alert("Not enough coins! Required: 200 coins.");
-                return;
-            }
-
-            score -= pwrCost;
-            updateUI();
-            saveState();
-            syncScoreToFirebase();
-
-            pwrScore = 0;
-            pwrTimerLeft = 45;
-            pwrGameActive = true;
-
-            document.getElementById('startPwrBtn').style.display = 'none';
-            document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
-            document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimerLeft}s`;
-            document.getElementById('pwrResultMsg').innerText = "Battle started! Make your choice!";
-
-            if (pwrTimerInterval) clearInterval(pwrTimerInterval);
-            pwrTimerInterval = setInterval(() => {
-                pwrTimerLeft--;
-                document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimerLeft}s`;
-                if (pwrTimerLeft <= 0) {
-                    endPwrGame();
-                }
-            }, 1000);
-        }
-
-        window.playPwrChoice = function(playerChoice) {
-            if (!pwrGameActive) return;
-
-            let botChoice = pwrSigns[Math.floor(Math.random() * pwrSigns.length)];
-
-            document.getElementById('pwrLeftHand').innerText = pwrEmojis[playerChoice];
-            document.getElementById('pwrRightHand').innerText = pwrEmojis[botChoice];
-
-            let actionText = document.getElementById('pwrActionText');
-            let msgEl = document.getElementById('pwrResultMsg');
-
-            if (playerChoice === botChoice) {
-                actionText.innerText = "DRAW";
-                msgEl.innerText = "It's a draw! Try again.";
-            } else if (
-                (playerChoice === 'rock' && botChoice === 'scissors') ||
-                (playerChoice === 'paper' && botChoice === 'rock') ||
-                (playerChoice === 'scissors' && botChoice === 'paper')
-            ) {
-                actionText.innerText = "WIN +50";
-                pwrScore += 50;
-                score += 50;
-                updateUI();
-                saveState();
-                syncScoreToFirebase();
-                msgEl.innerText = "You won this round! +50 coins.";
-            } else {
-                actionText.innerText = "LOSE -20";
-                pwrScore = Math.max(0, pwrScore - 20);
-                score = Math.max(0, score - 20);
-                updateUI();
-                saveState();
-                syncScoreToFirebase();
-                msgEl.innerText = "Bot won this round! -20 coins.";
-            }
-
-            document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
-        }
-
-        function endPwrGame() {
-            pwrGameActive = false;
-            clearInterval(pwrTimerInterval);
-
-            document.getElementById('startPwrBtn').style.display = 'block';
-            document.getElementById('startPwrBtn').innerText = `Play Again 🚀 (Cost: 200 🪙)`;
-            document.getElementById('pwrResultMsg').innerText = `Time's up! Total Battle Score: ${pwrScore}`;
-            alert(`Battle Over! You earned ${pwrScore} coins.`);
-        }
-
-        window.switchTab = function(tabName, btnElement) {
-            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            if (btnElement) btnElement.classList.add('active');
-
-            if (tabName === 'leaderboard') {
-                renderLeaderboard();
-            }
         }
 
         function saveState() {
@@ -2555,10 +2229,17 @@
             localStorage.setItem('biz_freeTap20Claimed', freeTap20Claimed);
         }
 
-        window.addEventListener('load', () => {
-            updateUI();
-            syncScoreToFirebase();
-        });
+        window.switchTab = function(tabId, el) {
+            document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            el.classList.add('active');
+            if (tabId === 'leaderboard') {
+                renderLeaderboard();
+            }
+        }
+
+        updateUI();
     </script>
 </body>
 </html>
