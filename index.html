@@ -2180,248 +2180,50 @@
                 { symbols: [{icon:'💰', label:'BIZ777'}, {icon:'💰', label:'BIZ777'}, {icon:'💰', label:'BIZ777'}], weight: 15, reward: 3000, type: 'triple' },
                 { symbols: [{icon:'🪙', label:'BIZ777'}, {icon:'🪙', label:'BIZ777'}, {icon:'🎁', label:'BIZ777'}], weight: 40, reward: 800, type: 'double' },
                 { symbols: [{icon:'💎', label:'BIZ777'}, {icon:'⭐', label:'BIZ777'}, {icon:'💎', label:'BIZ777'}], weight: 50, reward: 500, type: 'double' },
-                { symbols: [{icon:'💵', label:'BIZ777'}, {icon:'🪙', label:'BIZ777'}, {icon:'🎁', label:'BIZ777'}], weight: 100, reward: 0, type: 'none' }
+                { symbols: [{icon:'💵', label:'BIZ777'}, {icon:'🪙', label:'BIZ777'}, {icon:'🎁', label:'BIZ777'}], weight: 8879, reward: 0, type: 'loss' }
             ];
 
             let totalWeight = slotWeights.reduce((sum, item) => sum + item.weight, 0);
             let randomNum = Math.random() * totalWeight;
             let currentSum = 0;
-            let chosenResult = slotWeights[slotWeights.length - 1];
+            let selectedOutcome = slotWeights[slotWeights.length - 1];
 
             for (let item of slotWeights) {
                 currentSum += item.weight;
                 if (randomNum <= currentSum) {
-                    chosenResult = item;
+                    selectedOutcome = item;
                     break;
                 }
             }
 
             let counter = 0;
             let spinInterval = setInterval(() => {
-                for (let i = 0; i < 3; i++) {
-                    let randItem = slotItemsList[Math.floor(Math.random() * slotItemsList.length)];
-                    document.getElementById(`reel${i}`).innerHTML = `<span>${randItem.icon}</span>${randItem.label}`;
-                }
+                document.getElementById('reel0').innerHTML = `<span>${slotItemsList[Math.floor(Math.random() * slotItemsList.length)].icon}</span>BIZ777`;
+                document.getElementById('reel1').innerHTML = `<span>${slotItemsList[Math.floor(Math.random() * slotItemsList.length)].icon}</span>BIZ777`;
+                document.getElementById('reel2').innerHTML = `<span>${slotItemsList[Math.floor(Math.random() * slotItemsList.length)].icon}</span>BIZ777`;
                 counter++;
-                if (counter > 15) {
+
+                if (counter > 18) {
                     clearInterval(spinInterval);
-                    for (let i = 0; i < 3; i++) {
-                        let finalSymbol = chosenResult.symbols[i];
-                        document.getElementById(`reel${i}`).innerHTML = `<span>${finalSymbol.icon}</span>${finalSymbol.label}`;
-                    }
+                    document.getElementById('reel0').innerHTML = `<span>${selectedOutcome.symbols[0].icon}</span>${selectedOutcome.symbols[0].label}`;
+                    document.getElementById('reel1').innerHTML = `<span>${selectedOutcome.symbols[1].icon}</span>${selectedOutcome.symbols[1].label}`;
+                    document.getElementById('reel2').innerHTML = `<span>${selectedOutcome.symbols[2].icon}</span>${selectedOutcome.symbols[2].label}`;
 
-                    if (chosenResult.reward > 0) {
-                        score += chosenResult.reward;
-                        resText.innerText = `🎉 You won ${chosenResult.reward.toLocaleString()} Coins!`;
-                        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-                    } else {
-                        resText.innerText = `😢 No win. Try again!`;
-                        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+                    if (selectedOutcome.type === 'mega') {
+                        score += selectedOutcome.reward;
+                        resText.innerText = "Mega Jackpot! +5,000,000 coins! 🎉";
+                        alert("🎉 Incredible! All 3 BIZ777 coins landed and you won 5,000,000 coins Jackpot!");
+                    } else if (selectedOutcome.type === 'triple') {
+                        score += selectedOutcome.reward;
+                        resText.innerText = `Three of a kind! +${selectedOutcome.reward.toLocaleString()} coins!`;
                     }
-
+                    btn.disabled = false;
+                    btn.style.opacity = "1";
                     updateUI();
                     saveState();
                     syncScoreToFirebase();
-
-                    btn.disabled = false;
-                    btn.style.opacity = "1";
                 }
             }, 80);
-        }
-
-        let currentCupLevel = 1;
-        let cupBallPosition = 0;
-        let cupGameInProgress = false;
-
-        window.setCupLevel = function(lvl) {
-            currentCupLevel = lvl;
-            for (let i = 1; i <= 5; i++) {
-                let btn = document.getElementById(`lvlBtn${i}`);
-                if (i === lvl) {
-                    btn.classList.add('active-level');
-                } else {
-                    btn.classList.remove('active-level');
-                }
-            }
-            initCupStageUI();
-        }
-
-        window.initCupStageUI = function() {
-            let rewards = { 1: 1000, 2: 2500, 3: 6000, 4: 15000, 5: 40000 };
-            let costs = { 1: 500, 2: 1200, 3: 3000, 4: 7000, 5: 15000 };
-            let energyRewards = { 1: 200, 2: 500, 3: 1200, 4: 3000, 5: 8000 };
-            
-            document.getElementById('cupGameInfo').innerText = `Cost: ${costs[currentCupLevel].toLocaleString()} BIZ777 | Win: ${rewards[currentCupLevel].toLocaleString()} Coins + ${energyRewards[currentCupLevel]} Energy`;
-            
-            for (let i = 0; i < 3; i++) {
-                document.getElementById(`coin${i}`).style.opacity = "0";
-                document.getElementById(`cup${i}`).classList.remove('lifted');
-            }
-        }
-
-        window.startCupRound = function() {
-            let costs = { 1: 500, 2: 1200, 3: 3000, 4: 7000, 5: 15000 };
-            let cost = costs[currentCupLevel];
-
-            if (score < cost) {
-                alert("Not enough coins for this level!");
-                return;
-            }
-
-            score -= cost;
-            updateUI();
-            saveState();
-            syncScoreToFirebase();
-
-            cupGameInProgress = true;
-            document.getElementById('startCupGameBtn').disabled = true;
-            document.getElementById('cupCooldownText').innerText = "Shuffling cups... Watch closely!";
-
-            for (let i = 0; i < 3; i++) {
-                document.getElementById(`cup${i}`).classList.add('lifted');
-            }
-
-            cupBallPosition = Math.floor(Math.random() * 3);
-            document.getElementById(`coin${cupBallPosition}`).style.opacity = "1";
-
-            setTimeout(() => {
-                for (let i = 0; i < 3; i++) {
-                    document.getElementById(`cup${i}`).classList.remove('lifted');
-                    document.getElementById(`coin${i}`).style.opacity = "0";
-                }
-                document.getElementById('cupCooldownText').innerText = "Cups shuffled! Choose a cup!";
-            }, 1200);
-        }
-
-        window.chooseCup = function(cupIndex) {
-            if (!cupGameInProgress) return;
-            cupGameInProgress = false;
-
-            document.getElementById(`cup${cupIndex}`).classList.add('lifted');
-            document.getElementById(`coin${cupIndex}`).style.opacity = "1";
-
-            let rewards = { 1: 1000, 2: 2500, 3: 6000, 4: 15000, 5: 40000 };
-            let energyRewards = { 1: 200, 2: 500, 3: 1200, 4: 3000, 5: 8000 };
-
-            if (cupIndex === cupBallPosition) {
-                let r = rewards[currentCupLevel];
-                let e = energyRewards[currentCupLevel];
-                score += r;
-                energy = Math.min(maxEnergy, energy + e);
-                document.getElementById('cupCooldownText').innerText = `🎉 Correct! Won ${r.toLocaleString()} coins & ${e} energy!`;
-            } else {
-                document.getElementById('cupCooldownText').innerText = `😢 Wrong cup! The ball was under cup #${cupBallPosition + 1}.`;
-            }
-
-            updateUI();
-            saveState();
-            syncScoreToFirebase();
-            document.getElementById('startCupGameBtn').disabled = false;
-        }
-
-        let pwrGameActive = false;
-        let pwrScore = 0;
-        let pwrTimerVal = 45;
-        let pwrTimerInterval = null;
-
-        window.resetPwrLobby = function() {
-            document.getElementById('pwrLeftHand').innerText = "✊";
-            document.getElementById('pwrRightHand').innerText = "✊";
-            document.getElementById('pwrActionText').innerText = "BATTLE READY";
-            document.getElementById('startPwrBtn').style.display = 'block';
-            document.getElementById('pwrResultMsg').innerText = "";
-        }
-
-        window.startPwrGame = function() {
-            let cost = 200;
-            if (score < cost) {
-                alert("Not enough coins! Cost: 200 coins.");
-                return;
-            }
-            score -= cost;
-            updateUI();
-            saveState();
-            syncScoreToFirebase();
-
-            pwrScore = 0;
-            pwrTimerVal = 45;
-            pwrGameActive = true;
-            document.getElementById('startPwrBtn').style.display = 'none';
-            document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
-            document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimerVal} sec`;
-            document.getElementById('pwrResultMsg').innerText = "Battle started! Make your choice!";
-
-            if (pwrTimerInterval) clearInterval(pwrTimerInterval);
-            pwrTimerInterval = setInterval(() => {
-                pwrTimerVal--;
-                document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimerVal} sec`;
-                if (pwrTimerVal <= 0) {
-                    endPwrGame();
-                }
-            }, 1000);
-        }
-
-        window.playPwrChoice = function(playerChoice) {
-            if (!pwrGameActive) return;
-
-            const signs = {
-                rock: "✊",
-                paper: "✋",
-                scissors: "✌️"
-            };
-
-            const choices = ['rock', 'paper', 'scissors'];
-            const botChoice = choices[Math.floor(Math.random() * choices.length)];
-
-            document.getElementById('pwrLeftHand').innerText = signs[playerChoice];
-            document.getElementById('pwrRightHand').innerText = signs[botChoice];
-
-            let resultStr = "";
-            if (playerChoice === botChoice) {
-                resultStr = "Draw! 🤝 (+0)";
-                document.getElementById('pwrActionText').innerText = "DRAW";
-            } else if (
-                (playerChoice === 'rock' && botChoice === 'scissors') ||
-                (playerChoice === 'paper' && botChoice === 'rock') ||
-                (playerChoice === 'scissors' && botChoice === 'paper')
-            ) {
-                pwrScore += 10;
-                score += 10;
-                resultStr = "You Won this round! 🎉 (+10)";
-                document.getElementById('pwrActionText').innerText = "YOU WIN";
-            } else {
-                pwrScore = Math.max(0, pwrScore - 5);
-                score = Math.max(0, score - 5);
-                resultStr = "Bot Won this round! 😢 (-5)";
-                document.getElementById('pwrActionText').innerText = "BOT WINS";
-            }
-
-            document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
-            document.getElementById('pwrResultMsg').innerText = resultStr;
-            updateUI();
-            saveState();
-            syncScoreToFirebase();
-        }
-
-        function endPwrGame() {
-            pwrGameActive = false;
-            clearInterval(pwrTimerInterval);
-            document.getElementById('startPwrBtn').style.display = 'block';
-            document.getElementById('startPwrBtn').innerText = `Play Again 🚀 (Cost: 200 🪙)`;
-            document.getElementById('pwrResultMsg').innerText = `Battle Ended! Final Score: ${pwrScore}`;
-            alert(`Paper Wraps Rock Battle finished! Total Score: ${pwrScore}`);
-        }
-
-        window.switchTab = function(tabId, btnEl) {
-            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            btnEl.classList.add('active');
-
-            if (tabId === 'leaderboard') {
-                renderLeaderboard();
-            }
         }
 
         function saveState() {
@@ -2431,7 +2233,26 @@
             localStorage.setItem('biz_tapPower', tapPower);
             localStorage.setItem('biz_invitedFriends', invitedFriendsCount);
             localStorage.setItem('biz_freeTap20Claimed', freeTap20Claimed);
+            localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
         }
+
+        window.switchTab = function(tabId, el) {
+            document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            el.classList.add('active');
+            if (tabId === 'leaderboard') {
+                renderLeaderboard();
+            }
+        };
+
+        window.initCupStageUI = function() {};
+        window.setCupLevel = function(lvl) {};
+        window.chooseCup = function(slot) {};
+        window.startCupRound = function() {};
+        window.resetPwrLobby = function() {};
+        window.startPwrGame = function() {};
+        window.playPwrChoice = function(choice) {};
 
         updateUI();
     </script>
