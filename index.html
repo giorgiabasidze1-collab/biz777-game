@@ -129,21 +129,6 @@
             outline: none;
         }
 
-        .music-toggle-btn {
-            background: #0b0f19;
-            color: var(--accent);
-            border: 1px solid var(--accent);
-            border-radius: 6px;
-            padding: 4px 8px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-            outline: none;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
         .level-progress-container {
             width: 100%;
             display: flex;
@@ -707,11 +692,6 @@
     </style>
 </head>
 <body>
-    <!-- Background Music Audio Element (Replace src with your preferred music link) -->
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
-
     <div class="app-container">
         <header>
             <div class="header-top">
@@ -741,7 +721,6 @@
                         <option value="de">Deutsch</option>
                     </select>
                 </div>
-                <button class="music-toggle-btn" id="musicToggleBtn" onclick="toggleBackgroundMusic()">🎵 Music: OFF</button>
                 <div class="level-badge" id="coinsLabelText">BIZ777 Coins</div>
             </div>
 
@@ -1045,27 +1024,6 @@
     <!-- AdsGram SDK Integration -->
     <script src="https://sad.adsgram.ai/js/sad.js"></script>
     <script>
-        // Background Music Controls
-        let isMusicPlaying = false;
-        function toggleBackgroundMusic() {
-            let bgMusic = document.getElementById('bgMusic');
-            let musicBtn = document.getElementById('musicToggleBtn');
-            if (!bgMusic) return;
-
-            if (isMusicPlaying) {
-                bgMusic.pause();
-                isMusicPlaying = false;
-                musicBtn.innerText = "🎵 Music: OFF";
-            } else {
-                bgMusic.play().then(() => {
-                    isMusicPlaying = true;
-                    musicBtn.innerText = "🎵 Music: ON";
-                }).catch(error => {
-                    console.log("Audio playback prevented or failed:", error);
-                });
-            }
-        }
-
         const translations = {
             en: {
                 coinsLabel: "BIZ777 Coins",
@@ -1244,7 +1202,7 @@
                 flappySubHeader: "🕹️ Flappy BIZ777",
                 flappyInstructions: "कूदने के लिए टैप करें। बाधाओं से बचें!",
                 cupsSubHeader: "🕹️ BIZ777 बॉल खोजें",
-                slotSubHeader: "🕹️️ स्लॉट मशीन स्पिन",
+                slotSubHeader: "🕹️ स्लॉट मशीन स्पिन",
                 slotMachineBanner: "लागत: 500 सिक्के | 3x BIZ777 = 5,000,000 जैकपॉट!",
                 pwrSubHeader: "✌️ पेपर रैップ्स रॉक",
                 pwrYou: "आप",
@@ -1440,7 +1398,7 @@
                 gameCardSlotDesc: "Kosten: 500 Münzen | 3x BIZ777 = 5.000.000 Jackpot!",
                 gameCardPwrTitle: "✌️ Schere, Stein, Papier",
                 gameCardPwrDesc: "Klassisches Duell mit Emoji-Symbolen!",
-                catchSubHeader: "🕹️️ BIZ777 Fangspiel",
+                catchSubHeader: "🕹️ BIZ777 Fangspiel",
                 flappySubHeader: "🕹️ Flappy BIZ777",
                 flappyInstructions: "Tippen zum Springen. Hindernissen ausweichen!",
                 cupsSubHeader: "🕹️ Finde den BIZ777 Ball",
@@ -1581,17 +1539,694 @@
             4: { unlocked: false, completed: false },
             5: { unlocked: false, completed: false }
         };
+        let globalCupCooldownTimestamp = localStorage.getItem('biz_cup_global_cooldown') || "";
 
-        let userData = {
-            id: (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) ? String(tg.initDataUnsafe.user.id) : "guest_" + Math.floor(Math.random() * 1000000),
-            username: (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.username) ? tg.initDataUnsafe.user.username : ("User_" + Math.floor(Math.random() * 1000)),
-            firstName: (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) ? tg.initDataUnsafe.user.first_name : "Biz777 User"
+        let userId = "user_" + Math.floor(Math.random() * 100000);
+        let currentUserName = "BIZ777 User";
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            const user = tg.initDataUnsafe.user;
+            userId = String(user.id);
+            currentUserName = user.first_name || "BIZ777 User";
+            document.getElementById('userName').innerText = currentUserName;
+            document.getElementById('userAvatar').innerText = (user.first_name || "B")[0].toUpperCase();
+        }
+
+        window.showRewardedAd = function() {
+            if (window.Adsgram) {
+                window.Adsgram.init({ blockId: "48395" }).show().then((result) => {
+                    energy = maxEnergy;
+                    updateUI();
+                    saveState();
+                    syncScoreToFirebase();
+                    alert("Reward received! Your energy is fully refilled back to max!");
+                }).catch((result) => {
+                    console.log("Ad skipped or failed");
+                    alert("Ad was skipped or failed to load. Please try again to get the reward.");
+                });
+            } else {
+                energy = maxEnergy;
+                updateUI();
+                saveState();
+                syncScoreToFirebase();
+                alert("Energy successfully refilled back to max (Simulation mode)!");
+            }
         };
 
-        document.getElementById('userName').innerText = userData.firstName;
-        document.getElementById('userAvatar').innerText = userData.firstName.charAt(0).toUpperCase();
+        async function syncScoreToFirebase() {
+            try {
+                await setDoc(doc(db, "leaderboard", userId), {
+                    name: currentUserName,
+                    score: Number(score),
+                    timestamp: new Date()
+                }, { merge: true });
+            } catch (e) {
+                console.error("Error saving score to database: ", e);
+            }
+        }
 
-        function saveDataLocally() {
+        window.renderLeaderboard = async function() {
+            const container = document.getElementById('leaderboardContainer');
+            container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 16px;">Loading leaderboard...</div>`;
+
+            try {
+                const q = query(collection(db, "leaderboard"), orderBy("score", "desc"), limit(30));
+                const querySnapshot = await getDocs(q);
+                
+                container.innerHTML = "";
+                let rank = 1;
+                let foundUserInList = false;
+
+                querySnapshot.forEach((documentSnap) => {
+                    let data = documentSnap.data();
+                    let isMe = (documentSnap.id === userId);
+                    if (isMe) foundUserInList = true;
+
+                    let profileClass = isMe ? "leaderboard-item my-profile" : "leaderboard-item";
+                    let displayName = isMe ? `${data.name} (You)` : data.name;
+                    
+                    let rankDisplay = `#${rank}`;
+                    if (rank === 1) {
+                        rankDisplay = "👑";
+                    } else if (rank === 2) {
+                        rankDisplay = "🥈";
+                    } else if (rank === 3) {
+                        rankDisplay = "🥉";
+                    }
+
+                    let itemHTML = `
+                        <div class="${profileClass}">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="rank-number">${rankDisplay}</span>
+                                <span style="font-weight: 600;">${displayName}</span>
+                            </div>
+                            <div class="score">${Number(data.score).toLocaleString()} 🪙</div>
+                        </div>
+                    `;
+                    container.innerHTML += itemHTML;
+                    rank++;
+                });
+
+                if (!foundUserInList) {
+                    let itemHTML = `
+                        <div class="leaderboard-item my-profile">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="rank-number">#...</span>
+                                <span style="font-weight: 600;">${currentUserName} (You)</span>
+                            </div>
+                            <div class="score">${score.toLocaleString()} 🪙</div>
+                        </div>
+                    `;
+                    container.innerHTML += itemHTML;
+                }
+            } catch (e) {
+                console.error("Error loading leaderboard: ", e);
+                container.innerHTML = `<div style="text-align: center; color: var(--danger); padding: 16px;">Failed to load leaderboard.</div>`;
+            }
+        };
+
+        const levels = [
+            { name: "1. Complete Beginner", icon: "LEVEL1.jfif", min: 0, max: 500 },
+            { name: "2. Skinny Weakling", icon: "LEVEL2.jfif", min: 500, max: 1200 },
+            { name: "3. Soft & Out of Shape", icon: "LEVEL3.jfif", min: 1200, max: 2500 },
+            { name: "4. Couch Potato", icon: "LEVEL4.jfif", min: 2500, max: 4500 },
+            { name: "5. Starting to Move", icon: "LEVEL5.jfif", min: 4500, max: 7500 },
+            { name: "6. Light Jogger", icon: "LEVEL6.jfif", min: 7500, max: 11000 },
+            { name: "7. First Dumbbells", icon: "LEVEL7.jfif", min: 11000, max: 16000 },
+            { name: "8. Light Flexer", icon: "LEVEL8.jfif", min: 16000, max: 23000 },
+            { name: "9. Gym Novice", icon: "LEVEL9.jfif", min: 23000, max: 32000 },
+            { name: "10. Noticeable Biceps", icon: "LEVEL10.jfif", min: 32000, max: 44000 },
+            { name: "11. Fitness Enthusiast", icon: "LEVEL11.jfif", min: 44000, max: 60000 },
+            { name: "12. Toned Physique", icon: "LEVEL12.jfif", min: 60000, max: 80000 },
+            { name: "13. Shredded Abs", icon: "LEVEL13.jfif", min: 80000, max: 105000 },
+            { name: "14. Muscle Builder", icon: "LEVEL14.jfif", min: 105000, max: 135000 },
+            { name: "15. Heavy Lifter", icon: "LEVEL15.jfif", min: 135000, max: 175000 },
+            { name: "16. Iron Pumped", icon: "LEVEL16.jfif", min: 175000, max: 225000 },
+            { name: "17. Local Gym Beast", icon: "LEVEL17.jfif", min: 225000, max: 285000 },
+            { name: "18. Aesthetic Model Face", icon: "LEVEL18.jfif", min: 285000, max: 360000 },
+            { name: "19. Sharp Jawline King", icon: "LEVEL19.jfif", min: 360000, max: 450000 },
+            { name: "20. Pro Bodybuilder", icon: "LEVEL20.jfif", min: 450000, max: 560000 },
+            { name: "21. Massive Mass", icon: "LEVEL21.jfif", min: 560000, max: 700000 },
+            { name: "22. Titan Physique", icon: "LEVEL22.jfif", min: 700000, max: 880000 },
+            { name: "23. Greek God Proportions", icon: "LEVEL23.jfif", min: 880000, max: 1100000 },
+            { name: "24. Perfect Facial Symmetry", icon: "LEVEL24.jfif", min: 1100000, max: 1400000 },
+            { name: "25. Superhuman Strength", icon: "LEVEL25.jfif", min: 1400000, max: 1800000 },
+            { name: "26. Cosmic Energy Receiver", icon: "LEVEL26.jfif", min: 1800000, max: 2300000 },
+            { name: "27. Silver Glow Awakening", icon: "LEVEL27.jfif", min: 2300000, max: 3000000 },
+            { name: "28. Liquid Metal Form", icon: "LEVEL28.jfif", min: 3000000, max: 4000000 },
+            { name: "29. Perfect Cosmic Being", icon: "LEVEL29.jfif", min: 4000000, max: 5500000 },
+            { name: "30. SILVER SURFER LEGEND", icon: "LEVEL30.jfif", min: 5500000, max: Infinity }
+        ];
+
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const energyText = document.getElementById('energyText');
+        const energyFill = document.getElementById('energyFill');
+        const clickerBtn = document.getElementById('clickerBtn');
+        const levelName = document.getElementById('levelName');
+        const buildingIcon = document.getElementById('buildingIcon');
+        const friendCountDisplay = document.getElementById('friendCountDisplay');
+        
+        const levelBarFill = document.getElementById('levelBarFill');
+        const nextLevelText = document.getElementById('nextLevelText');
+        const levelPercentage = document.getElementById('levelPercentage');
+
+        clickerBtn.addEventListener('pointerdown', (e) => {
+            if (energy >= tapPower) {
+                energy -= tapPower;
+                score += tapPower;
+                showFloatingText(e.clientX, e.clientY, `+${tapPower}`);
+                updateUI();
+                saveState();
+                syncScoreToFirebase();
+            }
+        });
+
+        function showFloatingText(x, y, text) {
+            const el = document.createElement('div');
+            el.className = 'floating-number';
+            el.innerText = text;
+            el.style.left = `${x - 20}px`;
+            el.style.top = `${y - 40}px`;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 700);
+        }
+
+        setInterval(() => {
+            if (energy < maxEnergy) {
+                energy = Math.min(maxEnergy, energy + 3);
+                updateUI();
+                saveState();
+            }
+        }, 1000);
+
+        window.updateUI = function() {
+            scoreDisplay.innerText = score.toLocaleString();
+            energyText.innerText = `${energy} / ${maxEnergy}`;
+            energyFill.style.width = `${(energy / maxEnergy) * 100}%`;
+            friendCountDisplay.innerText = invitedFriendsCount;
+
+            let currentLevelIndex = 0;
+            for (let i = levels.length - 1; i >= 0; i--) {
+                if (score >= levels[i].min) {
+                    currentLevelIndex = i;
+                    break;
+                }
+            }
+
+            let currentLevelObj = levels[currentLevelIndex];
+            levelName.innerText = currentLevelObj.name;
+            
+            if (currentLevelObj.icon.includes('/') || currentLevelObj.icon.includes('.')) {
+                buildingIcon.innerHTML = `<img src="${currentLevelObj.icon}" alt="${currentLevelObj.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+            } else {
+                buildingIcon.innerText = currentLevelObj.icon;
+            }
+
+            let currentMin = currentLevelObj.min;
+            let nextMin = currentLevelObj.max;
+            let currentLang = localStorage.getItem('biz_selected_lang') || 'en';
+            let t = translations[currentLang] || translations.en;
+
+            if (currentLevelIndex === levels.length - 1) {
+                levelBarFill.style.width = "100%";
+                nextLevelText.innerText = t.maxLevel;
+                levelPercentage.innerText = "100%";
+            } else {
+                let progressRange = nextMin - currentMin;
+                let currentProgress = score - currentMin;
+                let percentage = Math.min(100, Math.max(0, (currentProgress / progressRange) * 100));
+
+                levelBarFill.style.width = `${percentage}%`;
+                nextLevelText.innerText = `${t.nextTarget} ${(nextMin - score).toLocaleString()} pts`;
+                levelPercentage.innerText = `${Math.floor(percentage)}%`;
+            }
+
+            updateShopUI();
+        }
+
+        function updateShopUI() {
+            var tapContainer = document.getElementById("tapShopContainer");
+            var energyContainer = document.getElementById("energyShopContainer");
+            tapContainer.innerHTML = "";
+            energyContainer.innerHTML = "";
+
+            let currentLang = localStorage.getItem('biz_selected_lang') || 'en';
+            let t = translations[currentLang] || translations.en;
+            
+            const tapPrices = { 2: 50, 3: 120, 4: 250, 5: 500, 6: 900, 7: 1500, 8: 2500, 9: 4000, 10: 6000 };
+
+            if (tapPower < 10) {
+                let nextPower = tapPower + 1;
+                let price = tapPrices[nextPower];
+                tapContainer.innerHTML = `
+                    <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 12px;">👆 Upgrade Tap Power (${tapPower} ➔ ${nextPower})</div>
+                            <div style="font-size: 10px; color: #ffd700;">Price: ${price.toLocaleString()} BIZ777</div>
+                        </div>
+                        <button onclick="buyTapUpgrade(${nextPower}, ${price})" class="btn" style="padding: 6px 12px; font-size: 11px;">Buy</button>
+                    </div>`;
+            } else if (tapPower === 10 && !freeTap20Claimed) {
+                if (invitedFriendsCount < 3) {
+                    tapContainer.innerHTML = `<div style="font-size: 11px; color: var(--warning); text-align: center; padding: 6px; font-weight: bold;">🔒 Invite ${3 - invitedFriendsCount} more friends for FREE Tap Power 20!</div>`;
+                } else {
+                    tapContainer.innerHTML = `
+                        <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: bold; font-size: 12px;">🎁 Get FREE Tap Power 20!</div>
+                                <div style="font-size: 10px; color: #22c55e;">3/3 Friends Invited</div>
+                            </div>
+                            <button onclick="claimFreeTap20()" class="btn" style="padding: 6px 12px; font-size: 11px; background: #22c55e;">Claim 🚀</button>
+                        </div>`;
+                }
+            } else {
+                tapContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Tap Power (20) Unlocked!</div>`;
+            }
+
+            const energyTiers = [
+                { target: 1500, price: 100 }, { target: 2000, price: 300 },
+                { target: 2500, price: 700 }, { target: 3000, price: 1300 },
+                { target: 3500, price: 2200 }, { target: 4000, price: 3500 },
+                { target: 4500, price: 5000 }, { target: 5000, price: 7500 }
+            ];
+
+            let nextTier = energyTiers.find(item => item.target > maxEnergy);
+            if (nextTier) {
+                energyContainer.innerHTML = `
+                    <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 12px;">⚡ Max Energy (${maxEnergy} ➔ ${nextTier.target})</div>
+                            <div style="font-size: 10px; color: #ffd700;">Price: ${nextTier.price.toLocaleString()} BIZ777</div>
+                        </div>
+                        <button onclick="buyEnergyUpgrade(${nextTier.target}, ${nextTier.price})" class="btn" style="padding: 6px 12px; font-size: 11px;">Buy</button>
+                    </div>`;
+            } else {
+                energyContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Energy (5,000) Purchased!</div>`;
+            }
+        }
+
+        window.buyTapUpgrade = function(newPower, price) {
+            if (score >= price) { score -= price; tapPower = newPower; updateUI(); saveState(); syncScoreToFirebase(); }
+            else { alert("Not enough BIZ777 coins!"); }
+        }
+
+        window.claimFreeTap20 = function() {
+            if (invitedFriendsCount >= 3 && !freeTap20Claimed) {
+                tapPower = 20; freeTap20Claimed = true; updateUI(); saveState(); syncScoreToFirebase();
+                alert("Tap Power 20 unlocked!");
+            }
+        }
+
+        window.buyEnergyUpgrade = function(newMaxEnergy, price) {
+            if (score >= price) { score -= price; maxEnergy = newMaxEnergy; energy = maxEnergy; updateUI(); saveState(); syncScoreToFirebase(); }
+            else { alert("Not enough BIZ777 coins!"); }
+        }
+
+        window.inviteFriendLink = function() {
+            let refLink = `https://t.me/biz_777_bot/app`;
+            let shareText = `Join BIZ777 Mini App and earn coins! 🚀`;
+            tg.openTelegramLink ? tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${encodeURIComponent(shareText)}`) : prompt("Copy link:", refLink);
+        }
+
+        window.openSubGame = function(gameName) {
+            document.getElementById('gamesMenu').style.display = 'none';
+            document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
+            document.getElementById(`subgame-${gameName}`).classList.add('active-subgame');
+            if (gameName === 'flappy' && !flappyRunning) { startFlappyGame(); }
+            if (gameName === 'cups') { initCupStageUI(); }
+            if (gameName === 'paperwrapsrock') { resetPwrLobby(); }
+        }
+
+        window.backToGamesMenu = function() {
+            flappyRunning = false;
+            pwrGameActive = false;
+            catchGameActive = false;
+            if (catchTimerInterval) clearInterval(catchTimerInterval);
+            if (catchSpawnInterval) clearInterval(catchSpawnInterval);
+            document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
+            document.getElementById('gamesMenu').style.display = 'flex';
+        }
+
+        let catchGameActive = false;
+        let catchScore = 0;
+        let catchTimeLeft = 60;
+        let catchTimerInterval = null;
+        let catchSpawnInterval = null;
+        const catchGameCost = 50;
+
+        window.startCatchGame = function() {
+            if (score < catchGameCost) {
+                alert("Not enough coins! Required: 50 coins.");
+                return;
+            }
+
+            score -= catchGameCost;
+            updateUI();
+            saveState();
+            syncScoreToFirebase();
+
+            catchScore = 0;
+            catchTimeLeft = 60;
+            catchGameActive = true;
+
+            document.getElementById('startCatchBtn').style.display = 'none';
+            document.getElementById('catchScore').innerText = `Score: ${catchScore}`;
+            document.getElementById('catchTimer').innerText = `⏱️ Time: ${catchTimeLeft}s`;
+            document.getElementById('catchMsg').innerText = "Game started! Catch coins (+5), avoid bombs!";
+
+            const container = document.getElementById('catchGameContainer');
+            container.innerHTML = '';
+
+            if (catchTimerInterval) clearInterval(catchTimerInterval);
+            if (catchSpawnInterval) clearInterval(catchSpawnInterval);
+
+            catchTimerInterval = setInterval(() => {
+                catchTimeLeft--;
+                document.getElementById('catchTimer').innerText = `⏱️ Time: ${catchTimeLeft}s`;
+                if (catchTimeLeft <= 0) {
+                    endCatchGame();
+                }
+            }, 1000);
+
+            catchSpawnInterval = setInterval(() => {
+                if (catchGameActive) {
+                    spawnCatchObject();
+                }
+            }, 450);
+        }
+
+        function spawnCatchObject() {
+            const container = document.getElementById('catchGameContainer');
+            const item = document.createElement('div');
+            const isBomb = Math.random() < 0.3;
+
+            item.classList.add('catch-falling-item');
+            if (isBomb) {
+                item.classList.add('catch-bomb');
+                item.innerText = '💣';
+            } else {
+                item.classList.add('catch-coin');
+                item.innerText = 'B777';
+            }
+
+            const randomX = Math.random() * (container.clientWidth - 40);
+            item.style.left = randomX + 'px';
+
+            const fallDuration = Math.random() * 1.2 + 1.8;
+            item.style.animationDuration = fallDuration + 's';
+
+            item.addEventListener('pointerdown', (e) => {
+                e.stopPropagation();
+                if (!catchGameActive) return;
+
+                if (isBomb) {
+                    catchScore = Math.max(0, catchScore - 5);
+                    score = Math.max(0, score - 5);
+                    document.getElementById('catchMsg').innerText = "Oops! Hit a bomb (-5 pts)";
+                } else {
+                    catchScore += 5;
+                    score += 5;
+                    updateUI();
+                    saveState();
+                    syncScoreToFirebase();
+                    document.getElementById('catchMsg').innerText = "+5 Coins collected!";
+                }
+                document.getElementById('catchScore').innerText = `Score: ${catchScore}`;
+                item.remove();
+            });
+
+            setTimeout(() => {
+                if (item && item.parentElement) {
+                    item.remove();
+                }
+            }, fallDuration * 1000);
+
+            container.appendChild(item);
+        }
+
+        function endCatchGame() {
+            catchGameActive = false;
+            clearInterval(catchTimerInterval);
+            clearInterval(catchSpawnInterval);
+
+            document.getElementById('catchGameContainer').innerHTML = '';
+            document.getElementById('startCatchBtn').style.display = 'block';
+            document.getElementById('startCatchBtn').innerText = `Play Again 🚀 (Cost: 50 🪙)`;
+            document.getElementById('catchMsg').innerText = `Time's up! Total Score: ${catchScore}`;
+            alert(`Game Over! You collected ${catchScore} coins in this session.`);
+        }
+
+        const canvas = document.getElementById('flappyCanvas');
+        const ctx = canvas.getContext('2d');
+        let flappyRunning = false;
+        let bird = { x: 50, y: 140, radius: 12, gravity: 0.4, lift: -5.5, velocity: 0 };
+        let pipes = [];
+        let frameCount = 0;
+        let flappyScore = 0;
+
+        canvas.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            if (flappyRunning) {
+                bird.velocity = bird.lift;
+            }
+        });
+
+        function startFlappyGame() {
+            bird.y = 140;
+            bird.velocity = 0;
+            pipes = [];
+            flappyScore = 0;
+            frameCount = 0;
+            flappyRunning = true;
+            requestAnimationFrame(loopFlappy);
+        }
+
+        function drawHandObstacle(x, topHeight, bottomY, pipeWidth) {
+            const handSkin = "#f5d0b1"; 
+            const cuffColor = "#e6d7c3"; 
+
+            ctx.fillStyle = cuffColor;
+            ctx.fillRect(x, 0, pipeWidth, topHeight - 35);
+            
+            ctx.fillStyle = handSkin;
+            ctx.fillRect(x - 4, topHeight - 35, pipeWidth + 8, 35);
+
+            ctx.fillStyle = handSkin;
+            let fingerWidth = (pipeWidth + 8) / 4;
+            for (let i = 0; i < 4; i++) {
+                ctx.fillRect(x - 4 + (i * fingerWidth), topHeight, fingerWidth - 2, 12);
+            }
+            ctx.fillRect(x - 10, topHeight - 20, 8, 16);
+
+            ctx.fillStyle = handSkin;
+            ctx.fillRect(x - 4, bottomY, pipeWidth + 8, 35);
+
+            for (let i = 0; i < 4; i++) {
+                ctx.fillRect(x - 4 + (i * fingerWidth), bottomY - 12, fingerWidth - 2, 12);
+            }
+            ctx.fillRect(x - 10, bottomY + 8, 8, 16);
+
+            ctx.fillStyle = cuffColor;
+            ctx.fillRect(x, bottomY + 35, pipeWidth, canvas.height - (bottomY + 35));
+        }
+
+        function loopFlappy() {
+            if (!flappyRunning) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
+
+            if (bird.y + bird.radius > canvas.height || bird.y - bird.radius < 0) {
+                endFlappyGame();
+                return;
+            }
+
+            ctx.beginPath();
+            ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#facc15';
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#fef08a';
+            ctx.stroke();
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 7px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('BIZ777', bird.x, bird.y);
+
+            if (frameCount % 100 === 0) {
+                let pipeWidth = 45;
+                let gapHeight = 120;
+                let topHeight = Math.floor(Math.random() * (canvas.height - gapHeight - 50)) + 25;
+                pipes.push({ 
+                    x: canvas.width, 
+                    top: topHeight, 
+                    bottom: canvas.height - topHeight, 
+                    width: pipeWidth, 
+                    passed: false,
+                    speedY: (Math.random() > 0.5 ? 1 : -1) * 0.7,
+                    dirTimer: 0
+                });
+            }
+
+            for (let i = pipes.length - 1; i >= 0; i--) {
+                pipes[i].x -= 2.2;
+
+                pipes[i].dirTimer++;
+                pipes[i].top += pipes[i].speedY;
+                
+                if (pipes[i].top < 15 || pipes[i].top > canvas.height - 150) {
+                    pipes[i].speedY *= -1;
+                }
+
+                let currentTopHeight = pipes[i].top;
+                let bottomYCoord = currentTopHeight + 120;
+
+                drawHandObstacle(pipes[i].x, currentTopHeight, bottomYCoord, pipes[i].width);
+
+                if (
+                    bird.x + bird.radius > pipes[i].x &&
+                    bird.x - bird.radius < pipes[i].x + pipes[i].width &&
+                    (bird.y - bird.radius < currentTopHeight || bird.y + bird.radius > bottomYCoord)
+                ) {
+                    endFlappyGame();
+                    return;
+                }
+
+                if (!pipes[i].passed && pipes[i].x + pipes[i].width < bird.x) {
+                    pipes[i].passed = true;
+                    flappyScore++;
+                    if (flappyScore === 10) {
+                        checkFlappyReward();
+                    }
+                }
+
+                if (pipes[i].x + pipes[i].width < 0) {
+                    pipes.splice(i, 1);
+                }
+            }
+
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(`Score: ${flappyScore} / 10`, 12, 20);
+
+            frameCount++;
+            requestAnimationFrame(loopFlappy);
+        }
+
+        function checkFlappyReward() {
+            let today = new Date().toDateString();
+            if (lastFlappyRewardDate !== today) {
+                lastFlappyRewardDate = today;
+                localStorage.setItem('biz_lastFlappyReward', today);
+                energy = Math.min(maxEnergy, energy + 500);
+                updateUI();
+                saveState();
+                alert("🎉 Amazing! +500 Energy Reward!");
+            }
+        }
+
+        function endFlappyGame() {
+            flappyRunning = false;
+            ctx.fillStyle = 'rgba(0,0,0,0.75)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ef4444';
+            ctx.font = 'bold 18px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 12);
+            ctx.fillStyle = '#fff';
+            ctx.font = '11px sans-serif';
+            ctx.fillText('Tap to Try Again', canvas.width / 2, canvas.height / 2 + 12);
+            
+            canvas.onclick = () => {
+                canvas.onclick = null;
+                startFlappyGame();
+            };
+        }
+
+        const slotItemsList = [
+            { icon: '🪙', label: 'BIZ777' },
+            { icon: '💰', label: 'BIZ777' },
+            { icon: '💵', label: 'BIZ777' },
+            { icon: '⭐', label: 'BIZ777' },
+            { icon: '💎', label: 'BIZ777' },
+            { icon: '🎁', label: 'BIZ777' }
+        ];
+
+        window.spinSlotMachine = function() {
+            const cost = 500;
+            if (score < cost) {
+                alert("Not enough BIZ777 coins! Required: 500 coins.");
+                return;
+            }
+
+            score -= cost;
+            updateUI();
+            saveState();
+            syncScoreToFirebase();
+
+            let btn = document.getElementById('spinSlotBtn');
+            let resText = document.getElementById('slotResultText');
+            btn.disabled = true;
+            btn.style.opacity = "0.5";
+            resText.innerText = "Spinning slot... 🎰";
+
+            const slotWeights = [
+                { symbols: [{icon:'🪙', label:'BIZ777'}, {icon:'🪙', label:'BIZ777'}, {icon:'🪙', label:'BIZ777'}], weight: 1, reward: 5000000, type: 'mega' },
+                { symbols: [{icon:'💎', label:'BIZ777'}, {icon:'💎', label:'BIZ777'}, {icon:'💎', label:'BIZ777'}], weight: 5, reward: 10000, type: 'triple' },
+                { symbols: [{icon:'⭐', label:'BIZ777'}, {icon:'⭐', label:'BIZ777'}, {icon:'⭐', label:'BIZ777'}], weight: 10, reward: 5000, type: 'triple' },
+                { symbols: [{icon:'💰', label:'BIZ777'}, {icon:'💰', label:'BIZ777'}, {icon:'💰', label:'BIZ777'}], weight: 15, reward: 3000, type: 'triple' },
+                { symbols: [{icon:'🪙', label:'BIZ777'}, {icon:'🪙', label:'BIZ777'}, {icon:'🎁', label:'BIZ777'}], weight: 40, reward: 800, type: 'double' },
+                { symbols: [{icon:'💎', label:'BIZ777'}, {icon:'⭐', label:'BIZ777'}, {icon:'💎', label:'BIZ777'}], weight: 50, reward: 500, type: 'double' },
+                { symbols: [{icon:'💵', label:'BIZ777'}, {icon:'🪙', label:'BIZ777'}, {icon:'🎁', label:'BIZ777'}], weight: 8879, reward: 0, type: 'loss' }
+            ];
+
+            let totalWeight = slotWeights.reduce((sum, item) => sum + item.weight, 0);
+            let randomNum = Math.random() * totalWeight;
+            let currentSum = 0;
+            let selectedOutcome = slotWeights[slotWeights.length - 1];
+
+            for (let item of slotWeights) {
+                currentSum += item.weight;
+                if (randomNum <= currentSum) {
+                    selectedOutcome = item;
+                    break;
+                }
+            }
+
+            let counter = 0;
+            let spinInterval = setInterval(() => {
+                document.getElementById('reel0').innerHTML = `<span>${slotItemsList[Math.floor(Math.random() * slotItemsList.length)].icon}</span>BIZ777`;
+                document.getElementById('reel1').innerHTML = `<span>${slotItemsList[Math.floor(Math.random() * slotItemsList.length)].icon}</span>BIZ777`;
+                document.getElementById('reel2').innerHTML = `<span>${slotItemsList[Math.floor(Math.random() * slotItemsList.length)].icon}</span>BIZ777`;
+                counter++;
+
+                if (counter > 18) {
+                    clearInterval(spinInterval);
+                    document.getElementById('reel0').innerHTML = `<span>${selectedOutcome.symbols[0].icon}</span>${selectedOutcome.symbols[0].label}`;
+                    document.getElementById('reel1').innerHTML = `<span>${selectedOutcome.symbols[1].icon}</span>${selectedOutcome.symbols[1].label}`;
+                    document.getElementById('reel2').innerHTML = `<span>${selectedOutcome.symbols[2].icon}</span>${selectedOutcome.symbols[2].label}`;
+
+                    if (selectedOutcome.type === 'mega') {
+                        score += selectedOutcome.reward;
+                        resText.innerText = "Mega Jackpot! +5,000,000 coins! 🎉";
+                        alert("🎉 Incredible! All 3 BIZ777 coins landed and you won 5,000,000 coins Jackpot!");
+                    } else if (selectedOutcome.type === 'triple') {
+                        score += selectedOutcome.reward;
+                        resText.innerText = `Three of a kind! +${selectedOutcome.reward.toLocaleString()} coins!`;
+                    }
+                    btn.disabled = false;
+                    btn.style.opacity = "1";
+                    updateUI();
+                    saveState();
+                    syncScoreToFirebase();
+                }
+            }, 80);
+        }
+
+        function saveState() {
             localStorage.setItem('biz_score', score);
             localStorage.setItem('biz_energy', energy);
             localStorage.setItem('biz_maxEnergy', maxEnergy);
@@ -1601,724 +2236,25 @@
             localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
         }
 
-        async function syncScoreToCloud() {
-            try {
-                await setDoc(doc(db, "leaderboard", userData.id), {
-                    userId: userData.id,
-                    username: userData.username,
-                    firstName: userData.firstName,
-                    score: score,
-                    updatedAt: new Date()
-                }, { merge: true });
-            } catch (e) {
-                console.error("Cloud sync error:", e);
-            }
-        }
-
-        const levelsList = [
-            { threshold: 0, name: "1. Complete Beginner" },
-            { threshold: 500, name: "2. Bronze Miner" },
-            { threshold: 2000, name: "3. Silver Clicker" },
-            { threshold: 10000, name: "4. Gold Trader" },
-            { threshold: 50000, name: "5. Platinum Tycoon" },
-            { threshold: 200000, name: "6. Diamond Master" },
-            { threshold: 1000000, name: "7. BIZ777 Legend" }
-        ];
-
-        function getCurrentLevelInfo() {
-            let currentLevel = levelsList[0];
-            let nextLevel = levelsList[1];
-            for (let i = 0; i < levelsList.length; i++) {
-                if (score >= levelsList[i].threshold) {
-                    currentLevel = levelsList[i];
-                    nextLevel = levelsList[i + 1] || null;
-                }
-            }
-            return { currentLevel, nextLevel };
-        }
-
-        function updateUI() {
-            document.getElementById('scoreDisplay').innerText = score.toLocaleString();
-            document.getElementById('energyText').innerText = `${Math.floor(energy)} / ${maxEnergy}`;
-            let energyPercent = Math.min(100, Math.max(0, (energy / maxEnergy) * 100));
-            document.getElementById('energyFill').style.width = energyPercent + "%";
-
-            let { currentLevel, nextLevel } = getCurrentLevelInfo();
-            document.getElementById('levelName').innerText = currentLevel.name;
-
-            let percentage = 100;
-            let nextText = translations[localStorage.getItem('biz_selected_lang') || 'en'].maxLevel;
-            if (nextLevel) {
-                let prevThreshold = currentLevel.threshold;
-                let currentProgress = score - prevThreshold;
-                let targetSpan = nextLevel.threshold - prevThreshold;
-                percentage = Math.min(100, Math.max(0, (currentProgress / targetSpan) * 100));
-                let targetLabel = translations[localStorage.getItem('biz_selected_lang') || 'en'].nextTarget;
-                nextText = `${targetLabel} ${nextLevel.threshold.toLocaleString()}`;
-            }
-            document.getElementById('nextLevelText').innerText = nextText;
-            document.getElementById('levelPercentage').innerText = Math.floor(percentage) + "%";
-            document.getElementById('levelBarFill').style.width = percentage + "%";
-
-            document.getElementById('friendCountDisplay').innerText = invitedFriendsCount;
-
-            renderShop();
-        }
-
-        const tapUpgradesList = [
-            { level: 1, cost: 100, power: 2 },
-            { level: 2, cost: 500, power: 5 },
-            { level: 3, cost: 2000, power: 10 },
-            { level: 4, cost: 8000, power: 25 },
-            { level: 5, cost: 30000, power: 50 }
-        ];
-
-        const energyUpgradesList = [
-            { level: 1, cost: 150, boost: 500 },
-            { level: 2, cost: 600, boost: 1000 },
-            { level: 3, cost: 2500, boost: 2500 },
-            { level: 4, cost: 10000, boost: 5000 }
-        ];
-
-        function renderShop() {
-            let tapContainer = document.getElementById('tapShopContainer');
-            let energyContainer = document.getElementById('energyShopContainer');
-            if (!tapContainer || !energyContainer) return;
-
-            let tapHtml = "";
-            tapUpgradesList.forEach((item, index) => {
-                let isOwned = tapPower >= item.power;
-                tapHtml += `<div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 8px 10px; border-radius: 8px; margin-bottom: 6px;">
-                    <div style="font-size: 11px;"><b>Level ${item.level}</b> (+${item.power} Tap)</div>
-                    <button class="btn" onclick="buyTapUpgrade(${item.cost}, ${item.power})" ${isOwned ? 'style="background:#22c55e; color:#000;" disabled' : ''}>${isOwned ? 'OWNED ✅' : item.cost.toLocaleString() + ' 🪙'}</button>
-                </div>`;
-            });
-            tapContainer.innerHTML = tapHtml;
-
-            let energyHtml = "";
-            energyUpgradesList.forEach((item, index) => {
-                let isOwned = maxEnergy >= (1000 + item.boost);
-                energyHtml += `<div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 8px 10px; border-radius: 8px; margin-bottom: 6px;">
-                    <div style="font-size: 11px;"><b>+${item.boost} Max Energy</b></div>
-                    <button class="btn" onclick="buyEnergyUpgrade(${item.cost}, ${item.boost})" ${isOwned ? 'style="background:#22c55e; color:#000;" disabled' : ''}>${isOwned ? 'OWNED ✅' : item.cost.toLocaleString() + ' 🪙'}</button>
-                </div>`;
-            });
-            energyContainer.innerHTML = energyHtml;
-        }
-
-        window.buyTapUpgrade = function(cost, power) {
-            if (score >= cost) {
-                score -= cost;
-                tapPower = power;
-                saveDataLocally();
-                updateUI();
-                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            } else {
-                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-            }
-        };
-
-        window.buyEnergyUpgrade = function(cost, boost) {
-            if (score >= cost) {
-                score -= cost;
-                maxEnergy = 1000 + boost;
-                energy = maxEnergy;
-                saveDataLocally();
-                updateUI();
-                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            } else {
-                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-            }
-        };
-
-        document.getElementById('clickerBtn').addEventListener('pointerdown', (e) => {
-            if (energy <= 0) {
-                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-                return;
-            }
-
-            score += tapPower;
-            energy = Math.max(0, energy - tapPower);
-
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-
-            let rect = e.currentTarget.getBoundingClientRect();
-            let x = e.clientX - rect.left;
-            let y = e.clientY - rect.top;
-
-            let numEl = document.createElement('div');
-            numEl.className = 'floating-number';
-            numEl.innerText = "+" + tapPower;
-            numEl.style.left = x + 'px';
-            numEl.style.top = y + 'px';
-            e.currentTarget.appendChild(numEl);
-            setTimeout(() => numEl.remove(), 700);
-
-            saveDataLocally();
-            updateUI();
-        });
-
-        setInterval(() => {
-            if (energy < maxEnergy) {
-                energy = Math.min(maxEnergy, energy + 5);
-                saveDataLocally();
-                updateUI();
-            }
-        }, 1000);
-
-        setInterval(() => {
-            syncScoreToCloud();
-        }, 15000);
-
-        window.switchTab = function(tabId, btnEl) {
-            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-
-            document.getElementById('tab-' + tabId).classList.add('active');
-            btnEl.classList.add('active');
-
+        window.switchTab = function(tabId, el) {
+            document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            el.classList.add('active');
             if (tabId === 'leaderboard') {
-                loadLeaderboardData();
+                renderLeaderboard();
             }
         };
 
-        async function loadLeaderboardData() {
-            let container = document.getElementById('leaderboardContainer');
-            container.innerHTML = `<div style="text-align:center; color: var(--text-secondary); padding: 20px;">Loading leaderboard...</div>`;
-            try {
-                let q = query(collection(db, "leaderboard"), orderBy("score", "desc"), limit(20));
-                let querySnapshot = await getDocs(q);
-                let html = "";
-                let rank = 1;
-                let foundUserInTop = false;
-
-                querySnapshot.forEach((docSnap) => {
-                    let d = docSnap.data();
-                    let isMe = d.userId === userData.id;
-                    if (isMe) foundUserInTop = true;
-
-                    html += `<div class="leaderboard-item ${isMe ? 'my-profile' : ''}">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="rank-number">#${rank}</span>
-                            <span style="font-weight: 600; font-size: 13px;">${d.firstName || d.username || 'User'}</span>
-                        </div>
-                        <span class="score">${(d.score || 0).toLocaleString()} 🪙</span>
-                    </div>`;
-                    rank++;
-                });
-
-                if (!foundUserInTop) {
-                    html += `<div style="text-align:center; color: var(--text-secondary); font-size: 11px; padding: 4px;">...</div>
-                    <div class="leaderboard-item my-profile">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="rank-number">#?</span>
-                            <span style="font-weight: 600; font-size: 13px;">${userData.firstName} (You)</span>
-                        </div>
-                        <span class="score">${score.toLocaleString()} 🪙</span>
-                    </div>`;
-                }
-
-                container.innerHTML = html;
-            } catch (e) {
-                console.error("Leaderboard error:", e);
-                container.innerHTML = `<div style="text-align:center; color: var(--danger); padding: 20px;">Failed to load leaderboard.</div>`;
-            }
-        }
-
-        window.openSubGame = function(subGameId) {
-            document.getElementById('gamesMenu').style.display = 'none';
-            document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
-            document.getElementById('subgame-' + subGameId).classList.add('active-subgame');
-
-            if (subGameId === 'flappy') {
-                initFlappyGame();
-            }
-        };
-
-        window.backToGamesMenu = function() {
-            document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
-            document.getElementById('gamesMenu').style.display = 'flex';
-            stopFlappyGame();
-        };
-
-        window.showRewardedAd = function() {
-            if (typeof Adsgram !== 'undefined') {
-                Adsgram.init({ blockId: "int-777" }).show().then((result) => {
-                    energy = maxEnergy;
-                    saveDataLocally();
-                    updateUI();
-                    alert("Energy successfully refilled to maximum!");
-                }).catch((result) => {
-                    alert("Ad was closed or failed to load. Try again later.");
-                });
-            } else {
-                energy = maxEnergy;
-                saveDataLocally();
-                updateUI();
-                alert("Energy successfully refilled to maximum!");
-            }
-        };
-
-        window.inviteFriendLink = function() {
-            let refUrl = `https://t.me/share/url?url=https://t.me/biz777game_bot?start=ref_${userData.id}&text=Join%20Biz777%20Mini%20App%20and%20earn%20crypto%20coins%20with%20me!`;
-            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
-                window.Telegram.WebApp.openTelegramLink(refUrl);
-            } else {
-                window.open(refUrl, '_blank');
-            }
-        };
-
-        // Catch Game Logic
-        let catchInterval = null;
-        let catchTimerInterval = null;
-        let catchScoreVal = 0;
-        let catchActive = false;
-
-        window.startCatchGame = function() {
-            if (score < 50) {
-                document.getElementById('catchMsg').innerText = "Not enough coins! Cost is 50 🪙";
-                return;
-            }
-            score -= 50;
-            saveDataLocally();
-            updateUI();
-
-            catchScoreVal = 0;
-            catchActive = true;
-            document.getElementById('catchScore').innerText = "Score: 0";
-            document.getElementById('startCatchBtn').style.display = 'none';
-            document.getElementById('catchMsg').innerText = "Game started! Catch coins!";
-
-            let container = document.getElementById('catchGameContainer');
-            container.innerHTML = "";
-
-            let timeLeft = 60;
-            document.getElementById('catchTimer').innerText = `⏱️ Time: ${timeLeft}s`;
-
-            catchInterval = setInterval(() => {
-                if (!catchActive) return;
-                let item = document.createElement('div');
-                let isBomb = Math.random() < 0.25;
-                item.className = `catch-falling-item ${isBomb ? 'catch-bomb' : 'catch-coin'}`;
-                item.innerText = isBomb ? '💣' : '🪙';
-                let startX = Math.floor(Math.random() * 265);
-                item.style.left = startX + 'px';
-                let duration = 2 + Math.random() * 2;
-                item.style.animationDuration = duration + 's';
-
-                item.onpointerdown = () => {
-                    if (!catchActive) return;
-                    if (isBomb) {
-                        catchScoreVal = Math.max(0, catchScoreVal - 10);
-                        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-                    } else {
-                        catchScoreVal += 5;
-                        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-                    }
-                    document.getElementById('catchScore').innerText = "Score: " + catchScoreVal;
-                    item.remove();
-                };
-
-                container.appendChild(item);
-                setTimeout(() => item.remove(), duration * 1000);
-            }, 550);
-
-            catchTimerInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('catchTimer').innerText = `⏱️ Time: ${timeLeft}s`;
-                if (timeLeft <= 0) {
-                    endCatchGame(true);
-                }
-            }, 1000);
-        };
-
-        function endCatchGame(won) {
-            catchActive = false;
-            clearInterval(catchInterval);
-            clearInterval(catchTimerInterval);
-            document.getElementById('startCatchBtn').style.display = 'block';
-            let reward = catchScoreVal * 2;
-            score += reward;
-            saveDataLocally();
-            updateUI();
-            document.getElementById('catchMsg').innerText = `Game Over! You earned ${reward} 🪙 coins!`;
-        }
-
-        // Flappy Game Logic
-        let flappyInterval = null;
-        let flappyActive = false;
-        let bird = { x: 50, y: 150, vy: 0, radius: 14 };
-        let pipes = [];
-        let flappyScore = 0;
-        let flappyCanvas = null;
-        let flappyCtx = null;
-
-        function initFlappyGame() {
-            flappyCanvas = document.getElementById('flappyCanvas');
-            if (!flappyCanvas) return;
-            flappyCtx = flappyCanvas.getContext('2d');
-            
-            flappyCanvas.onpointerdown = () => {
-                if (!flappyActive) {
-                    startFlappyGame();
-                } else {
-                    bird.vy = -6.5;
-                    if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-                }
-            };
-            drawFlappyStartScreen();
-        }
-
-        function drawFlappyStartScreen() {
-            if (!flappyCtx) return;
-            flappyCtx.fillStyle = '#0f172a';
-            flappyCtx.fillRect(0, 0, flappyCanvas.width, flappyCanvas.height);
-            flappyCtx.fillStyle = '#38bdf8';
-            flappyCtx.font = 'bold 16px sans-serif';
-            flappyCtx.textAlign = 'center';
-            flappyCtx.fillText("Tap to Start Flappy BIZ777", flappyCanvas.width / 2, flappyCanvas.height / 2 - 10);
-        }
-
-        function startFlappyGame() {
-            flappyActive = true;
-            bird = { x: 50, y: 150, vy: 0, radius: 14 };
-            pipes = [];
-            flappyScore = 0;
-
-            if (flappyInterval) clearInterval(flappyInterval);
-            flappyInterval = setInterval(updateFlappyGame, 1000 / 60);
-        }
-
-        function updateFlappyGame() {
-            if (!flappyActive) return;
-
-            bird.vy += 0.35;
-            bird.y += bird.vy;
-
-            if (bird.y + bird.radius >= flappyCanvas.height - 15 || bird.y - bird.radius <= 0) {
-                endFlappyGame();
-                return;
-            }
-
-            if (Math.random() < 0.022) {
-                let gapHeight = 110;
-                let topH = 50 + Math.random() * (flappyCanvas.height - 180 - gapHeight);
-                pipes.push({ x: flappyCanvas.width, top: topH, bottom: topH + gapHeight, passed: false });
-            }
-
-            for (let i = pipes.length - 1; i >= 0; i--) {
-                pipes[i].x -= 2.2;
-
-                if (!pipes[i].passed && pipes[i].x < bird.x) {
-                    pipes[i].passed = true;
-                    flappyScore++;
-                    if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-                }
-
-                if (pipes[i].x + 45 < 0) {
-                    pipes.splice(i, 1);
-                }
-
-                if (bird.x + bird.radius > pipes[i].x && bird.x - bird.radius < pipes[i].x + 45) {
-                    if (bird.y - bird.radius < pipes[i].top || bird.y + bird.radius > pipes[i].bottom) {
-                        endFlappyGame();
-                        return;
-                    }
-                }
-            }
-
-            // Draw
-            flappyCtx.fillStyle = '#0f172a';
-            flappyCtx.fillRect(0, 0, flappyCanvas.width, flappyCanvas.height);
-
-            // Draw pipes with hand obstacle representation
-            pipes.forEach(p => {
-                flappyCtx.fillStyle = '#38bdf8';
-                flappyCtx.fillRect(p.x, 0, 45, p.top);
-                flappyCtx.fillRect(p.x, p.bottom, 45, flappyCanvas.height - p.bottom);
-            });
-
-            // Draw bird (Coin/Biz icon)
-            flappyCtx.beginPath();
-            flappyCtx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
-            flappyCtx.fillStyle = '#facc15';
-            flappyCtx.fill();
-            flappyCtx.lineWidth = 2;
-            flappyCtx.strokeStyle = '#38bdf8';
-            flappyCtx.stroke();
-
-            // Draw score
-            flappyCtx.fillStyle = '#f8fafc';
-            flappyCtx.font = 'bold 18px sans-serif';
-            flappyCtx.textAlign = 'left';
-            flappyCtx.fillText("Score: " + flappyScore, 15, 25);
-        }
-
-        function endFlappyGame() {
-            flappyActive = false;
-            clearInterval(flappyInterval);
-
-            let coinReward = flappyScore * 10;
-            score += coinReward;
-            
-            let todayStr = new Date().toDateString();
-            if (flappyScore >= 10 && lastFlappyRewardDate !== todayStr) {
-                energy = maxEnergy;
-                lastFlappyRewardDate = todayStr;
-                localStorage.setItem('biz_lastFlappyReward', todayStr);
-                alert(`Amazing! You scored ${flappyScore}! You earned ${coinReward} 🪙 coins and +500 Energy refill!`);
-            } else {
-                alert(`Game Over! Score: ${flappyScore}. Earned ${coinReward} 🪙 coins!`);
-            }
-
-            saveDataLocally();
-            updateUI();
-            drawFlappyStartScreen();
-        }
-
-        function stopFlappyGame() {
-            flappyActive = false;
-            if (flappyInterval) clearInterval(flappyInterval);
-        }
-
-        // Cup Game Logic
-        let currentCupLevel = 1;
-        let correctCupIndex = 0;
-        let cupStateActive = false;
-
-        window.setCupLevel = function(lvl) {
-            currentCupLevel = lvl;
-            for (let i = 1; i <= 5; i++) {
-                let btn = document.getElementById('lvlBtn' + i);
-                if (btn) btn.classList.remove('active-level');
-            }
-            document.getElementById('lvlBtn' + lvl).classList.add('active-level');
-
-            let costs = { 1: 500, 2: 1200, 3: 3000, 4: 8000, 5: 20000 };
-            let wins = { 1: 1000, 2: 2500, 3: 6500, 4: 18000, 5: 45000 };
-            let energies = { 1: 200, 2: 400, 3: 800, 4: 1500, 5: 3000 };
-            document.getElementById('cupGameInfo').innerText = `Cost: ${costs[lvl].toLocaleString()} BIZ777 | Win: ${wins[lvl].toLocaleString()} Coins + ${energies[lvl]} Energy`;
-        };
-
-        window.startCupRound = function() {
-            if (cupStateActive) return;
-            let costs = { 1: 500, 2: 1200, 3: 3000, 4: 8000, 5: 20000 };
-            let cost = costs[currentCupLevel];
-
-            if (score < cost) {
-                document.getElementById('cupCooldownText').innerText = "Not enough coins for this level!";
-                return;
-            }
-
-            score -= cost;
-            saveDataLocally();
-            updateUI();
-
-            cupStateActive = true;
-            document.getElementById('startCupGameBtn').disabled = true;
-            document.getElementById('cupCooldownText').innerText = "Shuffling cups...";
-
-            for (let i = 0; i < 3; i++) {
-                document.getElementById('cup' + i).classList.remove('lifted');
-                document.getElementById('coin' + i).style.opacity = '0';
-            }
-
-            correctCupIndex = Math.floor(Math.random() * 3);
-            document.getElementById('coin' + correctCupIndex).style.opacity = '1';
-
-            // Show ball briefly then hide
-            setTimeout(() => {
-                document.getElementById('cup' + correctCupIndex).classList.add('lifted');
-                setTimeout(() => {
-                    document.getElementById('cup' + correctCupIndex).classList.remove('lifted');
-                    document.getElementById('cupCooldownText').innerText = "Choose a cup!";
-                    cupStateActive = false;
-                }, 800);
-            }, 400);
-        };
-
-        window.chooseCup = function(index) {
-            if (cupStateActive) return;
-            cupStateActive = true;
-
-            document.getElementById('cup' + index).classList.add('lifted');
-            document.getElementById('coin' + index).style.opacity = '1';
-
-            let wins = { 1: 1000, 2: 2500, 3: 6500, 4: 18000, 5: 45000 };
-            let energies = { 1: 200, 2: 400, 3: 800, 4: 1500, 5: 3000 };
-
-            if (index === correctCupIndex) {
-                let w = wins[currentCupLevel];
-                let e = energies[currentCupLevel];
-                score += w;
-                energy = Math.min(maxEnergy, energy + e);
-                document.getElementById('cupCooldownText').innerText = `You won ${w.toLocaleString()} coins and ${e} energy! 🎉`;
-                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            } else {
-                document.getElementById('cupCooldownText').innerText = "Wrong cup! Try again.";
-                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-            }
-
-            saveDataLocally();
-            updateUI();
-
-            setTimeout(() => {
-                document.getElementById('startCupGameBtn').disabled = false;
-                cupStateActive = false;
-            }, 1500);
-        };
-
-        // Slot Machine Logic
-        let isSpinningSlot = false;
-        window.spinSlotMachine = function() {
-            if (isSpinningSlot) return;
-            if (score < 500) {
-                document.getElementById('slotResultText').innerText = "Not enough coins! Cost is 500 🪙";
-                return;
-            }
-
-            score -= 500;
-            saveDataLocally();
-            updateUI();
-
-            isSpinningSlot = true;
-            document.getElementById('spinSlotBtn').disabled = true;
-            document.getElementById('slotResultText').innerText = "Spinning reels...";
-
-            let symbols = ['🪙', '💰', '💵', '💎', '⭐', '7️⃣'];
-            let r0 = document.getElementById('reel0');
-            let r1 = document.getElementById('reel1');
-            let r2 = document.getElementById('reel2');
-
-            let spinCount = 0;
-            let spinInterval = setInterval(() => {
-                r0.innerHTML = `<span>${symbols[Math.floor(Math.random() * symbols.length)]}</span>BIZ`;
-                r1.innerHTML = `<span>${symbols[Math.floor(Math.random() * symbols.length)]}</span>BIZ`;
-                r2.innerHTML = `<span>${symbols[Math.floor(Math.random() * symbols.length)]}</span>BIZ`;
-                spinCount++;
-
-                if (spinCount > 15) {
-                    clearInterval(spinInterval);
-
-                    let finalSym0 = symbols[Math.floor(Math.random() * symbols.length)];
-                    let finalSym1 = symbols[Math.floor(Math.random() * symbols.length)];
-                    let finalSym2 = symbols[Math.floor(Math.random() * symbols.length)];
-
-                    // Lucky chance for jackpot
-                    if (Math.random() < 0.08) {
-                        finalSym0 = '🪙';
-                        finalSym1 = '🪙';
-                        finalSym2 = '🪙';
-                    }
-
-                    r0.innerHTML = `<span>${finalSym0}</span>BIZ`;
-                    r1.innerHTML = `<span>${finalSym1}</span>BIZ`;
-                    r2.innerHTML = `<span>${finalSym2}</span>BIZ`;
-
-                    if (finalSym0 === '🪙' && finalSym1 === '🪙' && finalSym2 === '🪙') {
-                        score += 5000000;
-                        document.getElementById('slotResultText').innerText = "JACKPOT! Won 5,000,000 🪙!";
-                        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-                    } else if (finalSym0 === finalSym1 && finalSym1 === finalSym2) {
-                        score += 10000;
-                        document.getElementById('slotResultText').innerText = "Big Win! Won 10,000 🪙!";
-                        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-                    } else if (finalSym0 === finalSym1 || finalSym1 === finalSym2 || finalSym0 === finalSym2) {
-                        score += 1000;
-                        document.getElementById('slotResultText').innerText = "Small Win! Won 1,000 🪙!";
-                        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-                    } else {
-                        document.getElementById('slotResultText').innerText = "No win. Try again!";
-                        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-                    }
-
-                    saveDataLocally();
-                    updateUI();
-                    isSpinningSlot = false;
-                    document.getElementById('spinSlotBtn').disabled = false;
-                }
-            }, 100);
-        };
-
-        // Paper Wraps Rock Logic
-        let pwrActive = false;
-        let pwrTimerInterval = null;
-        let pwrScoreVal = 0;
-
-        window.startPwrGame = function() {
-            if (score < 200) {
-                document.getElementById('pwrResultMsg').innerText = "Not enough coins! Cost is 200 🪙";
-                return;
-            }
-            score -= 200;
-            saveDataLocally();
-            updateUI();
-
-            pwrScoreVal = 0;
-            pwrActive = true;
-            document.getElementById('pwrScore').innerText = "Score: 0";
-            document.getElementById('startPwrBtn').style.display = 'none';
-            document.getElementById('pwrResultMsg').innerText = "Battle started! Make your choice!";
-
-            let timeLeft = 45;
-            document.getElementById('pwrTimer').innerText = `⏱️ ${timeLeft} sec`;
-
-            if (pwrTimerInterval) clearInterval(pwrTimerInterval);
-            pwrTimerInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('pwrTimer').innerText = `⏱️ ${timeLeft} sec`;
-                if (timeLeft <= 0) {
-                    endPwrGame();
-                }
-            }, 1000);
-        };
-
-        window.playPwrChoice = function(playerChoice) {
-            if (!pwrActive) {
-                document.getElementById('pwrResultMsg').innerText = "Click 'Start Battle' first!";
-                return;
-            }
-
-            let signs = ['rock', 'paper', 'scissors'];
-            let botChoice = signs[Math.floor(Math.random() * signs.length)];
-
-            let icons = { rock: '✊', paper: '✋', scissors: '✌️' };
-            document.getElementById('pwrLeftHand').innerText = icons[playerChoice];
-            document.getElementById('pwrRightHand').innerText = icons[botChoice];
-
-            let outcomeText = "";
-            if (playerChoice === botChoice) {
-                outcomeText = "DRAW!";
-                if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-            } else if (
-                (playerChoice === 'rock' && botChoice === 'scissors') ||
-                (playerChoice === 'paper' && botChoice === 'rock') ||
-                (playerChoice === 'scissors' && botChoice === 'paper')
-            ) {
-                pwrScoreVal += 10;
-                outcomeText = "YOU WIN ROUND! +10";
-                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            } else {
-                pwrScoreVal = Math.max(0, pwrScoreVal - 5);
-                outcomeText = "BOT WINS ROUND! -5";
-                if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-            }
-
-            document.getElementById('pwrActionText').innerText = outcomeText;
-            document.getElementById('pwrScore').innerText = "Score: " + pwrScoreVal;
-        };
-
-        function endPwrGame() {
-            pwrActive = false;
-            clearInterval(pwrTimerInterval);
-            document.getElementById('startPwrBtn').style.display = 'block';
-
-            let reward = pwrScoreVal * 15;
-            score += reward;
-            saveDataLocally();
-            updateUI();
-            document.getElementById('pwrResultMsg').innerText = `Battle Ended! You earned ${reward} 🪙 coins!`;
-        }
+        window.initCupStageUI = function() {};
+        window.setCupLevel = function(lvl) {};
+        window.chooseCup = function(slot) {};
+        window.startCupRound = function() {};
+        window.resetPwrLobby = function() {};
+        window.startPwrGame = function() {};
+        window.playPwrChoice = function(choice) {};
+
+        updateUI();
     </script>
 </body>
 </html>
