@@ -725,9 +725,9 @@
                 <div class="music-selector-container">
                     <select id="bgMusicSelect" onchange="changeBgMusic(this.value)">
                         <option value="off">🎵 Music: Off</option>
-                        <option value="track1">🎵 Retro Synth</option>
-                        <option value="track2">🎵 Chill Ambient</option>
-                        <option value="track3">🎵 Cyber Beat</option>
+                        <option value="track1">🎵 Track 1 (YT)</option>
+                        <option value="track2">🎵 Track 2 (YT)</option>
+                        <option value="track3">🎵 Track 3 (YT)</option>
                     </select>
                 </div>
 
@@ -1031,76 +1031,92 @@
         </nav>
     </div>
 
-    <!-- Background Music Synth Controller Script -->
+    <!-- Background Music Controller Script -->
+    <div id="ytplayer" style="position: absolute; top: -9999px; left: -9999px; width: 0; height: 0; z-index: -1;"></div>
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        let audioCtx = null;
-        let currentTrack = 'off';
-        let musicInterval = null;
+        let ytPlayer;
+        let isMusicPlaying = false;
+        
+        // YouTube or tiktok Video IDs for the tracks
+        const trackIds = [
+            'uIfD2BKaD2k', // Track 1: First link provided
+            '5bn3Jmvep1k', // Track 2: Second link provided
+            '7681591960850713876'  // Track 3: Third link provided
+        ];
+        
+        let currentTrackIndex = 0;
 
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('ytplayer', {
+                height: '0',
+                width: '0',
+                videoId: trackIds[0],
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'showinfo': 0,
+                    'rel': 0,
+                    'playsinline': 1
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange,
+                    'onError': onPlayerError
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // Player is ready
+        }
+
+        function onPlayerStateChange(event) {
+            // Auto play next track when the current one finishes (state 0)
+            if (event.data === YT.PlayerState.ENDED) {
+                playNextTrack();
             }
         }
 
-        const melodies = {
-            track1: [
-                { note: 261.63, duration: 0.2 }, { note: 329.63, duration: 0.2 }, { note: 392.00, duration: 0.2 }, { note: 523.25, duration: 0.2 },
-                { note: 440.00, duration: 0.2 }, { note: 349.23, duration: 0.2 }, { note: 392.00, duration: 0.2 }, { note: 293.66, duration: 0.2 }
-            ],
-            track2: [
-                { note: 220.00, duration: 0.4 }, { note: 261.63, duration: 0.4 }, { note: 329.63, duration: 0.4 }, { note: 392.00, duration: 0.4 },
-                { note: 196.00, duration: 0.4 }, { note: 246.94, duration: 0.4 }, { note: 293.66, duration: 0.4 }, { note: 349.23, duration: 0.4 }
-            ],
-            track3: [
-                { note: 130.81, duration: 0.15 }, { note: 164.81, duration: 0.15 }, { note: 196.00, duration: 0.15 }, { note: 261.63, duration: 0.15 },
-                { note: 196.00, duration: 0.15 }, { note: 164.81, duration: 0.15 }, { note: 220.00, duration: 0.15 }, { note: 293.66, duration: 0.15 }
-            ]
-        };
-
-        let noteIndex = 0;
-        function playNextNote() {
-            if (!audioCtx || currentTrack === 'off') return;
-            const track = melodies[currentTrack];
-            if (!track) return;
-
-            const noteData = track[noteIndex % track.length];
-            noteIndex++;
-
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-
-                osc.type = currentTrack === 'track1' ? 'square' : (currentTrack === 'track2' ? 'sine' : 'sawtooth');
-                osc.frequency.setValueAtTime(noteData.note, audioCtx.currentTime);
-
-                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + noteData.duration);
-
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc.start();
-                osc.stop(audioCtx.currentTime + noteData.duration);
-            } catch(e) {}
+        function onPlayerError(event) {
+            // Skip to next if track can't be played
+            playNextTrack();
         }
 
-        function startMusicLoop() {
-            if (musicInterval) clearInterval(musicInterval);
-            if (currentTrack === 'off') return;
+        function playNextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % trackIds.length;
+            if (isMusicPlaying && ytPlayer && ytPlayer.loadVideoById) {
+                ytPlayer.loadVideoById(trackIds[currentTrackIndex]);
+                updateSelectUI();
+            }
+        }
 
-            let tempo = currentTrack === 'track1' ? 220 : (currentTrack === 'track2' ? 420 : 180);
-            musicInterval = setInterval(playNextNote, tempo);
+        function updateSelectUI() {
+            const select = document.getElementById('bgMusicSelect');
+            if (select) {
+                select.value = 'track' + (currentTrackIndex + 1);
+            }
         }
 
         function changeBgMusic(val) {
-            initAudio();
-            currentTrack = val;
-            noteIndex = 0;
-            startMusicLoop();
+            if (val === 'off') {
+                isMusicPlaying = false;
+                if (ytPlayer && ytPlayer.pauseVideo) {
+                    ytPlayer.pauseVideo();
+                }
+            } else {
+                isMusicPlaying = true;
+                let trackNum = parseInt(val.replace('track', '')) - 1;
+                
+                if (!isNaN(trackNum) && trackNum >= 0 && trackNum < trackIds.length) {
+                    if (currentTrackIndex !== trackNum || !ytPlayer.getPlayerState || ytPlayer.getPlayerState() !== 1) {
+                        currentTrackIndex = trackNum;
+                        if (ytPlayer && ytPlayer.loadVideoById) {
+                            ytPlayer.loadVideoById(trackIds[currentTrackIndex]);
+                        }
+                    }
+                }
+            }
         }
     </script>
 
@@ -2136,7 +2152,7 @@
             }
 
             flappyCtx.fillStyle = '#38bdf8';
-            flappyCtx.font = 'bold 16px sans-serif';
+            flappyCtx.font = 'bold 20px sans-serif';
             flappyCtx.fillText(`Score: ${flappyScore}`, 10, 25);
 
             flappyFrame++;
@@ -2145,202 +2161,285 @@
 
         function endFlappyGame() {
             flappyRunning = false;
-            if (!flappyCtx) return;
             flappyCtx.fillStyle = 'rgba(0,0,0,0.7)';
             flappyCtx.fillRect(0, 0, flappyCanvas.width, flappyCanvas.height);
-            flappyCtx.fillStyle = '#ef4444';
-            flappyCtx.font = 'bold 18px sans-serif';
-            flappyCtx.fillText('GAME OVER', 85, 140);
-            flappyCtx.fillStyle = '#fff';
+            flappyCtx.fillStyle = '#f8fafc';
+            flappyCtx.font = 'bold 24px sans-serif';
+            flappyCtx.textAlign = 'center';
+            flappyCtx.fillText('GAME OVER', flappyCanvas.width/2, flappyCanvas.height/2 - 20);
+            flappyCtx.font = '16px sans-serif';
+            flappyCtx.fillText(`Score: ${flappyScore}`, flappyCanvas.width/2, flappyCanvas.height/2 + 10);
             flappyCtx.font = '12px sans-serif';
-            flappyCtx.fillText(`Final Score: ${flappyScore}`, 105, 170);
-            flappyCtx.fillText('Tap to play again', 95, 200);
-            updateUI();
+            flappyCtx.fillText('Tap to Restart', flappyCanvas.width/2, flappyCanvas.height/2 + 40);
+            flappyCtx.textAlign = 'left';
             saveState();
+            syncScoreToFirebase();
         }
 
-        // Minigame 3: Find BIZ777 Ball (Cups)
-        let selectedCupLevel = 1;
-        let cupInAnim = false;
-        let winningCupIndex = 0;
+        // Minigame 3: Find BIZ777 Ball
+        let cupLevelSelected = 1;
+        let cupRoundActive = false;
+        let winningSlotIndex = 0;
 
-        window.setCupLevel = function(lvl) {
-            if (cupInAnim) return;
-            selectedCupLevel = lvl;
+        function setCupLevel(lvl) {
+            if (cupLevelDataState[lvl].unlocked) {
+                cupLevelSelected = lvl;
+                initCupStageUI();
+            } else {
+                alert(`Level ${lvl} is locked! Beat previous levels first.`);
+            }
+        }
+
+        function initCupStageUI() {
             for (let i = 1; i <= 5; i++) {
                 let btn = document.getElementById(`lvlBtn${i}`);
-                if (btn) btn.className = (i === lvl) ? 'level-btn active-level' : 'level-btn';
+                if (btn) {
+                    btn.className = "level-btn";
+                    if (cupLevelSelected === i) btn.classList.add("active-level");
+                    if (cupLevelDataState[i].completed) btn.classList.add("completed-level");
+                    if (!cupLevelDataState[i].unlocked) btn.style.opacity = "0.5";
+                    else btn.style.opacity = "1";
+                }
             }
-            let winCoins = lvl * 1000;
-            let winEnergy = lvl * 200;
-            document.getElementById('cupGameInfo').innerText = `Cost: 500 BIZ777 | Win: ${winCoins.toLocaleString()} Coins + ${winEnergy} Energy`;
-        }
-
-        window.initCupStageUI = function() {
-            document.querySelectorAll('.cup-2d').forEach(c => c.classList.remove('lifted'));
-            document.querySelectorAll('.coin-item-2d').forEach(cn => cn.style.opacity = '0');
-            cupInAnim = false;
+            
+            document.querySelectorAll('.cup-2d').forEach(cup => cup.classList.remove('lifted'));
+            document.querySelectorAll('.coin-item-2d').forEach(coin => coin.style.opacity = '0');
+            document.getElementById('startCupGameBtn').style.display = 'block';
+            document.getElementById('cupCooldownText').innerText = '';
+            cupRoundActive = false;
         }
 
         window.startCupRound = function() {
-            if (cupInAnim) return;
-            if (score < 500) {
-                alert("Not enough coins! Required: 500 BIZ777");
+            const cost = 500;
+            if (score < cost) {
+                alert("Not enough coins! Required: 500");
                 return;
             }
-            score -= 500;
+
+            score -= cost;
             updateUI();
             saveState();
             syncScoreToFirebase();
 
-            cupInAnim = true;
-            initCupStageUI();
-
-            winningCupIndex = Math.floor(Math.random() * 3);
+            document.getElementById('startCupGameBtn').style.display = 'none';
+            document.getElementById('cupCooldownText').innerText = 'Shuffling... Watch closely!';
             
-            let shuffleCount = 0;
-            let interval = setInterval(() => {
-                let slot0 = document.getElementById('slot0');
-                let slot1 = document.getElementById('slot1');
-                let slot2 = document.getElementById('slot2');
-                
-                let positions = [-90, 0, 90];
-                positions.sort(() => Math.random() - 0.5);
-                
-                if (slot0) slot0.style.transform = `translateX(${positions[0]}px)`;
-                if (slot1) slot1.style.transform = `translateX(${positions[1]}px)`;
-                if (slot2) slot2.style.transform = `translateX(${positions[2]}px)`;
-                
-                shuffleCount++;
-                if (shuffleCount >= 8) {
-                    clearInterval(interval);
-                    cupInAnim = false;
-                    document.getElementById('cupCooldownText').innerText = "Pick a cup!";
+            document.querySelectorAll('.cup-2d').forEach(cup => cup.classList.add('lifted'));
+            
+            winningSlotIndex = Math.floor(Math.random() * 3);
+            document.getElementById(`coin${winningSlotIndex}`).style.opacity = '1';
+
+            setTimeout(() => {
+                document.querySelectorAll('.cup-2d').forEach(cup => cup.classList.remove('lifted'));
+                document.getElementById(`coin${winningSlotIndex}`).style.opacity = '0';
+                shuffleCupsVisuals();
+            }, 1500);
+        }
+
+        function shuffleCupsVisuals() {
+            let moves = 0;
+            let totalMoves = 10 + (cupLevelSelected * 3);
+            let speed = 400 - (cupLevelSelected * 40);
+            
+            let posArray = [-90, 0, 90];
+            let currentPositions = [0, 1, 2];
+
+            let shuffleInterval = setInterval(() => {
+                let idx1 = Math.floor(Math.random() * 3);
+                let idx2 = Math.floor(Math.random() * 3);
+                while(idx1 === idx2) idx2 = Math.floor(Math.random() * 3);
+
+                let temp = currentPositions[idx1];
+                currentPositions[idx1] = currentPositions[idx2];
+                currentPositions[idx2] = temp;
+
+                document.getElementById(`slot${idx1}`).style.transform = `translateX(${posArray[currentPositions[idx1]]}px)`;
+                document.getElementById(`slot${idx2}`).style.transform = `translateX(${posArray[currentPositions[idx2]]}px)`;
+
+                moves++;
+                if (moves >= totalMoves) {
+                    clearInterval(shuffleInterval);
+                    cupRoundActive = true;
+                    document.getElementById('cupCooldownText').innerText = 'Pick a cup!';
                 }
-            }, 300);
+            }, speed);
         }
 
         window.chooseCup = function(index) {
-            if (cupInAnim) return;
-            
-            let cup = document.getElementById(`cup${index}`);
-            if (cup) cup.classList.add('lifted');
+            if (!cupRoundActive) return;
+            cupRoundActive = false;
 
-            if (index === winningCupIndex) {
-                let coin = document.getElementById(`coin${index}`);
-                if (coin) coin.style.opacity = '1';
-                let rewardCoins = selectedCupLevel * 1000;
-                let rewardEnergy = selectedCupLevel * 200;
-                score += rewardCoins;
-                energy = Math.min(maxEnergy, energy + rewardEnergy);
-                document.getElementById('cupCooldownText').innerText = `🎉 Correct! You won ${rewardCoins} Coins & +${rewardEnergy} Energy!`;
+            document.querySelectorAll('.cup-2d').forEach(cup => cup.classList.add('lifted'));
+            document.getElementById(`coin${winningSlotIndex}`).style.opacity = '1';
+
+            if (index === winningSlotIndex) {
+                let coinWin = 1000 * cupLevelSelected;
+                let energyWin = 200 * cupLevelSelected;
+                score += coinWin;
+                energy = Math.min(maxEnergy, energy + energyWin);
+                document.getElementById('cupCooldownText').innerText = `WIN! +${coinWin} 🪙, +${energyWin} ⚡`;
+                
+                cupLevelDataState[cupLevelSelected].completed = true;
+                if (cupLevelSelected < 5) cupLevelDataState[cupLevelSelected + 1].unlocked = true;
             } else {
-                document.getElementById('cupCooldownText').innerText = "❌ Wrong cup! Try again!";
+                document.getElementById('cupCooldownText').innerText = 'Wrong cup! Better luck next time.';
             }
 
-            cupInAnim = true;
+            updateUI();
+            saveState();
+            syncScoreToFirebase();
+
             setTimeout(() => {
-                let winCup = document.getElementById(`cup${winningCupIndex}`);
-                let winCoin = document.getElementById(`coin${winningCupIndex}`);
-                if (winCup) winCup.classList.add('lifted');
-                if (winCoin) winCoin.style.opacity = '1';
-                updateUI();
-                saveState();
-                syncScoreToFirebase();
-            }, 500);
+                initCupStageUI();
+            }, 3000);
         }
 
-        // Minigame 4: Slot Machine Spin
-        const slotSymbols = ['🪙', '💵', '💰', '💎', '7️⃣'];
+        // Minigame 4: Slot Machine
+        let isSlotSpinning = false;
 
         window.spinSlotMachine = function() {
-            if (score < 500) {
-                alert("Not enough coins! Required: 500 BIZ777");
+            const cost = 500;
+            if (isSlotSpinning) return;
+            if (score < cost) {
+                alert("Not enough BIZ777 coins! Required: 500");
                 return;
             }
-            score -= 500;
+
+            score -= cost;
             updateUI();
             saveState();
             syncScoreToFirebase();
 
-            let spins = 0;
-            document.getElementById('slotResultText').innerText = "Spinning...";
+            isSlotSpinning = true;
+            document.getElementById('spinSlotBtn').style.opacity = '0.5';
+            document.getElementById('slotResultText').innerText = 'Spinning... Good luck!';
 
-            let interval = setInterval(() => {
-                let s1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                let s2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                let s3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            const symbols = [
+                { icon: '🪙', name: 'BIZ777', weight: 10 },
+                { icon: '⚡', name: 'ENERGY', weight: 20 },
+                { icon: '🍒', name: 'CHERRY', weight: 30 },
+                { icon: '💎', name: 'DIAMOND', weight: 15 },
+                { icon: '❌', name: 'MISS', weight: 40 }
+            ];
 
-                document.getElementById('reel0').innerHTML = `<span>${s1}</span>BIZ777`;
-                document.getElementById('reel1').innerHTML = `<span>${s2}</span>BIZ777`;
-                document.getElementById('reel2').innerHTML = `<span>${s3}</span>BIZ777`;
+            const reelElements = [document.getElementById('reel0'), document.getElementById('reel1'), document.getElementById('reel2')];
+            let results = [];
 
-                spins++;
-                if (spins >= 12) {
-                    clearInterval(interval);
-                    evaluateSlotResult(s1, s2, s3);
+            reelElements.forEach(reel => reel.innerHTML = `<span>⏳</span>...`);
+
+            let spinTime = 0;
+            let spinInterval = setInterval(() => {
+                reelElements.forEach(reel => {
+                    let randSym = symbols[Math.floor(Math.random() * symbols.length)];
+                    reel.innerHTML = `<span>${randSym.icon}</span>${randSym.name}`;
+                });
+                spinTime += 100;
+                if (spinTime > 2000) {
+                    clearInterval(spinInterval);
+                    finalizeSlot();
                 }
             }, 100);
+
+            function finalizeSlot() {
+                results = [];
+                reelElements.forEach((reel, idx) => {
+                    setTimeout(() => {
+                        let randVal = Math.random() * 115;
+                        let selectedSym = symbols[4];
+                        let sum = 0;
+                        for (let s of symbols) {
+                            sum += s.weight;
+                            if (randVal <= sum) {
+                                selectedSym = s;
+                                break;
+                            }
+                        }
+                        results.push(selectedSym);
+                        reel.innerHTML = `<span>${selectedSym.icon}</span>${selectedSym.name}`;
+
+                        if (results.length === 3) {
+                            checkSlotWin(results);
+                        }
+                    }, idx * 400);
+                });
+            }
         }
 
-        function evaluateSlotResult(s1, s2, s3) {
-            if (s1 === s2 && s2 === s3) {
-                if (s1 === '7️⃣' || s1 === '🪙') {
-                    let jackpot = 5000000;
-                    score += jackpot;
-                    document.getElementById('slotResultText').innerText = `🎰 JACKPOT! You won 5,000,000 BIZ777! 🎉`;
+        function checkSlotWin(results) {
+            isSlotSpinning = false;
+            document.getElementById('spinSlotBtn').style.opacity = '1';
+            let resText = document.getElementById('slotResultText');
+
+            if (results[0].name === results[1].name && results[1].name === results[2].name) {
+                if (results[0].name === 'BIZ777') {
+                    score += 5000000;
+                    resText.innerText = '🎉 MEGA JACKPOT! +5,000,000 Coins! 🎉';
+                    resText.style.color = '#22c55e';
+                } else if (results[0].name === 'DIAMOND') {
+                    score += 100000;
+                    resText.innerText = '💎 DIAMOND WIN! +100,000 Coins! 💎';
+                    resText.style.color = '#38bdf8';
+                } else if (results[0].name === 'ENERGY') {
+                    energy = maxEnergy;
+                    resText.innerText = '⚡ ENERGY FULLY RESTORED! ⚡';
+                    resText.style.color = '#eab308';
+                } else if (results[0].name === 'CHERRY') {
+                    score += 5000;
+                    resText.innerText = '🍒 CHERRY WIN! +5,000 Coins! 🍒';
+                    resText.style.color = '#ef4444';
                 } else {
-                    let prize = 25000;
-                    score += prize;
-                    document.getElementById('slotResultText').innerText = `🎉 3x Match! You won 25,000 BIZ777!`;
+                    resText.innerText = '😢 TRIPLE MISS! Nothing won.';
+                    resText.style.color = 'var(--text-secondary)';
                 }
-            } else if (s1 === s2 || s2 === s3 || s1 === s3) {
-                score += 1000;
-                document.getElementById('slotResultText').innerText = `2x Match! You won 1,000 BIZ777!`;
+            } else if (results[0].name === results[1].name || results[1].name === results[2].name || results[0].name === results[2].name) {
+                score += 250;
+                resText.innerText = '✨ Mini Win! +250 Coins returned.';
+                resText.style.color = '#facc15';
             } else {
-                document.getElementById('slotResultText').innerText = `No match. Try again!`;
+                resText.innerText = '😢 No Match! Try again.';
+                resText.style.color = 'var(--text-secondary)';
             }
             updateUI();
             saveState();
             syncScoreToFirebase();
         }
 
-        // Minigame 5: Paper Wraps Rock
+        // Minigame 5: Paper Wraps Rock (PWR)
         let pwrGameActive = false;
         let pwrScore = 0;
         let pwrTimeLeft = 45;
         let pwrTimerInterval = null;
+        const pwrCost = 200;
 
-        window.resetPwrLobby = function() {
-            pwrGameActive = false;
-            if (pwrTimerInterval) clearInterval(pwrTimerInterval);
-            document.getElementById('startPwrBtn').style.display = 'block';
-            document.getElementById('pwrLeftHand').innerText = '✊';
-            document.getElementById('pwrRightHand').innerText = '✊';
-            document.getElementById('pwrActionText').innerText = 'BATTLE READY';
-            document.getElementById('pwrResultMsg').innerText = '';
-        }
+        const pwrSigns = {
+            'rock': { icon: '✊', beats: 'scissors' },
+            'paper': { icon: '✋', beats: 'rock' },
+            'scissors': { icon: '✌️', beats: 'paper' }
+        };
 
         window.startPwrGame = function() {
-            if (score < 200) {
-                alert("Not enough coins! Required: 200 BIZ777");
+            if (score < pwrCost) {
+                alert("Not enough coins! Required: 200");
                 return;
             }
-            score -= 200;
+
+            score -= pwrCost;
             updateUI();
             saveState();
             syncScoreToFirebase();
 
+            pwrGameActive = true;
             pwrScore = 0;
             pwrTimeLeft = 45;
-            pwrGameActive = true;
 
             document.getElementById('startPwrBtn').style.display = 'none';
             document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
             document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimeLeft} sec`;
-            document.getElementById('pwrActionText').innerText = 'CHOOSE!';
+            document.getElementById('pwrResultMsg').innerText = "Game started! Make your choice!";
+            document.getElementById('pwrActionText').innerText = "VS";
 
             if (pwrTimerInterval) clearInterval(pwrTimerInterval);
+
             pwrTimerInterval = setInterval(() => {
                 pwrTimeLeft--;
                 document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimeLeft} sec`;
@@ -2350,50 +2449,73 @@
             }, 1000);
         }
 
-        window.playPwrChoice = function(userChoice) {
-            if (!pwrGameActive) {
-                alert("Start battle first!");
-                return;
-            }
+        window.playPwrChoice = function(playerChoice) {
+            if (!pwrGameActive) return;
 
             const choices = ['rock', 'paper', 'scissors'];
-            const botChoice = choices[Math.floor(Math.random() * 3)];
+            const botChoice = choices[Math.floor(Math.random() * choices.length)];
 
-            const iconMap = { rock: '✊', paper: '✋', scissors: '✌️️' };
-            document.getElementById('pwrLeftHand').innerText = iconMap[userChoice];
-            document.getElementById('pwrRightHand').innerText = iconMap[botChoice];
+            document.getElementById('pwrLeftHand').innerText = pwrSigns[playerChoice].icon;
+            
+            document.getElementById('pwrRightHand').innerText = '⏳';
+            document.getElementById('pwrActionText').innerText = "Hmm...";
 
-            if (userChoice === botChoice) {
-                document.getElementById('pwrActionText').innerText = 'DRAW!';
-                document.getElementById('pwrResultMsg').innerText = 'Tie round!';
-            } else if (
-                (userChoice === 'rock' && botChoice === 'scissors') ||
-                (userChoice === 'paper' && botChoice === 'rock') ||
-                (userChoice === 'scissors' && botChoice === 'paper')
-            ) {
-                pwrScore += 100;
-                score += 100;
-                document.getElementById('pwrActionText').innerText = 'WIN!';
-                document.getElementById('pwrResultMsg').innerText = '+100 Coins!';
-            } else {
-                document.getElementById('pwrActionText').innerText = 'LOSE!';
-                document.getElementById('pwrResultMsg').innerText = 'Bot won this round!';
-            }
+            setTimeout(() => {
+                document.getElementById('pwrRightHand').innerText = pwrSigns[botChoice].icon;
 
-            document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
-            updateUI();
-            saveState();
-            syncScoreToFirebase();
+                if (playerChoice === botChoice) {
+                    document.getElementById('pwrActionText').innerText = "DRAW!";
+                    document.getElementById('pwrActionText').style.color = "var(--text-secondary)";
+                } else if (pwrSigns[playerChoice].beats === botChoice) {
+                    pwrScore += 100;
+                    score += 100;
+                    document.getElementById('pwrActionText').innerText = "YOU WIN! +100";
+                    document.getElementById('pwrActionText').style.color = "#22c55e";
+                } else {
+                    document.getElementById('pwrActionText').innerText = "BOT WINS!";
+                    document.getElementById('pwrActionText').style.color = "#ef4444";
+                }
+
+                document.getElementById('pwrScore').innerText = `Score: ${pwrScore}`;
+                updateUI();
+                saveState();
+                syncScoreToFirebase();
+            }, 600);
         }
 
         function endPwrGame() {
             pwrGameActive = false;
             if (pwrTimerInterval) clearInterval(pwrTimerInterval);
             document.getElementById('startPwrBtn').style.display = 'block';
-            document.getElementById('pwrActionText').innerText = 'FINISHED';
-            document.getElementById('pwrResultMsg').innerText = `Game over! Total score: ${pwrScore}`;
-            saveState();
-            syncScoreToFirebase();
+            document.getElementById('startPwrBtn').innerText = 'Play Again (Cost: 200 🪙)';
+            document.getElementById('pwrResultMsg').innerText = `Battle Ended! Total Won: ${pwrScore} coins.`;
+            document.getElementById('pwrActionText').innerText = "BATTLE READY";
+        }
+
+        function resetPwrLobby() {
+            if (pwrTimerInterval) clearInterval(pwrTimerInterval);
+            pwrGameActive = false;
+            document.getElementById('startPwrBtn').style.display = 'block';
+            document.getElementById('startPwrBtn').innerText = 'Start Battle 🚀 (Cost: 200 🪙)';
+            document.getElementById('pwrLeftHand').innerText = '✊';
+            document.getElementById('pwrRightHand').innerText = '✊';
+            document.getElementById('pwrActionText').innerText = "BATTLE READY";
+            document.getElementById('pwrResultMsg').innerText = "";
+            document.getElementById('pwrTimer').innerText = `⏱️ 45 sec`;
+            document.getElementById('pwrScore').innerText = `Score: 0`;
+        }
+
+
+        // Navigation & Storage
+        window.switchTab = function(tabId, btn) {
+            document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (tabId === 'leaderboard') {
+                renderLeaderboard();
+            }
         }
 
         function saveState() {
@@ -2406,17 +2528,8 @@
             localStorage.setItem('biz_cup_states', JSON.stringify(cupLevelDataState));
         }
 
-        window.switchTab = function(tabName, element) {
-            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            if (element) element.classList.add('active');
-            if (tabName === 'leaderboard') {
-                renderLeaderboard();
-            }
-        };
-
         updateUI();
+        syncScoreToFirebase();
     </script>
 </body>
 </html>
