@@ -54,8 +54,7 @@
         .music-player-widget {
             position: absolute;
             top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 10px;
             z-index: 1000;
             background: linear-gradient(145deg, #1e293b, #0f172a);
             border: 1px solid var(--accent);
@@ -1387,7 +1386,7 @@
                 gameCardPwrTitle: "✌️ ورقة تغلف صخرة",
                 gameCardPwrDesc: "معركة حجر ورقة مقص الكلاسيكية برمز الوجوه التعبيرية!",
                 catchSubHeader: "🕹️ لعبة الصيد BIZ777",
-                flappySubHeader: "🕹️️ Flappy BIZ777",
+                flappySubHeader: "🕹️ Flappy BIZ777",
                 flappyInstructions: "انقر للقفز وتجنب العقبات المتحركة!",
                 cupsSubHeader: "🕹️ ابحث عن كرة BIZ777",
                 slotSubHeader: "🕹️ دوران ماكينة القمار",
@@ -1439,7 +1438,7 @@
                 catchSubHeader: "🕹️ Jeu de capture BIZ777",
                 flappySubHeader: "🕹️ Flappy BIZ777",
                 flappyInstructions: "Touchez pour sauter et éviter les obstacles !",
-                cupsSubHeader: "🕹️️ Trouver la balle BIZ777",
+                cupsSubHeader: "🕹️ Trouver la balle BIZ777",
                 slotSubHeader: "🕹️ Machine à sous",
                 slotMachineBanner: "Coût : 500 pièces | 3x BIZ777 = 5 000 000 Jackpot !",
                 pwrSubHeader: "✌️ Pierre Papier Ciseaux",
@@ -1484,9 +1483,9 @@
                 gameCardCupsDesc: "¡Encuentra la bola bajo las tazas para ganar premios!",
                 gameCardSlotTitle: "🎰 Giros de Tragamonedas",
                 gameCardSlotDesc: "Costo: 500 monedas | 3x BIZ777 = 5,000,000 Jackpot!",
-                gameCardPwrTitle: "✌ Piedra, Papel, Tijera",
+                gameCardPwrTitle: "✌️️ Piedra, Papel, Tijera",
                 gameCardPwrDesc: "¡Batalla clásica con iconos de emoji!",
-                catchSubHeader: "🕹 Juego de Atrapa BIZ777",
+                catchSubHeader: "🕹️️ Juego de Atrapa BIZ777",
                 flappySubHeader: "🕹️ Flappy BIZ777",
                 flappyInstructions: "Toca para saltar y esquivar obstáculos.",
                 cupsSubHeader: "🕹️ Encuentra la bola BIZ777",
@@ -1496,7 +1495,7 @@
                 pwrYou: "TÚ",
                 pwrBot: "BOT",
                 pwrChooseSign: "Elige tu seña:",
-                pwrBtnScissors: "✌ Tijera",
+                pwrBtnScissors: "✌️️ Tijera",
                 pwrBtnPaper: "✋ Papel",
                 pwrBtnRock: "✊ Piedra",
                 friendsTitle: "👥 Invitar amigos",
@@ -1539,7 +1538,7 @@
                 catchSubHeader: "🕹️ BIZ777 Fangspiel",
                 flappySubHeader: "🕹️ Flappy BIZ777",
                 flappyInstructions: "Tippen zum Springen. Hindernissen ausweichen!",
-                cupsSubHeader: "🕹️️ Finde den BIZ777 Ball",
+                cupsSubHeader: "🕹️ Finde den BIZ777 Ball",
                 slotSubHeader: "🕹️ Spielautomat Spin",
                 slotMachineBanner: "Kosten: 500 Münzen | 3x BIZ777 = 5.000.000 Jackpot!",
                 pwrSubHeader: "✌️ Schere, Stein, Papier",
@@ -1911,995 +1910,440 @@
                     tapContainer.innerHTML = `<div style="font-size: 11px; color: var(--warning); text-align: center; padding: 6px; font-weight: bold;">🔒 Invite ${3 - invitedFriendsCount} more friends for FREE Tap Power 20!</div>`;
                 } else {
                     tapContainer.innerHTML = `
-                        <divმუსიკის ვიჯეტის ადგილმდებარეობა შეიცვალა და ახლა ის ეკრანის ზედა ცენტრალურ ნაწილშია განთავსებული (`top: 10px; left: 50%; transform: translateX(-50%);`), რათა არ დაფაროს მომხმარებლის მიღწევები და ქულები[cite: 1]. კოდი სრულად არის გასწორებული და ბოლოში გაწყვეტილი ფუნქციები (ჭიქების, სლოტების და ჯეირანის მინი-თამაშებისთვის) აღდგენილია. სკრიპტებში არ არის გამოყენებული ქართული ასოები და შენარჩუნებულია ორიგინალი ლოგიკა.
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Biz777 Mini App - Classic 2D</title>
-    <script src="[https://telegram.org/js/telegram-web-app.js](https://telegram.org/js/telegram-web-app.js)"></script>
-    <style>
-        :root {
-            --bg-color: #0b0f19;
-            --card-bg: #162032;
-            --accent: #38bdf8;
-            --accent-glow: rgba(56, 189, 248, 0.4);
-            --text-color: #f8fafc;
-            --text-secondary: #94a3b8;
-            --success: #22c55e;
-            --warning: #eab308;
-            --danger: #ef4444;
-            --border-color: #334155;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            user-select: none;
-            -webkit-user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            font-size: 14px;
-        }
-
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            max-width: 480px;
-            margin: 0 auto;
-            width: 100%;
-            position: relative;
-        }
-
-        /* Music Player Widget Styles */
-        .music-player-widget {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            border: 1px solid var(--accent);
-            border-radius: 12px;
-            padding: 8px 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            width: 150px;
-            font-size: 11px;
-        }
-
-        .music-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-            color: var(--accent);
-        }
-
-        .music-header button {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .music-body {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .music-body select {
-            background: #0b0f19;
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 4px;
-            font-size: 10px;
-            outline: none;
-        }
-
-        .music-controls {
-            display: flex;
-            gap: 4px;
-            justify-content: space-between;
-        }
-
-        .music-controls button {
-            flex: 1;
-            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
-            color: #000;
-            border: none;
-            padding: 4px 6px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 10px;
-        }
-
-        header {
-            padding: 12px 14px;
-            display: flex;
-            flex-direction: column;
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            border-bottom-left-radius: 18px;
-            border-bottom-right-radius: 18px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-            z-index: 10;
-            gap: 8px;
-            border-bottom: 2px solid var(--accent);
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #2563eb);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #000;
-            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
-            font-size: 14px;
-        }
-
-        .username {
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        .level-badge {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .score-board {
-            text-align: right;
-        }
-
-        .score-value {
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--accent);
-            text-shadow: 0 0 8px var(--accent-glow);
-        }
-
-        .header-bottom-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .language-selector-container select {
-            background: #0b0f19;
-            color: var(--accent);
-            border: 1px solid var(--accent);
-            border-radius: 6px;
-            padding: 4px 8px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .level-progress-container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .level-progress-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .level-bar-bg {
-            width: 100%;
-            height: 7px;
-            background: #090d16;
-            border-radius: 4px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .level-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #22c55e, #38bdf8);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            padding: 14px;
-            overflow: hidden;
-        }
-
-        .coin-background-pattern {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            overflow: hidden;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .bg-coin {
-            position: absolute;
-            font-size: 26px;
-            opacity: 0.1;
-            font-weight: bold;
-            color: #38bdf8;
-        }
-
-        .ambient-glow {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0) 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 0;
-            animation: pulseGlow 4s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulseGlow {
-            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
-            100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-        }
-
-        .floating-particle {
-            position: absolute;
-            background: var(--accent);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.25;
-            animation: floatParticle linear infinite;
-        }
-
-        @keyframes floatParticle {
-            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-            20% { opacity: 0.3; }
-            80% { opacity: 0.3; }
-            100% { transform: translateY(-40px) scale(1.2); opacity: 0; }
-        }
-
-        .interactive-clicker-area {
-            position: relative;
-            z-index: 5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            pointer-events: auto;
-        }
-
-        .clicker-circle {
-            width: 195px;
-            height: 195px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #22304c 0%, #0f172a 100%);
-            border: 5px solid var(--accent);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.5), 0 0 20px var(--accent-glow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-            transition: transform 0.1s ease;
-            overflow: hidden;
-        }
-
-        .clicker-circle:active {
-            transform: scale(0.95);
-        }
-
-        .clicker-icon {
-            font-size: 65px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        .energy-container {
-            width: 235px;
-            margin-top: 22px;
-            position: relative;
-            z-index: 5;
-        }
-
-        .energy-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            margin-bottom: 5px;
-            color: var(--text-secondary);
-        }
-
-        .energy-bar-bg {
-            width: 100%;
-            height: 11px;
-            background: #090d16;
-            border-radius: 6px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .energy-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #38bdf8, #818cf8);
-            width: 100%;
-            transition: width 0.2s linear;
-        }
-
-        .floating-number {
-            position: absolute;
-            font-size: 22px;
-            font-weight: bold;
-            color: var(--warning);
-            pointer-events: none;
-            z-index: 100;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-            animation: floatUp 0.7s ease-out forwards;
-        }
-
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-65px) scale(1.2); }
-        }
-
-        nav {
-            display: flex;
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            padding: 12px;
-            justify-content: space-around;
-            border-top-left-radius: 18px;
-            border-top-right-radius: 18px;
-            box-shadow: 0 -8px 20px rgba(0,0,0,0.5);
-            z-index: 10;
-            border-top: 2px solid var(--accent);
-        }
-
-        .nav-item {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 11px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .nav-item.active {
-            color: var(--accent);
-            transform: scale(1.05);
-        }
-
-        .nav-item span:first-child {
-            font-size: 18px;
-        }
-
-        .tab-pane {
-            display: none;
-            width: 100%;
-            height: 100%;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            overflow-y: auto;
-            padding-bottom: 15px;
-            z-index: 5;
-            position: relative;
-        }
-
-        .tab-pane.active {
-            display: flex;
-        }
-
-        .shop-list, .ads-list, .friends-list, .games-menu {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin-top: 10px;
-        }
-
-        .shop-card, .ad-card, .friend-card, .game-card-option, .game-header-banner {
-            background: linear-gradient(135deg, #1e293b 0%, #111827 100%);
-            padding: 16px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid rgba(56, 189, 248, 0.15);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .leaderboard-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            width: 100%;
-            padding: 14px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-        }
-
-        .leaderboard-container {
-            display: flex;
-            flex-direction: column;
-            gap: 9px;
-            max-height: 400px;
-            overflow-y: auto;
-            width: 100%;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
-            padding: 11px 15px;
-            border-radius: 9px;
-        }
-
-        .my-profile {
-            background: rgba(56, 189, 248, 0.15) !important;
-            border-color: var(--accent) !important;
-        }
-
-        .rank-number {
-            font-weight: bold;
-            color: #94a3b8;
-            width: 32px;
-            font-size: 13px;
-        }
-
-        .score {
-            font-weight: bold;
-            color: var(--accent);
-            font-size: 13px;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
-            color: #000;
-            border: none;
-            padding: 9px 15px;
-            font-weight: bold;
-            border-radius: 9px;
-            cursor: pointer;
-            box-shadow: 0 3px 10px rgba(56, 189, 248, 0.3);
-            transition: transform 0.1s ease;
-            font-size: 12px;
-        }
-
-        .btn:active {
-            transform: scale(0.96);
-        }
-
-        .game-header-banner {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(15, 23, 42, 0.9));
-            border: 1px solid var(--accent);
-            text-align: center;
-            margin-bottom: 4px;
-        }
-
-        .game-card-option {
-            flex-direction: row;
-            cursor: pointer;
-        }
-
-        .sub-game-container {
-            display: none;
-            width: 100%;
-            flex-direction: column;
-            align-items: center;
-            height: 100%;
-        }
-
-        .sub-game-container.active-subgame {
-            display: flex;
-        }
-
-        #flappyCanvas {
-            background: linear-gradient(to bottom, #1e293b, #0f172a);
-            border-radius: 15px;
-            border: 2px solid var(--accent);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-            cursor: pointer;
-            margin: 10px 0;
-            touch-action: none;
-        }
-
-        .catch-game-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            gap: 10px;
-        }
-
-        #catchGameContainer {
-            width: 100%;
-            max-width: 315px;
-            height: 315px;
-            background: #080c14;
-            border-radius: 15px;
-            border: 2px solid var(--accent);
-            position: relative;
-            overflow: hidden;
-            box-shadow: inset 0 4px 12px rgba(0,0,0,0.8);
-            cursor: pointer;
-        }
-
-        .catch-falling-item {
-            position: absolute;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: bold;
-            user-select: none;
-            cursor: pointer;
-            animation: fallItem linear forwards;
-        }
-
-        .catch-coin {
-            background: radial-gradient(circle, #ffd700, #ffa500);
-            color: #000;
-            border: 2px solid #ffcc00;
-            box-shadow: 0 0 6px #ffd700;
-        }
-
-        .catch-bomb {
-            background: radial-gradient(circle, #ff4d4d, #b30000);
-            color: #fff;
-            border: 2px solid #ff1a1a;
-            box-shadow: 0 0 6px #ff4d4d;
-        }
-
-        @keyframes fallItem {
-            0% { top: -45px; }
-            100% { top: 325px; }
-        }
-
-        .slot-machine-wrapper, .jeiran-game-wrapper, .paperwrapsrock-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            padding: 6px;
-            gap: 12px;
-        }
-
-        .slot-board-2d {
-            width: 100%;
-            max-width: 315px;
-            height: 175px;
-            background: #080c14;
-            border-radius: 15px;
-            border: 2px solid var(--accent);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            margin: 6px 0;
-            box-shadow: inset 0 4px 12px rgba(0,0,0,0.8);
-        }
-
-        .slots-row {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .slot-reel {
-            width: 80px;
-            height: 98px;
-            background: #1e293b;
-            border: 2px solid var(--accent);
-            border-radius: 9px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-            color: #facc15;
-            gap: 4px;
-        }
-        
-        .slot-reel span {
-            font-size: 24px;
-        }
-
-        .cup-game-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            padding: 6px;
-            gap: 12px;
-        }
-
-        .levels-container {
-            display: flex;
-            gap: 6px;
-            width: 100%;
-            justify-content: center;
-        }
-
-        .level-btn {
-            background: #1e293b;
-            border: 1px solid rgba(255,255,255,0.15);
-            color: var(--text-secondary);
-            padding: 6px 10px;
-            border-radius: 7px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .level-btn.active-level {
-            background: var(--accent);
-            color: #000;
-            border-color: var(--accent);
-        }
-
-        .level-btn.completed-level {
-            background: #22c55e;
-            color: #000;
-            border-color: #22c55e;
-        }
-
-        .cups-board-2d {
-            width: 100%;
-            height: 160px;
-            background: #0a0f1d;
-            border-radius: 15px;
-            border: 2px solid var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            margin: 10px 0;
-            box-shadow: inset 0 4px 12px rgba(0,0,0,0.8);
-        }
-
-        .cups-scene {
-            position: relative;
-            width: 280px;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .cup-slot-2d {
-            position: absolute;
-            width: 75px;
-            height: 90px;
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
-
-        .coin-item-2d {
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #facc15;
-            color: #000;
-            font-weight: bold;
-            font-size: 10px;
-            padding: 2px 5px;
-            border-radius: 9px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            z-index: 1;
-        }
-
-        .cup-2d {
-            position: absolute;
-            width: 75px;
-            height: 85px;
-            background: linear-gradient(135deg, #ef4444, #991b1b);
-            border-radius: 7px 7px 18px 18px;
-            border-bottom: 3px solid #fef2f2;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .cup-2d.lifted {
-            transform: translateY(-45px);
-        }
-    </style>
-</head>
-<body>
-    <div class="app-container">
-        <!-- Music Player Widget -->
-        <div class="music-player-widget">
-            <div class="music-header">
-                <span>🎵 Music</span>
-                <button id="musicToggleBtn" onclick="toggleMusicWidget()">-</button>
-            </div>
-            <div class="music-body" id="musicBody">
-                <select id="musicTrackSelect" onchange="changeTrack(this.value)">
-                    <option value="uIfD2BKaD2k">Track 1</option>
-                    <option value="B63R7G8aFh4">Track 2</option>
-                    <option value="BOeaa2MCXig">Track 3</option>
-                    <option value="jyPEDBIxnwI">Track 4</option>
-                    <option value="5bn3Jmvep1k">Track 5</option>
-                </select>
-                <div class="music-controls">
-                    <button id="playPauseMusicBtn" onclick="togglePlayMusic()">▶ Play</button>
-                    <button onclick="stopMusic()">⏹ Stop</button>
-                </div>
-            </div>
-            <iframe id="ytAudioPlayer" style="display:none;" width="0" height="0" src="" allow="autoplay"></iframe>
-        </div>
-
-        <header>
-            <div class="header-top">
-                <div class="user-info">
-                    <div class="avatar" id="userAvatar">B</div>
-                    <div>
-                        <div class="username" id="userName">Biz777 User</div>
-                        <div class="level-badge" id="levelName">1. Complete Beginner</div>
-                    </div>
-                </div>
-                <div class="score-board">
-                    <div class="score-value" id="scoreDisplay">0</div>
-                    <div class="level-badge" id="coinsLabelHeader">BIZ777 Coins</div>
-                </div>
-            </div>
-
-            <div class="header-bottom-bar">
-                <div class="language-selector-container">
-                    <select id="gameLangSelect" onchange="changeGameLanguage(this.value)">
-                        <option value="en">English</option>
-                        <option value="ru">Русский</option>
-                        <option value="zh">中文</option>
-                        <option value="hi">हिन्दी</option>
-                        <option value="ar">العربية</option>
-                        <option value="fr">Français</option>
-                        <option value="es">Español</option>
-                        <option value="de">Deutsch</option>
-                    </select>
-                </div>
-                <div class="level-badge" id="coinsLabelText">BIZ777 Coins</div>
-            </div>
-
-            <div class="level-progress-container">
-                <div class="level-progress-info">
-                    <span id="nextLevelText">Next Level: 500</span>
-                    <span id="levelPercentage">0%</span>
-                </div>
-                <div class="level-bar-bg">
-                    <div class="level-bar-fill" id="levelBarFill"></div>
-                </div>
-            </div>
-        </header>
-
-        <div class="content">
-            <div class="ambient-glow"></div>
-            <div class="floating-particle" style="left: 15%; width: 4px; height: 4px; animation-duration: 7s; animation-delay: 0s;"></div>
-            <div class="floating-particle" style="left: 35%; width: 5px; height: 5px; animation-duration: 9s; animation-delay: 2s;"></div>
-            <div class="floating-particle" style="left: 65%; width: 4px; height: 4px; animation-duration: 6s; animation-delay: 1s;"></div>
-            <div class="floating-particle" style="left: 85%; width: 6px; height: 6px; animation-duration: 10s; animation-delay: 3s;"></div>
-
-            <div class="tab-pane active" id="tab-clicker">
-                <div class="coin-background-pattern">
-                    <span class="bg-coin" style="top: 2%; left: 5%;">🪙 BIZ777</span>
-                    <span class="bg-coin" style="top: 10%; right: 8%;">💵 BIZ777</span>
-                    <span class="bg-coin" style="bottom: 22%; left: 8%;">🪙 BIZ777</span>
-                    <span class="bg-coin" style="bottom: 10%; right: 12%;">💰 BIZ777</span>
-                </div>
-
-                <div class="interactive-clicker-area" id="clickerBtn">
-                    <div class="clicker-circle">
-                        <div class="clicker-icon" id="buildingIcon">🏗️</div>
-                    </div>
-
-                    <div class="energy-container">
-                        <div class="energy-info">
-                            <span id="energyLabelText">⚡ Energy</span>
-                            <span id="energyText">1000 / 1000</span>
-                        </div>
-                        <div class="energy-bar-bg">
-                            <div class="energy-bar-fill" id="energyFill"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-pane" id="tab-shop">
-                <h3 id="shopTitleText" style="margin-bottom: 10px; align-self: flex-start; font-size: 15px;">🛒 Upgrades Shop</h3>
-                <div class="shop-list">
-                    <div class="shop-card">
-                        <div class="shop-info"><h4 id="tapPowerTitleText" style="font-size: 13px;">Tap Power Upgrades</h4></div>
-                        <div id="tapShopContainer" style="margin-top: 8px; width: 100%;"></div>
-                    </div>
-                    <div class="shop-card">
-                        <div class="shop-info"><h4 id="energyUpgradesTitleText" style="font-size: 13px;">Energy Upgrades</h4></div>
-                        <div id="energyShopContainer" style="margin-top: 8px; width: 100%;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-pane" id="tab-ads">
-                <h3 id="adsTitleText" style="margin-bottom: 10px; align-self: flex-start; font-size: 15px;">📺 Ads & Energy Boost</h3>
-                <div class="ads-list">
-                    <div class="shop-card" style="align-items: stretch; gap: 10px;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span style="font-size: 32px;">⚡</span>
+                        <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
                             <div>
-                                <h4 id="adsCardTitle" style="font-size: 13px; color: var(--accent);">Refill Energy Boost</h4>
-                                <p id="adsCardDesc" style="font-size: 11px; color: var(--text-secondary);">Watch a rewarded video ad to refill your energy completely back to max!</p>
+                                <div style="font-weight: bold; font-size: 12px;">🎁 Get FREE Tap Power 20!</div>
+                                <div style="font-size: 10px; color: #22c55e;">3/3 Friends Invited</div>
                             </div>
+                            <button onclick="claimFreeTap20()" class="btn" style="padding: 6px 12px; font-size: 11px; background: #22c55e;">Claim 🚀</button>
+                        </div>`;
+                }
+            } else {
+                tapContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Tap Power (20) Unlocked!</div>`;
+            }
+
+            const energyTiers = [
+                { target: 1500, price: 100 }, { target: 2000, price: 300 },
+                { target: 2500, price: 700 }, { target: 3000, price: 1300 },
+                { target: 3500, price: 2200 }, { target: 4000, price: 3500 },
+                { target: 4500, price: 5000 }, { target: 5000, price: 7500 }
+            ];
+
+            let nextTier = energyTiers.find(item => item.target > maxEnergy);
+            if (nextTier) {
+                energyContainer.innerHTML = `
+                    <div style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: bold; font-size: 12px;">⚡ Upgrade Max Energy (${maxEnergy} ➔ ${nextTier.target})</div>
+                            <div style="font-size: 10px; color: #ffd700;">Price: ${nextTier.price.toLocaleString()} BIZ777</div>
                         </div>
-                        <button class="btn" id="watchAdBtn" onclick="showRewardedAd()" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff;">Watch Ad & Refill Energy 🚀</button>
-                    </div>
-                </div>
-            </div>
+                        <button onclick="buyEnergyUpgrade(${nextTier.target}, ${nextTier.price})" class="btn" style="padding: 6px 12px; font-size: 11px;">Buy</button>
+                    </div>`;
+            } else {
+                energyContainer.innerHTML = `<div style="font-size: 11px; color: #22c55e; text-align: center; padding: 4px; font-weight: bold;">✅ Max Energy Limit Reached!</div>`;
+            }
+        }
 
-            <div class="tab-pane" id="tab-leaderboard">
-                <div class="leaderboard-card">
-                    <h3 id="leaderboardTitleText" style="margin-bottom: 12px; text-align: center; color: var(--accent); font-size: 15px;">🏆 Leaderboard</h3>
-                    <div class="leaderboard-container" id="leaderboardContainer">
-                    </div>
-                </div>
-            </div>
+        window.buyTapUpgrade = function(newPower, cost) {
+            if (score >= cost) {
+                score -= cost;
+                tapPower = newPower;
+                saveState();
+                updateUI();
+                syncScoreToFirebase();
+            } else {
+                alert("Not enough coins!");
+            }
+        };
 
-            <div class="tab-pane" id="tab-minigame">
-                <div class="games-menu" id="gamesMenu">
-                    <div class="game-header-banner">
-                        <h3 id="gamesHubTitle" style="font-size: 14px; color: var(--accent); margin-bottom: 3px;">🎮 Classic Arcade Games Hub</h3>
-                        <p id="gamesHubDesc" style="font-size: 11px; color: var(--text-secondary);">Select a game below to play and boost your earnings!</p>
-                    </div>
-                    
-                    <div class="game-card-option" onclick="openSubGame('catch')">
-                        <div class="game-card-info">
-                            <h4 id="gameCardCatchTitle" style="color: var(--accent); font-size: 13px;">🪙 Biiz777 Catch Game</h4>
-                            <p id="gameCardCatchDesc" style="font-size: 11px; color: var(--text-secondary);">Cost: 50 Coins | Catch BIZ777 coins, avoid bombs for 1 min!</p>
-                        </div>
-                        <span style="font-size: 18px; color: var(--accent);">👉</span>
-                    </div>
+        window.claimFreeTap20 = function() {
+            if (invitedFriendsCount >= 3 && !freeTap20Claimed) {
+                tapPower = 20;
+                freeTap20Claimed = true;
+                saveState();
+                updateUI();
+                syncScoreToFirebase();
+                alert("Congratulations! Tap Power upgraded to 20!");
+            }
+        };
 
-                    <div class="game-card-option" onclick="openSubGame('flappy')">
-                        <div class="game-card-info">
-                            <h4 id="gameCardFlappyTitle" style="color: var(--accent); font-size: 13px;">🪙 Flappy BIZ777</h4>
-                            <p id="gameCardFlappyDesc" style="font-size: 11px; color: var(--text-secondary);">Avoid moving hand obstacles! Score 10 for +500 Energy!</p>
-                        </div>
-                        <span style="font-size: 18px; color: var(--accent);">👉</span>
-                    </div>
+        window.buyEnergyUpgrade = function(newMax, cost) {
+            if (score >= cost) {
+                score -= cost;
+                maxEnergy = newMax;
+                energy = newMax;
+                saveState();
+                updateUI();
+                syncScoreToFirebase();
+            } else {
+                alert("Not enough coins!");
+            }
+        };
 
-                    <div class="game-card-option" onclick="openSubGame('cups')">
-                        <div class="game-card-info">
-                            <h4 id="gameCardCupsTitle" style="color: var(--accent); font-size: 13px;">🏆 Find BIZ777 Ball</h4>
-                            <p id="gameCardCupsDesc" style="font-size: 11px; color: var(--text-secondary);">Find the BIZ777 ball under cups to win coins and energy!</p>
-                        </div>
-                        <span style="font-size: 18px; color: var(--accent);">👉</span>
-                    </div>
+        window.switchTab = function(tabName, navEl) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            const targetTab = document.getElementById(`tab-${tabName}`);
+            if (targetTab) targetTab.classList.add('active');
+            if (navEl) navEl.classList.add('active');
 
-                    <div class="game-card-option" onclick="openSubGame('slot')">
-                        <div class="game-card-info">
-                            <h4 id="gameCardSlotTitle" style="color: var(--accent); font-size: 13px;">🎰 Slot Machine Spin</h4>
-                            <p id="gameCardSlotDesc" style="font-size: 11px; color: var(--text-secondary);">Cost: 500 Coins | 3x BIZ777 = 5,000,000 Jackpot!</p>
-                        </div>
-                        <span style="font-size: 18px; color: var(--accent);">👉</span>
-                    </div>
+            if (tabName === 'leaderboard') {
+                renderLeaderboard();
+            }
+        };
 
-                    <div class="game-card-option" onclick="openSubGame('paperwrapsrock')">
-                        <div class="game-card-info">
-                            <h4 id="gameCardPwrTitle" style="color: var(--accent); font-size: 13px;">✌️ Paper Wraps Rock (Classic)</h4>
-                            <p id="gameCardPwrDesc" style="font-size: 11px; color: var(--text-secondary);">Classic Rock, Paper, Scissors battle with emoji icons!</p>
-                        </div>
-                        <span style="font-size: 18px; color: var(--accent);">👉</span>
-                    </div>
-                </div>
+        window.openSubGame = function(gameId) {
+            document.getElementById('gamesMenu').style.display = 'none';
+            document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
+            const sub = document.getElementById(`subgame-${gameId}`);
+            if (sub) sub.classList.add('active-subgame');
+        };
 
-                <div class="sub-game-container" id="subgame-catch">
-                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 6px;">
-                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 9px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 id="catchSubHeaderTitle" style="font-size: 13px; color: var(--accent);">🕹️ Biiz777 Catch Game</h3>
-                        <div style="width: 40px;"></div>
-                    </div>
+        window.backToGamesMenu = function() {
+            document.querySelectorAll('.sub-game-container').forEach(el => el.classList.remove('active-subgame'));
+            document.getElementById('gamesMenu').style.display = 'flex';
+        };
 
-                    <div class="catch-game-wrapper">
-                        <div style="display: flex; justify-content: space-between; width: 100%; max-width: 315px; font-weight: bold; font-size: 12px; color: var(--warning);">
-                            <span id="catchTimer">⏱️ Time: 60s</span>
-                            <span id="catchScore">Score: 0</span>
-                        </div>
+        window.inviteFriendLink = function() {
+            invitedFriendsCount = Math.min(3, invitedFriendsCount + 1);
+            saveState();
+            updateUI();
+            alert("Referral link copied!");
+        };
 
-                        <div id="catchGameContainer"></div>
+        function saveState() {
+            localStorage.setItem('biz_score', score);
+            localStorage.setItem('biz_energy', energy);
+            localStorage.setItem('biz_maxEnergy', maxEnergy);
+            localStorage.setItem('biz_tapPower', tapPower);
+            localStorage.setItem('biz_invitedFriends', invitedFriendsCount);
+            localStorage.setItem('biz_freeTap20Claimed', freeTap20Claimed);
+        }
 
-                        <button class="btn" id="startCatchBtn" onclick="startCatchGame()" style="width: 100%; max-width: 315px; background: #22c55e; color: #000;">Start Game 🚀 (Cost: 50 🪙)</button>
-                        <div id="catchMsg" style="font-size: 11px; color: var(--text-secondary); text-align: center; height: 16px;"></div>
-                    </div>
-                </div>
+        /* --- CATCH GAME LOGIC --- */
+        let catchInterval = null;
+        let catchTimerInterval = null;
+        let catchScoreVal = 0;
+        let catchTimeLeft = 60;
 
-                <div class="sub-game-container" id="subgame-flappy">
-                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 6px;">
-                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 9px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 id="flappySubHeaderTitle" style="font-size: 13px; color: var(--accent);">🕹️ Flappy BIZ777</h3>
-                        <div style="width: 40px;"></div>
-                    </div>
-                    <canvas id="flappyCanvas" width="290" height="315"></canvas>
-                    <div id="flappyInstructions" style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 3px;">
-                        Tap canvas to jump. Avoid moving hand obstacles!
-                    </div>
-                </div>
+        window.startCatchGame = function() {
+            if (score < 50) {
+                alert("You need 50 Coins to play!");
+                return;
+            }
+            score -= 50;
+            catchScoreVal = 0;
+            catchTimeLeft = 60;
+            updateUI();
+            saveState();
 
-                <div class="sub-game-container" id="subgame-cups">
-                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 6px;">
-                        <button class="btn menu-back-btn" onclick="backToGamesMenu()" style="padding: 4px 9px; font-size: 11px;">⬅️ Menu</button>
-                        <h3 id="cupsSubHeaderTitle" style="font-size: 13px; color: var(--accent);">🕹️ Find BIZ777 Ball</h3>
-                        <div style="width: 40px;"></div>
-                    </div>
+            document.getElementById('startCatchBtn').style.display = 'none';
+            document.getElementById('catchScore').innerText = `Score: ${catchScoreVal}`;
+            document.getElementById('catchTimer').innerText = `⏱️ Time: ${catchTimeLeft}s`;
+            document.getElementById('catchMsg').innerText = "Catch coins, avoid bombs!";
 
-                    <div class="cup-game-wrapper">
-                        <div class="levels-container">
-                            <button class="level-btn active-level" id="lvlBtn1" onclick="set
+            const container = document.getElementById('catchGameContainer');
+            container.innerHTML = "";
+
+            clearInterval(catchInterval);
+            clearInterval(catchTimerInterval);
+
+            catchInterval = setInterval(spawnCatchItem, 800);
+            catchTimerInterval = setInterval(() => {
+                catchTimeLeft--;
+                document.getElementById('catchTimer').innerText = `⏱️ Time: ${catchTimeLeft}s`;
+                if (catchTimeLeft <= 0) {
+                    endCatchGame();
+                }
+            }, 1000);
+        };
+
+        function spawnCatchItem() {
+            const container = document.getElementById('catchGameContainer');
+            if (!container) return;
+            const item = document.createElement('div');
+            const isBomb = Math.random() < 0.3;
+            item.className = `catch-falling-item ${isBomb ? 'catch-bomb' : 'catch-coin'}`;
+            item.innerText = isBomb ? '💣' : '🪙';
+            item.style.left = `${Math.floor(Math.random() * 260)}px`;
+            item.style.animationDuration = `${2 + Math.random() * 2}s`;
+
+            item.onclick = function() {
+                if (isBomb) {
+                    catchScoreVal = Math.max(0, catchScoreVal - 100);
+                } else {
+                    catchScoreVal += 50;
+                    score += 50;
+                    updateUI();
+                }
+                document.getElementById('catchScore').innerText = `Score: ${catchScoreVal}`;
+                item.remove();
+            };
+
+            container.appendChild(item);
+            setTimeout(() => { if (item.parentNode) item.remove(); }, 4000);
+        }
+
+        function endCatchGame() {
+            clearInterval(catchInterval);
+            clearInterval(catchTimerInterval);
+            document.getElementById('startCatchBtn').style.display = 'block';
+            document.getElementById('catchMsg').innerText = `Game Over! Total score: ${catchScoreVal}`;
+            saveState();
+            syncScoreToFirebase();
+        }
+
+        /* --- FLAPPY GAME LOGIC --- */
+        const canvas = document.getElementById('flappyCanvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+        let birdY = 150, birdV = 0, gravity = 0.35, jump = -6.5;
+        let pipes = [], flappyScore = 0, flappyRunning = false, flappyLoop = null;
+
+        if (canvas) {
+            canvas.addEventListener('pointerdown', () => {
+                if (!flappyRunning) {
+                    startFlappy();
+                } else {
+                    birdV = jump;
+                }
+            });
+        }
+
+        function startFlappy() {
+            birdY = 150;
+            birdV = 0;
+            pipes = [];
+            flappyScore = 0;
+            flappyRunning = true;
+            if (flappyLoop) cancelAnimationFrame(flappyLoop);
+            updateFlappy();
+        }
+
+        function updateFlappy() {
+            if (!flappyRunning) return;
+            birdV += gravity;
+            birdY += birdV;
+
+            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 140) {
+                let gap = 100;
+                let topH = Math.floor(Math.random() * (canvas.height - gap - 60)) + 30;
+                pipes.push({ x: canvas.width, top: topH, bottom: canvas.height - topH - gap, passed: false });
+            }
+
+            for (let i = 0; i < pipes.length; i++) {
+                pipes[i].x -= 2;
+                if (!pipes[i].passed && pipes[i].x < 50) {
+                    pipes[i].passed = true;
+                    flappyScore++;
+                    score += 10;
+                    if (flappyScore >= 10) {
+                        energy = Math.min(maxEnergy, energy + 500);
+                    }
+                    updateUI();
+                }
+            }
+
+            pipes = pipes.filter(p => p.x > -50);
+
+            if (birdY > canvas.height || birdY < 0) {
+                flappyRunning = false;
+            }
+
+            for (let p of pipes) {
+                if (50 + 20 > p.x && 50 < p.x + 40) {
+                    if (birdY < p.top || birdY + 20 > canvas.height - p.bottom) {
+                        flappyRunning = false;
+                    }
+                }
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#38bdf8";
+            ctx.beginPath();
+            ctx.arc(60, birdY, 12, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#ef4444";
+            for (let p of pipes) {
+                ctx.fillRect(p.x, 0, 40, p.top);
+                ctx.fillRect(p.x, canvas.height - p.bottom, 40, p.bottom);
+            }
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "16px sans-serif";
+            ctx.fillText(`Score: ${flappyScore}`, 10, 25);
+
+            if (flappyRunning) {
+                flappyLoop = requestAnimationFrame(updateFlappy);
+            } else {
+                ctx.fillStyle = "rgba(0,0,0,0.6)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "18px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("Game Over! Tap to restart", canvas.width / 2, canvas.height / 2);
+                ctx.textAlign = "left";
+                saveState();
+                syncScoreToFirebase();
+            }
+        }
+
+        /* --- CUPS GAME LOGIC --- */
+        let currentCupLevel = 1;
+        let winningCupIndex = 0;
+        let cupInAnim = false;
+
+        window.setCupLevel = function(lvl) {
+            currentCupLevel = lvl;
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById(`lvlBtn${i}`);
+                if (btn) btn.classList.toggle('active-level', i === lvl);
+            }
+        };
+
+        window.startCupRound = function() {
+            if (cupInAnim) return;
+            if (score < 500) {
+                alert("You need 500 Coins to play!");
+                return;
+            }
+            score -= 500;
+            updateUI();
+
+            cupInAnim = true;
+            winningCupIndex = Math.floor(Math.random() * 3);
+
+            for (let i = 0; i < 3; i++) {
+                document.getElementById(`cup${i}`).classList.remove('lifted');
+                document.getElementById(`coin${i}`).style.opacity = '0';
+            }
+
+            setTimeout(() => {
+                document.getElementById(`coin${winningCupIndex}`).style.opacity = '1';
+                document.getElementById(`cup${winningCupIndex}`).classList.add('lifted');
+                setTimeout(() => {
+                    document.getElementById(`cup${winningCupIndex}`).classList.remove('lifted');
+                    document.getElementById(`coin${winningCupIndex}`).style.opacity = '0';
+                    cupInAnim = false;
+                }, 1000);
+            }, 300);
+        };
+
+        window.chooseCup = function(index) {
+            if (cupInAnim) return;
+            document.getElementById(`cup${index}`).classList.add('lifted');
+            if (index === winningCupIndex) {
+                document.getElementById(`coin${index}`).style.opacity = '1';
+                score += 1000;
+                energy = Math.min(maxEnergy, energy + 200);
+                alert("You won! +1,000 Coins & +200 Energy!");
+            } else {
+                alert("Wrong cup! Try again!");
+            }
+            updateUI();
+            saveState();
+            syncScoreToFirebase();
+        };
+
+        /* --- SLOT MACHINE LOGIC --- */
+        const slotSymbols = ["🪙", "💎", "🎰", "7️⃣", "⭐"];
+        window.spinSlotMachine = function() {
+            if (score < 500) {
+                alert("You need 500 Coins to spin!");
+                return;
+            }
+            score -= 500;
+            updateUI();
+
+            const r0 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            const r1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            const r2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+
+            document.getElementById('reel0').innerHTML = `<span>${r0}</span>BIZ777`;
+            document.getElementById('reel1').innerHTML = `<span>${r1}</span>BIZ777`;
+            document.getElementById('reel2').innerHTML = `<span>${r2}</span>BIZ777`;
+
+            if (r0 === r1 && r1 === r2) {
+                let win = 5000000;
+                score += win;
+                document.getElementById('slotResultText').innerText = `🎉 JACKPOT! You won ${win.toLocaleString()} Coins!`;
+            } else if (r0 === r1 || r1 === r2 || r0 === r2) {
+                score += 1000;
+                document.getElementById('slotResultText').innerText = "Nice! Match 2! Won 1,000 Coins!";
+            } else {
+                document.getElementById('slotResultText').innerText = "No match, try again!";
+            }
+            updateUI();
+            saveState();
+            syncScoreToFirebase();
+        };
+
+        /* --- PAPER WRAPS ROCK LOGIC --- */
+        let pwrScoreVal = 0;
+        let pwrActive = false;
+        let pwrTimeLeft = 45;
+        let pwrTimerInterval = null;
+
+        window.startPwrGame = function() {
+            if (score < 200) {
+                alert("You need 200 Coins to play!");
+                return;
+            }
+            score -= 200;
+            pwrScoreVal = 0;
+            pwrTimeLeft = 45;
+            pwrActive = true;
+            updateUI();
+
+            document.getElementById('pwrScore').innerText = `Score: ${pwrScoreVal}`;
+            document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimeLeft} sec`;
+            document.getElementById('pwrResultMsg').innerText = "Choose your move below!";
+
+            clearInterval(pwrTimerInterval);
+            pwrTimerInterval = setInterval(() => {
+                pwrTimeLeft--;
+                document.getElementById('pwrTimer').innerText = `⏱️ ${pwrTimeLeft} sec`;
+                if (pwrTimeLeft <= 0) {
+                    pwrActive = false;
+                    clearInterval(pwrTimerInterval);
+                    document.getElementById('pwrResultMsg').innerText = `Game Over! Total score: ${pwrScoreVal}`;
+                    saveState();
+                    syncScoreToFirebase();
+                }
+            }, 1000);
+        };
+
+        window.playPwrChoice = function(userMove) {
+            if (!pwrActive) {
+                alert("Click 'Start Battle' first!");
+                return;
+            }
+            const moves = ["rock", "paper", "scissors"];
+            const icons = { rock: "✊", paper: "✋", scissors: "✌️" };
+            const botMove = moves[Math.floor(Math.random() * moves.length)];
+
+            document.getElementById('pwrLeftHand').innerText = icons[userMove];
+            document.getElementById('pwrRightHand').innerText = icons[botMove];
+
+            if (userMove === botMove) {
+                document.getElementById('pwrActionText').innerText = "DRAW!";
+            } else if (
+                (userMove === "rock" && botMove === "scissors") ||
+                (userMove === "paper" && botMove === "rock") ||
+                (userMove === "scissors" && botMove === "paper")
+            ) {
+                document.getElementById('pwrActionText').innerText = "YOU WIN!";
+                pwrScoreVal += 100;
+                score += 100;
+                updateUI();
+            } else {
+                document.getElementById('pwrActionText').innerText = "BOT WINS!";
+            }
+            document.getElementById('pwrScore').innerText = `Score: ${pwrScoreVal}`;
+        };
+
+        updateUI();
+    </script>
+</body>
+</html>
