@@ -1027,8 +1027,8 @@
   .content { contain: layout paint; }
   .music-player-widget {
     top: auto !important;
-    bottom: 10px !important;
-    left: 10px !important;
+    bottom: 76px !important;
+    left: 8px !important;
     right: auto !important;
     width: 118px !important;
     max-width: calc(100% - 20px) !important;
@@ -1041,7 +1041,27 @@
   .music-player-widget .music-controls button { padding: 3px 4px !important; font-size: 9px !important; }
 }
 @media (min-width: 601px) {
-  .music-player-widget { top: 58px !important; right: 10px !important; }
+  .music-player-widget { bottom: 72px !important; top: auto !important; right: 10px !important; left: auto !important; }
+}
+
+/* Keep the level photos visible and properly sized on desktop too. */
+.clicker-icon img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+}
+
+@media (min-width: 700px) {
+  .clicker-circle {
+    width: 220px !important;
+    height: 220px !important;
+  }
+  .clicker-icon {
+    width: 100% !important;
+    height: 100% !important;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .ambient-glow, .floating-particle, .content::before, .content::after { animation: none !important; }
