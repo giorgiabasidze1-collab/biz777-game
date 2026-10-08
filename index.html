@@ -1018,7 +1018,35 @@
         .cup-2d.lifted {
             transform: translateY(-45px);
         }
-    </style>
+    
+/* Mobile performance + music panel placement fix */
+@media (max-width: 600px) {
+  .ambient-glow { animation: none !important; opacity: .72 !important; transform: translate(-50%, -50%) scale(1) !important; }
+  .floating-particle { animation-duration: 14s !important; opacity: .14 !important; }
+  .content::before, .content::after { animation-duration: 28s !important; }
+  .content { contain: layout paint; }
+  .music-player-widget {
+    top: auto !important;
+    bottom: 10px !important;
+    left: 10px !important;
+    right: auto !important;
+    width: 118px !important;
+    max-width: calc(100% - 20px) !important;
+    padding: 6px 8px !important;
+    font-size: 10px !important;
+    opacity: .94;
+    z-index: 20 !important;
+  }
+  .music-player-widget .music-body { gap: 4px !important; }
+  .music-player-widget .music-controls button { padding: 3px 4px !important; font-size: 9px !important; }
+}
+@media (min-width: 601px) {
+  .music-player-widget { top: 58px !important; right: 10px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ambient-glow, .floating-particle, .content::before, .content::after { animation: none !important; }
+}
+</style>
 </head>
 <body>
     <div class="app-container">
@@ -1376,7 +1404,7 @@
     </div>
 
     <!-- AdsGram SDK Integration -->
-    <script src="https://sad.adsgram.ai/js/sad.js"></script>
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <script>
         let isMusicPlaying = false;
         let currentTrackId = "uIfD2BKaD2k";
@@ -1941,23 +1969,64 @@
             document.getElementById('userAvatar').innerText = (user.first_name || "B")[0].toUpperCase();
         }
 
-        window.showRewardedAd = function() {
-            if (window.Adsgram) {
-                window.Adsgram.init({ blockId: "48395" }).show().then((result) => {
+        // AdsGram Rewarded Video integration
+        // Block ID from AdsGram publisher panel: 46267
+        let adsGramController = null;
+        let adsGramLoading = false;
+
+        function initAdsGram() {
+            if (adsGramController) return adsGramController;
+            if (!window.Adsgram || typeof window.Adsgram.init !== 'function') return null;
+
+            try {
+                adsGramController = window.Adsgram.init({ blockId: "46267" });
+                return adsGramController;
+            } catch (error) {
+                console.error('AdsGram initialization failed:', error);
+                return null;
+            }
+        }
+
+        window.showRewardedAd = async function() {
+            const button = document.getElementById('watchAdBtn');
+            if (adsGramLoading) return;
+
+            const controller = initAdsGram();
+            if (!controller) {
+                alert('Ads are not ready right now. Please try again in a moment.');
+                return;
+            }
+
+            adsGramLoading = true;
+            if (button) {
+                button.disabled = true;
+                button.style.opacity = '0.65';
+                button.innerText = 'Loading ad… ⏳';
+            }
+
+            try {
+                const result = await controller.show();
+
+                // Reward only after a Rewarded Video has been watched to completion.
+                if (result && result.done === true) {
                     energy = maxEnergy;
                     updateUI();
                     saveState();
                     syncScoreToFirebase();
-                    alert("Reward received! Your energy is fully refilled back to max!");
-                }).catch((result) => {
-                    alert("Ad was skipped or failed to load. Please try again to get the reward.");
-                });
-            } else {
-                energy = maxEnergy;
-                updateUI();
-                saveState();
-                syncScoreToFirebase();
-                alert("Energy successfully refilled back to max!");
+                    alert('Reward received! Your energy is fully refilled back to max!');
+                } else {
+                    alert('The ad was not completed, so no reward was given.');
+                }
+            } catch (result) {
+                console.error('AdsGram ad error:', result);
+                alert('No ad could be shown right now. Please try again later.');
+            } finally {
+                adsGramLoading = false;
+                if (button) {
+                    button.disabled = false;
+                    button.style.opacity = '';
+                    button.innerText = 'Watch Ad & Refill Energy 🚀';
+                }
             }
         };
 
