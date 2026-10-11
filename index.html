@@ -1607,14 +1607,6 @@
                 gameCardCupsDesc: "Trouvez la balle sous les tasses pour gagner des pièces !",
                 gameCardSlotTitle: "🎰 Machine à sous",
                 gameCardSlotDesc: "Coût : 500 pièces | 3x BIZ777 = 5 000 000 Jackpot !",
-                gameCardPwrTitle: "✌️ Pierre Papier Ciseaux",
-                gameCardPwrDesc: "Bataille classique avec des emojis !",
-                catchSubHeader: "🕹️ Jeu de capture BIZ777",
-                flappySubHeader: "🕹️ Flappy BIZ777",
-                flappyInstructions: "Touchez pour sauter et éviter les obstacles cartoon !",
-                cupsSubHeader: "🕹️ Trouver la balle BIZ777",
-                slotSubHeader: "🕹️ Machine à sous",
-                slotMachineBanner: "Coût : 500 pièces | 3x BIZ777 = 5 000 000 Jackpot !",
                 pwrSubHeader: "✌️ Pierre Papier Ciseaux",
                 pwrYou: "VOUS",
                 pwrBot: "BOT",
@@ -1729,7 +1721,7 @@
                 navTap: "Tippen",
                 navShop: "Shop",
                 navAds: "Boost",
-                navRang: "Rang",
+                navRank: "Rang",
                 navGame: "Spiel",
                 navFriends: "Freunde",
                 menuBack: "⬅️ Menü",
@@ -2310,19 +2302,23 @@
             syncScoreToFirebase();
         }
 
-        /* --- FLAPPY BIZ777 2D CARTOON ART STYLE --- */
+        /* --- FLAPPY BIZ777 EXACT IMAGE-STYLE HAND ART LOGIC --- */
         const canvas = document.getElementById('flappyCanvas');
         const ctx = canvas ? canvas.getContext('2d') : null;
         let birdY = 150, birdV = 0, gravity = 0.35, jump = -6.5;
         let pipes = [], flappyScore = 0, flappyRunning = false, flappyLoop = null;
 
-        const skinTones = ['#ffdbac', '#f1c27d', '#e0ac69', '#ffccd5', '#f3d2c1'];
-        const nailColors = ['#ef4444', '#ec4899', '#3b82f6', '#10b981', '#ffffff'];
+        const skinTones = ['#f5d3b3', '#e0ac69', '#c68642', '#ffccd5', '#f3d2c1'];
+        const nailColors = ['#ef4444', '#ec4899', '#8b5cf6', '#10b981', '#ffffff', '#eab308'];
 
         function getRandomHandVariant() {
             return {
                 skinColor: skinTones[Math.floor(Math.random() * skinTones.length)],
-                nailColor: nailColors[Math.floor(Math.random() * nailColors.length)]
+                nailColor: nailColors[Math.floor(Math.random() * nailColors.length)],
+                isFemale: Math.random() < 0.5,
+                hasWatch: Math.random() < 0.3,
+                hasBracelet: Math.random() < 0.35,
+                hasTattoo: Math.random() < 0.3
             };
         }
 
@@ -2346,127 +2342,223 @@
             updateFlappy();
         }
 
-        // 2D Cartoon Illustrated Coin
         function drawCartoonCoin(ctx, x, y, radius) {
             ctx.save();
-            // Dark cartoon outer outline
             ctx.beginPath();
-            ctx.arc(x, y, radius + 3, 0, Math.PI * 2);
-            ctx.fillStyle = '#0f172a';
+            ctx.arc(x, y, radius + 2, 0, Math.PI * 2);
+            ctx.fillStyle = '#5c3a00';
             ctx.fill();
 
-            // Bright 2D coin fill
             ctx.beginPath();
             ctx.arc(x, y, radius, 0, Math.PI * 2);
             ctx.fillStyle = '#facc15';
             ctx.fill();
 
-            // Inner rim line
             ctx.beginPath();
             ctx.arc(x, y, radius - 3, 0, Math.PI * 2);
             ctx.strokeStyle = '#ca8a04';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1.5;
             ctx.stroke();
 
-            // Cartoon highlight shape
             ctx.beginPath();
-            ctx.arc(x - 4, y - 4, radius / 3, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.arc(x - 3, y - 3, radius / 3, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
             ctx.fill();
 
-            // Text BIZ
             ctx.fillStyle = '#713f12';
-            ctx.font = 'bold 11px sans-serif';
+            ctx.font = 'bold 10px sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText('BIZ', x, y);
             ctx.restore();
         }
 
-        // 2D Cartoon Illustrated Hand (Obstacle)
-        function drawCartoonHand(ctx, x, height, isTop, variant) {
+        /* Drawing Hand matched directly to uploaded illustration proportions */
+        function drawExactImageStyleHand(ctx, x, height, isTop, variant) {
             ctx.save();
-            const width = 52;
-            const armX = x;
+            const armWidth = 38;
+            const palmWidth = 62;
+            const centerX = x + 30;
 
             ctx.fillStyle = variant.skinColor;
-            ctx.strokeStyle = '#0f172a';
+            ctx.strokeStyle = '#5c3a1e';
             ctx.lineWidth = 2.5;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
 
             if (isTop) {
-                // Arm/Stem
+                // Top Hand extending down
                 ctx.beginPath();
-                ctx.roundRect(armX + 6, 0, width - 12, Math.max(0, height - 20), [0, 0, 8, 8]);
-                ctx.fill();
-                ctx.stroke();
+                ctx.moveTo(centerX - armWidth / 2, 0);
+                ctx.lineTo(centerX - armWidth / 2 - 2, height - 35);
+                
+                // Thumb
+                ctx.bezierCurveTo(centerX - palmWidth / 2 - 12, height - 35, centerX - palmWidth / 2 - 14, height - 12, centerX - palmWidth / 2 + 2, height - 15);
+                
+                // 4 Main Fingers
+                const fingerHeights = [30, 36, 32, 24];
+                const fingerOffsets = [-18, -6, 6, 18];
 
-                // Palm
-                ctx.beginPath();
-                ctx.roundRect(armX, height - 24, width, 24, [0, 0, 12, 12]);
-                ctx.fill();
-                ctx.stroke();
-
-                // Fingers
                 for (let i = 0; i < 4; i++) {
-                    let fx = armX + 4 + i * 11;
-                    ctx.beginPath();
-                    ctx.roundRect(fx, height, 9, 22, [0, 0, 4, 4]);
-                    ctx.fillStyle = variant.skinColor;
-                    ctx.fill();
-                    ctx.stroke();
-
-                    // Nail
-                    ctx.fillStyle = variant.nailColor;
-                    ctx.beginPath();
-                    ctx.roundRect(fx + 2, height + 16, 5, 4, [1, 1, 0, 0]);
-                    ctx.fill();
+                    let fx = centerX + fingerOffsets[i];
+                    let fh = fingerHeights[i];
+                    ctx.lineTo(fx - 4, height - 20);
+                    ctx.lineTo(fx - 5, height + fh - 20);
+                    ctx.bezierCurveTo(fx - 4, height + fh - 15, fx + 4, height + fh - 15, fx + 5, height + fh - 20);
+                    ctx.lineTo(fx + 4, height - 20);
                 }
 
-                // Thumb
-                ctx.beginPath();
-                ctx.ellipse(armX - 2, height - 10, 5, 11, Math.PI / 6, 0, Math.PI * 2);
-                ctx.fillStyle = variant.skinColor;
+                ctx.lineTo(centerX + armWidth / 2 + 2, height - 35);
+                ctx.lineTo(centerX + armWidth / 2, 0);
+                ctx.closePath();
                 ctx.fill();
                 ctx.stroke();
+
+                // Inner details & shading lines
+                ctx.beginPath();
+                ctx.moveTo(centerX - armWidth / 2 + 5, 10);
+                ctx.lineTo(centerX - armWidth / 2 + 3, height - 40);
+                ctx.strokeStyle = '#d49b6a';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Nails / Manicure
+                ctx.strokeStyle = '#5c3a1e';
+                ctx.lineWidth = 1.5;
+
+                // Thumb nail
+                ctx.beginPath();
+                ctx.arc(centerX - palmWidth / 2 - 5, height - 18, variant.isFemale ? 4 : 3, 0, Math.PI * 2);
+                ctx.fillStyle = variant.isFemale ? variant.nailColor : '#ffffff99';
+                ctx.fill();
+                ctx.stroke();
+
+                for (let i = 0; i < 4; i++) {
+                    let fx = centerX + fingerOffsets[i];
+                    let fh = fingerHeights[i];
+                    let nailY = height + fh - 22;
+                    ctx.beginPath();
+                    if (variant.isFemale) {
+                        ctx.ellipse(fx, nailY, 3, 5, 0, 0, Math.PI * 2);
+                    } else {
+                        ctx.arc(fx, nailY, 3, 0, Math.PI * 2);
+                    }
+                    ctx.fillStyle = variant.isFemale ? variant.nailColor : '#ffffff99';
+                    ctx.fill();
+                    ctx.stroke();
+                }
+
+                // Accessories
+                if (variant.hasWatch) {
+                    ctx.fillStyle = '#1e293b';
+                    ctx.fillRect(centerX - armWidth / 2 - 2, 25, armWidth + 4, 10);
+                    ctx.fillStyle = '#facc15';
+                    ctx.beginPath();
+                    ctx.arc(centerX, 30, 6, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                } else if (variant.hasBracelet) {
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(centerX - armWidth / 2, 30);
+                    ctx.lineTo(centerX + armWidth / 2, 30);
+                    ctx.stroke();
+                } else if (variant.hasTattoo) {
+                    ctx.strokeStyle = '#ef4444';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(centerX + 6, height - 50, 5, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
 
             } else {
+                // Bottom Hand extending up
                 let startY = canvas.height - height;
 
-                // Arm/Stem
                 ctx.beginPath();
-                ctx.roundRect(armX + 6, startY + 20, width - 12, Math.max(0, height - 20), [8, 8, 0, 0]);
-                ctx.fillStyle = variant.skinColor;
-                ctx.fill();
-                ctx.stroke();
+                ctx.moveTo(centerX - armWidth / 2, canvas.height);
+                ctx.lineTo(centerX - armWidth / 2 - 2, startY + 35);
+                
+                // Thumb
+                ctx.bezierCurveTo(centerX - palmWidth / 2 - 12, startY + 35, centerX - palmWidth / 2 - 14, startY + 12, centerX - palmWidth / 2 + 2, startY + 15);
+                
+                // 4 Main Fingers
+                const fingerHeights = [30, 36, 32, 24];
+                const fingerOffsets = [-18, -6, 6, 18];
 
-                // Palm
-                ctx.beginPath();
-                ctx.roundRect(armX, startY, width, 24, [12, 12, 0, 0]);
-                ctx.fill();
-                ctx.stroke();
-
-                // Fingers
                 for (let i = 0; i < 4; i++) {
-                    let fx = armX + 4 + i * 11;
-                    ctx.beginPath();
-                    ctx.roundRect(fx, startY - 22, 9, 22, [4, 4, 0, 0]);
-                    ctx.fillStyle = variant.skinColor;
-                    ctx.fill();
-                    ctx.stroke();
-
-                    // Nail
-                    ctx.fillStyle = variant.nailColor;
-                    ctx.beginPath();
-                    ctx.roundRect(fx + 2, startY - 20, 5, 4, [0, 0, 1, 1]);
-                    ctx.fill();
+                    let fx = centerX + fingerOffsets[i];
+                    let fh = fingerHeights[i];
+                    ctx.lineTo(fx - 4, startY + 20);
+                    ctx.lineTo(fx - 5, startY - fh + 20);
+                    ctx.bezierCurveTo(fx - 4, startY - fh + 15, fx + 4, startY - fh + 15, fx + 5, startY - fh + 20);
+                    ctx.lineTo(fx + 4, startY + 20);
                 }
 
-                // Thumb
-                ctx.beginPath();
-                ctx.ellipse(armX - 2, startY + 10, 5, 11, -Math.PI / 6, 0, Math.PI * 2);
-                ctx.fillStyle = variant.skinColor;
+                ctx.lineTo(centerX + armWidth / 2 + 2, startY + 35);
+                ctx.lineTo(centerX + armWidth / 2, canvas.height);
+                ctx.closePath();
                 ctx.fill();
                 ctx.stroke();
+
+                // Inner details
+                ctx.beginPath();
+                ctx.moveTo(centerX - armWidth / 2 + 5, canvas.height - 10);
+                ctx.lineTo(centerX - armWidth / 2 + 3, startY + 40);
+                ctx.strokeStyle = '#d49b6a';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Nails
+                ctx.strokeStyle = '#5c3a1e';
+                ctx.lineWidth = 1.5;
+
+                // Thumb nail
+                ctx.beginPath();
+                ctx.arc(centerX - palmWidth / 2 - 5, startY + 18, variant.isFemale ? 4 : 3, 0, Math.PI * 2);
+                ctx.fillStyle = variant.isFemale ? variant.nailColor : '#ffffff99';
+                ctx.fill();
+                ctx.stroke();
+
+                for (let i = 0; i < 4; i++) {
+                    let fx = centerX + fingerOffsets[i];
+                    let fh = fingerHeights[i];
+                    let nailY = startY - fh + 22;
+                    ctx.beginPath();
+                    if (variant.isFemale) {
+                        ctx.ellipse(fx, nailY, 3, 5, 0, 0, Math.PI * 2);
+                    } else {
+                        ctx.arc(fx, nailY, 3, 0, Math.PI * 2);
+                    }
+                    ctx.fillStyle = variant.isFemale ? variant.nailColor : '#ffffff99';
+                    ctx.fill();
+                    ctx.stroke();
+                }
+
+                // Accessories
+                if (variant.hasWatch) {
+                    ctx.fillStyle = '#0f172a';
+                    ctx.fillRect(centerX - armWidth / 2 - 2, startY + 45, armWidth + 4, 10);
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.beginPath();
+                    ctx.arc(centerX, startY + 50, 6, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                } else if (variant.hasBracelet) {
+                    ctx.strokeStyle = '#f59e0b';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(centerX - armWidth / 2, startY + 50);
+                    ctx.lineTo(centerX + armWidth / 2, startY + 50);
+                    ctx.stroke();
+                } else if (variant.hasTattoo) {
+                    ctx.strokeStyle = '#8b5cf6';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(centerX + 6, startY + 50, 5, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
             }
             ctx.restore();
         }
@@ -2477,7 +2569,7 @@
             birdY += birdV;
 
             if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 150) {
-                let gap = 115;
+                let gap = 120;
                 let topH = Math.floor(Math.random() * (canvas.height - gap - 70)) + 35;
                 pipes.push({
                     x: canvas.width,
@@ -2515,7 +2607,7 @@
                 let birdBottom = birdY + 13;
 
                 let pipeLeft = p.x;
-                let pipeRight = p.x + 52;
+                let pipeRight = p.x + 60;
 
                 if (birdRight > pipeLeft && birdLeft < pipeRight) {
                     if (birdTop < p.top || birdBottom > canvas.height - p.bottom) {
@@ -2527,8 +2619,8 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             for (let p of pipes) {
-                drawCartoonHand(ctx, p.x, p.top, true, p.topVariant);
-                drawCartoonHand(ctx, p.x, p.bottom, false, p.bottomVariant);
+                drawExactImageStyleHand(ctx, p.x, p.top, true, p.topVariant);
+                drawExactImageStyleHand(ctx, p.x, p.bottom, false, p.bottomVariant);
             }
 
             drawCartoonCoin(ctx, 60, birdY, 14);
