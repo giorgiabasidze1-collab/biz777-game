@@ -237,121 +237,14 @@
             position: relative;
             padding: 14px;
             overflow: hidden;
-        }
-
-        /* PREMIUM GAME BACKGROUND — visual layer only; gameplay/UI logic untouched */
-        .content {
             isolation: isolate;
             background:
                 radial-gradient(ellipse at 50% 45%, rgba(24, 62, 105, .78) 0%, rgba(11, 15, 25, .28) 45%, rgba(3, 6, 12, .94) 100%),
                 radial-gradient(circle at 5% 8%, rgba(0, 210, 255, .26) 0%, transparent 27%),
                 radial-gradient(circle at 95% 10%, rgba(112, 72, 255, .25) 0%, transparent 29%),
-                radial-gradient(circle at 7% 94%, rgba(0, 142, 255, .20) 0%, transparent 27%),
-                radial-gradient(circle at 94% 91%, rgba(0, 255, 204, .14) 0%, transparent 25%),
                 linear-gradient(145deg, #040711 0%, #0a1121 48%, #050912 100%);
         }
 
-        .content::before {
-            content: "";
-            position: absolute;
-            inset: -10%;
-            z-index: 0;
-            pointer-events: none;
-            background-image:
-                linear-gradient(rgba(56,189,248,.09) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(56,189,248,.09) 1px, transparent 1px),
-                linear-gradient(rgba(129,92,246,.035) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(129,92,246,.035) 1px, transparent 1px);
-            background-size: 40px 40px, 40px 40px, 120px 120px, 120px 120px;
-            transform: perspective(650px) rotateX(58deg) scale(1.45) translateY(18%);
-            transform-origin: center bottom;
-            opacity: .95;
-            mask-image: linear-gradient(to top, rgba(0,0,0,.98), transparent 82%);
-            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,.98), transparent 82%);
-        }
-
-        .content::after {
-            content: "✦   ◈      ◇   ⬡         ✧   ◆      ◈   ⬢         ✦   ◇      ⬡";
-            position: absolute;
-            inset: -8% -28%;
-            z-index: 0;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            white-space: pre;
-            font-size: clamp(28px, 5vw, 58px);
-            letter-spacing: 14px;
-            line-height: 4.2;
-            color: rgba(70,205,255,.14);
-            text-shadow: 0 0 18px rgba(0,210,255,.42), 0 0 48px rgba(100,70,255,.20);
-            transform: rotate(-9deg) scale(1.18);
-            animation: backgroundIconDrift 16s ease-in-out infinite alternate;
-        }
-
-        @keyframes backgroundIconDrift {
-            from { transform: rotate(-9deg) scale(1.18) translate3d(-12px, 4px, 0); opacity: .72; }
-            to { transform: rotate(-6deg) scale(1.25) translate3d(12px, -10px, 0); opacity: 1; }
-        }
-
-        /* ULTRA PREMIUM ATMOSPHERE — background only */
-        .content::marker { display: none; }
-
-        .content .premium-aurora {
-            position: absolute;
-            inset: -35%;
-            z-index: 0;
-            pointer-events: none;
-            background:
-                conic-gradient(from 210deg at 50% 50%,
-                    transparent 0deg,
-                    rgba(0, 220, 255, .055) 55deg,
-                    transparent 105deg,
-                    rgba(122, 82, 255, .06) 180deg,
-                    transparent 250deg,
-                    rgba(0, 255, 200, .035) 315deg,
-                    transparent 360deg);
-            filter: blur(24px);
-            animation: premiumAurora 20s linear infinite;
-        }
-
-        .content .premium-vignette {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            background:
-                radial-gradient(circle at 50% 50%, transparent 38%, rgba(0,0,0,.18) 72%, rgba(0,0,0,.58) 100%),
-                linear-gradient(90deg, rgba(0,0,0,.20), transparent 18%, transparent 82%, rgba(0,0,0,.20));
-        }
-
-        .content .premium-scanline {
-            position: absolute;
-            left: -15%;
-            right: -15%;
-            top: -20%;
-            height: 1px;
-            z-index: 1;
-            pointer-events: none;
-            background: linear-gradient(90deg, transparent, rgba(56,189,248,.28), rgba(129,92,246,.22), transparent);
-            box-shadow: 0 0 18px rgba(56,189,248,.22);
-            animation: premiumScanline 9s ease-in-out infinite;
-        }
-
-        @keyframes premiumAurora {
-            0% { transform: rotate(0deg) scale(1); opacity: .55; }
-            50% { transform: rotate(180deg) scale(1.08); opacity: .9; }
-            100% { transform: rotate(360deg) scale(1); opacity: .55; }
-        }
-
-        @keyframes premiumScanline {
-            0%, 100% { transform: translateY(-5vh); opacity: 0; }
-            12% { opacity: .7; }
-            50% { transform: translateY(115vh); opacity: .35; }
-            88% { opacity: .7; }
-        }
-
-        /* Responsive safety: keeps the original game/UI intact while adapting to screens */
         html, body { width: 100%; min-height: 100%; }
         body { min-height: 100vh; min-height: 100dvh; }
         .app-container {
@@ -359,198 +252,6 @@
             min-height: 100dvh;
             height: 100vh;
             height: 100dvh;
-        }
-        .content {
-            min-width: 0;
-            min-height: 0;
-            padding-left: max(14px, env(safe-area-inset-left));
-            padding-right: max(14px, env(safe-area-inset-right));
-        }
-        .tab-pane { min-width: 0; }
-        img, canvas, video { max-width: 100%; }
-
-        @media (max-width: 360px) {
-            body { font-size: 13px; }
-            .music-player-widget { width: 132px; right: 6px; top: 6px; }
-            .content { padding-left: 10px; padding-right: 10px; }
-            .content .ambient-glow { width: 390px; height: 390px; }
-            .content::after { font-size: 27px; letter-spacing: 9px; }
-        }
-
-        @media (min-width: 700px) {
-            body { background: #02050c; }
-            .app-container {
-                max-width: 560px;
-                box-shadow: 0 0 80px rgba(56,189,248,.08), 0 0 140px rgba(99,102,241,.05);
-            }
-            .content { border-left: 1px solid rgba(56,189,248,.08); border-right: 1px solid rgba(129,92,246,.08); }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .content .premium-aurora,
-            .content .premium-scanline,
-            .content::after { animation: none !important; }
-        }
-
-        .content > * { position: relative; }
-
-        .content .ambient-glow {
-            position: absolute;
-            width: 520px;
-            height: 520px;
-            background:
-                radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(56, 189, 248, 0.055) 26%, rgba(99, 102, 241, 0.025) 46%, transparent 72%);
-            filter: blur(1px);
-            z-index: 0;
-        }
-
-        .content .floating-particle {
-            z-index: 1;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
-        }
-
-        .content .coin-background-pattern {
-            z-index: 1;
-        }
-
-        .content .bg-coin {
-            opacity: 0.20;
-            filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.28));
-            transform: rotate(-8deg);
-        }
-
-
-        /* EXTRA PREMIUM ATMOSPHERE — background only */
-        .content .ambient-glow::before,
-        .content .ambient-glow::after {
-            content: "";
-            position: absolute;
-            pointer-events: none;
-            border-radius: 50%;
-        }
-
-        .content .ambient-glow::before {
-            width: 150%;
-            height: 22%;
-            left: -25%;
-            top: 42%;
-            background: linear-gradient(90deg, transparent, rgba(56,189,248,.13), rgba(129,92,246,.10), transparent);
-            filter: blur(18px);
-            transform: rotate(-18deg);
-            animation: neonBeam 9s ease-in-out infinite alternate;
-        }
-
-        .content .ambient-glow::after {
-            width: 34%;
-            height: 34%;
-            left: 33%;
-            top: 33%;
-            border: 1px solid rgba(88,210,255,.12);
-            box-shadow: 0 0 45px rgba(56,189,248,.10), inset 0 0 35px rgba(129,92,246,.08);
-            animation: corePulse 5s ease-in-out infinite;
-        }
-
-        .content .coin-background-pattern::before,
-        .content .coin-background-pattern::after {
-            content: "✦  ◆  ◇  ⬡  ✧  ◈";
-            position: absolute;
-            left: -20%;
-            width: 140%;
-            pointer-events: none;
-            white-space: nowrap;
-            font-size: 18px;
-            letter-spacing: 42px;
-            color: rgba(104,220,255,.10);
-            text-shadow: 0 0 16px rgba(56,189,248,.35);
-            animation: iconStream 22s linear infinite;
-        }
-
-        .content .coin-background-pattern::before {
-            top: 18%;
-            transform: rotate(4deg);
-        }
-
-        .content .coin-background-pattern::after {
-            top: 76%;
-            color: rgba(150,115,255,.09);
-            animation-duration: 28s;
-            animation-direction: reverse;
-            transform: rotate(-5deg);
-        }
-
-        @keyframes neonBeam {
-            0% { transform: translateX(-18%) rotate(-18deg); opacity: .35; }
-            100% { transform: translateX(18%) rotate(-12deg); opacity: .9; }
-        }
-
-        @keyframes corePulse {
-            0%,100% { transform: scale(.82); opacity: .35; }
-            50% { transform: scale(1.16); opacity: .85; }
-        }
-
-        @keyframes iconStream {
-            from { transform: translateX(-5%) rotate(4deg); }
-            to { transform: translateX(5%) rotate(4deg); }
-        }
-
-        /* Tiny atmospheric stars, still behind the game */
-        .content .floating-particle:nth-of-type(1) { animation-duration: 5.5s; }
-        .content .floating-particle:nth-of-type(2) { animation-duration: 7.5s; }
-        .content .floating-particle:nth-of-type(3) { animation-duration: 6.5s; }
-        .content .floating-particle:nth-of-type(4) { animation-duration: 8.5s; }
-
-        .coin-background-pattern {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            overflow: hidden;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .bg-coin {
-            position: absolute;
-            font-size: 26px;
-            opacity: 0.1;
-            font-weight: bold;
-            color: #38bdf8;
-        }
-
-        .ambient-glow {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0) 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 0;
-            animation: pulseGlow 4s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulseGlow {
-            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
-            100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-        }
-
-        .floating-particle {
-            position: absolute;
-            background: var(--accent);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.25;
-            animation: floatParticle linear infinite;
-        }
-
-        @keyframes floatParticle {
-            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-            20% { opacity: 0.3; }
-            80% { opacity: 0.3; }
-            100% { transform: translateY(-40px) scale(1.2); opacity: 0; }
         }
 
         .interactive-clicker-area {
@@ -948,12 +649,6 @@
             border-color: var(--accent);
         }
 
-        .level-btn.completed-level {
-            background: #22c55e;
-            color: #000;
-            border-color: #22c55e;
-        }
-
         .cups-board-2d {
             width: 100%;
             height: 160px;
@@ -1018,55 +713,30 @@
         .cup-2d.lifted {
             transform: translateY(-45px);
         }
-    
-/* Mobile performance + music panel placement fix */
-@media (max-width: 600px) {
-  .ambient-glow { animation: none !important; opacity: .72 !important; transform: translate(-50%, -50%) scale(1) !important; }
-  .floating-particle { animation-duration: 14s !important; opacity: .14 !important; }
-  .content::before, .content::after { animation-duration: 28s !important; }
-  .content { contain: layout paint; }
-  .music-player-widget {
-    top: auto !important;
-    bottom: 76px !important;
-    left: 8px !important;
-    right: auto !important;
-    width: 118px !important;
-    max-width: calc(100% - 20px) !important;
-    padding: 6px 8px !important;
-    font-size: 10px !important;
-    opacity: .94;
-    z-index: 20 !important;
-  }
-  .music-player-widget .music-body { gap: 4px !important; }
-  .music-player-widget .music-controls button { padding: 3px 4px !important; font-size: 9px !important; }
-}
-@media (min-width: 601px) {
-  .music-player-widget { bottom: 72px !important; top: auto !important; right: 10px !important; left: auto !important; }
-}
 
-/* Keep the level photos visible and properly sized on desktop too. */
-.clicker-icon img {
-  display: block !important;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  border-radius: 50% !important;
-}
+        @media (max-width: 600px) {
+            .music-player-widget {
+                top: auto !important;
+                bottom: 76px !important;
+                left: 8px !important;
+                right: auto !important;
+                width: 118px !important;
+                max-width: calc(100% - 20px) !important;
+                padding: 6px 8px !important;
+                font-size: 10px !important;
+                opacity: .94;
+                z-index: 20 !important;
+            }
+        }
 
-@media (min-width: 700px) {
-  .clicker-circle {
-    width: 220px !important;
-    height: 220px !important;
-  }
-  .clicker-icon {
-    width: 100% !important;
-    height: 100% !important;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ambient-glow, .floating-particle, .content::before, .content::after { animation: none !important; }
-}
-</style>
+        .clicker-icon img {
+            display: block !important;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            border-radius: 50% !important;
+        }
+    </style>
 </head>
 <body>
     <div class="app-container">
@@ -1135,23 +805,7 @@
         </header>
 
         <div class="content">
-            <div class="premium-aurora" aria-hidden="true"></div>
-            <div class="premium-vignette" aria-hidden="true"></div>
-            <div class="premium-scanline" aria-hidden="true"></div>
-            <div class="ambient-glow"></div>
-            <div class="floating-particle" style="left: 15%; width: 4px; height: 4px; animation-duration: 7s; animation-delay: 0s;"></div>
-            <div class="floating-particle" style="left: 35%; width: 5px; height: 5px; animation-duration: 9s; animation-delay: 2s;"></div>
-            <div class="floating-particle" style="left: 65%; width: 4px; height: 4px; animation-duration: 6s; animation-delay: 1s;"></div>
-            <div class="floating-particle" style="left: 85%; width: 6px; height: 6px; animation-duration: 10s; animation-delay: 3s;"></div>
-
             <div class="tab-pane active" id="tab-clicker">
-                <div class="coin-background-pattern">
-                    <span class="bg-coin" style="top: 2%; left: 5%;">🪙 BIZ777</span>
-                    <span class="bg-coin" style="top: 10%; right: 8%;">💵 BIZ777</span>
-                    <span class="bg-coin" style="bottom: 22%; left: 8%;">🪙 BIZ777</span>
-                    <span class="bg-coin" style="bottom: 10%; right: 12%;">💰 BIZ777</span>
-                </div>
-
                 <div class="interactive-clicker-area" id="clickerBtn">
                     <div class="clicker-circle">
                         <div class="clicker-icon" id="buildingIcon">🏗️</div>
@@ -1202,8 +856,7 @@
             <div class="tab-pane" id="tab-leaderboard">
                 <div class="leaderboard-card">
                     <h3 id="leaderboardTitleText" style="margin-bottom: 12px; text-align: center; color: var(--accent); font-size: 15px;">🏆 Leaderboard</h3>
-                    <div class="leaderboard-container" id="leaderboardContainer">
-                    </div>
+                    <div class="leaderboard-container" id="leaderboardContainer"></div>
                 </div>
             </div>
 
@@ -1225,7 +878,7 @@
                     <div class="game-card-option" onclick="openSubGame('flappy')">
                         <div class="game-card-info">
                             <h4 id="gameCardFlappyTitle" style="color: var(--accent); font-size: 13px;">🪙 Flappy BIZ777</h4>
-                            <p id="gameCardFlappyDesc" style="font-size: 11px; color: var(--text-secondary);">Avoid moving hand obstacles! Score 10 for +500 Energy!</p>
+                            <p id="gameCardFlappyDesc" style="font-size: 11px; color: var(--text-secondary);">Avoid hand obstacles! Score 10 for +500 Energy!</p>
                         </div>
                         <span style="font-size: 18px; color: var(--accent);">👉</span>
                     </div>
@@ -1283,7 +936,7 @@
                     </div>
                     <canvas id="flappyCanvas" width="290" height="315"></canvas>
                     <div id="flappyInstructions" style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 3px;">
-                        Tap canvas to jump. Avoid moving hand obstacles!
+                        Tap canvas to jump. Avoid hand obstacles!
                     </div>
                 </div>
 
@@ -1489,7 +1142,7 @@
                 gameCardCatchTitle: "🪙 Biiz777 Catch Game",
                 gameCardCatchDesc: "Cost: 50 Coins | Catch BIZ777 coins, avoid bombs for 1 min!",
                 gameCardFlappyTitle: "🪙 Flappy BIZ777",
-                gameCardFlappyDesc: "Avoid moving hand obstacles! Score 10 for +500 Energy!",
+                gameCardFlappyDesc: "Avoid hand obstacles! Score 10 for +500 Energy!",
                 gameCardCupsTitle: "🏆 Find BIZ777 Ball",
                 gameCardCupsDesc: "Find the BIZ777 ball under cups to win coins and energy!",
                 gameCardSlotTitle: "🎰 Slot Machine Spin",
@@ -1498,7 +1151,7 @@
                 gameCardPwrDesc: "Classic Rock, Paper, Scissors battle with emoji icons!",
                 catchSubHeader: "🕹️ Biiz777 Catch Game",
                 flappySubHeader: "🕹️ Flappy BIZ777",
-                flappyInstructions: "Tap canvas to jump. Avoid moving hand obstacles!",
+                flappyInstructions: "Tap canvas to jump. Avoid hand obstacles!",
                 cupsSubHeader: "🕹️ Find BIZ777 Ball",
                 slotSubHeader: "🕹️ Slot Machine Spin",
                 slotMachineBanner: "Cost: 500 Coins | 3x BIZ777 = 5,000,000 Jackpot!",
@@ -1539,7 +1192,7 @@
                 gameCardCatchTitle: "🪙 Игра Поймай BIZ777",
                 gameCardCatchDesc: "Стоимость: 50 монет | Ловите монеты, избегайте бомб 1 мин!",
                 gameCardFlappyTitle: "🪙 Flappy BIZ777",
-                gameCardFlappyDesc: "Избегайте движущихся препятствий! Наберите 10 для +500 энергии!",
+                gameCardFlappyDesc: "Избегайте препятствий-рук! Наберите 10 для +500 энергии!",
                 gameCardCupsTitle: "🏆 Найти мяч BIZ777",
                 gameCardCupsDesc: "Найдите мяч под стаканчиками, чтобы выиграть монеты и энергию!",
                 gameCardSlotTitle: "🎰 Слот-автомат",
@@ -1589,7 +1242,7 @@
                 gameCardCatchTitle: "🪙 BIZ777 抓金币",
                 gameCardCatchDesc: "消耗: 50 代币 | 抓取代币，避开炸弹 1 分钟！",
                 gameCardFlappyTitle: "🪙 Flappy BIZ777",
-                gameCardFlappyDesc: "避开移动手部障碍！达到10分获得+500能量！",
+                gameCardFlappyDesc: "避开手部障碍！达到10分获得+500能量！",
                 gameCardCupsTitle: "🏆 寻找 BIZ777 球",
                 gameCardCupsDesc: "在杯子下寻找球以赢得代币和能量！",
                 gameCardSlotTitle: "🎰 老虎机旋转",
@@ -1598,7 +1251,7 @@
                 gameCardPwrDesc: "经典的石头剪刀布表情符号战斗！",
                 catchSubHeader: "🕹️ BIZ777 抓金币",
                 flappySubHeader: "🕹️ Flappy BIZ777",
-                flappyInstructions: "点击画布跳跃，避开移动障碍！",
+                flappyInstructions: "点击画布跳跃，避开手部障碍！",
                 cupsSubHeader: "🕹️ 寻找 BIZ777 球",
                 slotSubHeader: "🕹️ 老虎机旋转",
                 slotMachineBanner: "消耗: 500 代币 | 3x BIZ777 = 5,000,000 大奖！",
@@ -1631,7 +1284,7 @@
                 energyUpgradesTitle: "ऊर्जा अपग्रेड",
                 adsTitle: "📺 विज्ञापन और ऊर्जा बूस्ट",
                 adsCardTitle: "ऊर्जा पुनःपूर्ति बूस्ट",
-                adsCardDesc: "अपनी ऊर्जा को पूरी तरह से अधिकतम तक रिफिल करने के लिए एक rewarded वीडियो विज्ञापन देखें!",
+                adsCardDesc: "अपनी ऊर्जा को पूरी तरह से अधिकतम तक रिफिल करने के लिए विज्ञापन देखें!",
                 watchAdBtnText: "विज्ञापन देखें और ऊर्जा भरें 🚀",
                 leaderboardTitle: "🏆 लीडरबोर्ड",
                 gamesHubTitle: "🎮 क्लासिक आर्केड गेम्स हब",
@@ -1639,7 +1292,7 @@
                 gameCardCatchTitle: "🪙 BIZ777 कैच गेम",
                 gameCardCatchDesc: "लागत: 50 सिक्के | BIZ777 सिक्के पकड़ें, बम से बचें!",
                 gameCardFlappyTitle: "🪙 Flappy BIZ777",
-                gameCardFlappyDesc: "बाधाओं से बचें! +500 ऊर्जा के लिए 10 स्कोर करें!",
+                gameCardFlappyDesc: "हाथ की बाधाओं से बचें! +500 ऊर्जा के लिए 10 स्कोर करें!",
                 gameCardCupsTitle: "🏆 BIZ777 बॉल खोजें",
                 gameCardCupsDesc: "सिक्के और ऊर्जा जीतने के लिए कप के नीचे गेंद खोजें!",
                 gameCardSlotTitle: "🎰 स्लॉट मशीन स्पिन",
@@ -1652,7 +1305,7 @@
                 cupsSubHeader: "🕹️ BIZ777 बॉल खोजें",
                 slotSubHeader: "🕹️ स्लॉट मशीन स्पिन",
                 slotMachineBanner: "लागत: 500 सिक्के | 3x BIZ777 = 5,000,000 जैकपॉट!",
-                pwrSubHeader: "✌️ पेपर रैップ्स रॉक",
+                pwrSubHeader: "✌️ पेपर रैप्स रॉक",
                 pwrYou: "आप",
                 pwrBot: "बोट",
                 pwrChooseSign: "अपना संकेत चुनें:",
@@ -1681,7 +1334,7 @@
                 energyUpgradesTitle: "ترقيات الطاقة",
                 adsTitle: "📺 الإعلانات وتعزيز الطاقة",
                 adsCardTitle: "إعادة تعزيز الطاقة",
-                adsCardDesc: "اهدف مشاهدة إعلان فيديو مكافأة لإعادة تعزيز طاقتك بالكامل إلى الحد الأقصى!",
+                adsCardDesc: "شاهد إعلان فيديو مكافأة لإعادة تعزيز طاقتك بالكامل إلى الحد الأقصى!",
                 watchAdBtnText: "شاهد الإعلان واملأ الطاقة 🚀",
                 leaderboardTitle: "🏆 لوحة المتصدرين",
                 gamesHubTitle: "🎮 مركز الألعاب الكلاسيكية",
@@ -1689,7 +1342,7 @@
                 gameCardCatchTitle: "🪙 لعبة الصيد BIZ777",
                 gameCardCatchDesc: "التكلفة: 50 عملة | الصطد العملات وتجنب القنابل!",
                 gameCardFlappyTitle: "🪙 Flappy BIZ777",
-                gameCardFlappyDesc: "تجنب العقبات المتحركة! سجل 10 للحصول على +500 طاقة!",
+                gameCardFlappyDesc: "تجنب عقبات الأيدي! سجل 10 للحصول على +500 طاقة!",
                 gameCardCupsTitle: "🏆 ابحث عن كرة BIZ777",
                 gameCardCupsDesc: "ابحث عن الكرة تحت الأكواب للفوز بالعملات والطاقة!",
                 gameCardSlotTitle: "🎰 دوران ماكينة القمار",
@@ -1698,7 +1351,7 @@
                 gameCardPwrDesc: "معركة حجر ورقة مقص الكلاسيكية برمز الوجوه التعبيرية!",
                 catchSubHeader: "🕹️ لعبة الصيد BIZ777",
                 flappySubHeader: "🕹️ Flappy BIZ777",
-                flappyInstructions: "انقر للقفز وتجنب العقبات المتحركة!",
+                flappyInstructions: "انقر للقفز وتجنب العقبات!",
                 cupsSubHeader: "🕹️ ابحث عن كرة BIZ777",
                 slotSubHeader: "🕹️ دوران ماكينة القمار",
                 slotMachineBanner: "التكلفة: 500 عملة | 3x BIZ777 = 5,000,000 الجائزة الكبرى!",
@@ -1731,7 +1384,7 @@
                 energyUpgradesTitle: "Améliorations d'énergie",
                 adsTitle: "📺 Publicités & Boost d'énergie",
                 adsCardTitle: "Recharge de Boost d'énergie",
-                adsCardDesc: "Regardez une publicité vidéo récompensée pour recharger complètement votre énergie au maximum !",
+                adsCardDesc: "Regardez une publicité vidéo pour recharger complètement votre énergie au maximum !",
                 watchAdBtnText: "Voir la pub et recharger 🚀",
                 leaderboardTitle: "🏆 Classement",
                 gamesHubTitle: "🎮 Hub de jeux d'arcade classiques",
@@ -1739,7 +1392,7 @@
                 gameCardCatchTitle: "🪙 Jeu de capture BIZ777",
                 gameCardCatchDesc: "Coût : 50 pièces | Attrapez les pièces, évitez les bombes !",
                 gameCardFlappyTitle: "🪙 Flappy BIZ777",
-                gameCardFlappyDesc: "Évitez les obstacles ! Score 10 pour +500 Énergie !",
+                gameCardFlappyDesc: "Évitez les mains obstacles ! Score 10 pour +500 Énergie !",
                 gameCardCupsTitle: "🏆 Trouver la balle BIZ777",
                 gameCardCupsDesc: "Trouvez la balle sous les tasses pour gagner des pièces !",
                 gameCardSlotTitle: "🎰 Machine à sous",
@@ -1781,7 +1434,7 @@
                 energyUpgradesTitle: "Mejoras de energía",
                 adsTitle: "📺 Anuncios y Aumento de Energía",
                 adsCardTitle: "Recarga de Energía Boost",
-                adsCardDesc: "¡Mira un anuncio de video recompensado para rellenar tu energía por completo al máximo!",
+                adsCardDesc: "¡Mira un anuncio para rellenar tu energía por completo al máximo!",
                 watchAdBtnText: "Ver anuncio y recargar 🚀",
                 leaderboardTitle: "🏆 Tabla de clasificación",
                 gamesHubTitle: "🎮 Centro de juegos arcade clásicos",
@@ -1789,14 +1442,14 @@
                 gameCardCatchTitle: "🪙 Juego de Atrapa BIZ777",
                 gameCardCatchDesc: "Costo: 50 monedas | Atrapa monedas, evita bombas!",
                 gameCardFlappyTitle: "🪙 Flappy BIZ777",
-                gameCardFlappyDesc: "¡Evita obstáculos! ¡Suma 10 para +500 de Energía!",
+                gameCardFlappyDesc: "¡Evita manos de obstáculos! ¡Suma 10 para +500 de Energía!",
                 gameCardCupsTitle: "🏆 Encuentra la bola BIZ777",
                 gameCardCupsDesc: "¡Encuentra la bola bajo las tazas para ganar premios!",
                 gameCardSlotTitle: "🎰 Giros de Tragamonedas",
                 gameCardSlotDesc: "Costo: 500 monedas | 3x BIZ777 = 5,000,000 Jackpot!",
-                gameCardPwrTitle: "✌️️ Piedra, Papel, Tijera",
+                gameCardPwrTitle: "✌ Piedra, Papel, Tijera",
                 gameCardPwrDesc: "¡Batalla clásica con iconos de emoji!",
-                catchSubHeader: "🕹️️ Juego de Atrapa BIZ777",
+                catchSubHeader: "🕹 Juego de Atrapa BIZ777",
                 flappySubHeader: "🕹️ Flappy BIZ777",
                 flappyInstructions: "Toca para saltar y esquivar obstáculos.",
                 cupsSubHeader: "🕹️ Encuentra la bola BIZ777",
@@ -1806,7 +1459,7 @@
                 pwrYou: "TÚ",
                 pwrBot: "BOT",
                 pwrChooseSign: "Elige tu seña:",
-                pwrBtnScissors: "✌️️ Tijera",
+                pwrBtnScissors: "✌ Tijera",
                 pwrBtnPaper: "✋ Papel",
                 pwrBtnRock: "✊ Piedra",
                 friendsTitle: "👥 Invitar amigos",
@@ -1831,7 +1484,7 @@
                 energyUpgradesTitle: "Energie Upgrades",
                 adsTitle: "📺 Werbung & Energie-Boost",
                 adsCardTitle: "Energie-Boost auffüllen",
-                adsCardDesc: "Sieh dir ein belohntes Video an, um deine Energie vollständig auf das Maximum aufzufüllen!",
+                adsCardDesc: "Sieh dir ein Video an, um deine Energie vollständig auf das Maximum aufzufüllen!",
                 watchAdBtnText: "Werbung anusehen & Energie füllen 🚀",
                 leaderboardTitle: "🏆 Bestenliste",
                 gamesHubTitle: "🎮 Klassisches Arcade-Spiele-Hub",
@@ -1839,7 +1492,7 @@
                 gameCardCatchTitle: "🪙 BIZ777 Fangspiel",
                 gameCardCatchDesc: "Kosten: 50 Münzen | Fange Münzen, vermeide Bomben!",
                 gameCardFlappyTitle: "🪙 Flappy BIZ777",
-                gameCardFlappyDesc: "Vermeide Hindernisse! Erreiche 10 für +500 Energie!",
+                gameCardFlappyDesc: "Vermeide Hand-Hindernisse! Erreiche 10 für +500 Energie!",
                 gameCardCupsTitle: "🏆 Finde den BIZ777 Ball",
                 gameCardCupsDesc: "Finde den Ball unter Bechern, um Münzen zu gewinnen!",
                 gameCardSlotTitle: "🎰 Spielautomat Spin",
@@ -1989,8 +1642,6 @@
             document.getElementById('userAvatar').innerText = (user.first_name || "B")[0].toUpperCase();
         }
 
-        // AdsGram Rewarded Video integration
-        // Block ID from AdsGram publisher panel: 46267
         let adsGramController = null;
         let adsGramLoading = false;
 
@@ -2026,8 +1677,6 @@
 
             try {
                 const result = await controller.show();
-
-                // Reward only after a Rewarded Video has been watched to completion.
                 if (result && result.done === true) {
                     energy = maxEnergy;
                     updateUI();
@@ -2191,6 +1840,8 @@
             }
         }, 1000);
 
+        let lastRenderedLevelIcon = "";
+
         window.updateUI = function() {
             scoreDisplay.innerText = score.toLocaleString();
             energyText.innerText = `${energy} / ${maxEnergy}`;
@@ -2208,10 +1859,13 @@
             let currentLevelObj = levels[currentLevelIndex];
             levelName.innerText = currentLevelObj.name;
             
-            if (currentLevelObj.icon.includes('/') || currentLevelObj.icon.includes('.')) {
-                buildingIcon.innerHTML = `<img src="${currentLevelObj.icon}" alt="${currentLevelObj.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-            } else {
-                buildingIcon.innerText = currentLevelObj.icon;
+            if (lastRenderedLevelIcon !== currentLevelObj.icon) {
+                lastRenderedLevelIcon = currentLevelObj.icon;
+                if (currentLevelObj.icon.includes('/') || currentLevelObj.icon.includes('.')) {
+                    buildingIcon.innerHTML = `<img src="${currentLevelObj.icon}" alt="${currentLevelObj.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+                } else {
+                    buildingIcon.innerText = currentLevelObj.icon;
+                }
             }
 
             let currentMin = currentLevelObj.min;
@@ -2446,11 +2100,24 @@
             syncScoreToFirebase();
         }
 
-        /* --- FLAPPY GAME LOGIC --- */
+        /* --- FLAPPY BIZ777 GAME LOGIC WITH CUSTOM HAND OBSTACLES & COIN BIRD --- */
         const canvas = document.getElementById('flappyCanvas');
         const ctx = canvas ? canvas.getContext('2d') : null;
         let birdY = 150, birdV = 0, gravity = 0.35, jump = -6.5;
         let pipes = [], flappyScore = 0, flappyRunning = false, flappyLoop = null;
+
+        const skinTones = ['#ffdbac', '#f1c27d', '#e0ac69', '#c68642', '#8d5524', '#ffccd5', '#d4a373'];
+        const nailColors = ['#ef4444', '#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ffffff'];
+
+        function getRandomHandVariant() {
+            return {
+                skinColor: skinTones[Math.floor(Math.random() * skinTones.length)],
+                nailColor: nailColors[Math.floor(Math.random() * nailColors.length)],
+                hasWatch: Math.random() < 0.3,
+                hasBracelet: Math.random() < 0.3,
+                hasTattoo: Math.random() < 0.4
+            };
+        }
 
         if (canvas) {
             canvas.addEventListener('pointerdown', () => {
@@ -2472,15 +2139,122 @@
             updateFlappy();
         }
 
+        function drawCoinBird(ctx, x, y, radius) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            let grad = ctx.createRadialGradient(x - 4, y - 4, 2, x, y, radius);
+            grad.addColorStop(0, '#fef08a');
+            grad.addColorStop(0.5, '#eab308');
+            grad.addColorStop(1, '#ca8a04');
+            ctx.fillStyle = grad;
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#facc15';
+            ctx.stroke();
+
+            ctx.fillStyle = '#713f12';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('BIZ', x, y);
+            ctx.restore();
+        }
+
+        function drawHand(ctx, x, height, isTop, variant) {
+            ctx.save();
+            const width = 48;
+            const armX = x + 1;
+            
+            ctx.fillStyle = variant.skinColor;
+            if (isTop) {
+                ctx.fillRect(armX, 0, width, Math.max(0, height - 16));
+                ctx.beginPath();
+                ctx.roundRect(x, height - 20, width + 2, 20, [0, 0, 10, 10]);
+                ctx.fill();
+
+                for (let i = 0; i < 4; i++) {
+                    let fx = x + 3 + i * 11;
+                    ctx.fillStyle = variant.skinColor;
+                    ctx.fillRect(fx, height, 8, 14);
+                    ctx.fillStyle = variant.nailColor;
+                    ctx.fillRect(fx, height + 10, 8, 4);
+                }
+
+                if (variant.hasWatch) {
+                    ctx.fillStyle = "#334155";
+                    ctx.fillRect(armX - 2, 45, width + 4, 10);
+                    ctx.fillStyle = "#facc15";
+                    ctx.fillRect(armX + 14, 46, 16, 8);
+                } else if (variant.hasBracelet) {
+                    ctx.strokeStyle = "#e2e8f0";
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(armX, 55);
+                    ctx.lineTo(armX + width, 55);
+                    ctx.stroke();
+                } else if (variant.hasTattoo) {
+                    ctx.strokeStyle = "#38bdf8";
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(armX + 10, 35);
+                    ctx.lineTo(armX + 30, 45);
+                    ctx.stroke();
+                }
+            } else {
+                let startY = canvas.height - height;
+                ctx.fillRect(armX, startY + 16, width, Math.max(0, height - 16));
+                ctx.beginPath();
+                ctx.roundRect(x, startY, width + 2, 20, [10, 10, 0, 0]);
+                ctx.fill();
+
+                for (let i = 0; i < 4; i++) {
+                    let fx = x + 3 + i * 11;
+                    ctx.fillStyle = variant.skinColor;
+                    ctx.fillRect(fx, startY - 14, 8, 14);
+                    ctx.fillStyle = variant.nailColor;
+                    ctx.fillRect(fx, startY - 14, 8, 4);
+                }
+
+                if (variant.hasWatch) {
+                    ctx.fillStyle = "#1e293b";
+                    ctx.fillRect(armX - 2, startY + 45, width + 4, 10);
+                    ctx.fillStyle = "#38bdf8";
+                    ctx.fillRect(armX + 14, startY + 46, 16, 8);
+                } else if (variant.hasBracelet) {
+                    ctx.strokeStyle = "#f59e0b";
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(armX, startY + 55);
+                    ctx.lineTo(armX + width, startY + 55);
+                    ctx.stroke();
+                } else if (variant.hasTattoo) {
+                    ctx.strokeStyle = "#ef4444";
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(armX + 24, startY + 45, 8, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+            }
+            ctx.restore();
+        }
+
         function updateFlappy() {
             if (!flappyRunning) return;
             birdV += gravity;
             birdY += birdV;
 
-            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 140) {
-                let gap = 100;
-                let topH = Math.floor(Math.random() * (canvas.height - gap - 60)) + 30;
-                pipes.push({ x: canvas.width, top: topH, bottom: canvas.height - topH - gap, passed: false });
+            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 150) {
+                let gap = 110;
+                let topH = Math.floor(Math.random() * (canvas.height - gap - 70)) + 35;
+                pipes.push({
+                    x: canvas.width,
+                    top: topH,
+                    bottom: canvas.height - topH - gap,
+                    passed: false,
+                    topVariant: getRandomHandVariant(),
+                    bottomVariant: getRandomHandVariant()
+                });
             }
 
             for (let i = 0; i < pipes.length; i++) {
@@ -2496,31 +2270,36 @@
                 }
             }
 
-            pipes = pipes.filter(p => p.x > -50);
+            pipes = pipes.filter(p => p.x > -60);
 
             if (birdY > canvas.height || birdY < 0) {
                 flappyRunning = false;
             }
 
             for (let p of pipes) {
-                if (50 + 20 > p.x && 50 < p.x + 40) {
-                    if (birdY < p.top || birdY + 20 > canvas.height - p.bottom) {
+                let birdLeft = 60 - 13;
+                let birdRight = 60 + 13;
+                let birdTop = birdY - 13;
+                let birdBottom = birdY + 13;
+
+                let pipeLeft = p.x;
+                let pipeRight = p.x + 48;
+
+                if (birdRight > pipeLeft && birdLeft < pipeRight) {
+                    if (birdTop < p.top || birdBottom > canvas.height - p.bottom) {
                         flappyRunning = false;
                     }
                 }
             }
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#38bdf8";
-            ctx.beginPath();
-            ctx.arc(60, birdY, 12, 0, Math.PI * 2);
-            ctx.fill();
 
-            ctx.fillStyle = "#ef4444";
             for (let p of pipes) {
-                ctx.fillRect(p.x, 0, 40, p.top);
-                ctx.fillRect(p.x, canvas.height - p.bottom, 40, p.bottom);
+                drawHand(ctx, p.x, p.top, true, p.topVariant);
+                drawHand(ctx, p.x, p.bottom, false, p.bottomVariant);
             }
+
+            drawCoinBird(ctx, 60, birdY, 14);
 
             ctx.fillStyle = "#ffffff";
             ctx.font = "16px sans-serif";
