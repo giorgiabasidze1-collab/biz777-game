@@ -722,39 +722,45 @@
             overflow: hidden;
             box-shadow: inset 0 4px 12px rgba(0,0,0,0.8);
             cursor: pointer;
+            touch-action: manipulation;
         }
 
         .catch-falling-item {
             position: absolute;
-            width: 38px;
-            height: 38px;
+            width: 58px;
+            height: 58px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
             user-select: none;
             cursor: pointer;
             animation: fallItem linear forwards;
+            touch-action: manipulation;
+            z-index: 10;
         }
 
         .catch-coin {
-            background: radial-gradient(circle, #ffd700, #ffa500);
+            background: radial-gradient(circle, #facc15, #ca8a04);
             color: #000;
-            border: 2px solid #ffcc00;
-            box-shadow: 0 0 6px #ffd700;
+            border: 2px solid #fef08a;
+            box-shadow: 0 0 10px rgba(250, 204, 21, 0.7);
+            flex-direction: column;
+            gap: 1px;
         }
 
         .catch-bomb {
             background: radial-gradient(circle, #ff4d4d, #b30000);
             color: #fff;
             border: 2px solid #ff1a1a;
-            box-shadow: 0 0 6px #ff4d4d;
+            box-shadow: 0 0 10px rgba(255, 77, 77, 0.7);
+            font-size: 24px;
         }
 
         @keyframes fallItem {
-            0% { top: -45px; }
+            0% { top: -65px; }
             100% { top: 325px; }
         }
 
@@ -1721,7 +1727,7 @@
                 navTap: "Tippen",
                 navShop: "Shop",
                 navAds: "Boost",
-                navRank: "Rang",
+                navRang: "Rang",
                 navGame: "Spiel",
                 navFriends: "Freunde",
                 menuBack: "⬅️ Menü",
@@ -2229,7 +2235,7 @@
             localStorage.setItem('biz_freeTap20Claimed', freeTap20Claimed);
         }
 
-        /* --- CATCH GAME LOGIC --- */
+        /* --- CATCH GAME LOGIC WITH HIGH RESPONSIVENESS & BIZ777 COINS --- */
         let catchInterval = null;
         let catchTimerInterval = null;
         let catchScoreVal = 0;
@@ -2249,7 +2255,7 @@
             document.getElementById('startCatchBtn').style.display = 'none';
             document.getElementById('catchScore').innerText = `Score: ${catchScoreVal}`;
             document.getElementById('catchTimer').innerText = `⏱️ Time: ${catchTimeLeft}s`;
-            document.getElementById('catchMsg').innerText = "Catch coins, avoid bombs!";
+            document.getElementById('catchMsg').innerText = "Catch BIZ777 coins, avoid bombs!";
 
             const container = document.getElementById('catchGameContainer');
             container.innerHTML = "";
@@ -2273,11 +2279,13 @@
             const item = document.createElement('div');
             const isBomb = Math.random() < 0.3;
             item.className = `catch-falling-item ${isBomb ? 'catch-bomb' : 'catch-coin'}`;
-            item.innerText = isBomb ? '💣' : '🪙';
-            item.style.left = `${Math.floor(Math.random() * 260)}px`;
-            item.style.animationDuration = `${2 + Math.random() * 2}s`;
+            item.innerHTML = isBomb ? '💣' : '🪙<br>BIZ777';
+            item.style.left = `${Math.floor(Math.random() * 240)}px`;
+            item.style.animationDuration = `${2.2 + Math.random() * 2}s`;
 
-            item.onclick = function() {
+            const handleItemTap = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
                 if (isBomb) {
                     catchScoreVal = Math.max(0, catchScoreVal - 100);
                 } else {
@@ -2289,8 +2297,11 @@
                 item.remove();
             };
 
+            item.addEventListener('pointerdown', handleItemTap);
+            item.addEventListener('touchstart', handleItemTap);
+
             container.appendChild(item);
-            setTimeout(() => { if (item.parentNode) item.remove(); }, 4000);
+            setTimeout(() => { if (item.parentNode) item.remove(); }, 4500);
         }
 
         function endCatchGame() {
@@ -2373,7 +2384,6 @@
             ctx.restore();
         }
 
-        /* Drawing Hand matched directly to uploaded illustration proportions */
         function drawExactImageStyleHand(ctx, x, height, isTop, variant) {
             ctx.save();
             const armWidth = 38;
@@ -2387,15 +2397,12 @@
             ctx.lineCap = 'round';
 
             if (isTop) {
-                // Top Hand extending down
                 ctx.beginPath();
                 ctx.moveTo(centerX - armWidth / 2, 0);
                 ctx.lineTo(centerX - armWidth / 2 - 2, height - 35);
                 
-                // Thumb
                 ctx.bezierCurveTo(centerX - palmWidth / 2 - 12, height - 35, centerX - palmWidth / 2 - 14, height - 12, centerX - palmWidth / 2 + 2, height - 15);
                 
-                // 4 Main Fingers
                 const fingerHeights = [30, 36, 32, 24];
                 const fingerOffsets = [-18, -6, 6, 18];
 
@@ -2414,7 +2421,6 @@
                 ctx.fill();
                 ctx.stroke();
 
-                // Inner details & shading lines
                 ctx.beginPath();
                 ctx.moveTo(centerX - armWidth / 2 + 5, 10);
                 ctx.lineTo(centerX - armWidth / 2 + 3, height - 40);
@@ -2422,11 +2428,9 @@
                 ctx.lineWidth = 2;
                 ctx.stroke();
 
-                // Nails / Manicure
                 ctx.strokeStyle = '#5c3a1e';
                 ctx.lineWidth = 1.5;
 
-                // Thumb nail
                 ctx.beginPath();
                 ctx.arc(centerX - palmWidth / 2 - 5, height - 18, variant.isFemale ? 4 : 3, 0, Math.PI * 2);
                 ctx.fillStyle = variant.isFemale ? variant.nailColor : '#ffffff99';
@@ -2448,7 +2452,6 @@
                     ctx.stroke();
                 }
 
-                // Accessories
                 if (variant.hasWatch) {
                     ctx.fillStyle = '#1e293b';
                     ctx.fillRect(centerX - armWidth / 2 - 2, 25, armWidth + 4, 10);
@@ -2473,17 +2476,14 @@
                 }
 
             } else {
-                // Bottom Hand extending up
                 let startY = canvas.height - height;
 
                 ctx.beginPath();
                 ctx.moveTo(centerX - armWidth / 2, canvas.height);
                 ctx.lineTo(centerX - armWidth / 2 - 2, startY + 35);
                 
-                // Thumb
                 ctx.bezierCurveTo(centerX - palmWidth / 2 - 12, startY + 35, centerX - palmWidth / 2 - 14, startY + 12, centerX - palmWidth / 2 + 2, startY + 15);
                 
-                // 4 Main Fingers
                 const fingerHeights = [30, 36, 32, 24];
                 const fingerOffsets = [-18, -6, 6, 18];
 
@@ -2502,7 +2502,6 @@
                 ctx.fill();
                 ctx.stroke();
 
-                // Inner details
                 ctx.beginPath();
                 ctx.moveTo(centerX - armWidth / 2 + 5, canvas.height - 10);
                 ctx.lineTo(centerX - armWidth / 2 + 3, startY + 40);
@@ -2510,11 +2509,9 @@
                 ctx.lineWidth = 2;
                 ctx.stroke();
 
-                // Nails
                 ctx.strokeStyle = '#5c3a1e';
                 ctx.lineWidth = 1.5;
 
-                // Thumb nail
                 ctx.beginPath();
                 ctx.arc(centerX - palmWidth / 2 - 5, startY + 18, variant.isFemale ? 4 : 3, 0, Math.PI * 2);
                 ctx.fillStyle = variant.isFemale ? variant.nailColor : '#ffffff99';
@@ -2536,7 +2533,6 @@
                     ctx.stroke();
                 }
 
-                // Accessories
                 if (variant.hasWatch) {
                     ctx.fillStyle = '#0f172a';
                     ctx.fillRect(centerX - armWidth / 2 - 2, startY + 45, armWidth + 4, 10);
