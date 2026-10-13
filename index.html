@@ -1173,7 +1173,7 @@
                         </div>
 
                         <div id="cupGameInfo" style="font-size: 11px; font-weight: bold; color: var(--warning); background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 7px; text-align: center; width: 100%; border: 1px solid rgba(255,255,255,0.05);">
-                            Cost: 500 BIZ777 | Win: 1,000 Coins + 200 Energy
+                            Cost: 200 BIZ777 | Win: 500 Coins + 100 Energy
                         </div>
 
                         <div class="cups-board-2d">
@@ -2633,13 +2633,21 @@
             }
         }
 
-        /* --- CUPS GAME LOGIC (CLASSIC SHUFFLE) --- */
+        /* --- CUPS GAME LOGIC (HIGH RISK / HIGH REWARD & SINGLE BALL) --- */
         let currentCupLevel = 1;
         let cupInAnim = false;
         let canGuess = false;
         let ballCupIndex = 0;
         let cupPositions = [0, 1, 2];
         const slotCoords = [-90, 0, 90];
+
+        const cupLevelConfigs = {
+            1: { cost: 200, winCoins: 500, winEnergy: 100, count: 5, speed: 500 },
+            2: { cost: 500, winCoins: 1500, winEnergy: 300, count: 9, speed: 340 },
+            3: { cost: 1200, winCoins: 4000, winEnergy: 800, count: 14, speed: 220 },
+            4: { cost: 3000, winCoins: 12000, winEnergy: 2000, count: 20, speed: 130 },
+            5: { cost: 8000, winCoins: 40000, winEnergy: 5000, count: 30, speed: 70 }
+        };
 
         window.setCupLevel = function(lvl) {
             if (cupInAnim) return;
@@ -2648,15 +2656,18 @@
                 const btn = document.getElementById(`lvlBtn${i}`);
                 if (btn) btn.classList.toggle('active-level', i === lvl);
             }
+            let cfg = cupLevelConfigs[lvl];
+            document.getElementById('cupGameInfo').innerText = `Cost: ${cfg.cost.toLocaleString()} BIZ777 | Win: ${cfg.winCoins.toLocaleString()} Coins + ${cfg.winEnergy} Energy`;
         };
 
         window.startCupRound = function() {
             if (cupInAnim) return;
-            if (score < 500) {
-                alert("You need 500 Coins to play!");
+            let cfg = cupLevelConfigs[currentCupLevel];
+            if (score < cfg.cost) {
+                alert(`You need ${cfg.cost.toLocaleString()} Coins to play Level ${currentCupLevel}!`);
                 return;
             }
-            score -= 500;
+            score -= cfg.cost;
             updateUI();
 
             cupInAnim = true;
@@ -2699,23 +2710,15 @@
         }
 
         function runCupShuffles() {
-            const shuffleConfig = {
-                1: { count: 5, speed: 500 },
-                2: { count: 9, speed: 340 },
-                3: { count: 14, speed: 220 },
-                4: { count: 20, speed: 130 },
-                5: { count: 30, speed: 70 }
-            };
-
-            let config = shuffleConfig[currentCupLevel] || shuffleConfig[1];
+            let cfg = cupLevelConfigs[currentCupLevel];
             let currentShuffle = 0;
 
             for (let i = 0; i < 3; i++) {
-                document.getElementById(`slot${i}`).style.transition = `transform ${config.speed}ms ease-in-out`;
+                document.getElementById(`slot${i}`).style.transition = `transform ${cfg.speed}ms ease-in-out`;
             }
 
             function doNextShuffle() {
-                if (currentShuffle < config.count) {
+                if (currentShuffle < cfg.count) {
                     let c1 = Math.floor(Math.random() * 3);
                     let c2;
                     do {
@@ -2729,7 +2732,7 @@
                     updateCupDOMPositions();
 
                     currentShuffle++;
-                    setTimeout(doNextShuffle, config.speed + 15);
+                    setTimeout(doNextShuffle, cfg.speed + 15);
                 } else {
                     cupInAnim = false;
                     canGuess = true;
@@ -2744,16 +2747,15 @@
             canGuess = false;
 
             let cupIdx = cupPositions.indexOf(slotIdx);
+            let cfg = cupLevelConfigs[currentCupLevel];
 
             document.getElementById(`cup${cupIdx}`).classList.add('lifted');
             document.getElementById(`coin${cupIdx}`).style.opacity = '1';
 
             if (cupIdx === ballCupIndex) {
-                let rewardCoins = 1000 * currentCupLevel;
-                let rewardEnergy = 200 * currentCupLevel;
-                score += rewardCoins;
-                energy = Math.min(maxEnergy, energy + rewardEnergy);
-                alert(`You won! +${rewardCoins.toLocaleString()} Coins & +${rewardEnergy} Energy!`);
+                score += cfg.winCoins;
+                energy = Math.min(maxEnergy, energy + cfg.winEnergy);
+                alert(`You won! +${cfg.winCoins.toLocaleString()} Coins & +${cfg.winEnergy} Energy!`);
             } else {
                 document.getElementById(`cup${ballCupIndex}`).classList.add('lifted');
                 document.getElementById(`coin${ballCupIndex}`).style.opacity = '1';
