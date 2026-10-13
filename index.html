@@ -1655,8 +1655,8 @@
                 gameCardCupsDesc: "¡Encuentra la bola bajo las tazas para ganar premios!",
                 gameCardSlotTitle: "🎰 Giros de Tragamonedas",
                 gameCardSlotDesc: "Costo: 500 monedas | 3x BIZ777 = 5,000,000 Jackpot!",
-                gameCardPwrTitle: "✌ Piedra, Papel, Tijera",
-                gameCardPwrDesc: "¡Batalla clásica con iconos de emoji!",
+                pwrSubHeader: "✌ Piedra, Papel, Tijera",
+                pwrWants: "¡Batalla clásica con iconos de emoji!",
                 catchSubHeader: "🕹 Juego de Atrapa BIZ777",
                 flappySubHeader: "🕹️ Flappy BIZ777",
                 flappyInstructions: "Toca para saltar y esquivar obstáculos animados.",
@@ -1705,14 +1705,7 @@
                 gameCardCupsDesc: "Finde den Ball unter Bechern, um Münzen zu gewinnen!",
                 gameCardSlotTitle: "🎰 Spielautomat Spin",
                 gameCardSlotDesc: "Kosten: 500 Münzen | 3x BIZ777 = 5.000.000 Jackpot!",
-                gameCardPwrTitle: "✌️ Schere, Stein, Papier",
-                gameCardPwrDesc: "Klassisches Duell mit Emoji-Symbolen!",
-                catchSubHeader: "🕹️ BIZ777 Fangspiel",
-                flappySubHeader: "🕹️ Flappy BIZ777",
-                flappyInstructions: "Tippen zum Springen. Cartoon-Hindernissen ausweichen!",
-                cupsSubHeader: "🕹️ Finde den BIZ777 Ball",
-                slotSubHeader: "🕹️ Spielautomat Spin",
-                slotMachineBanner: "Kosten: 500 Münzen | 3x BIZ777 = 5.000.000 Jackpot!",
+                pwrSubHeader: "✌️ Schere, Stein, Papier",
                 pwrSubHeader: "✌️ Schere, Stein, Papier",
                 pwrYou: "DU",
                 pwrBot: "BOT",
@@ -2235,7 +2228,7 @@
             localStorage.setItem('biz_freeTap20Claimed', freeTap20Claimed);
         }
 
-        /* --- CATCH GAME LOGIC WITH HIGH RESPONSIVENESS & BIZ777 COINS --- */
+        /* --- CATCH GAME LOGIC --- */
         let catchInterval = null;
         let catchTimerInterval = null;
         let catchScoreVal = 0;
@@ -2287,10 +2280,10 @@
                 e.preventDefault();
                 e.stopPropagation();
                 if (isBomb) {
-                    catchScoreVal = Math.max(0, catchScoreVal - 100);
+                    catchScoreVal = Math.max(0, catchScoreVal - 50);
                 } else {
-                    catchScoreVal += 50;
-                    score += 50;
+                    catchScoreVal += 25;
+                    score += 25;
                     updateUI();
                 }
                 document.getElementById('catchScore').innerText = `Score: ${catchScoreVal}`;
@@ -2313,7 +2306,7 @@
             syncScoreToFirebase();
         }
 
-        /* --- FLAPPY BIZ777 EXACT IMAGE-STYLE HAND ART LOGIC --- */
+        /* --- FLAPPY BIZ777 LOGIC --- */
         const canvas = document.getElementById('flappyCanvas');
         const ctx = canvas ? canvas.getContext('2d') : null;
         let birdY = 150, birdV = 0, gravity = 0.35, jump = -6.5;
@@ -2640,12 +2633,16 @@
             }
         }
 
-        /* --- CUPS GAME LOGIC --- */
+        /* --- CUPS GAME LOGIC (CLASSIC SHUFFLE) --- */
         let currentCupLevel = 1;
-        let winningCupIndex = 0;
         let cupInAnim = false;
+        let canGuess = false;
+        let ballCupIndex = 0;
+        let cupPositions = [0, 1, 2];
+        const slotCoords = [-90, 0, 90];
 
         window.setCupLevel = function(lvl) {
+            if (cupInAnim) return;
             currentCupLevel = lvl;
             for (let i = 1; i <= 5; i++) {
                 const btn = document.getElementById(`lvlBtn${i}`);
@@ -2663,38 +2660,116 @@
             updateUI();
 
             cupInAnim = true;
-            winningCupIndex = Math.floor(Math.random() * 3);
+            canGuess = false;
+
+            cupPositions = [0, 1, 2];
+            updateCupDOMPositions();
 
             for (let i = 0; i < 3; i++) {
                 document.getElementById(`cup${i}`).classList.remove('lifted');
                 document.getElementById(`coin${i}`).style.opacity = '0';
             }
 
+            ballCupIndex = Math.floor(Math.random() * 3);
+
             setTimeout(() => {
-                document.getElementById(`coin${winningCupIndex}`).style.opacity = '1';
-                document.getElementById(`cup${winningCupIndex}`).classList.add('lifted');
+                document.getElementById(`coin${ballCupIndex}`).style.opacity = '1';
+                document.getElementById(`cup${ballCupIndex}`).classList.add('lifted');
+                
                 setTimeout(() => {
-                    document.getElementById(`cup${winningCupIndex}`).classList.remove('lifted');
-                    document.getElementById(`coin${winningCupIndex}`).style.opacity = '0';
-                    cupInAnim = false;
+                    document.getElementById(`cup${ballCupIndex}`).classList.remove('lifted');
+                    document.getElementById(`coin${ballCupIndex}`).style.opacity = '0';
+
+                    setTimeout(() => {
+                        runCupShuffles();
+                    }, 400);
+
                 }, 1000);
             }, 300);
         };
 
-        window.chooseCup = function(index) {
-            if (cupInAnim) return;
-            document.getElementById(`cup${index}`).classList.add('lifted');
-            if (index === winningCupIndex) {
-                document.getElementById(`coin${index}`).style.opacity = '1';
-                score += 1000;
-                energy = Math.min(maxEnergy, energy + 200);
-                alert("You won! +1,000 Coins & +200 Energy!");
-            } else {
-                alert("Wrong cup! Try again!");
+        function updateCupDOMPositions() {
+            for (let cupIdx = 0; cupIdx < 3; cupIdx++) {
+                let slotIdx = cupPositions[cupIdx];
+                const slotEl = document.getElementById(`slot${cupIdx}`);
+                if (slotEl) {
+                    slotEl.style.transform = `translateX(${slotCoords[slotIdx]}px)`;
+                }
             }
+        }
+
+        function runCupShuffles() {
+            const shuffleConfig = {
+                1: { count: 5, speed: 500 },
+                2: { count: 9, speed: 340 },
+                3: { count: 14, speed: 220 },
+                4: { count: 20, speed: 130 },
+                5: { count: 30, speed: 70 }
+            };
+
+            let config = shuffleConfig[currentCupLevel] || shuffleConfig[1];
+            let currentShuffle = 0;
+
+            for (let i = 0; i < 3; i++) {
+                document.getElementById(`slot${i}`).style.transition = `transform ${config.speed}ms ease-in-out`;
+            }
+
+            function doNextShuffle() {
+                if (currentShuffle < config.count) {
+                    let c1 = Math.floor(Math.random() * 3);
+                    let c2;
+                    do {
+                        c2 = Math.floor(Math.random() * 3);
+                    } while (c2 === c1);
+
+                    let temp = cupPositions[c1];
+                    cupPositions[c1] = cupPositions[c2];
+                    cupPositions[c2] = temp;
+
+                    updateCupDOMPositions();
+
+                    currentShuffle++;
+                    setTimeout(doNextShuffle, config.speed + 15);
+                } else {
+                    cupInAnim = false;
+                    canGuess = true;
+                }
+            }
+
+            doNextShuffle();
+        }
+
+        window.chooseCup = function(slotIdx) {
+            if (!canGuess || cupInAnim) return;
+            canGuess = false;
+
+            let cupIdx = cupPositions.indexOf(slotIdx);
+
+            document.getElementById(`cup${cupIdx}`).classList.add('lifted');
+            document.getElementById(`coin${cupIdx}`).style.opacity = '1';
+
+            if (cupIdx === ballCupIndex) {
+                let rewardCoins = 1000 * currentCupLevel;
+                let rewardEnergy = 200 * currentCupLevel;
+                score += rewardCoins;
+                energy = Math.min(maxEnergy, energy + rewardEnergy);
+                alert(`You won! +${rewardCoins.toLocaleString()} Coins & +${rewardEnergy} Energy!`);
+            } else {
+                document.getElementById(`cup${ballCupIndex}`).classList.add('lifted');
+                document.getElementById(`coin${ballCupIndex}`).style.opacity = '1';
+                alert("Wrong cup! Better luck next time!");
+            }
+
             updateUI();
             saveState();
             syncScoreToFirebase();
+
+            setTimeout(() => {
+                for (let i = 0; i < 3; i++) {
+                    document.getElementById(`cup${i}`).classList.remove('lifted');
+                    document.getElementById(`coin${i}`).style.opacity = '0';
+                }
+            }, 2000);
         };
 
         /* --- SLOT MACHINE LOGIC --- */
