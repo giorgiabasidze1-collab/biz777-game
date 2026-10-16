@@ -1833,6 +1833,17 @@
         let invitedFriendsCount = parseInt(localStorage.getItem('biz_invitedFriends')) || 0;
         let freeTap20Claimed = localStorage.getItem('biz_freeTap20Claimed') === "true";
 
+        // Offline energy regeneration calculation (10 energy per 1 minute)
+        let lastTime = parseInt(localStorage.getItem('biz_lastTime')) || Date.now();
+        let now = Date.now();
+        let elapsedSeconds = Math.floor((now - lastTime) / 1000);
+        if (elapsedSeconds > 0 && energy < maxEnergy) {
+            let addedEnergy = Math.floor((elapsedSeconds / 60) * 10);
+            if (addedEnergy > 0) {
+                energy = Math.min(maxEnergy, energy + addedEnergy);
+            }
+        }
+
         let userId = "user_" + Math.floor(Math.random() * 100000);
         let currentUserName = "BIZ777 User";
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -2033,13 +2044,14 @@
             setTimeout(() => el.remove(), 700);
         }
 
+        // Energy regeneration: +10 energy every 60 seconds (1 minute) both in-game and in menu
         setInterval(() => {
             if (energy < maxEnergy) {
-                energy = Math.min(maxEnergy, energy + 3);
+                energy = Math.min(maxEnergy, energy + 10);
                 updateUI();
                 saveState();
             }
-        }, 1000);
+        }, 60000);
 
         let lastRenderedLevelIcon = "";
 
@@ -2226,7 +2238,18 @@
             localStorage.setItem('biz_tapPower', tapPower);
             localStorage.setItem('biz_invitedFriends', invitedFriendsCount);
             localStorage.setItem('biz_freeTap20Claimed', freeTap20Claimed);
+            localStorage.setItem('biz_lastTime', Date.now());
         }
+
+        window.addEventListener('beforeunload', () => {
+            saveState();
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                saveState();
+            }
+        });
 
         /* --- CATCH GAME LOGIC --- */
         let catchInterval = null;
