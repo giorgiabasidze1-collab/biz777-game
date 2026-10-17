@@ -2840,18 +2840,23 @@
             if (!canGuess || cupInAnim) return;
             canGuess = false;
 
-            let cupIdx = cupPositions.indexOf(slotIdx);
+            let chosenCupIdx = -1;
+            for (let i = 0; i < 3; i++) {
+                if (cupPositions[i] === slotIdx) {
+                    chosenCupIdx = i;
+                    break;
+                }
+            }
+
             let cfg = cupLevelConfigs[currentCupLevel];
 
-            document.getElementById(`cup${cupIdx}`).classList.add('lifted');
-            document.getElementById(`coin${cupIdx}`).style.opacity = '1';
+            document.getElementById(`cup${chosenCupIdx}`).classList.add('lifted');
 
-            if (cupIdx === ballCupIndex) {
+            if (chosenCupIdx === ballCupIndex) {
+                document.getElementById(`coin${chosenCupIdx}`).style.opacity = '1';
                 score += cfg.winCoins;
                 alert(`You won! +${cfg.winCoins.toLocaleString()} Coins!`);
             } else {
-                document.getElementById(`cup${ballCupIndex}`).classList.add('lifted');
-                document.getElementById(`coin${ballCupIndex}`).style.opacity = '1';
                 alert("Wrong cup! Better luck next time!");
             }
 
